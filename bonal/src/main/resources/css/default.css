@@ -1,0 +1,10 @@
+/* tamanho da fonte dos componentes do primefaces */
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+form {
+	height: 100%;
+}

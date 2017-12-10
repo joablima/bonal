@@ -10,12 +10,13 @@
 <ui:composition template="/template/main.xhtml">
 
 	<ui:define name="content">
+		<h1>ERRO 404 - PAGINA NÃO ENCONTRADA</h1>
 
-		<h:outputText value="Nome" />
-		<h:inputText id="nome"></h:inputText>
+		<h:form>
+			<h:commandLink value="Retornar a Pagina Inicial"
+				action="index?faces-redirect=true" immediate="true" />
+		</h:form>
 
-		<h:outputText value="Prefixo" />
-		<h:inputText id="prefixo"></h:inputText>
 	</ui:define>
 </ui:composition>
 </html>

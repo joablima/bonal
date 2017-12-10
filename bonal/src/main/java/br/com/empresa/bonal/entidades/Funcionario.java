@@ -9,33 +9,38 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("Funcionario")
-public class Funcionario extends Pessoa{
+public class Funcionario extends Pessoa {
+
 	@Id
 	private Long cpf;
 	private String formacao;
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="cargo")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cargo")
 	private Cargo cargo;
-	
+
 	public Long getCpf() {
 		return cpf;
 	}
+
 	public void setCpf(Long cpf) {
 		this.cpf = cpf;
 	}
+
 	public String getFormacao() {
 		return formacao;
 	}
+
 	public void setFormacao(String formacao) {
 		this.formacao = formacao;
 	}
+
 	public Cargo getCargo() {
 		return cargo;
 	}
+
 	public void setCargo(Cargo cargo) {
 		this.cargo = cargo;
 	}
-	
-	
+
 }

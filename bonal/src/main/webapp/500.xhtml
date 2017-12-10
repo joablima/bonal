@@ -8,14 +8,12 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
-
 	<ui:define name="content">
-
-		<h:outputText value="Nome" />
-		<h:inputText id="nome"></h:inputText>
-
-		<h:outputText value="Prefixo" />
-		<h:inputText id="prefixo"></h:inputText>
+		<h1>ERRO 500</h1>
+		<h:form>
+			<h:commandLink value="Retornar a Pagina Inicial"
+				action="index?faces-redirect=true" immediate="true" />
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>

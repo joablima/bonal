@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<nav class="ui-g">
+	<h:form id="navbar">
+		<p:menubar>
+			<p:submenu label="Novo" icon="ui-icon-document">
+				<p:menuitem value="bens e Produtos" url="index.xhtml"
+					styleClass="nav-item-menu" />
+				<p:menuitem value="exemplo" url="index.xhtml"
+					styleClass="nav-item-menu" />
+				<p:separator />
+				<p:menuitem value="Categorias" url="cadastroDeCategorias.xhtml"
+					styleClass="nav-item-menu" />
+			</p:submenu>
+
+			<p:submenu label="Consultar" icon="ui-icon-search">
+				<p:menuitem value="consultar 1" url="index.xhtml"
+					styleClass="nav-item-menu" />
+				<p:menuitem value="consultar 1" url="#" styleClass="nav-item-menu" />
+			</p:submenu>
+
+			<p:submenu label="Help" icon="ui-icon-help">
+				<p:menuitem value="Contents" url="#" styleClass="nav-item-menu" />
+				<p:menuitem value="Contents" url="#" styleClass="nav-item-menu" />
+				<p:submenu label="Search" icon="ui-icon-search"
+					styleClass="nav-item-menu">
+					<p:submenu label="Text">
+						<p:menuitem value="Workspace" url="#" styleClass="nav-item-menu" />
+					</p:submenu>
+					<p:menuitem value="File" url="#" styleClass="nav-item-menu" />
+				</p:submenu>
+			</p:submenu>
+		</p:menubar>
+	</h:form>
+</nav>
+</html>
