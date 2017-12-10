@@ -1,7 +1,7 @@
 package br.com.empresa.bonal.entidades;
-
-
-
+/*
+	Esta tabela registra os bens de consumo da empresa
+*/
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -17,15 +17,23 @@ public class BemDeConsumo {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
+	//define um codigo que irá obedecer a uma ordem com Prefixo da categoria que pertence+codigo dado pelo usuário
 	private String codigo, descricao; 
 	
+	//campo para guardar a data de validade do bem 
 	private Date dataValidade;
 	
+	//registra a unidade de medida referente ao bem
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="unidadeDeMedida")
 	private UnidadeDeMedida unidadeDeMedida;
 	
+	//registra a categoria que esse bem pertence 
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="categoria")
+	private Categoria categoria;
+	
+	//registra a quantidade de bem que existe disponível
 	private double quantidade;
 	
 	public Long getId() {
@@ -63,6 +71,12 @@ public class BemDeConsumo {
 	}
 	public void setQuantidade(double quantidade) {
 		this.quantidade = quantidade;
+	}
+	public Categoria getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 	
 	

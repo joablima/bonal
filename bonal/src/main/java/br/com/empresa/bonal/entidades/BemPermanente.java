@@ -17,17 +17,26 @@ public class BemPermanente {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
+	//define um codigo que irá obedecer a uma ordem com Prefixo da categoria que pertence+codigo dado pelo usuário
 	private String codigo, descricao; 
 	
+	//campo para guardar a data de garanti do bem 	
 	private Date dataGarantia;
 	
+	//registra a unidade de medida referente ao bem
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="unidadeDeMedida")
 	private UnidadeDeMedida unidadeDeMedida;
 	
+	//registra a categoria que esse bem pertence 
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="categoria")
+	private Categoria categoria;
+	
+	//registra a quantidade de bem que existe disponível
 	private double quantidade;
 	
+	//registra a vida util e a partir dela calcula a taxa de depreciação
 	private int vidaUtil, taxaDepreciacao;
 
 	public Long getId() {
@@ -92,6 +101,14 @@ public class BemPermanente {
 
 	public void setTaxaDepreciacao(int taxaDepreciacao) {
 		this.taxaDepreciacao = taxaDepreciacao;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 	
 	
