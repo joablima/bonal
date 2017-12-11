@@ -11,6 +11,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import br.com.empresa.bonal.entidades.Cargo;
+import br.com.empresa.bonal.repositorio.CargoRepositorio;
+import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
@@ -90,8 +92,7 @@ public class CargoControle {
 
 	public void filtrarTabela() {
 		Stream<Cargo> filter = lista.stream()
-				.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim())
-						| c.getCodigo().toLowerCase().contains(cargoNome.toLowerCase().trim())));
+				.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim())));
 
 		cargos = filter.collect(Collectors.toList());
 	}
