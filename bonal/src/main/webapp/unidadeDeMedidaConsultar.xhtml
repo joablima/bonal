@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+
+	<ui:define name="content">
+
+		<p:panelGrid styleClass="tab-formulario">
+			<p:column>
+				<h1>Consultar Unidades de Medidas</h1>
+			</p:column>
+			<p:column>
+				<span style="float: right; position: relative; top: .5em;"> <i
+					class="fa fa-coffee" style="margin-right: 5px;" /> <p:commandLink
+						value="Cadastrar Nova Uniade de Medida"
+						action="#{unidadeDeMedidaControle.novo}" />
+				</span>
+			</p:column>
+		</p:panelGrid>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formUnidadeDeMedidaConsulta">
+			<p:panelGrid styleClass="tab-formulario">
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Nome ou Sigla da Unidade De Medida: "
+							for="unidadeDeMedidaNome" />
+						<p:inputText
+							value="#{unidadeDeMedidaControle.unidadeDeMedidaNome}"
+							id="unidadeDeMedidaNome" styleClass="form-normal">
+							<p:ajax event="keyup"
+								listener="#{unidadeDeMedidaControle.listar}" process="@form"
+								update="@form :tabelaUnidadesDeMedida" />
+						</p:inputText>
+					</p:column>
+					<p:column styleClass="td-botao-consulta">
+						<p:commandButton id="buscarUnidadeDeMedida" value="Filtrar"
+							action="#{unidadeDeMedidaControle.listar}" process="@form"
+							update="@form :tabelaUnidadesDeMedida" icon="fa fa-fw fa-filter" />
+						<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+							action="#{unidadeDeMedidaControle.limpar}" process="@form"
+							update="@form :tabelaUnidadesDeMedida" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+
+		<h:form id="tabelaUnidadesDeMedida">
+			<p:dataTable id="unidadeDeMedida" var="unidadeDeMedida"
+				value="#{unidadeDeMedidaControle.unidadesDeMedida}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowKey="#{unidadeDeMedida.id}"
+				selection="#{unidadeDeMedidaControle.unidadeDeMedida}"
+				selectionMode="single"
+				emptyMessage="Nenhuma unidade de Medida Encontrado!">
+
+				<f:facet name="header">Lista de Unidades de Medida
+            		<p:commandButton id="toggler" type="button"
+						value="Columns" style="float:right" icon="ui-icon-calculator" />
+					<p:columnToggler datasource="unidadeDeMedida" trigger="toggler" />
+				</f:facet>
+
+				<p:column headerText="#" style="width:36px" priority="4">
+					<p:rowToggler />
+				</p:column>
+
+				<p:column headerText="Sigla" sortBy="#{unidadeDeMedida.sigla}">
+					<h:outputText value="#{unidadeDeMedida.sigla}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{unidadeDeMedida.nome}">
+					<h:outputText value="#{unidadeDeMedida.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+						outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedida)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+						action="#{unidadeDeMedidaControle.remover(unidadeDeMedida)}"
+						update="@form" process="@this @form" />
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{unidadeDeMedidaControle.totalUnidadesDeMedida} de #{unidadeDeMedidaControle.totalUnidadesDeMedidaConsulta}" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:contextMenu for="unidadeDeMedida">
+				<p:menuitem value="Edição" update="unidadeDeMedidaEditar"
+					icon="ui-icon-search"
+					oncomplete="PF('unidadeDeMedidaDialog').show()" />
+				<p:menuitem value="Deletar" update="unidadeDeMedida"
+					icon="ui-icon-close" action="#{unidadeDeMedidaControle.remover}" />
+			</p:contextMenu>
+
+			<p:dialog header="Edição de unidade De Medida"
+				widgetVar="unidadeDeMedidaDialog" modal="true" showEffect="fade"
+				hideEffect="fade" resizable="false">
+				<p:outputPanel id="unidadeDeMedidaEditar" style="text-align:center;">
+					<p:panelGrid columns="2"
+						rendered="#{not empty unidadeDeMedidaControle.unidadesDeMedida}"
+						columnClasses="label,value">
+						<f:facet name="header">
+						Titulo
+						</f:facet>
+						<h:outputText value="Sigla" />
+						<h:outputText
+							value="#{unidadeDeMedidaControle.unidadeDeMedida.sigla}" />
+						<h:outputText value="Nome:" />
+						<h:outputText
+							value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}" />
+						<h:commandButton styleClass="botao" value="Excluir"
+							action="#{unidadeDeMedidaControle.remover(unidadeDeMedidaControle.unidadeDeMedida)}" />
+						<h:link styleClass="botao" value="Editar"
+							outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedidaControle.unidadeDeMedida)}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

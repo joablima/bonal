@@ -7,16 +7,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-
-import com.sun.faces.action.RequestMapping;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 
-
+@ManagedBean
+@ViewScoped
 public class UnidadeDeMedidaControle {
-	
+
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
 	private Long unidadeDeMedidaId;
@@ -37,32 +38,32 @@ public class UnidadeDeMedidaControle {
 	}
 
 	// Getters and Setters
-	public UnidadeDeMedida getCargo() {
+	public UnidadeDeMedida getUnidadeDeMedida() {
 		return unidadeDeMedida;
 	}
 
 	// Adicionado para propriedade de contexto das tabelas do Primefaces
-	public void setCargo(UnidadeDeMedida cargo) {
-		this.unidadeDeMedida = cargo;
+	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
+		this.unidadeDeMedida = unidadeDeMedida;
 	}
 
-	public Long getCargoId() {
+	public Long getUnidadeDeMedidaId() {
 		return unidadeDeMedidaId;
 	}
 
-	public void setCargoId(Long cargoId) {
-		this.unidadeDeMedidaId = cargoId;
+	public void setUnidadeDeMedidaId(Long unidadeDeMedidaId) {
+		this.unidadeDeMedidaId = unidadeDeMedidaId;
 	}
 
-	public String getCargoNome() {
+	public String getUnidadeDeMedidaNome() {
 		return unidadeDeMedidaNome;
 	}
 
-	public void setCargoNome(String cargoNome) {
-		this.unidadeDeMedidaNome = cargoNome;
+	public void setUnidadeDeMedidaNome(String unidadeDeMedidaNome) {
+		this.unidadeDeMedidaNome = unidadeDeMedidaNome;
 	}
 
-	public List<UnidadeDeMedida> getCargos() {
+	public List<UnidadeDeMedida> getUnidadesDeMedida() {
 		return unidadesDeMedida;
 	}
 
@@ -71,11 +72,11 @@ public class UnidadeDeMedidaControle {
 	}
 
 	// verificar importancia dos métodos abaixo //verificar se estão trocados??
-	public Integer getTotalCargos() {
+	public Integer getTotalUnidadesDeMedida() {
 		return lista.size();
 	}
 
-	public Integer getTotalCargosConsultados() {
+	public Integer getTotalUnidadesDeMedidaConsulta() {
 		return unidadesDeMedida.size();
 	}
 
@@ -112,6 +113,7 @@ public class UnidadeDeMedidaControle {
 
 	// Métodos que utilizam métodos do repositório
 	public String salvar() {
+		System.out.println("entrou em salvar");
 		String message = "";
 		if (unidadeDeMedida.getId() == null) {
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
@@ -126,7 +128,7 @@ public class UnidadeDeMedidaControle {
 		return null;
 	}
 
-	public void recuperarCargoPorId() {
+	public void recuperarUnidadeDeMedidaPorId() {
 		unidadeDeMedida = unidadeDeMedidaRepositorio.getUnidadeDeMedida(unidadeDeMedidaId);
 	}
 
@@ -159,5 +161,5 @@ public class UnidadeDeMedidaControle {
 			return false;
 		return true;
 	}
-	
+
 }

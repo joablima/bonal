@@ -1,5 +1,5 @@
-package br.com.empresa.bonal.repositorio;
-
-public class FuncionarioRepositorio {
-
-}
+//package br.com.empresa.bonal.repositorio;
+//
+//public class FuncionarioRepositorio {
+//
+//}
