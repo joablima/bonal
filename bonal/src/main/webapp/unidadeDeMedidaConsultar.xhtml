@@ -8,7 +8,6 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
-
 	<ui:define name="content">
 
 		<p:panelGrid styleClass="tab-formulario">
@@ -17,9 +16,9 @@
 			</p:column>
 			<p:column>
 				<span style="float: right; position: relative; top: .5em;"> <i
-					class="fa fa-coffee" style="margin-right: 5px;" /> <p:commandLink
-						value="Cadastrar Nova Uniade de Medida"
-						action="#{unidadeDeMedidaControle.novo}" />
+					class="fa fa-coffee" style="margin-right: 5px;" /> <p:link
+						value="Cadastrar/Editar Unidade De Medida"
+						outcome="unidadeDeMedida" />
 				</span>
 			</p:column>
 		</p:panelGrid>
@@ -62,16 +61,6 @@
 				selection="#{unidadeDeMedidaControle.unidadeDeMedida}"
 				selectionMode="single"
 				emptyMessage="Nenhuma unidade de Medida Encontrado!">
-
-				<f:facet name="header">Lista de Unidades de Medida
-            		<p:commandButton id="toggler" type="button"
-						value="Columns" style="float:right" icon="ui-icon-calculator" />
-					<p:columnToggler datasource="unidadeDeMedida" trigger="toggler" />
-				</f:facet>
-
-				<p:column headerText="#" style="width:36px" priority="4">
-					<p:rowToggler />
-				</p:column>
 
 				<p:column headerText="Sigla" sortBy="#{unidadeDeMedida.sigla}">
 					<h:outputText value="#{unidadeDeMedida.sigla}" />

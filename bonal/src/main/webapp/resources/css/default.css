@@ -7,4 +7,102 @@
 
 form {
 	height: 100%;
+	width: 100%;
 }
+
+body {
+	margin: 0 5em;
+	border-right: 1px solid rgba(79, 93, 115, 1);
+	border-left: 1px solid rgba(79, 93, 115, 1);
+	background: #fff;
+}
+
+html, body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea,
+	.ui-widget button {
+	font-size: 14px !important;
+	font-family: 'Montserrat', 'Lato', 'Varela Round', 'Play',
+		'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;
+}
+
+#body, #content {
+	display: flex;
+	flex-direction: column;
+}
+
+h1, legend {
+	text-transform: uppercase;
+}
+
+/* --------------------- Elementos das Tabelas --------------------- */
+#content table {
+	border-collapse: collapse;
+	background: transparent;
+	table-layout: auto;
+}
+
+/* Sobrecarga sobre o modelo do Primefaces */
+.ui-datatable-tablewrapper {
+	overflow: hidden !important;
+	width: 100% !important;
+}
+
+#content table tr {
+	background: transparent;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	border: 1px solid transparent !important;
+	/* 	border: 1px solid #fc9 !important; */
+	/* 	padding: 0 !important; */
+	background: transparent !important;
+}
+
+/* --------------------- Elementos dos Formularios --------------------- */
+#content fieldset {
+	margin: 1em 0 1em 0;
+}
+
+/* --------------------- Elementos do Header --------------------- */
+#header {
+	padding: 0 .5em;
+	display: flex;
+	align-items: center;
+}
+
+#logo {
+	display: flex;
+}
+
+a#title-logo {
+	text-decoration: none
+}
+
+#title-logo h1 {
+	color: #4F5D73;
+	font-size: 4em;
+	margin: 0 .1em;
+	text-shadow: 4px 0px 0px #000;
+	transition: all 1s linear;
+	transform: skewX(-10deg);
+	font-weight: 700;
+}
+
+#img-logo {
+	transition: all 1s linear;
+	transform: rotate(30deg) scale(1);
+}
+
+/* --------------------- Elementos da Nav --------------------- */
+
+/* --------------------- Elementos do Footer --------------------- */
+#footer {
+	text-align: center;
+}
+
+/* #footer footer { */
+/* 	border-top: 1px solid #bbb1aa; */
+/* 	padding: .5em; */
+/* 	margin: 0 1em; */
+/* } */
+
+/* --------------------- Elementos do Main --------------------- */
