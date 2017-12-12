@@ -46,7 +46,7 @@ public class CargoRepositorio {
 	}
 
 	public List<Cargo> listarCargos(String nome) {
-		String jpql = "select c from Cargo s where c.nome like :pnome or c.codigo like :pcodigo";
+		String jpql = "select c from Cargo c where c.nome like :pnome or c.codigo like :pcodigo";
 
 		TypedQuery<Cargo> query = em.createQuery(jpql, Cargo.class);
 
