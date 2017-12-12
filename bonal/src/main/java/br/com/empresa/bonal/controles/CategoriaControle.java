@@ -14,11 +14,10 @@ import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 
-
 @ManagedBean
 @ViewScoped
 public class CategoriaControle {
-	
+
 	private Categoria categoria = new Categoria();
 
 	private Long categoriaId;
@@ -77,7 +76,7 @@ public class CategoriaControle {
 		return lista.size();
 	}
 
-	public Integer getTotalCategoriasConsultados() {
+	public Integer getTotalCategoriasConsulta() {
 		return categorias.size();
 	}
 
@@ -93,8 +92,11 @@ public class CategoriaControle {
 
 	public void filtrarTabela() {
 		Stream<Categoria> filter = lista.stream()
-				.filter(c -> (c.getNome().toLowerCase().contains(categoriaNome.toLowerCase().trim())));
-
+				.filter(c -> (c.getNome().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
+						| (c.getCodigo().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
+						| c.getDescricao().toLowerCase().contains(categoriaNome.toLowerCase().trim()));
+	
+		
 		categorias = filter.collect(Collectors.toList());
 	}
 
@@ -107,7 +109,7 @@ public class CategoriaControle {
 	// Limpar tabela da consulta,
 	public String limpar() {
 		this.categoriaNome = "";
-		// listarCargos(); // Realiza nova consulta ao repositorio
+		// listarCategorias(); // Realiza nova consulta ao repositorio
 		filtrarTabela(); // Retorna a lista unmodifiablelist offline armazenada
 		return null;
 	}
@@ -127,11 +129,11 @@ public class CategoriaControle {
 		return null;
 	}
 
-	public void recuperarCargoPorId() {
+	public void recuperarCategoriaPorId() {
 		categoria = categoriaRepositorio.getCategoria(categoriaId);
 	}
 
-	// Remove um cargo do banco de dados
+	// Remove um Categoria do banco de dados
 	public void remover() {
 		categoriaRepositorio.remover(categoria);
 		categorias = null;
@@ -144,21 +146,21 @@ public class CategoriaControle {
 		remover();
 	}
 
-	// Editar um cargo
+	// Editar um Categoria
 	public String editar() {
 		categoriaId = this.categoria.getId();
 		return "categoria?categoriaid=" + categoriaId;
 	}
 
-	public String editar(Categoria c) {
-		this.categoria = c;
+	public String editar(Categoria categoria) {
+		this.categoria = categoria;
 		return editar();
 	}
 
-	public boolean cargoIdExiste() {
+	public boolean CategoriaIdExiste() {
 		if (this.categoriaId == null)
 			return false;
 		return true;
 	}
-	
+
 }

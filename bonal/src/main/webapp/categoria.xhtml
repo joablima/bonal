@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="categoriaId"
+			value="#{categoriaControle.categoriaId}" />
+		<f:viewAction action="#{categoriaControle.recuperarCategoriaPorId}"
+			if="#{param.categoriaId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g titulo">
+			<div class="ui-g-12 ui-md-8 ui-lg-8">
+				<h1>
+					<h:outputText rendered="#{categoriaControle.categoriaId == null}"
+						value="Cadastro de Categoria" />
+					<h:outputText rendered="#{categoriaControle.categoriaId != null}"
+						value="Edição de Categoria" />
+				</h1>
+			</div>
+			<div class="ui-g-12 ui-md-4 ui-lg-4">
+				<i class="fa fa-coffee" />
+				<p:link value="Consultar Categoria" outcome="categoriaConsultar" />
+			</div>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formCategoria">
+			<p:focus context="formCategoria" />
+			<p:fieldset legend="Dados do Categoria">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Código:" for="codigo" />
+						<p:inputText id="codigo"
+							value="#{categoriaControle.categoria.codigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Código da categoria obrigatório"
+							validatorMessage="Código da categoria deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="codigo" id="codigoMessage" />
+					</div>
+				</div>
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{categoriaControle.categoria.nome}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Nome da categoria obrigatório"
+							validatorMessage="Nome da categoria deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="nome" id="nomeMessage" />
+					</div>
+				</div>
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Descrição:" for="descricao" />
+						<p:inputText id="descricao"
+							value="#{categoriaControle.categoria.descricao}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Descrição da categoria obrigatório"
+							validatorMessage="Descrição da categoria deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="descricao" id="descricaoMessage" />
+					</div>
+				</div>
+			</p:fieldset>
+
+			<div class="td-botao-consulta">
+
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{categoriaControle.salvar}" process="@this @form"
+					update="@form :messages" icon="fa fa-fw fa-save"
+					validateClient="true" />
+
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

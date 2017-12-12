@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+
+	<ui:define name="content">
+
+		<p:panelGrid styleClass="tab-formulario">
+			<p:column>
+				<h1>Consultar Categorias</h1>
+			</p:column>
+			<p:column>
+				<span style="float: right; position: relative; top: .5em;"> <i
+					class="fa fa-coffee" style="margin-right: 5px;" /> <p:commandLink
+						value="Cadastrar Nova Categoria"
+						action="#{categoriaControle.novo}" />
+				</span>
+			</p:column>
+		</p:panelGrid>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formCategoriaConsulta">
+			<p:panelGrid styleClass="tab-formulario">
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Nome ou Codigo da Categoria: "
+							for="categoriaNome" />
+						<p:inputText value="#{categoriaControle.categoriaNome}"
+							id="categoriaNome" styleClass="form-normal">
+							<p:ajax event="keyup" listener="#{categoriaControle.listar}"
+								process="@form" update="@form :tabelaCategorias" />
+						</p:inputText>
+					</p:column>
+					<p:column styleClass="td-botao-consulta">
+						<p:commandButton id="buscarCategoria" value="Filtrar"
+							action="#{categoriaControle.listar}" process="@form"
+							update="@form :tabelaCategorias" icon="fa fa-fw fa-filter" />
+						<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+							action="#{categoriaControle.limpar}" process="@form"
+							update="@form :tabelaCategorias" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+
+		<h:form id="tabelaCategorias">
+			<p:dataTable id="categoria" var="categoria"
+				value="#{categoriaControle.categorias}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowKey="#{categoria.id}" selection="#{categoriaControle.categoria}"
+				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!">
+
+				<f:facet name="header">Lista de Categorias
+            		<p:commandButton id="toggler" type="button"
+						value="Columns" style="float:right" icon="ui-icon-calculator" />
+					<p:columnToggler datasource="categoria" trigger="toggler" />
+				</f:facet>
+
+				<p:column headerText="#" style="width:36px" priority="4">
+					<p:rowToggler />
+				</p:column>
+
+				<p:column headerText="Codigo" sortBy="#{categoria.codigo}">
+					<h:outputText value="#{categoria.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{categoria.nome}">
+					<h:outputText value="#{categoria.nome}" />
+				</p:column>
+
+				<p:column headerText="Descricao" sortBy="#{categoria.descricao}">
+					<h:outputText value="#{categoria.descricao}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+						outcome="#{categoriaControle.editar(categoria)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+						action="#{categoriaControle.remover(categoria)}" update="@form"
+						process="@this @form" />
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{categoriaControle.totalCategorias} de #{categoriaControle.totalCategoriasConsulta}" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:contextMenu for="categoria">
+				<p:menuitem value="Edição" update="categoriaEditar"
+					icon="ui-icon-search" oncomplete="PF('categoriaDialog').show()" />
+				<p:menuitem value="Deletar" update="categoria" icon="ui-icon-close"
+					action="#{categoriaControle.remover}" />
+			</p:contextMenu>
+
+			<p:dialog header="Edição de Categoria" widgetVar="categoriaDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel id="categoriaEditar" style="text-align:center;">
+					<p:panelGrid columns="2"
+						rendered="#{not empty categoriaControle.categorias}"
+						columnClasses="label,value">
+						<f:facet name="header">
+						Titulo
+						</f:facet>
+						<h:outputText value="Codigo" />
+						<h:outputText value="#{categoriaControle.categoria.codigo}" />
+						<h:outputText value="Nome:" />
+						<h:outputText value="#{categoriaControle.categoria.nome}" />
+						<h:outputText value="#{categoriaControle.categoria.descricao}" />
+						<h:commandButton styleClass="botao" value="Excluir"
+							action="#{categoriaControle.remover(categoriaControle.categoria)}" />
+						<h:link styleClass="botao" value="Editar"
+							outcome="#{categoriaControle.editar(categoriaControle.categoria)}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

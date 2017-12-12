@@ -46,12 +46,13 @@ public class CategoriaRepositorio {
 	}
 	//lista categorias com base em uma chave de pesquisa
 	public List<Categoria> listarCategorias(String nome) {
-		String jpql = "select c from Categoria c where c.nome like :pnome or c.codigo like :pcodigo";
+		String jpql = "select c from Categoria c where c.nome like :pnome or c.codigo like :pcodigo or c.descricao like :pdescricao";
 
 		TypedQuery<Categoria> query = em.createQuery(jpql, Categoria.class);
 
 		query.setParameter("pnome", '%' + nome + '%');
 		query.setParameter("pcodigo", '%' + nome + '%');
+		query.setParameter("pdescricao", '%' + nome + '%');
 
 		System.out.println(jpql);
 		return query.getResultList();
