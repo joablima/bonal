@@ -14,8 +14,8 @@ public class Categoria {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	//define o nome da categoria e o prefixo que irá ser combinado no código de todos os bens pertencentes a essa clase
-	private String nome, prefixo;
+	//define o nome da categoria e o codigo da categoria 
+	private String nome, codigo;
 	public Long getId() {
 		return id;
 	}
@@ -28,11 +28,11 @@ public class Categoria {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public String getPrefixo() {
-		return prefixo;
+	public String getCodigo() {
+		return codigo;
 	}
-	public void setPrefixo(String prefixo) {
-		this.prefixo = prefixo;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 	
 	
