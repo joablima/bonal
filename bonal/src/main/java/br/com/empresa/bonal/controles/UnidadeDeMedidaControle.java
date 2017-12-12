@@ -12,7 +12,6 @@ import javax.faces.bean.ViewScoped;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
-import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
@@ -111,19 +110,24 @@ public class UnidadeDeMedidaControle {
 		return null;
 	}
 
+	public void salvar(UnidadeDeMedida d) {
+		this.unidadeDeMedida = d;
+		salvar();
+	}
+
 	// Métodos que utilizam métodos do repositório
 	public String salvar() {
-		System.out.println("entrou em salvar");
 		String message = "";
 		if (unidadeDeMedida.getId() == null) {
+			System.out.println("Entrou no adicionar ");
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
 			message += "Cargo Cadastrado com Sucesso.";
 		} else {
 			unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
 			message += "Cargo Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
-		// System.out.println(cargo);
+		// new FacesContextUtil().info(message);
+		System.out.println(message);
 		unidadeDeMedida = new UnidadeDeMedida();
 		return null;
 	}

@@ -48,4 +48,16 @@ public class Categoria {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(getClass().getSimpleName() + " {");
+		builder.append("\n\tid= " + getId());
+		builder.append("\n\tnome= " + getNome());
+		builder.append("\n\tfone= " + getCodigo());
+		builder.append("\n\temail= " + getDescricao());
+		builder.append("\n }");
+		return builder.toString();
+	}
 }

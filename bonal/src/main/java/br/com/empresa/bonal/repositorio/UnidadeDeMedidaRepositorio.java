@@ -21,7 +21,7 @@ public class UnidadeDeMedidaRepositorio {
 		em.getTransaction().begin();
 		em.persist(unidadeDeMedida);
 		em.getTransaction().commit();
-		em.close();
+//		em.close();
 	}
 
 	// funcao que atualiza os registros de uma unidade de medida

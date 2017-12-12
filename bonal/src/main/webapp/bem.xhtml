@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="bemId" value="#{bemControle.bemId}" />
+		<f:viewAction action="#{bemControle.recuperarBemPorId}"
+			if="#{param.bemId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g titulo">
+			<div class="ui-g-12 ui-md-8 ui-lg-8">
+				<h1>
+					<h:outputText rendered="#{bemControle.bemId == null}"
+						value="Cadastro de Bens" />
+					<h:outputText rendered="#{bemControle.bemId != null}"
+						value="Edição de Bens" />
+				</h1>
+			</div>
+			<div class="ui-g-12 ui-md-4 ui-lg-4">
+				<i class="fa fa-coffee" />
+				<p:link value="Consultar Bens" outcome="bemConsultar" />
+			</div>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formBem">
+			<p:focus context="formBem" />
+			<p:fieldset legend="Dados do Bem">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Código:" for="codigo" />
+						<p:inputText id="codigo" value="#{bemControle.bem.codigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Código da bem obrigatório"
+							validatorMessage="Código da bem deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="codigo" id="codigoMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{bemControle.bem.nome}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Nome da bem obrigatório"
+							validatorMessage="Nome da bem deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="nome" id="nomeMessage" />
+					</div>
+				</div>
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Descrição:" for="descricao" />
+						<p:inputText id="descricao" value="#{bemControle.bem.descricao}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Descrição da bem obrigatório"
+							validatorMessage="Descrição da bem deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="descricao" id="descricaoMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Quantidade:" for="quantidade" />
+						<p:inputText id="quantidade" value="#{bemControle.bem.quantidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Quantidade da bem obrigatório"
+							validatorMessage="Quantidade da bem deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="quantidade" id="quantidadeMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Categoria:" for="categoriaId" />
+						<p:selectOneMenu value="#{bemControle.categoriaId}"
+							id="categoriaId" styleClass="form-normal">
+							<c:choose>
+								<c:when test="#{bemControle.bem.categoria.id == null}">
+									<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
+								</c:when>
+								<c:when test="#{bemControle.bem.categoria.id != null}">
+									<f:selectItem itemValue="#{bemControle.bem.categoria.id}"
+										itemLabel="#{bemControle.bem.categoria.nome}" />
+								</c:when>
+							</c:choose>
+							<f:selectItems value="#{categoriaControle.categorias}"
+								var="categoria" itemLabel="#{categoria.nome}"
+								itemValue="#{categoria.id}" />
+							<p:clientValidator event="blur" />
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
+						<i class="fa fa-coffee" />
+						<p:link value="Cadastrar Nova Categoria" outcome="categoria" />
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
+						<p:message for="categoriaId" id="categoriaMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Unidade de medida:" for="unidadeDeMedidaId" />
+						<p:selectOneMenu value="#{bemControle.unidadeDeMedidaId}"
+							id="unidadeDeMedidaId" styleClass="form-normal">
+							<c:choose>
+								<c:when test="#{bemControle.bem.unidadeDeMedida.id == null}">
+									<f:selectItem itemValue=""
+										itemLabel="Escolha um Unidade de Medida" />
+								</c:when>
+								<c:when test="#{bemControle.bem.unidadeDeMedida.id != null}">
+									<f:selectItem itemValue="#{bemControle.bem.unidadeDeMedida.id}"
+										itemLabel="#{bemControle.bem.unidadeDeMedida.nome}" />
+								</c:when>
+							</c:choose>
+							<f:selectItems
+								value="#{unidadeDeMedidaControle.unidadesDeMedida}"
+								var="unidadeDeMedida" itemLabel="#{unidadeDeMedida.nome}"
+								itemValue="#{unidadeDeMedida.id}" />
+							<p:clientValidator event="blur" />
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
+						<i class="fa fa-coffee" />
+						<p:link value="Cadastrar Nova Unidade de Medida"
+							outcome="unidadeDeMedida" />
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
+						<p:message for="unidadeDeMedidaId" id="unidadeDeMedidaMessage" />
+					</div>
+				</div>
+			</p:fieldset>
+
+
+
+			<div class="td-botao-consulta">
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{bemControle.salvar}" process="@this @form"
+					update="@form :messages" icon="fa fa-fw fa-save"
+					validateClient="true" />
+
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

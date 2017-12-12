@@ -88,8 +88,8 @@ a#title-logo {
 }
 
 #img-logo {
-	transition: all 1s linear;
-	transform: rotate(30deg) scale(1);
+/* 	transition: all 1s linear; */
+/* 	transform: rotate(30deg) scale(1); */
 }
 
 /* --------------------- Elementos da Nav --------------------- */

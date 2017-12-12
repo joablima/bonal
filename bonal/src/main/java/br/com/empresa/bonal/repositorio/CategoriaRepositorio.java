@@ -21,7 +21,7 @@ public class CategoriaRepositorio {
 		em.getTransaction().begin();
 		em.persist(categoria);
 		em.getTransaction().commit();
-		em.close();
+//		em.close();
 	}
 
 	// funcao que atualiza os registros de uma categoria

@@ -12,7 +12,6 @@ import javax.faces.bean.ViewScoped;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
-import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
@@ -95,8 +94,7 @@ public class CategoriaControle {
 				.filter(c -> (c.getNome().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
 						| (c.getCodigo().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
 						| c.getDescricao().toLowerCase().contains(categoriaNome.toLowerCase().trim()));
-	
-		
+
 		categorias = filter.collect(Collectors.toList());
 	}
 
@@ -114,17 +112,24 @@ public class CategoriaControle {
 		return null;
 	}
 
+	public void salvar(Categoria c) {
+		this.categoria = c;
+		salvar();
+	}
+
 	// Métodos que utilizam métodos do repositório
 	public String salvar() {
 		String message = "";
 		if (categoria.getId() == null) {
+			System.out.println("Entrou pra salvar categoria");
 			categoriaRepositorio.adicionar(categoria);
 			message += "Categoria Cadastrado com Sucesso.";
 		} else {
 			categoriaRepositorio.atualizar(categoria);
 			message += "Categoria Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
+		// new FacesContextUtil().info(message);
+		System.out.println(message);
 		categoria = new Categoria();
 		return null;
 	}

@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+
+	<ui:define name="content">
+
+		<p:panelGrid styleClass="tab-formulario">
+			<p:column>
+				<h1>Consultar Bens</h1>
+			</p:column>
+			<p:column>
+				<span style="float: right; position: relative; top: .5em;"> <i
+					class="fa fa-coffee" style="margin-right: 5px;" /> <p:link
+						value="Cadastrar Novo Bem" outcome="bem" />
+				</span>
+			</p:column>
+		</p:panelGrid>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formBemConsulta">
+			<p:panelGrid styleClass="tab-formulario">
+				<p:row>
+					<p:column>
+						<div class="ui-g-12 ui-md-6 ui-lg-4">
+							<p:outputLabel value="Categoria:" for="categoriaId" />
+							<p:selectOneMenu value="#{categoriaControle.categoriaId}" id="categoriaId"
+								styleClass="form-normal">
+<!-- 								<f:selectItem itemValue="" itemLabel="Escolha um Categoria" /> -->
+								<f:selectItems value="#{categoriaControle.categorias}" var="categoria"
+									itemLabel="#{categoria.nome}" itemValue="#{categoria.id}" />
+								<p:ajax event="blur" listener="#{bemControle.listar}"
+									process="@form" update="@form :tabelaBens" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="ui-g-12 ui-md-6 ui-lg-4">
+							<p:outputLabel value="Nome ou Codigo do Bem: " for="bemNome" />
+							<p:inputText value="#{bemControle.bemNome}" id="bemNome"
+								styleClass="form-normal">
+								<p:ajax event="keyup" listener="#{bemControle.listar}"
+									process="@form" update="@form :tabelaBens" />
+							</p:inputText>
+						</div>
+					</p:column>
+					<p:column styleClass="td-botao-consulta">
+						<p:commandButton id="buscarBem" value="Filtrar"
+							action="#{bemControle.listar}" process="@form"
+							update="@form :tabelaBens" icon="fa fa-fw fa-filter" />
+
+						<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+							action="#{bemControle.limpar}" process="@form"
+							update="@form :tabelaBens" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+
+		<h:form id="tabelaBens">
+			<p:dataTable id="bem" var="bem" value="#{bemControle.bens}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowKey="#{bem.id}" selection="#{bemControle.bem}"
+				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!">
+
+				<p:column headerText="Codigo" sortBy="#{bem.codigo}">
+					<h:outputText value="#{bem.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{bem.nome}">
+					<h:outputText value="#{bem.nome}" />
+				</p:column>
+
+				<p:column headerText="Descricao" sortBy="#{bem.descricao}">
+					<h:outputText value="#{bem.descricao}" />
+				</p:column>
+
+				<p:column headerText="categoria" sortBy="#{bem.categoria.nome}">
+					<h:outputText value="#{bem.categoria.nome}" />
+				</p:column>
+
+				<p:column headerText="unidadeDeMedida"
+					sortBy="#{bem.unidadeDeMedida.nome}">
+					<h:outputText value="#{bem.unidadeDeMedida.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+						outcome="#{bemControle.editar(bem)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+						action="#{bemControle.remover(bem)}" update="@form"
+						process="@this @form" />
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{bemControle.totalBens} de #{bemControle.totalBensConsulta}" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:contextMenu for="bem">
+				<p:menuitem value="Edição" update="bemEditar" icon="ui-icon-search"
+					oncomplete="PF('bemDialog').show()" />
+				<p:menuitem value="Deletar" update="bem" icon="ui-icon-close"
+					action="#{bemControle.remover}" />
+			</p:contextMenu>
+
+			<p:dialog header="Edição de Bens" widgetVar="bemDialog" modal="true"
+				showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel id="bemEditar" style="text-align:center;">
+					<p:panelGrid columns="2" rendered="#{not empty bemControle.bens}"
+						columnClasses="label,value">
+						<f:facet name="header">
+						Titulo
+						</f:facet>
+						<h:outputText value="Codigo" />
+						<h:outputText value="#{bemControle.bem.codigo}" />
+						<h:outputText value="Nome:" />
+						<h:outputText value="#{bemControle.bem.nome}" />
+						<h:outputText value="#{bemControle.bem.descricao}" />
+						<h:commandButton styleClass="botao" value="Excluir"
+							action="#{bemControle.remover(bemControle.bem)}" />
+						<h:link styleClass="botao" value="Editar"
+							outcome="#{bemControle.editar(bemControle.bem)}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
