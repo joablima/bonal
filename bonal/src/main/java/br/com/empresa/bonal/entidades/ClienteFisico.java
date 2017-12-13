@@ -4,7 +4,9 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("fornecedor_juridico")
-public class FornecedorJuridico extends PessoaJuridica {
+@DiscriminatorValue("cliente_fisico")
+public class ClienteFisico extends PessoaFisica {
+
+
 
 }
