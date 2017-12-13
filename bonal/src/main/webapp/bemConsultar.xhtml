@@ -31,11 +31,12 @@
 					<p:column>
 						<div class="ui-g-12 ui-md-6 ui-lg-4">
 							<p:outputLabel value="Categoria:" for="categoriaId" />
-							<p:selectOneMenu value="#{categoriaControle.categoriaId}" id="categoriaId"
-								styleClass="form-normal">
-<!-- 								<f:selectItem itemValue="" itemLabel="Escolha um Categoria" /> -->
-								<f:selectItems value="#{categoriaControle.categorias}" var="categoria"
-									itemLabel="#{categoria.nome}" itemValue="#{categoria.id}" />
+							<p:selectOneMenu value="#{categoriaControle.categoriaId}"
+								id="categoriaId" styleClass="form-normal">
+								<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
+								<f:selectItems value="#{categoriaControle.categorias}"
+									var="categoria" itemLabel="#{categoria.nome}"
+									itemValue="#{categoria.id}" />
 								<p:ajax event="blur" listener="#{bemControle.listar}"
 									process="@form" update="@form :tabelaBens" />
 							</p:selectOneMenu>
