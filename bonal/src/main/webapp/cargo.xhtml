@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="cargoId" value="#{cargoControle.cargoId}" />
+		<f:viewAction action="#{cargoControle.recuperarCargoPorId}"
+			if="#{param.cargoId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g titulo">
+			<div class="ui-g-12 ui-md-8 ui-lg-8">
+				<h1>
+					<h:outputText rendered="#{cargoControle.cargoId == null}"
+						value="Cadastro de Cargo" />
+					<h:outputText rendered="#{cargoControle.cargoId != null}"
+						value="Edição de Cargo" />
+				</h1>
+			</div>
+			<div class="ui-g-12 ui-md-4 ui-lg-4">
+				<i class="fa fa-coffee" />
+				<p:link value="Consultar Cargo" outcome="cargoConsultar" />
+			</div>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formCargo">
+			<p:focus context="formCargo" />
+			<p:fieldset legend="Dados do Cargo">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{cargoControle.cargo.nome}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Nome da cargo obrigatório"
+							validatorMessage="Nome da cargo deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="nome" id="nomeMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Salário:" for="salario" />
+						<p:inputText id="salario" value="#{cargoControle.cargo.salario}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Salário da cargo obrigatório"
+							validatorMessage="Salário deve ser preenchido corretamente"
+							maxlength="12">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="salario" id="salarioMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Nível de Permissão do Cargo:" for="permissao" />
+						<p:selectOneMenu value="#{cargoControle.cargo.permissao}" id="permissao"
+							styleClass="form-normal" required="true"
+							requiredMessage="Nível de permissão obrigatório">
+							<f:selectItem itemValue="0"
+								itemLabel="funcionario sem acesso ao sistema" />
+							<f:selectItem itemValue="1" itemLabel="Administrador" />
+							<f:selectItem itemValue="2" itemLabel="Gerente" />
+							<p:clientValidator event="blur" />
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="permissao" id="permissaoMessage" />
+					</div>
+				</div>
+			</p:fieldset>
+
+			<div class="td-botao-consulta">
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{cargoControle.salvar}" process="@this @form"
+					update="@form :messages" icon="fa fa-fw fa-save"
+					validateClient="true" />
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

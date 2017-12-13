@@ -1,16 +1,35 @@
 package br.com.empresa.bonal.entidades;
 
+import java.util.Calendar;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class UnidadeDeMedida {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome, sigla;
+
+	@NotNull
+	private String nome;
+
+	private String sigla;
+
+	@Version
+	private Integer version;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "data_cadastro")
+	private Calendar dataCadastro = Calendar.getInstance();
 
 	public Long getId() {
 		return id;
@@ -32,6 +51,14 @@ public class UnidadeDeMedida {
 		this.sigla = sigla;
 	}
 
+	public Integer getVersion() {
+		return version;
+	}
+
+	public Calendar getDataCadastro() {
+		return dataCadastro;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -39,6 +66,8 @@ public class UnidadeDeMedida {
 		builder.append("\n\tid= " + getId());
 		builder.append("\n\tfone= " + getSigla());
 		builder.append("\n\tnome= " + getNome());
+		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
+		builder.append("\n\tversion=" + getVersion());
 		builder.append("\n }");
 		return builder.toString();
 	}

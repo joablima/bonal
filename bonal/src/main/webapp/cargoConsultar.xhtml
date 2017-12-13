@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+
+	<ui:define name="content">
+
+		<p:panelGrid styleClass="tab-formulario">
+			<p:column>
+				<h1>Consultar Cargos</h1>
+			</p:column>
+			<p:column>
+				<span style="float: right; position: relative; top: .5em;"> <i
+					class="fa fa-coffee" style="margin-right: 5px;" /> <p:link
+						value="Cadastrar Novo Cargo" outcome="cargo" />
+				</span>
+			</p:column>
+		</p:panelGrid>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formCargoConsulta">
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-6 tab-formulario">
+					<p:outputLabel value="Nome do Cargo: " for="cargoNome" />
+					<p:inputText value="#{cargoControle.cargoNome}" id="cargoNome"
+						styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{cargoControle.listar}"
+							process="@form" update="@form :tabelaCargos" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 td-botao-consulta">
+					<p:commandButton id="buscarCargo" value="Filtrar"
+						action="#{cargoControle.listar}" process="@form"
+						update="@form :tabelaCargos" icon="fa fa-fw fa-filter" />
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{cargoControle.limpar}" process="@form"
+						update="@form :tabelaCargos" />
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="tabelaCargos">
+			<p:dataTable id="cargo" var="cargo" value="#{cargoControle.cargos}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowKey="#{cargo.id}" selection="#{cargoControle.cargo}"
+				selectionMode="single" emptyMessage="Nenhuma Cargo Encontrado!">
+
+				<p:column headerText="Nome" sortBy="#{cargo.nome}">
+					<h:outputText value="#{cargo.nome}" />
+				</p:column>
+
+				<p:column headerText="Salário" sortBy="#{cargo.salario}">
+					<h:outputText value="#{cargo.salario}" />
+				</p:column>
+
+				<p:column headerText="Permissão" sortBy="#{cargo.permissao}">
+					<h:outputText value="#{cargo.permissao}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+						outcome="#{cargoControle.editar(cargo)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+						action="#{cargoControle.remover(cargo)}" update="@form"
+						process="@this @form" />
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{cargoControle.totalCargos} de #{cargoControle.totalCargosConsulta}" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:contextMenu for="cargo">
+				<p:menuitem value="Edição" update="cargoEditar"
+					icon="ui-icon-search" oncomplete="PF('cargoDialog').show()" />
+				<p:menuitem value="Deletar" update="cargo" icon="ui-icon-close"
+					action="#{cargoControle.remover}" />
+			</p:contextMenu>
+
+			<p:dialog header="Edição de Cargo" widgetVar="cargoDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel id="cargoEditar" style="text-align:center;">
+					<p:panelGrid columns="2"
+						rendered="#{not empty cargoControle.cargos}"
+						columnClasses="label,value">
+						<f:facet name="header">
+						Titulo
+						</f:facet>
+						<h:outputText value="Nome:" />
+						<h:outputText value="#{cargoControle.cargo.nome}" />
+						<h:outputText value="Salário:" />
+						<h:outputText value="#{cargoControle.cargo.salario}" />
+						<h:outputText value="#{cargoControle.cargo.permissao}" />
+						<h:commandButton styleClass="botao" value="Excluir"
+							action="#{cargoControle.remover(cargoControle.cargo)}" />
+						<h:link styleClass="botao" value="Editar"
+							outcome="#{cargoControle.editar(cargoControle.cargo)}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

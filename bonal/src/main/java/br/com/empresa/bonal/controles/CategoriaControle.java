@@ -154,7 +154,7 @@ public class CategoriaControle {
 	// Editar um Categoria
 	public String editar() {
 		categoriaId = this.categoria.getId();
-		return "categoria?categoriaid=" + categoriaId;
+		return "categoria?categoriaId=" + categoriaId;
 	}
 
 	public String editar(Categoria categoria) {

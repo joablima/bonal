@@ -29,6 +29,10 @@ html, body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea
 	flex-direction: column;
 }
 
+#content{
+	margin: 1rem 2rem;
+}
+
 h1, legend {
 	text-transform: uppercase;
 }

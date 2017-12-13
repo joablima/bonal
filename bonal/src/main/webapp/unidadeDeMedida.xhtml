@@ -9,8 +9,10 @@
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="unidadeDeMedidaId" value="#{unidadeDeMedidaControle.unidadeDeMedidaId}" />
-		<f:viewAction action="#{unidadeDeMedidaControle.recuperarUnidadeDeMedidaPorId}"
+		<f:viewParam name="unidadeDeMedidaId"
+			value="#{unidadeDeMedidaControle.unidadeDeMedidaId}" />
+		<f:viewAction
+			action="#{unidadeDeMedidaControle.recuperarUnidadeDeMedidaPorId}"
 			if="#{param.unidadeDeMedidaId != null}" />
 	</f:metadata>
 
@@ -18,15 +20,18 @@
 		<div class="ui-g titulo">
 			<div class="ui-g-12 ui-md-8 ui-lg-8">
 				<h1>
-					<h:outputText rendered="#{unidadeDeMedidaControle.unidadeDeMedidaId == null}"
+					<h:outputText
+						rendered="#{unidadeDeMedidaControle.unidadeDeMedidaId == null}"
 						value="Cadastro de Unidade de Medida" />
-					<h:outputText rendered="#{unidadeDeMedidaControle.unidadeDeMedidaId != null}"
+					<h:outputText
+						rendered="#{unidadeDeMedidaControle.unidadeDeMedidaId != null}"
 						value="Edição de Unidade de Medida" />
 				</h1>
 			</div>
 			<div class="ui-g-12 ui-md-4 ui-lg-4">
 				<i class="fa fa-coffee" />
-				<p:link value="Consultar Unidade De Medida" outcome="unidadeDeMedidaConsultar" />
+				<p:link value="Consultar Unidade De Medida"
+					outcome="unidadeDeMedidaConsultar" />
 			</div>
 		</div>
 
@@ -41,7 +46,8 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Sigla:" for="sigla" />
-						<p:inputText id="sigla" value="#{unidadeDeMedidaControle.unidadeDeMedida.sigla}"
+						<p:inputText id="sigla"
+							value="#{unidadeDeMedidaControle.unidadeDeMedida.sigla}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Sigla da unidade de medida obrigatório"
 							validatorMessage="Sigla da unidade de medida deve ter no minimo 2 caracteres"
@@ -56,11 +62,12 @@
 				</div>
 
 
-			
+
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Nome:" for="nome" />
-						<p:inputText id="nome" value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}"
+						<p:inputText id="nome"
+							value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Nome da unidade de medida obrigatório"
 							validatorMessage="Nome da unidade de medida deve ter no minimo 2 caracteres"
@@ -76,12 +83,12 @@
 			</p:fieldset>
 
 			<div class="td-botao-consulta">
-			
+
 				<p:commandButton id="salvar" value="Salvar"
 					action="#{unidadeDeMedidaControle.salvar()}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />
-					
+
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>

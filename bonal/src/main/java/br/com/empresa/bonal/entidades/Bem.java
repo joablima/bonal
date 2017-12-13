@@ -1,14 +1,19 @@
 package br.com.empresa.bonal.entidades;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 @Entity
 public class Bem {
@@ -20,6 +25,15 @@ public class Bem {
 	private String nome;
 	private String descricao;
 	private BigDecimal quantidade;
+
+	private String tipoBem;
+
+	@Version
+	private Integer version;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "data_cadastro")
+	private Calendar dataCadastro = Calendar.getInstance();
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "categoria")
@@ -81,6 +95,31 @@ public class Bem {
 		this.nome = nome;
 	}
 
+	public String getTipoBem() {
+		return tipoBem;
+	}
+
+	public void setTipoBem(String tipoBem) {
+		this.tipoBem = tipoBem;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public Calendar getDataCadastro() {
+		return dataCadastro;
+	}
+
+	// @PrePersist
+	// @PreUpdate
+	// public void gerarCodigo() {
+	// StringBuilder builder = new StringBuilder();
+	// builder.append(this.tipoBem);
+	// builder.append(codigo);
+	// this.codigo = builder.toString();
+	// }
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -89,6 +128,8 @@ public class Bem {
 		builder.append("\n\tnome= " + getNome());
 		builder.append("\n\tcodigo= " + getCodigo());
 		builder.append("\n\tdescricao= " + getDescricao());
+		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
+		builder.append("\n\tversion=" + getVersion());
 		builder.append("\n }");
 		return builder.toString();
 	}

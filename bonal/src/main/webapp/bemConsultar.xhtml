@@ -26,42 +26,39 @@
 		<p:messages id="messages" globalOnly="true" />
 
 		<h:form id="formBemConsulta">
-			<p:panelGrid styleClass="tab-formulario">
-				<p:row>
-					<p:column>
-						<div class="ui-g-12 ui-md-6 ui-lg-4">
-							<p:outputLabel value="Categoria:" for="categoriaId" />
-							<p:selectOneMenu value="#{categoriaControle.categoriaId}"
-								id="categoriaId" styleClass="form-normal">
-								<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
-								<f:selectItems value="#{categoriaControle.categorias}"
-									var="categoria" itemLabel="#{categoria.nome}"
-									itemValue="#{categoria.id}" />
-								<p:ajax event="blur" listener="#{bemControle.listar}"
-									process="@form" update="@form :tabelaBens" />
-							</p:selectOneMenu>
-						</div>
+			<div class=" ui-g tab-formulario">
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Categoria:" for="categoriaId" />
+					<p:selectOneMenu value="#{categoriaControle.categoriaId}"
+						id="categoriaId" styleClass="form-normal">
+						<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
+						<f:selectItems value="#{categoriaControle.categorias}"
+							var="categoria" itemLabel="#{categoria.nome}"
+							itemValue="#{categoria.id}" />
+						<p:ajax event="blur" listener="#{bemControle.listar}"
+							process="@form" update="@form :tabelaBens" />
+					</p:selectOneMenu>
+				</div>
 
-						<div class="ui-g-12 ui-md-6 ui-lg-4">
-							<p:outputLabel value="Nome ou Codigo do Bem: " for="bemNome" />
-							<p:inputText value="#{bemControle.bemNome}" id="bemNome"
-								styleClass="form-normal">
-								<p:ajax event="keyup" listener="#{bemControle.listar}"
-									process="@form" update="@form :tabelaBens" />
-							</p:inputText>
-						</div>
-					</p:column>
-					<p:column styleClass="td-botao-consulta">
-						<p:commandButton id="buscarBem" value="Filtrar"
-							action="#{bemControle.listar}" process="@form"
-							update="@form :tabelaBens" icon="fa fa-fw fa-filter" />
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Nome ou Codigo do Bem: " for="bemNome" />
+					<p:inputText value="#{bemControle.bemNome}" id="bemNome"
+						styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{bemControle.listar}"
+							process="@form" update="@form :tabelaBens" />
+					</p:inputText>
+				</div>
 
-						<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-							action="#{bemControle.limpar}" process="@form"
-							update="@form :tabelaBens" />
-					</p:column>
-				</p:row>
-			</p:panelGrid>
+				<div class="ui-g-12 ui-md-6 ui-lg-4 td-botao-consulta">
+					<p:commandButton id="buscarBem" value="Filtrar"
+						action="#{bemControle.listar}" process="@form"
+						update="@form :tabelaBens" icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{bemControle.limpar}" process="@form"
+						update="@form :tabelaBens" />
+				</div>
+			</div>
 		</h:form>
 
 		<h:form id="tabelaBens">

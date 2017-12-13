@@ -185,7 +185,7 @@ public class BemControle {
 	// Editar um Bem
 	public String editar() {
 		bemId = this.bem.getId();
-		return "bem?bemid=" + bemId;
+		return "bem?bemId=" + bemId;
 	}
 
 	public String editar(Bem bem) {

@@ -144,19 +144,19 @@ public class UnidadeDeMedidaControle {
 		unidadeDeMedida = null;
 	}
 
-	public void remover(UnidadeDeMedida c) {
-		this.unidadeDeMedida = c;
+	public void remover(UnidadeDeMedida unidade) {
+		this.unidadeDeMedida = unidade;
 		remover();
 	}
 
 	// Editar um cargo
 	public String editar() {
 		unidadeDeMedidaId = this.unidadeDeMedida.getId();
-		return "cargo?cargoid=" + unidadeDeMedidaId;
+		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedidaId;
 	}
 
-	public String editar(UnidadeDeMedida c) {
-		this.unidadeDeMedida = c;
+	public String editar(UnidadeDeMedida unidadeDeMedida) {
+		this.unidadeDeMedida = unidadeDeMedida;
 		return editar();
 	}
 

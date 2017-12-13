@@ -58,6 +58,25 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Classificação do bem:" for="tipoBem" />
+						<p:selectOneMenu value="#{bem.tipoBem}" id="tipoBem"
+							styleClass="form-normal" required="true"
+							requiredMessage="Tipo de bem obrigatório">
+							<f:selectItem itemValue=""
+								itemLabel="Selecione a classificação do Bem" />
+							<f:selectItem itemValue="10" itemLabel="Bem de Consumo" />
+							<f:selectItem itemValue="20" itemLabel="Bem Permanente" />
+							<p:clientValidator event="blur" />
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="tipoBem" id="tipoBemMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Nome:" for="nome" />
 						<p:inputText id="nome" value="#{bemControle.bem.nome}"
 							styleClass="form-normal" required="true"
@@ -102,6 +121,7 @@
 							validatorMessage="Quantidade da bem deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
+							<f:convertNumber maxFractionDigits="3" locale="pt_BR" />
 						</p:inputText>
 					</div>
 
@@ -172,8 +192,6 @@
 					</div>
 				</div>
 			</p:fieldset>
-
-
 
 			<div class="td-botao-consulta">
 				<p:commandButton id="salvar" value="Salvar"
