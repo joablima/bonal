@@ -12,8 +12,7 @@ public class Funcionario extends PessoaFisica {
 
 	private String formacao;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "qualificacao")
+	
 	private QualificacaoProfissional qualificacao;
 
 	@ManyToOne(cascade = CascadeType.ALL)

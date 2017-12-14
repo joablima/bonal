@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="qualificacaoId"
+			value="#{qualificacaoControle.qualificacaoId}" />
+		<f:viewAction
+			action="#{qualificacaoControle.recuperarQualificacaoPorId}"
+			if="#{param.qualificacaoId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g titulo">
+			<div class="ui-g-12 ui-md-8 ui-lg-8">
+				<h1>
+					<h:outputText
+						rendered="#{qualificacaoControle.qualificacaoId == null}"
+						value="Cadastro de Qualificação" />
+					<h:outputText
+						rendered="#{qualificacaoControle.qualificacaoId != null}"
+						value="Edição de Qualificação" />
+				</h1>
+			</div>
+			<div class="ui-g-12 ui-md-4 ui-lg-4">
+				<i class="fa fa-coffee" />
+				<p:link value="Consultar Qualificação"
+					outcome="cargoConsultar" />
+			</div>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formQualificacao">
+			<p:focus context="formQualificacao" />
+			<p:fieldset legend="Dados do Qualificação">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Titulo da Formação:" for="titulo" />
+						<p:inputText id="titulo"
+							value="#{qualificacaoControle.qualificacao.titulo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Titulo da qualificacao obrigatório"
+							validatorMessage="Título da qualificacao deve ter no minimo 5 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="titulo" id="ctituloMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Descrição da qualificação:" for="descricao" />
+						<p:inputText id="descricao"
+							value="#{qualificacaoControle.qualificacao.descricao}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Descrição da qualificacao obrigatório"
+							validatorMessage="Descrição da qualificacao deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="descricao" id="descricaoMessage" />
+					</div>
+				</div>
+
+
+				<!-- inicio das datas -->
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<p:outputLabel value="Data de Inicio:" for="dataInicio" />
+						<p:calendar id="dataInicio" label="Data de Inicio"
+							value="#{qualificacaoControle.qualificacao.dataInicio.time}"
+							showOn="button" locale="pt_BR" navigator="true"
+							pattern="dd/MM/yyyy" required="true"
+							requiredMessage="Data de Inico Obrigatória" maxlength="10"
+							mask="true">
+							<f:ajax event="blur" render="dataInicioMessage" />
+						</p:calendar>
+					</div>
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<p:outputLabel value="Data Final:" for="dataFim" />
+						<p:calendar id="dataFim" label="Data Fim"
+							value="#{qualificacaoControle.qualificacao.dataFim.time}"
+							showOn="button" locale="pt_BR" navigator="true"
+							pattern="dd/MM/yyyy" required="true"
+							requiredMessage="Data Fim Obrigatória" maxlength="10" mask="true">
+							<f:ajax event="blur" render="dataFimMessage" />
+						</p:calendar>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+						<p:message for="dataInicio" id="dataInicioMessage" />
+						<p:message for="dataFim" id="dataFimMessage" />
+					</div>
+				</div>
+			</p:fieldset>
+
+			<div class="td-botao-consulta">
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{qualificacaoControle.salvar}" process="@this @form"
+					update="@form :messages" icon="fa fa-fw fa-save"
+					validateClient="true" />
+
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

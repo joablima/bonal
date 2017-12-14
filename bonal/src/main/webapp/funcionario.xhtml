@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="funcionarioId"
+			value="#{funcionarioControle.funcionarioId}" />
+		<f:viewAction
+			action="#{funcionarioControle.recuperarFuncionarioPorId}"
+			if="#{param.funcionarioId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g titulo">
+			<div class="ui-g-12 ui-md-8 ui-lg-8">
+				<h1>
+					<h:outputText
+						rendered="#{funcionarioControle.funcionarioId == null}"
+						value="Cadastro de Funcionarios" />
+					<h:outputText
+						rendered="#{funcionarioControle.funcionarioId != null}"
+						value="Edição de Funcionarios" />
+				</h1>
+			</div>
+			<div class="ui-g-12 ui-md-4 ui-lg-4">
+				<i class="fa fa-coffee" />
+				<p:link value="Consultar Funcionarios"
+					outcome="cargoConsultar" />
+			</div>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formFuncionario">
+			<p:focus context="formFuncionario" />
+			<p:fieldset legend="Dados do Funcionario">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome"
+							value="#{funcionarioControle.funcionario.nome}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Nome da funcionario obrigatório"
+							validatorMessage="Nome da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="nome" id="nomeMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="CPF:" for="cpf" />
+						<p:inputText id="cpf"
+							value="#{funcionarioControle.funcionario.cpf}"
+							styleClass="form-normal" required="true"
+							requiredMessage="cpf do funcionario obrigatório" maxlength="14">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="cpf" id="cpfMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Sexo:" for="sexo" />
+						<h:selectOneRadio label="Sexo do Funcionário"
+							styleClass="form-normal"
+							value="#{funcionarioControle.funcionario.sexo}" id="sexo"
+							required="true" requiredMessage="Selecione uma opção de sexo">
+							<f:selectItem itemLabel="Feminino" itemValue="F" />
+							<f:selectItem itemLabel="Masculino" itemValue="M" />
+							<p:clientValidator event="blur" />
+						</h:selectOneRadio>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+						<p:message for="sexo" id="sexoMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Email:" for="email" />
+						<p:inputText id="email"
+							value="#{funcionarioControle.funcionario.email}"
+							styleClass="form-normal" required="false" maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="email" id="emailMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Telefone:" for="telefone" />
+						<p:inputText id="telefone"
+							value="#{funcionarioControle.funcionario.telefone}"
+							styleClass="form-normal" required="false" maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="telefone" id="telefoneMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Formação:" for="formacao" />
+						<h:selectOneRadio label="Formação do Funcionário"
+							styleClass="form-normal"
+							value="#{funcionarioControle.funcionario.formacao}" id="formacao"
+							required="true" requiredMessage="Selecione uma opção de formação">
+							<f:selectItem itemLabel="Ensino Fundamental Incompleto"
+								itemValue="Fundamental Incompleto" />
+							<f:selectItem itemLabel="Ensino Fundamental Completo"
+								itemValue="Fundamental Completo" />
+							<f:selectItem itemLabel="Ensino Médio Incompleto"
+								itemValue="Médio Incompleto" />
+							<f:selectItem itemLabel="Ensino Médio Completo"
+								itemValue="Médio Completo" />
+							<f:selectItem itemLabel="Ensino Superior Incompleto"
+								itemValue="Superior Incompleto" />
+							<f:selectItem itemLabel="Ensino Superior Completo"
+								itemValue="Superior Completo" />
+							<f:selectItem itemLabel="Mestrado " itemValue="Mestrado" />
+							<f:selectItem itemLabel="Doutorado" itemValue="Doutorado" />
+							<p:clientValidator event="blur" />
+						</h:selectOneRadio>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+						<p:message for="formacao" id="formacaoMessage" />
+					</div>
+				</div>
+
+
+
+				<!-- cargo -->
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Cargo:" for="cargoId" />
+						<p:selectOneMenu value="#{funcionarioControle.cargoId}"
+							id="cargoId" styleClass="form-normal">
+							<c:choose>
+								<c:when
+									test="#{funcionarioControle.funcionario.cargo.id == null}">
+									<f:selectItem itemValue="" itemLabel="Escolha um cargo" />
+								</c:when>
+								<c:when
+									test="#{funcionarioControle.funcionario.cargo.id != null}">
+									<f:selectItem
+										itemValue="#{funcionarioControle.funcionario.cargo.id}"
+										itemLabel="#{funcionarioControle.funcionario.cargo.nome}" />
+								</c:when>
+							</c:choose>
+							<f:selectItems value="#{unidadeDeMedidaControle.cargos}"
+								var="cargo" itemLabel="#{cargo.nome}" itemValue="#{cargo.id}" />
+							<p:clientValidator event="blur" />
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
+						<i class="fa fa-coffee" />
+						<p:link value="Cadastrar Novo Cargo" outcome="cargo" />
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
+						<p:message for="cargoId" id="cargoMessage" />
+					</div>
+				</div>
+
+			</p:fieldset>
+
+			<div class="td-botao-consulta">
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{funcionarioControle.salvar}" process="@this @form"
+					update="@form :messages" icon="fa fa-fw fa-save"
+					validateClient="true" />
+
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
