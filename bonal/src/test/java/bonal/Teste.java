@@ -2,8 +2,6 @@ package bonal;
 
 import java.math.BigDecimal;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 import br.com.empresa.bonal.controles.BemControle;
 import br.com.empresa.bonal.controles.CategoriaControle;
 import br.com.empresa.bonal.controles.UnidadeDeMedidaControle;

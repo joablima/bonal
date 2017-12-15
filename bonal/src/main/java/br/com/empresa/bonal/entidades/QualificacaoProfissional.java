@@ -2,14 +2,11 @@ package br.com.empresa.bonal.entidades;
 
 import java.util.Calendar;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -40,9 +37,9 @@ public class QualificacaoProfissional {
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "funcionario")
-	private Funcionario funcionario;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "funcionario")
+//	private Funcionario funcionario;
 
 	// ---------- Relacionamentos para muito com Funcionario ----------
 	// @ManyToOne(cascade = CascadeType.MERGE)

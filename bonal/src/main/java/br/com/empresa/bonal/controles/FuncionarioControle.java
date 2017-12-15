@@ -15,6 +15,8 @@ import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.QualificacaoProfissional;
 import br.com.empresa.bonal.repositorio.FuncionarioRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.enums.EnumFormacao;
+import br.com.empresa.bonal.util.enums.EnumSexo;
 
 @ManagedBean
 @ViewScoped
@@ -82,6 +84,15 @@ public class FuncionarioControle {
 
 	public void setFuncionarioNome(String funcionarioNome) {
 		this.funcionarioNome = funcionarioNome;
+	}
+
+	// ----- Carrega os Enums em Arrays -----
+	public EnumSexo[] getEnumSexo() {
+		return EnumSexo.values();
+	}
+
+	public EnumFormacao[] getEnumFormacoes() {
+		return EnumFormacao.values();
 	}
 
 	public List<Funcionario> getFuncionarios() {

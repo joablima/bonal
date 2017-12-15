@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,21 +32,15 @@ public abstract class Pessoa {
 
 	private String telefone;
 
+	@Embedded
+	private Endereco endereco;
+
 	@Version
 	private Integer version;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
-
-	// ---------- INICIO RELACIONAMENTOS ----------
-	// @MANYTOONE(CASCADE = CASCADETYPE.MERGE)
-	// @JOINCOLUMN(NAME = "ENDERECO_ID")
-	// PRIVATE ENDERECO ENDERECO;
-
-	// @ONETOONE(MAPPEDBY = "PESSOA")
-	// PRIVATE FUNCIONARIO FUNCIONARIO;
-	// ---------- FIM RELACIONAMENTOS ----------
 
 	public String getNome() {
 		return nome;
@@ -71,6 +66,10 @@ public abstract class Pessoa {
 		this.telefone = telefone;
 	}
 
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -91,6 +90,15 @@ public abstract class Pessoa {
 		builder.append("\n\tnome= " + getNome());
 		builder.append("\n\temail= " + getEmail());
 		builder.append("\n\ttelefone= " + getTelefone());
+
+		builder.append("\n\tLogradouro= " + getEndereco().getLogradouro());
+		builder.append("\n\tnumero= " + getEndereco().getNumero());
+		builder.append("\n\tbairro= " + getEndereco().getBairro());
+		builder.append("\n\tcomplemento= " + getEndereco().getComplemento());
+		builder.append("\n\tcep= " + getEndereco().getCep());
+		builder.append("\n\tcidade= " + getEndereco().getCidade());
+		builder.append("\n\tuf= " + getEndereco().getUf());
+
 		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
 		builder.append("\n\tversion=" + getVersion());
 		builder.append("\n }");

@@ -31,8 +31,7 @@
 			</div>
 			<div class="ui-g-12 ui-md-4 ui-lg-4">
 				<i class="fa fa-coffee" />
-				<p:link value="Consultar Funcionarios"
-					outcome="cargoConsultar" />
+				<p:link value="Consultar Funcionarios" outcome="cargoConsultar" />
 			</div>
 		</div>
 
@@ -87,8 +86,8 @@
 							styleClass="form-normal"
 							value="#{funcionarioControle.funcionario.sexo}" id="sexo"
 							required="true" requiredMessage="Selecione uma opção de sexo">
-							<f:selectItem itemLabel="Feminino" itemValue="F" />
-							<f:selectItem itemLabel="Masculino" itemValue="M" />
+							<f:selectItems value="#{funcionarioControle.enumSexo}" var="sexo"
+								itemValue="#{sexo}" itemLabel="#{sexo.label}" />
 							<p:clientValidator event="blur" />
 						</h:selectOneRadio>
 					</div>
@@ -129,35 +128,36 @@
 				</div>
 
 
+				<!-- formação -->
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<p:outputLabel value="Formação:" for="formacao" />
-						<h:selectOneRadio label="Formação do Funcionário"
-							styleClass="form-normal"
+						<p:outputLabel value="Formaçao:" for="formacao" />
+						<p:selectOneMenu
 							value="#{funcionarioControle.funcionario.formacao}" id="formacao"
-							required="true" requiredMessage="Selecione uma opção de formação">
-							<f:selectItem itemLabel="Ensino Fundamental Incompleto"
-								itemValue="Fundamental Incompleto" />
-							<f:selectItem itemLabel="Ensino Fundamental Completo"
-								itemValue="Fundamental Completo" />
-							<f:selectItem itemLabel="Ensino Médio Incompleto"
-								itemValue="Médio Incompleto" />
-							<f:selectItem itemLabel="Ensino Médio Completo"
-								itemValue="Médio Completo" />
-							<f:selectItem itemLabel="Ensino Superior Incompleto"
-								itemValue="Superior Incompleto" />
-							<f:selectItem itemLabel="Ensino Superior Completo"
-								itemValue="Superior Completo" />
-							<f:selectItem itemLabel="Mestrado " itemValue="Mestrado" />
-							<f:selectItem itemLabel="Doutorado" itemValue="Doutorado" />
+							styleClass="form-normal">
+							<c:choose>
+								<c:when
+									test="#{funcionarioControle.funcionario.formacao == null}">
+									<f:selectItem itemValue=""
+										itemLabel="Escolha um nivel de formação" />
+								</c:when>
+								<c:when
+									test="#{funcionarioControle.funcionario.formacao != null}">
+									<f:selectItem
+										itemValue="#{funcionarioControle.funcionario.formacao}"
+										itemLabel="#{funcionarioControle.funcionario.formacao.label}" />
+								</c:when>
+							</c:choose>
+							<f:selectItems value="#{funcionarioControle.enumFormacoes}"
+								var="formacao" itemLabel="#{formacao.label}"
+								itemValue="#{formacao}" />
 							<p:clientValidator event="blur" />
-						</h:selectOneRadio>
+						</p:selectOneMenu>
 					</div>
 					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
 						<p:message for="formacao" id="formacaoMessage" />
 					</div>
 				</div>
-
 
 
 				<!-- cargo -->
@@ -178,8 +178,8 @@
 										itemLabel="#{funcionarioControle.funcionario.cargo.nome}" />
 								</c:when>
 							</c:choose>
-							<f:selectItems value="#{unidadeDeMedidaControle.cargos}"
-								var="cargo" itemLabel="#{cargo.nome}" itemValue="#{cargo.id}" />
+							<f:selectItems value="#{cargoControle.cargos}" var="cargo"
+								itemLabel="#{cargo.nome}" itemValue="#{cargo.id}" />
 							<p:clientValidator event="blur" />
 						</p:selectOneMenu>
 					</div>

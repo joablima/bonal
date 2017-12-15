@@ -30,8 +30,7 @@
 			</div>
 			<div class="ui-g-12 ui-md-4 ui-lg-4">
 				<i class="fa fa-coffee" />
-				<p:link value="Consultar Qualificação"
-					outcome="cargoConsultar" />
+				<p:link value="Consultar Qualificação" outcome="cargoConsultar" />
 			</div>
 		</div>
 
@@ -63,7 +62,7 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Descrição da qualificação:" for="descricao" />
+						<p:outputLabel value="Descrição da qualificação:" for="descricao" /><br/>
 						<p:inputText id="descricao"
 							value="#{qualificacaoControle.qualificacao.descricao}"
 							styleClass="form-normal" required="true"
@@ -88,8 +87,7 @@
 							value="#{qualificacaoControle.qualificacao.dataInicio.time}"
 							showOn="button" locale="pt_BR" navigator="true"
 							pattern="dd/MM/yyyy" required="true"
-							requiredMessage="Data de Inico Obrigatória" maxlength="10"
-							mask="true">
+							requiredMessage="Data de Inico Obrigatória" maxlength="10">
 							<f:ajax event="blur" render="dataInicioMessage" />
 						</p:calendar>
 					</div>
@@ -99,7 +97,7 @@
 							value="#{qualificacaoControle.qualificacao.dataFim.time}"
 							showOn="button" locale="pt_BR" navigator="true"
 							pattern="dd/MM/yyyy" required="true"
-							requiredMessage="Data Fim Obrigatória" maxlength="10" mask="true">
+							requiredMessage="Data Fim Obrigatória" maxlength="10">
 							<f:ajax event="blur" render="dataFimMessage" />
 						</p:calendar>
 					</div>

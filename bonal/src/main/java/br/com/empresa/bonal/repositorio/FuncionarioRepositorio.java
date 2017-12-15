@@ -66,7 +66,7 @@ public class FuncionarioRepositorio {
 		String jpql = "select f from Funcionario f where ";
 
 		if (nome != null)
-			jpql += "(f.nome like :pnome or f.formacao like :pformacao) and ";
+			jpql += "f.nome like :pnome and ";
 		if (cargoId != null)
 			jpql += "f.cargo.id = :pcargo and ";
 		if (qualificacaoId != null)
@@ -75,10 +75,8 @@ public class FuncionarioRepositorio {
 
 		TypedQuery<Funcionario> query = em.createQuery(jpql, Funcionario.class);
 
-		if (nome != null) {
+		if (nome != null)
 			query.setParameter("pnome", '%' + nome + '%');
-			query.setParameter("pformacao", '%' + nome + '%');
-		}
 		if (cargoId != null)
 			query.setParameter("pcargo", cargoId);
 		if (qualificacaoId != null)
