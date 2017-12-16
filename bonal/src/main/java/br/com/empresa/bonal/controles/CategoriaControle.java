@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
+import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
@@ -83,19 +84,20 @@ public class CategoriaControle {
 	@PostConstruct
 	public void listarTabela() {
 		if (this.categorias == null) {
-			lista = categoriaRepositorio.listarCategorias(categoriaNome);
+			lista = categoriaRepositorio.listarTodos();
 			categorias = new ArrayList<>(lista);
 		}
 		filtrarTabela();
 	}
 
 	public void filtrarTabela() {
-		Stream<Categoria> filter = lista.stream()
-				.filter(c -> (c.getNome().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
-						| (c.getCodigo().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
-						| c.getDescricao().toLowerCase().contains(categoriaNome.toLowerCase().trim()));
+		Stream<Categoria> stream = lista.stream();
 
-		categorias = filter.collect(Collectors.toList());
+		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
+				| (c.getCodigo().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
+				| c.getDescricao().toLowerCase().contains(categoriaNome.toLowerCase().trim()));
+
+		categorias = stream.collect(Collectors.toList());
 	}
 
 	// Método chamado ao carregar pagina de consulta para popular tabela
@@ -104,12 +106,15 @@ public class CategoriaControle {
 		return null;
 	}
 
-	// Limpar tabela da consulta,
+	// Limpar tabela da consulta
 	public String limpar() {
-		this.categoriaNome = "";
-		// listarCategorias(); // Realiza nova consulta ao repositorio
-		filtrarTabela(); // Retorna a lista unmodifiablelist offline armazenada
+		limparFiltros();
+		this.categorias = new ArrayList<>(this.lista);
 		return null;
+	}
+
+	public void limparFiltros() {
+		this.categoriaNome = "";
 	}
 
 	public void salvar(Categoria c) {
@@ -128,14 +133,14 @@ public class CategoriaControle {
 			categoriaRepositorio.atualizar(categoria);
 			message += "Categoria Atualizado com Sucesso.";
 		}
-		// new FacesContextUtil().info(message);
+		new FacesContextUtil().info(message);
 		System.out.println(message);
 		categoria = new Categoria();
 		return null;
 	}
 
 	public void recuperarCategoriaPorId() {
-		categoria = categoriaRepositorio.getCategoria(categoriaId);
+		categoria = categoriaRepositorio.buscarPorId(categoriaId);
 	}
 
 	// Remove um Categoria do banco de dados

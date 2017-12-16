@@ -4,48 +4,61 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.util.JPAUtil;
 
 public class UnidadeDeMedidaRepositorio {
 
-	EntityManager em;
-
-	public UnidadeDeMedidaRepositorio() {
-		em = new JPAUtil().getEntityManager();
-	}
-
-	// funcao que adiciona uma unidade de medida ao banco de dados
+	// método que persiste um registro
 	public void adicionar(UnidadeDeMedida unidadeDeMedida) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.persist(unidadeDeMedida);
 		em.getTransaction().commit();
-//		em.close();
+		em.close();
 	}
 
-	// funcao que atualiza os registros de uma unidade de medida
+	// método que atualiza um registro
 	public void atualizar(UnidadeDeMedida unidadeDeMedida) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.merge(unidadeDeMedida);
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// funcao que remove os registros de uma unidade de medida
+	// método que remove um registro
 	public void remover(UnidadeDeMedida unidadeDeMedida) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.remove(em.merge(unidadeDeMedida));
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// funcao que recupera uma unidade de medida de acordo com id
-	public UnidadeDeMedida getUnidadeDeMedida(Long id) {
-		return em.find(UnidadeDeMedida.class, id);
+	// método que recupera um objeto pelo id
+	public UnidadeDeMedida buscarPorId(Long id) {
+		EntityManager em = JPAUtil.getEntityManager();
+		UnidadeDeMedida medida = em.find(UnidadeDeMedida.class, id);
+		em.close();
+		return medida;
 	}
-	//lista unidades de medidas com base em uma chave de pesquisa
-	public List<UnidadeDeMedida> listarUnidadesDeMedida(String nome) {
+
+	// método que lista todos os registros
+	public List<UnidadeDeMedida> listarTodos() {
+		EntityManager em = JPAUtil.getEntityManager();
+		CriteriaQuery<UnidadeDeMedida> query = em.getCriteriaBuilder().createQuery(UnidadeDeMedida.class);
+		query.select(query.from(UnidadeDeMedida.class));
+		List<UnidadeDeMedida> list = em.createQuery(query).getResultList();
+		em.close();
+		return list;
+	}
+
+	// método que lista com critérios todos os registros
+	public List<UnidadeDeMedida> listarPorCriterios(String nome) {
+		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select u from UnidadeDeMedida u where u.nome like :pnome or u.sigla like :psigla";
 
 		TypedQuery<UnidadeDeMedida> query = em.createQuery(jpql, UnidadeDeMedida.class);
@@ -54,6 +67,20 @@ public class UnidadeDeMedidaRepositorio {
 		query.setParameter("psigla", '%' + nome + '%');
 
 		System.out.println(jpql);
-		return query.getResultList();
+		List<UnidadeDeMedida> list = query.getResultList();
+		em.close();
+		return list;
 	}
+
+	// método que lista todos os registros com paginação
+	public List<UnidadeDeMedida> listarTodosPaginada(int firstResult, int maxResults) {
+		EntityManager em = JPAUtil.getEntityManager();
+		CriteriaQuery<UnidadeDeMedida> query = em.getCriteriaBuilder().createQuery(UnidadeDeMedida.class);
+		query.select(query.from(UnidadeDeMedida.class));
+		List<UnidadeDeMedida> list = em.createQuery(query).setFirstResult(firstResult).setMaxResults(maxResults)
+				.getResultList();
+		em.close();
+		return list;
+	}
+
 }

@@ -4,48 +4,61 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.empresa.bonal.entidades.ItemBC;
 import br.com.empresa.bonal.util.JPAUtil;
 
 public class ItemBCRepositorio {
 
-	EntityManager em;
-
-	public ItemBCRepositorio() {
-		em = new JPAUtil().getEntityManager();
-	}
-
-	// funcao que adiciona uma unidade de medida ao banco de dados
+	// método que persiste um registro
 	public void adicionar(ItemBC itemBC) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.persist(itemBC);
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// funcao que atualiza os registros de uma unidade de medida
+	// método que atualiza um registro
 	public void atualizar(ItemBC itemBC) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.merge(itemBC);
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// funcao que remove os registros de uma unidade de medida
+	// método que remove um registro
 	public void remover(ItemBC itemBC) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.remove(em.merge(itemBC));
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// funcao que recupera uma unidade de medida de acordo com id
-	public ItemBC getItemBC(Long id) {
-		return em.find(ItemBC.class, id);
+	// método que recupera um objeto pelo id
+	public ItemBC buscarPorId(Long id) {
+		EntityManager em = JPAUtil.getEntityManager();
+		ItemBC bc = em.find(ItemBC.class, id);
+		em.close();
+		return bc;
 	}
-	//lista unidades de medidas com base em uma chave de pesquisa
-	public List<ItemBC> listarItensBC(String nome) {
+
+	// método que lista todos os registros
+	public List<ItemBC> listarTodos() {
+		EntityManager em = JPAUtil.getEntityManager();
+		CriteriaQuery<ItemBC> query = em.getCriteriaBuilder().createQuery(ItemBC.class);
+		query.select(query.from(ItemBC.class));
+		List<ItemBC> list = em.createQuery(query).getResultList();
+		em.close();
+		return list;
+	}
+
+	// método que lista com critérios todos os registros
+	public List<ItemBC> listarPorCriterios(String nome) {
+		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select i from ItemBC i where i.codigo like :pcodigo or i.dataDeValidade like :pdataDeValidade";
 
 		TypedQuery<ItemBC> query = em.createQuery(jpql, ItemBC.class);
@@ -54,6 +67,8 @@ public class ItemBCRepositorio {
 		query.setParameter("psigla", '%' + nome + '%');
 
 		System.out.println(jpql);
-		return query.getResultList();
+		List<ItemBC> list = query.getResultList();
+		em.close();
+		return list;
 	}
 }

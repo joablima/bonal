@@ -5,16 +5,16 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class JPAUtil {
-
-	private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("Bonal");
-
-	public EntityManager getEntityManager() {
-		EntityManager entityManager = emf.createEntityManager();
-		return entityManager;
+	private static EntityManagerFactory emf;
+	static {
+		emf = Persistence.createEntityManagerFactory("Bonal");
 	}
 
-	public void close(EntityManager em) {
-		em.close();
+	public static EntityManager getEntityManager() {
+		return emf.createEntityManager();
+	}
+
+	public static void close() {
 		emf.close();
 	}
 }

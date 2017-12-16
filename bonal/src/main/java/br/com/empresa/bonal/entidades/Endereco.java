@@ -68,4 +68,21 @@ public class Endereco {
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(getClass().getSimpleName() + " {");
+		builder.append("\n\tLogradouro= " + getLogradouro());
+		builder.append("\n\tnumero= " + getNumero());
+		builder.append("\n\tbairro= " + getBairro());
+		builder.append("\n\tcomplemento= " + getComplemento());
+		builder.append("\n\tcep= " + getCep());
+		builder.append("\n\tcidade= " + getCidade());
+		builder.append("\n\tuf= " + getUf());
+		builder.append("\n }");
+		return builder.toString();
+	}
+
+	// TODO falta implementar equal e hashcode
 }

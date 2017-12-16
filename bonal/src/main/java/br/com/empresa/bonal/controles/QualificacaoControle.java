@@ -85,7 +85,7 @@ public class QualificacaoControle {
 	@PostConstruct
 	public void listarTabela() {
 		if (this.qualificacoes == null) {
-			lista = qualificacaoRepositorio.listarQualificacoes(qualificacaoNome);
+			lista = qualificacaoRepositorio.listarTodos();
 			qualificacoes = new ArrayList<>(lista);
 		}
 		filtrarTabela();
@@ -105,12 +105,16 @@ public class QualificacaoControle {
 		listarTabela();
 		return null;
 	}
-
-	// Limpar tabela da consulta,
+	
+	// Limpar tabela da consulta
 	public String limpar() {
-		this.qualificacaoNome = "";
-		filtrarTabela(); // Retorna a lista unmodifiablelist offline armazenada
+		limparFiltros();
+		this.qualificacoes = new ArrayList<>(this.lista);
 		return null;
+	}
+
+	public void limparFiltros() {
+		this.qualificacaoNome = "";
 	}
 
 	// Métodos que utilizam métodos do repositório
@@ -130,7 +134,7 @@ public class QualificacaoControle {
 	}
 
 	public void recuperarQualificacaoPorId() {
-		qualificacao = qualificacaoRepositorio.getQualificacao(qualificacaoId);
+		qualificacao = qualificacaoRepositorio.buscarPorId(qualificacaoId);
 	}
 
 	// Remove um objeto do banco de dados

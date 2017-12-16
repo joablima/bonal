@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
+import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
@@ -83,31 +84,35 @@ public class UnidadeDeMedidaControle {
 	@PostConstruct
 	public void listarTabela() {
 		if (this.unidadesDeMedida == null) {
-			lista = unidadeDeMedidaRepositorio.listarUnidadesDeMedida(unidadeDeMedidaNome);
+			lista = unidadeDeMedidaRepositorio.listarTodos();
 			unidadesDeMedida = new ArrayList<>(lista);
 		}
 		filtrarTabela();
 	}
 
 	public void filtrarTabela() {
-		Stream<UnidadeDeMedida> filter = lista.stream()
-				.filter(c -> (c.getNome().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim())));
+		Stream<UnidadeDeMedida> filter = lista.stream();
+
+		filter = filter.filter(c -> (c.getNome().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim())));
 
 		unidadesDeMedida = filter.collect(Collectors.toList());
 	}
 
-	// Método chamado ao carregar pagina de consulta para popular tabela
+	// Método chamado ao carregar tabela
 	public String listar() {
 		listarTabela();
 		return null;
 	}
 
-	// Limpar tabela da consulta,
+	// Limpar tabela da consulta
 	public String limpar() {
-		this.unidadeDeMedidaNome = "";
-		// listarCargos(); // Realiza nova consulta ao repositorio
-		filtrarTabela(); // Retorna a lista unmodifiablelist offline armazenada
+		limparFiltros();
+		this.unidadesDeMedida = new ArrayList<>(this.lista);
 		return null;
+	}
+
+	public void limparFiltros() {
+		this.unidadeDeMedidaNome = "";
 	}
 
 	public void salvar(UnidadeDeMedida d) {
@@ -119,29 +124,27 @@ public class UnidadeDeMedidaControle {
 	public String salvar() {
 		String message = "";
 		if (unidadeDeMedida.getId() == null) {
-			System.out.println("Entrou no adicionar ");
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
-			message += "Cargo Cadastrado com Sucesso.";
+			message += "Unidade de Medida Cadastrada com Sucesso.";
 		} else {
 			unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
-			message += "Cargo Atualizado com Sucesso.";
+			message += "Unidade de Medida Atualizada com Sucesso.";
 		}
-		// new FacesContextUtil().info(message);
+		new FacesContextUtil().info(message);
 		System.out.println(message);
 		unidadeDeMedida = new UnidadeDeMedida();
 		return null;
 	}
 
 	public void recuperarUnidadeDeMedidaPorId() {
-		unidadeDeMedida = unidadeDeMedidaRepositorio.getUnidadeDeMedida(unidadeDeMedidaId);
+		unidadeDeMedida = unidadeDeMedidaRepositorio.buscarPorId(unidadeDeMedidaId);
 	}
 
 	// Remove um cargo do banco de dados
 	public void remover() {
 		unidadeDeMedidaRepositorio.remover(unidadeDeMedida);
 		unidadesDeMedida = null;
-		listarTabela();
-		unidadeDeMedida = null;
+		listar();
 	}
 
 	public void remover(UnidadeDeMedida unidade) {

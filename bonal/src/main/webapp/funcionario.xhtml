@@ -194,6 +194,124 @@
 
 			</p:fieldset>
 
+
+			<!-- Dados do Endereço -->
+			<p:fieldset legend="Endereço do Funcionario">
+				<div class="ui-g">
+					<div class="ui-g-8 ui-md-8 ui-lg-6">
+						<p:outputLabel value="Logradouro:" for="logradouro" />
+						<p:inputText id="logradouro"
+							value="#{funcionarioControle.funcionario.endereco.logradouro}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Endereço do Funcionário obrigatório"
+							validatorMessage="Logradouro deve ter no minimo 5 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+					<div class="ui-g-4 ui-md-4 ui-lg-2">
+						<p:outputLabel value="Número:" for="numero" />
+						<p:inputText id="numero"
+							value="#{funcionarioControle.funcionario.endereco.numero}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Endereço do Funcionário obrigatório"
+							validatorMessage="Logradouro deve ter no minimo 5 caracteres"
+							maxlength="10">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-4 form-messages">
+						<p:message for="logradouro" id="logradouroMessage" />
+						<p:message for="numero" id="numeroMessage" />
+					</div>
+				</div>
+
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-8 ui-md-8 ui-lg-6">
+						<p:outputLabel value="Bairro:" for="bairro" />
+						<p:inputText id="bairro"
+							value="#{funcionarioControle.funcionario.endereco.bairro}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Endereço do Funcionário obrigatório"
+							validatorMessage="Bairro deve ter no minimo 5 caracteres"
+							maxlength="60">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+					<div class="ui-g-4 ui-md-4 ui-lg-2">
+						<p:outputLabel value="CEP:" for="cep" />
+						<p:inputMask id="cep"
+							value="#{funcionarioControle.funcionario.endereco.cep}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Endereço do Funcionário obrigatório"
+							validatorMessage="CEP deve ter no minimo 5 caracteres"
+							maxlength="9" mask="99999-999">
+							<p:clientValidator event="blur" />
+						</p:inputMask>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-4 form-messages">
+						<p:message for="bairro" id="bairroMessage" />
+						<p:message for="cep" id="cepMessage" />
+					</div>
+				</div>
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-8 ui-md-8 ui-lg-6">
+						<p:outputLabel value="Cidade:" for="cidade" />
+						<p:inputText id="cidade"
+							value="#{funcionarioControle.funcionario.endereco.cidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Cidade do Funcionário obrigatório"
+							validatorMessage="Cidade deve ter no minimo 5 caracteres"
+							maxlength="30">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+					<div class="ui-g-4 ui-md-4 ui-lg-2">
+						<p:outputLabel value="UF:" for="uf" />
+						<p:inputText id="uf"
+							value="#{funcionarioControle.funcionario.endereco.uf}"
+							styleClass="form-normal" required="true"
+							requiredMessage="UF do Funcionário obrigatório"
+							validatorMessage="UF deve ter no minimo 5 caracteres"
+							maxlength="2">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-4 form-messages">
+						<p:message for="cidade" id="cidadeMessage" />
+						<p:message for="uf" id="ufMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Complemento:" for="complemento" />
+						<p:inputText id="complemento"
+							value="#{funcionarioControle.funcionario.endereco.complemento}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Endereço do Funcionário obrigatório"
+							validatorMessage="complemento deve ter no minimo 5 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+						<p:message for="complemento" id="complementoMessage" />
+					</div>
+				</div>
+
+			</p:fieldset>
+
+
+
+
 			<div class="td-botao-consulta">
 				<p:commandButton id="salvar" value="Salvar"
 					action="#{funcionarioControle.salvar}" process="@this @form"

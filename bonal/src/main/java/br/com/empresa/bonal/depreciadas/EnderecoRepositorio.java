@@ -1,3 +1,4 @@
+package br.com.empresa.bonal.depreciadas;
 //package br.com.empresa.bonal.repositorio;
 //
 //import java.util.List;

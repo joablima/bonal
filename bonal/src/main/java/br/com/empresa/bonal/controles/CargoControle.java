@@ -84,17 +84,18 @@ public class CargoControle {
 	@PostConstruct
 	public void listarTabela() {
 		if (this.cargos == null) {
-			lista = cargoRepositorio.listarCargos(cargoNome);
+			lista = cargoRepositorio.listarTodos();
 			cargos = new ArrayList<>(lista);
 		}
 		filtrarTabela();
 	}
 
 	public void filtrarTabela() {
-		Stream<Cargo> filter = lista.stream()
-				.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim())));
+		Stream<Cargo> stream = lista.stream();
 
-		cargos = filter.collect(Collectors.toList());
+		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim())));
+
+		cargos = stream.collect(Collectors.toList());
 	}
 
 	// Método chamado ao carregar pagina de consulta para popular tabela
@@ -103,11 +104,15 @@ public class CargoControle {
 		return null;
 	}
 
-	// Limpar tabela da consulta,
+	// Limpar tabela da consulta
 	public String limpar() {
-		this.cargoNome = "";
-		filtrarTabela(); // Retorna a lista unmodifiablelist offline armazenada
+		limparFiltros();
+		this.cargos = new ArrayList<>(this.lista);
 		return null;
+	}
+
+	public void limparFiltros() {
+		this.cargoNome = "";
 	}
 
 	// Métodos que utilizam métodos do repositório
@@ -127,7 +132,7 @@ public class CargoControle {
 	}
 
 	public void recuperarCargoPorId() {
-		cargo = cargoRepositorio.getCargo(cargoId);
+		cargo = cargoRepositorio.buscarPorId(cargoId);
 	}
 
 	// Remove um cargo do banco de dados

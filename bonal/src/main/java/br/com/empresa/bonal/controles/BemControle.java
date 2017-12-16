@@ -14,6 +14,7 @@ import br.com.empresa.bonal.entidades.Bem;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemRepositorio;
+import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
@@ -104,28 +105,28 @@ public class BemControle {
 	@PostConstruct
 	public void listarTabela() {
 		if (this.bens == null) {
-			lista = bemRepositorio.listarBens(bemNome, categoriaId, unidadeDeMedidaId);
+			lista = bemRepositorio.listarTodos();
 			bens = new ArrayList<>(lista);
 		}
 		filtrarTabela();
 	}
 
 	public void filtrarTabela() {
-		Stream<Bem> filter = lista.stream();
+		Stream<Bem> stream = lista.stream();
 
 		if (!bemNome.equals(null)) {
-			filter = filter.filter(c -> (c.getNome().toLowerCase().contains(bemNome.toLowerCase().trim()))
+			stream = stream.filter(c -> (c.getNome().toLowerCase().contains(bemNome.toLowerCase().trim()))
 					| (c.getCodigo().toLowerCase().contains(bemNome.toLowerCase().trim()))
 					| c.getDescricao().toLowerCase().contains(bemNome.toLowerCase().trim()));
 		}
 
 		if (categoriaId != null)
-			filter = filter.filter(c -> (c.getCategoria().getId().equals(categoriaId)));
+			stream = stream.filter(c -> (c.getCategoria().getId().equals(categoriaId)));
 
 		if (unidadeDeMedidaId != null)
-			filter = filter.filter(c -> (c.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
+			stream = stream.filter(c -> (c.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
 
-		bens = filter.collect(Collectors.toList());
+		bens = stream.collect(Collectors.toList());
 	}
 
 	// Método chamado ao carregar pagina de consulta para popular tabela
@@ -159,14 +160,14 @@ public class BemControle {
 			bemRepositorio.atualizar(bem, categoriaId, unidadeDeMedidaId);
 			message += "Bem Atualizado com Sucesso.";
 		}
-		// new FacesContextUtil().info(message);
+		new FacesContextUtil().info(message);
 		System.out.println(message);
 		bem = new Bem();
 		return null;
 	}
 
 	public void recuperarBemPorId() {
-		bem = bemRepositorio.getBem(bemId);
+		bem = bemRepositorio.buscarPorId(bemId);
 	}
 
 	// Remove um Bem do banco de dados

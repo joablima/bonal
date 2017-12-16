@@ -64,7 +64,7 @@ public class UnidadeDeMedida {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getSimpleName() + " {");
 		builder.append("\n\tid= " + getId());
-		builder.append("\n\tfone= " + getSigla());
+		builder.append("\n\tsigla= " + getSigla());
 		builder.append("\n\tnome= " + getNome());
 		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
 		builder.append("\n\tversion=" + getVersion());
@@ -72,4 +72,5 @@ public class UnidadeDeMedida {
 		return builder.toString();
 	}
 
+	// TODO falta implementar equal e hashcode
 }

@@ -87,4 +87,6 @@ public class Cargo {
 		builder.append("\n }");
 		return builder.toString();
 	}
+
+	// TODO falta implementar equal e hashcode
 }

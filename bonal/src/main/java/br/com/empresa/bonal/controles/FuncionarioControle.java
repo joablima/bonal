@@ -116,25 +116,25 @@ public class FuncionarioControle {
 	@PostConstruct
 	public void listarTabela() {
 		if (this.funcionarios == null) {
-			lista = funcionarioRepositorio.listarFuncionarios(funcionarioNome, cargoId, qualificacaoId);
+			lista = funcionarioRepositorio.listarTodos();
 			funcionarios = new ArrayList<>(lista);
 		}
 		filtrarTabela();
 	}
 
 	public void filtrarTabela() {
-		Stream<Funcionario> filter = lista.stream();
+		Stream<Funcionario> stream = lista.stream();
 
 		if (!funcionarioNome.equals(null))
-			filter = filter.filter(c -> (c.getNome().toLowerCase().contains(funcionarioNome.toLowerCase().trim())));
+			stream = stream.filter(c -> (c.getNome().toLowerCase().contains(funcionarioNome.toLowerCase().trim())));
 
 		if (cargoId != null)
-			filter = filter.filter(c -> (c.getCargo().getId().equals(cargoId)));
+			stream = stream.filter(c -> (c.getCargo().getId().equals(cargoId)));
 
 		if (qualificacaoId != null)
-			filter = filter.filter(c -> (c.getQualificacao().getId().equals(qualificacaoId)));
+			stream = stream.filter(c -> (c.getQualificacao().getId().equals(qualificacaoId)));
 
-		funcionarios = filter.collect(Collectors.toList());
+		funcionarios = stream.collect(Collectors.toList());
 	}
 
 	// Método chamado ao carregar pagina de consulta para popular tabela
@@ -174,7 +174,7 @@ public class FuncionarioControle {
 	}
 
 	public void recuperarFuncionarioPorId() {
-		funcionario = funcionarioRepositorio.getFuncionario(funcionarioId);
+		funcionario = funcionarioRepositorio.buscarPorId(funcionarioId);
 	}
 
 	// Remove um Bem do banco de dados

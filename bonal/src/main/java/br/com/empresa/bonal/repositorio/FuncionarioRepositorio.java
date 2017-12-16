@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Funcionario;
@@ -12,14 +13,9 @@ import br.com.empresa.bonal.util.JPAUtil;
 
 public class FuncionarioRepositorio {
 
-	EntityManager em;
-
-	public FuncionarioRepositorio() {
-		em = new JPAUtil().getEntityManager();
-	}
-
-	// funcao que adiciona uma bem ao banco de dados
+	// método que persiste um registro
 	public void adicionar(Funcionario funcionario, Long cargoId, Long qualificacaoId) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
 		QualificacaoProfissional qualificacao = em.find(QualificacaoProfissional.class, qualificacaoId);
@@ -33,8 +29,9 @@ public class FuncionarioRepositorio {
 		em.close();
 	}
 
-	// funcao que atualiza os registros de uma bem
+	// método que atualiza um registro
 	public void atualizar(Funcionario funcionario, Long cargoId, Long qualificacaoId) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
 		QualificacaoProfissional qualificacao = em.find(QualificacaoProfissional.class, qualificacaoId);
@@ -48,21 +45,36 @@ public class FuncionarioRepositorio {
 		em.close();
 	}
 
-	// funcao que remove os registros de uma bem
+	// método que remove um registro
 	public void remover(Funcionario funcionario) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.remove(em.merge(funcionario));
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// funcao que recupera uma bem de acordo com id
-	public Funcionario getFuncionario(Long id) {
-		return em.find(Funcionario.class, id);
+	// método que recupera um objeto pelo id
+	public Funcionario buscarPorId(Long id) {
+		EntityManager em = JPAUtil.getEntityManager();
+		Funcionario funcionario = em.find(Funcionario.class, id);
+		em.close();
+		return funcionario;
 	}
 
-	// lista bems com base em uma chave de pesquisa
-	public List<Funcionario> listarFuncionarios(String nome, Long cargoId, Long qualificacaoId) {
+	// método que lista todos os registros
+	public List<Funcionario> listarTodos() {
+		EntityManager em = JPAUtil.getEntityManager();
+		CriteriaQuery<Funcionario> query = em.getCriteriaBuilder().createQuery(Funcionario.class);
+		query.select(query.from(Funcionario.class));
+		List<Funcionario> list = em.createQuery(query).getResultList();
+		em.close();
+		return list;
+	}
+
+	// método que lista com critérios todos os registros
+	public List<Funcionario> listarPorCriterios(String nome, Long cargoId, Long qualificacaoId) {
+		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select f from Funcionario f where ";
 
 		if (nome != null)
@@ -83,6 +95,8 @@ public class FuncionarioRepositorio {
 			query.setParameter("pqualificacao", qualificacaoId);
 
 		System.out.println(jpql);
-		return query.getResultList();
+		List<Funcionario> list = query.getResultList();
+		em.close();
+		return list;
 	}
 }

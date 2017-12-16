@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.empresa.bonal.entidades.Bem;
 import br.com.empresa.bonal.entidades.Categoria;
@@ -12,14 +13,9 @@ import br.com.empresa.bonal.util.JPAUtil;
 
 public class BemRepositorio {
 
-	EntityManager em;
-
-	public BemRepositorio() {
-		em = new JPAUtil().getEntityManager();
-	}
-
-	// funcao que adiciona uma bem ao banco de dados
+	// método que persiste um registro
 	public void adicionar(Bem bem, Long categoriaId, Long unidadeDeMedidaId) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
@@ -33,8 +29,9 @@ public class BemRepositorio {
 		em.close();
 	}
 
-	// funcao que atualiza os registros de uma bem
+	// método que atualiza um registro
 	public void atualizar(Bem bem, Long categoriaId, Long unidadeDeMedidaId) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
@@ -48,21 +45,36 @@ public class BemRepositorio {
 		em.close();
 	}
 
-	// funcao que remove os registros de uma bem
+	// método que remove um registro
 	public void remover(Bem bem) {
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.remove(em.merge(bem));
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// funcao que recupera uma bem de acordo com id
-	public Bem getBem(Long id) {
-		return em.find(Bem.class, id);
+	// método que recupera um objeto pelo id	
+	public Bem buscarPorId(Long id) {
+		EntityManager em = JPAUtil.getEntityManager();
+		Bem bem = em.find(Bem.class, id);
+		em.close();
+		return bem;
 	}
 
-	// lista bems com base em uma chave de pesquisa
-	public List<Bem> listarBens(String nome, Long categoriaId, Long unidadeDeMedidaId) {
+	// método que lista todos os registros
+	public List<Bem> listarTodos() {
+		EntityManager em = JPAUtil.getEntityManager();
+		CriteriaQuery<Bem> query = em.getCriteriaBuilder().createQuery(Bem.class);
+		query.select(query.from(Bem.class));
+		List<Bem> list = em.createQuery(query).getResultList();
+		em.close();
+		return list;
+	}	
+	
+	// método que lista com critérios todos os registros
+	public List<Bem> listarPorCriterios(String nome, Long categoriaId, Long unidadeDeMedidaId) {
+		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select b from Bem b where ";
 
 		if (nome != null)
@@ -86,6 +98,8 @@ public class BemRepositorio {
 			query.setParameter("punidade", unidadeDeMedidaId);
 
 		System.out.println(jpql);
-		return query.getResultList();
+		List<Bem> list = query.getResultList();
+		em.close();
+		return list;
 	}
 }
