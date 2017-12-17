@@ -41,7 +41,9 @@ public abstract class Pessoa {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
-
+	
+	private int status;
+	
 	public String getNome() {
 		return nome;
 	}
@@ -80,6 +82,14 @@ public abstract class Pessoa {
 
 	public Calendar getDataCadastro() {
 		return dataCadastro;
+	}
+	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	@Override

@@ -132,6 +132,21 @@ public class QualificacaoControle {
 		qualificacao = new QualificacaoProfissional();
 		return null;
 	}
+	public String salvar(QualificacaoProfissional qualificacao) {
+		String message = "";
+		this.qualificacao = qualificacao;
+		if (qualificacao.getId() == null) {
+			qualificacaoRepositorio.adicionar(qualificacao);
+			message += "Qualificacao profissional cadastrada com Sucesso.";
+		} else {
+			qualificacaoRepositorio.atualizar(qualificacao);
+			message += "Qualificacao profissional atualizada com Sucesso.";
+		}
+		new FacesContextUtil().info(message);
+		System.out.println(message);
+		qualificacao = new QualificacaoProfissional();
+		return null;
+	}
 
 	public void recuperarQualificacaoPorId() {
 		qualificacao = qualificacaoRepositorio.buscarPorId(qualificacaoId);
