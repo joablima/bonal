@@ -16,19 +16,15 @@
 	</f:metadata>
 
 	<ui:define name="content">
-		<div class="ui-g titulo">
-			<div class="ui-g-12 ui-md-8 ui-lg-8">
-				<h1>
-					<h:outputText rendered="#{bemControle.bemId == null}"
-						value="Cadastro de Bens" />
-					<h:outputText rendered="#{bemControle.bemId != null}"
-						value="Edição de Bens" />
-				</h1>
-			</div>
-			<div class="ui-g-12 ui-md-4 ui-lg-4">
-				<i class="fa fa-coffee" />
-				<p:link value="Consultar Bens" outcome="bemConsultar" />
-			</div>
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText rendered="#{bemControle.bemId == null}"
+					value="Cadastro de Bens" />
+				<h:outputText rendered="#{bemControle.bemId != null}"
+					value="Edição de Bens" />
+			</h1>
+			<span><i class="fa fa-coffee" /> <p:link
+					value="Consultar Bens" outcome="bemConsultar" /> </span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
@@ -193,7 +189,7 @@
 				</div>
 			</p:fieldset>
 
-			<div class="td-botao-consulta">
+			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
 					action="#{bemControle.salvar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
@@ -202,6 +198,7 @@
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
+
 		</h:form>
 	</ui:define>
 </ui:composition>

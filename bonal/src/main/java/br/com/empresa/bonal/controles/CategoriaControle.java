@@ -126,12 +126,11 @@ public class CategoriaControle {
 	public String salvar() {
 		String message = "";
 		if (categoria.getId() == null) {
-			System.out.println("Entrou pra salvar categoria");
 			categoriaRepositorio.adicionar(categoria);
-			message += "Categoria Cadastrado com Sucesso.";
+			message += "Categoria Cadastrada com Sucesso.";
 		} else {
 			categoriaRepositorio.atualizar(categoria);
-			message += "Categoria Atualizado com Sucesso.";
+			message += "Categoria Atualizada com Sucesso.";
 		}
 		new FacesContextUtil().info(message);
 		System.out.println(message);

@@ -135,12 +135,17 @@ public class BemControle {
 		return null;
 	}
 
-	// Limpar tabela da consulta,
+	// Limpar tabela da consulta
 	public String limpar() {
-		this.bemNome = "";
-		// listarCategorias(); // Realiza nova consulta ao repositorio
-		filtrarTabela(); // Retorna a lista unmodifiablelist offline armazenada
+		limparFiltros();
+		this.bens = new ArrayList<>(this.lista);
 		return null;
+	}
+
+	public void limparFiltros() {
+		this.bemNome = "";
+		this.categoriaId = null;
+		this.unidadeDeMedidaId = null;
 	}
 
 	public void salvar(Bem b, Categoria c, UnidadeDeMedida u) {

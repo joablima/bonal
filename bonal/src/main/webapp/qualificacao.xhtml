@@ -17,21 +17,17 @@
 	</f:metadata>
 
 	<ui:define name="content">
-		<div class="ui-g titulo">
-			<div class="ui-g-12 ui-md-8 ui-lg-8">
-				<h1>
-					<h:outputText
-						rendered="#{qualificacaoControle.qualificacaoId == null}"
-						value="Cadastro de Qualificação" />
-					<h:outputText
-						rendered="#{qualificacaoControle.qualificacaoId != null}"
-						value="Edição de Qualificação" />
-				</h1>
-			</div>
-			<div class="ui-g-12 ui-md-4 ui-lg-4">
-				<i class="fa fa-coffee" />
-				<p:link value="Consultar Qualificação" outcome="cargoConsultar" />
-			</div>
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText
+					rendered="#{qualificacaoControle.qualificacaoId == null}"
+					value="Cadastro de Qualificação" />
+				<h:outputText
+					rendered="#{qualificacaoControle.qualificacaoId != null}"
+					value="Edição de Qualificação" />
+			</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Consultar Qualificação" outcome="cargoConsultar" /></span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
@@ -62,7 +58,8 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Descrição da qualificação:" for="descricao" /><br/>
+						<p:outputLabel value="Descrição da qualificação:" for="descricao" />
+						<br />
 						<p:inputText id="descricao"
 							value="#{qualificacaoControle.qualificacao.descricao}"
 							styleClass="form-normal" required="true"
@@ -108,7 +105,7 @@
 				</div>
 			</p:fieldset>
 
-			<div class="td-botao-consulta">
+			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
 					action="#{qualificacaoControle.salvar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
@@ -118,6 +115,7 @@
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
 		</h:form>
+		
 	</ui:define>
 </ui:composition>
 </html>

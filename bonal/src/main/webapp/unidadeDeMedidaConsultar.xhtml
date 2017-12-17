@@ -10,46 +10,38 @@
 <ui:composition template="/template/main.xhtml">
 	<ui:define name="content">
 
-		<p:panelGrid styleClass="tab-formulario">
-			<p:column>
-				<h1>Consultar Unidades de Medidas</h1>
-			</p:column>
-			<p:column>
-				<span style="float: right; position: relative; top: .5em;"> <i
-					class="fa fa-coffee" style="margin-right: 5px;" /> <p:link
-						value="Cadastrar/Editar Unidade De Medida"
-						outcome="unidadeDeMedida" />
-				</span>
-			</p:column>
-		</p:panelGrid>
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Unidades de Medidas</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar/Editar Unidade De Medida"
+					outcome="unidadeDeMedida" />
+			</span>
+		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
 		<h:form id="formUnidadeDeMedidaConsulta">
-			<p:panelGrid styleClass="tab-formulario">
-				<p:row>
-					<p:column>
-						<p:outputLabel value="Nome ou Sigla da Unidade De Medida: "
-							for="unidadeDeMedidaNome" />
-						<p:inputText
-							value="#{unidadeDeMedidaControle.unidadeDeMedidaNome}"
-							id="unidadeDeMedidaNome" styleClass="form-normal">
-							<p:ajax event="keyup"
-								listener="#{unidadeDeMedidaControle.listar}" process="@form"
-								update="@form :tabelaUnidadesDeMedida" />
-						</p:inputText>
-					</p:column>
-					<p:column styleClass="td-botao-consulta">
-						<p:commandButton id="buscarUnidadeDeMedida" value="Filtrar"
-							action="#{unidadeDeMedidaControle.listar}" process="@form"
-							update="@form :tabelaUnidadesDeMedida" icon="fa fa-fw fa-filter" />
-						<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-							action="#{unidadeDeMedidaControle.limpar}" process="@form"
-							update="@form :tabelaUnidadesDeMedida" />
-					</p:column>
-				</p:row>
-			</p:panelGrid>
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Sigla da Unidade De Medida: "
+						for="unidadeDeMedidaNome" />
+					<p:inputText value="#{unidadeDeMedidaControle.unidadeDeMedidaNome}"
+						id="unidadeDeMedidaNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{unidadeDeMedidaControle.listar}"
+							process="@form" update="@form :tabelaUnidadesDeMedida" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					<p:commandButton id="buscarUnidadeDeMedida" value="Filtrar"
+						action="#{unidadeDeMedidaControle.listar}" process="@form"
+						update="@form :tabelaUnidadesDeMedida" icon="fa fa-fw fa-filter" />
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{unidadeDeMedidaControle.limpar}" process="@form"
+						update="@form :tabelaUnidadesDeMedida" />
+				</div>
+			</div>
 		</h:form>
+
 
 		<h:form id="tabelaUnidadesDeMedida">
 			<p:dataTable id="unidadeDeMedida" var="unidadeDeMedida"
@@ -60,7 +52,8 @@
 				rowKey="#{unidadeDeMedida.id}"
 				selection="#{unidadeDeMedidaControle.unidadeDeMedida}"
 				selectionMode="single"
-				emptyMessage="Nenhuma unidade de Medida Encontrado!">
+				emptyMessage="Nenhuma unidade de Medida Encontrado!"
+				styleClass="ui-g-12">
 
 				<p:column headerText="Sigla" sortBy="#{unidadeDeMedida.sigla}">
 					<h:outputText value="#{unidadeDeMedida.sigla}" />

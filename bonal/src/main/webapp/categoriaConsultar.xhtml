@@ -8,45 +8,37 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
-
 	<ui:define name="content">
 
-		<p:panelGrid styleClass="tab-formulario">
-			<p:column>
-				<h1>Consultar Categorias</h1>
-			</p:column>
-			<p:column>
-				<span style="float: right; position: relative; top: .5em;"> <i
-					class="fa fa-coffee" style="margin-right: 5px;" /> <p:link
-						value="Cadastrar Nova Categoria" outcome="categoria" />
-				</span>
-			</p:column>
-		</p:panelGrid>
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Categorias</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Nova Categoria" outcome="categoria" />
+			</span>
+		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
 		<h:form id="formCategoriaConsulta">
-			<p:panelGrid styleClass="tab-formulario">
-				<p:row>
-					<p:column>
-						<p:outputLabel value="Nome ou Codigo da Categoria: "
-							for="categoriaNome" />
-						<p:inputText value="#{categoriaControle.categoriaNome}"
-							id="categoriaNome" styleClass="form-normal">
-							<p:ajax event="keyup" listener="#{categoriaControle.listar}"
-								process="@form" update="@form :tabelaCategorias" />
-						</p:inputText>
-					</p:column>
-					<p:column styleClass="td-botao-consulta">
-						<p:commandButton id="buscarCategoria" value="Filtrar"
-							action="#{categoriaControle.listar}" process="@form"
-							update="@form :tabelaCategorias" icon="fa fa-fw fa-filter" />
-						<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-							action="#{categoriaControle.limpar}" process="@form"
-							update="@form :tabelaCategorias" />
-					</p:column>
-				</p:row>
-			</p:panelGrid>
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Codigo da Categoria: "
+						for="categoriaNome" />
+					<p:inputText value="#{categoriaControle.categoriaNome}"
+						id="categoriaNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{categoriaControle.listar}"
+							process="@form" update="@form :tabelaCategorias" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					<p:commandButton id="buscarCategoria" value="Filtrar"
+						action="#{categoriaControle.listar}" process="@form"
+						update="@form :tabelaCategorias" icon="fa fa-fw fa-filter" />
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{categoriaControle.limpar}" process="@form"
+						update="@form :tabelaCategorias" />
+				</div>
+			</div>
 		</h:form>
 
 		<h:form id="tabelaCategorias">
@@ -56,17 +48,14 @@
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
 				rowKey="#{categoria.id}" selection="#{categoriaControle.categoria}"
-				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!">
+				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!"
+				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Categorias
             		<p:commandButton id="toggler" type="button"
 						value="Columns" style="float:right" icon="ui-icon-calculator" />
 					<p:columnToggler datasource="categoria" trigger="toggler" />
 				</f:facet>
-
-				<p:column headerText="#" style="width:36px" priority="4">
-					<p:rowToggler />
-				</p:column>
 
 				<p:column headerText="Codigo" sortBy="#{categoria.codigo}">
 					<h:outputText value="#{categoria.codigo}" />

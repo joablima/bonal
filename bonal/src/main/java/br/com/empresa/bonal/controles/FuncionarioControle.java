@@ -143,11 +143,17 @@ public class FuncionarioControle {
 		return null;
 	}
 
-	// Limpar tabela da consulta,
+	// Limpar tabela da consulta
 	public String limpar() {
-		this.funcionarioNome = "";
-		filtrarTabela(); // Retorna a lista unmodifiablelist offline armazenada
+		limparFiltros();
+		this.funcionarios = new ArrayList<>(this.lista);
 		return null;
+	}
+
+	public void limparFiltros() {
+		this.funcionarioNome = "";
+		this.cargoId = null;
+		this.qualificacaoId = null;
 	}
 
 	public void salvar(Funcionario funcionario, Cargo cargo, QualificacaoProfissional qualificacao) {

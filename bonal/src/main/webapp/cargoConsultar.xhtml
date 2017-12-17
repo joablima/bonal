@@ -11,23 +11,17 @@
 
 	<ui:define name="content">
 
-		<p:panelGrid styleClass="tab-formulario">
-			<p:column>
-				<h1>Consultar Cargos</h1>
-			</p:column>
-			<p:column>
-				<span style="float: right; position: relative; top: .5em;"> <i
-					class="fa fa-coffee" style="margin-right: 5px;" /> <p:link
-						value="Cadastrar Novo Cargo" outcome="cargo" />
-				</span>
-			</p:column>
-		</p:panelGrid>
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Cargos</h1>
+			<span> <i class="fa fa-coffee" style="margin-right: 5px;" />
+				<p:link value="Cadastrar Novo Cargo" outcome="cargo" /></span>
+		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
 		<h:form id="formCargoConsulta">
-			<div class="ui-g">
-				<div class="ui-g-12 ui-md-6 ui-lg-6 tab-formulario">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
 					<p:outputLabel value="Nome do Cargo: " for="cargoNome" />
 					<p:inputText value="#{cargoControle.cargoNome}" id="cargoNome"
 						styleClass="form-normal">
@@ -35,7 +29,8 @@
 							process="@form" update="@form :tabelaCargos" />
 					</p:inputText>
 				</div>
-				<div class="ui-g-12 ui-md-6 ui-lg-6 td-botao-consulta">
+				
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
 					<p:commandButton id="buscarCargo" value="Filtrar"
 						action="#{cargoControle.listar}" process="@form"
 						update="@form :tabelaCargos" icon="fa fa-fw fa-filter" />
@@ -43,6 +38,7 @@
 						action="#{cargoControle.limpar}" process="@form"
 						update="@form :tabelaCargos" />
 				</div>
+				
 			</div>
 		</h:form>
 
@@ -52,7 +48,8 @@
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
 				rowKey="#{cargo.id}" selection="#{cargoControle.cargo}"
-				selectionMode="single" emptyMessage="Nenhuma Cargo Encontrado!">
+				selectionMode="single" emptyMessage="Nenhuma Cargo Encontrado!"
+				styleClass="ui-g-12">
 
 				<p:column headerText="Nome" sortBy="#{cargo.nome}">
 					<h:outputText value="#{cargo.nome}" />

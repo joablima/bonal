@@ -12,6 +12,7 @@ form {
 
 body {
 	margin: 0 5em;
+	min-height: 100vh;
 	border-right: 1px solid rgba(79, 93, 115, 1);
 	border-left: 1px solid rgba(79, 93, 115, 1);
 	background: #fff;
@@ -31,6 +32,10 @@ html, body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea
 
 #content {
 	margin: 1rem 2rem;
+}
+
+#nav, #footer {
+	width: 100.1%;
 }
 
 h1, legend {
@@ -84,8 +89,8 @@ input[type="text"], .ui-widget textarea, .ui-selectonemenu label.ui-selectonemen
 	margin: .25rem 0 0;
 }
 
-.ui-widget button {
-	padding: .2rem;
+.ui-widget button, .ui-button {
+	padding: .2rem !important;
 }
 
 .ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
@@ -107,6 +112,10 @@ input[type="text"], .ui-widget textarea, .ui-selectonemenu label.ui-selectonemen
 	border-radius: .2rem 0 0 .2rem;
 }
 
+.ui-selectonemenu label.ui-selectonemenu-label {
+	margin: 0;
+}
+
 input[type="radio"] {
 	margin: 1rem .2rem 1rem 2rem !important;
 }
@@ -114,6 +123,10 @@ input[type="radio"] {
 .form-messages {
 	display: flex !important;
 	align-items: flex-end !important;
+}
+
+.form-messages i, .form-messages a {
+	padding-bottom: .75rem;
 }
 
 .ui-messages-error, .ui-message-error {
@@ -141,22 +154,12 @@ input[type="radio"] {
 	background: transparent;
 }
 
-/* --------------------- Elementos do Header --------------------- */
-#header {
-	padding: 0 .5em;
-	display: flex;
-	align-items: center;
-}
-
-#logo {
-	display: flex;
-}
-
-a#title-logo {
+/* --------------------- Elementos do #header --------------------- */
+#header a {
 	text-decoration: none
 }
 
-#title-logo h1 {
+#header h1 {
 	color: #4F5D73;
 	font-size: 4em;
 	margin: 0 .1em;
@@ -167,22 +170,47 @@ a#title-logo {
 }
 
 #img-logo {
-	/* 	transition: all 1s linear; */
-	/* 	transform: rotate(30deg) scale(1); */
+	/* 		transition: all 1s linear; */
+	/* 		transform: rotate(30deg) scale(1); */
 	
 }
 
-/* --------------------- Elementos da Nav --------------------- */
+/* --------------------- Elementos da #nav --------------------- */
 
-/* --------------------- Elementos do Footer --------------------- */
+/* --------------------- Elementos do #footer --------------------- */
 #footer {
 	text-align: center;
+	margin: auto auto 0 auto;
 }
 
-/* #footer footer { */
-/* 	border-top: 1px solid #bbb1aa; */
-/* 	padding: .5em; */
-/* 	margin: 0 1em; */
-/* } */
+#rodape {
+	padding: 1rem .5rem;
+	border-top: 1px solid #000;
+}
 
-/* --------------------- Elementos do Main --------------------- */
+/* --------------------- Elementos do #content --------------------- */
+#content .titulo {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.filtros-consultar {
+	width: 100%;
+	display: flex;
+	align-items: flex-end;
+}
+
+.botoes {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.botoes-cadastrar {
+	display: flex;
+	justify-content: center;
+}
+
+.botoes-cadastrar button {
+	margin-left: 4rem;
+}

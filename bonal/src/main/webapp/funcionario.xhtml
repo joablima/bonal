@@ -18,21 +18,18 @@
 	</f:metadata>
 
 	<ui:define name="content">
-		<div class="ui-g titulo">
-			<div class="ui-g-12 ui-md-8 ui-lg-8">
-				<h1>
-					<h:outputText
-						rendered="#{funcionarioControle.funcionarioId == null}"
-						value="Cadastro de Funcionarios" />
-					<h:outputText
-						rendered="#{funcionarioControle.funcionarioId != null}"
-						value="Edição de Funcionarios" />
-				</h1>
-			</div>
-			<div class="ui-g-12 ui-md-4 ui-lg-4">
-				<i class="fa fa-coffee" />
-				<p:link value="Consultar Funcionarios" outcome="cargoConsultar" />
-			</div>
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText
+					rendered="#{funcionarioControle.funcionarioId == null}"
+					value="Cadastro de Funcionarios" />
+				<h:outputText
+					rendered="#{funcionarioControle.funcionarioId != null}"
+					value="Edição de Funcionarios" />
+			</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Consultar Funcionarios" outcome="cargoConsultar" />
+			</span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
@@ -312,7 +309,7 @@
 
 
 
-			<div class="td-botao-consulta">
+			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
 					action="#{funcionarioControle.salvar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"

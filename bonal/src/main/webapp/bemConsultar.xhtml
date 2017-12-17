@@ -11,22 +11,17 @@
 
 	<ui:define name="content">
 
-		<p:panelGrid styleClass="tab-formulario">
-			<p:column>
-				<h1>Consultar Bens</h1>
-			</p:column>
-			<p:column>
-				<span style="float: right; position: relative; top: .5em;"> <i
-					class="fa fa-coffee" style="margin-right: 5px;" /> <p:link
-						value="Cadastrar Novo Bem" outcome="bem" />
-				</span>
-			</p:column>
-		</p:panelGrid>
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Bens</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Novo Bem" outcome="bem" />
+			</span>
+		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
 		<h:form id="formBemConsulta">
-			<div class=" ui-g tab-formulario">
+			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-4">
 					<p:outputLabel value="Categoria:" for="categoriaId" />
 					<p:selectOneMenu value="#{categoriaControle.categoriaId}"
@@ -39,7 +34,6 @@
 							process="@form" update="@form :tabelaBens" />
 					</p:selectOneMenu>
 				</div>
-
 				<div class="ui-g-12 ui-md-6 ui-lg-4">
 					<p:outputLabel value="Nome ou Codigo do Bem: " for="bemNome" />
 					<p:inputText value="#{bemControle.bemNome}" id="bemNome"
@@ -48,8 +42,7 @@
 							process="@form" update="@form :tabelaBens" />
 					</p:inputText>
 				</div>
-
-				<div class="ui-g-12 ui-md-6 ui-lg-4 td-botao-consulta">
+				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
 					<p:commandButton id="buscarBem" value="Filtrar"
 						action="#{bemControle.listar}" process="@form"
 						update="@form :tabelaBens" icon="fa fa-fw fa-filter" />
@@ -67,7 +60,8 @@
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
 				rowKey="#{bem.id}" selection="#{bemControle.bem}"
-				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!">
+				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!"
+				styleClass="ui-g-12">
 
 				<p:column headerText="Codigo" sortBy="#{bem.codigo}">
 					<h:outputText value="#{bem.codigo}" />
