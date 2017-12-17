@@ -41,6 +41,7 @@ public class QualificacaoProfissional {
 	private Calendar dataCadastro = Calendar.getInstance();
 	
 	//relacionamento corrigido, muitas qualificações para um Funcionario
+	//e apenas um funcionario para uma qualificação
 	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name="funcionario")
 	private Funcionario funcionario;
@@ -105,6 +106,14 @@ public class QualificacaoProfissional {
 
 	public Calendar getDataCadastro() {
 		return dataCadastro;
+	}
+
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
 	}
 
 	@Override
