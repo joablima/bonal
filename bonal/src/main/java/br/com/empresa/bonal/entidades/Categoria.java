@@ -36,7 +36,9 @@ public class Categoria {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
-
+	
+	private int status;
+	
 	public Long getId() {
 		return id;
 	}
@@ -71,6 +73,15 @@ public class Categoria {
 
 	public Calendar getDataCadastro() {
 		return dataCadastro;
+	}
+	
+	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	@Override

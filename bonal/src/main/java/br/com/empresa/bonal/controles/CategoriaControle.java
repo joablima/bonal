@@ -119,12 +119,15 @@ public class CategoriaControle {
 
 	public void salvar(Categoria c) {
 		this.categoria = c;
+		this.categoria.setStatus(1);
 		salvar();
 	}
 
 	// Métodos que utilizam métodos do repositório
 	public String salvar() {
 		String message = "";
+		categoria.setStatus(1);
+		
 		if (categoria.getId() == null) {
 			categoriaRepositorio.adicionar(categoria);
 			message += "Categoria Cadastrada com Sucesso.";
@@ -144,6 +147,7 @@ public class CategoriaControle {
 
 	// Remove um Categoria do banco de dados
 	public void remover() {
+		categoria.setStatus(0);
 		categoriaRepositorio.remover(categoria);
 		categorias = null;
 		listarTabela();
@@ -152,6 +156,7 @@ public class CategoriaControle {
 
 	public void remover(Categoria c) {
 		this.categoria = c;
+		this.categoria.setStatus(0);
 		remover();
 	}
 

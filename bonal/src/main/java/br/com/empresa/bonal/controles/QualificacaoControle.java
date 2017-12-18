@@ -95,7 +95,14 @@ public class QualificacaoControle {
 		Stream<QualificacaoProfissional> filter = lista.stream();
 
 		if (!qualificacaoNome.equals(null))
-			filter = filter.filter(q -> (q.getTitulo().toLowerCase().contains(qualificacaoNome.toLowerCase().trim())));
+			filter = filter.filter(q -> (q.getTitulo().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
+					| (q.getTitulo().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
+					| (q.getDescricao().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
+					| (q.getDataInicio().toString().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
+					| (q.getDataFim().toString().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
+					| (q.getDataCadastro().toString().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
+					| (q.getFuncionario().getNome().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
+					);
 
 		qualificacoes = filter.collect(Collectors.toList());
 	}

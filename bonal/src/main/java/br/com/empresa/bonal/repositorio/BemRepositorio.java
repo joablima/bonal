@@ -93,7 +93,7 @@ public class BemRepositorio {
 			query.setParameter("pdescricao", '%' + nome + '%');
 		}
 		if (categoriaId != null)
-			query.setParameter("pcategoria", categoriaId);
+			query.setParameter("pcategoria", categoriaId);	
 		if (unidadeDeMedidaId != null)
 			query.setParameter("punidade", unidadeDeMedidaId);
 

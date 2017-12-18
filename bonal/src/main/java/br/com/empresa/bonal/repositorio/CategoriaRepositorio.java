@@ -15,6 +15,7 @@ public class CategoriaRepositorio {
 	public void adicionar(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
+		
 		em.persist(categoria);
 		em.getTransaction().commit();
 		em.close();
@@ -24,6 +25,7 @@ public class CategoriaRepositorio {
 	public void atualizar(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
+		
 		em.merge(categoria);
 		em.getTransaction().commit();
 		em.close();
@@ -33,7 +35,8 @@ public class CategoriaRepositorio {
 	public void remover(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.remove(em.merge(categoria));
+		
+		em.merge(categoria);
 		em.getTransaction().commit();
 		em.close();
 	}
@@ -59,14 +62,20 @@ public class CategoriaRepositorio {
 	// método que lista com critérios todos os registros
 	public List<Categoria> listarPorCriterios(String nome) {
 		EntityManager em = JPAUtil.getEntityManager();
-		String jpql = "select c from Categoria c where c.nome like :pnome or c.codigo like :pcodigo or c.descricao like :pdescricao";
-
+		String jpql = "select c from Categoria c where ";
+		
+		if(nome!=null)
+			jpql += "(c.nome like :pnome or c.codigo like :pcodigo or c.descricao like :pdescricao);";
+		jpql += "1 = 1";
+		
 		TypedQuery<Categoria> query = em.createQuery(jpql, Categoria.class);
-
-		query.setParameter("pnome", '%' + nome + '%');
-		query.setParameter("pcodigo", '%' + nome + '%');
-		query.setParameter("pdescricao", '%' + nome + '%');
-
+		
+		if(nome!=null) {
+			query.setParameter("pnome", '%' + nome + '%');
+			query.setParameter("pcodigo", '%' + nome + '%');
+			query.setParameter("pdescricao", '%' + nome + '%');
+		}
+		
 		System.out.println(jpql);
 		List<Categoria> list = query.getResultList();
 		em.close();
