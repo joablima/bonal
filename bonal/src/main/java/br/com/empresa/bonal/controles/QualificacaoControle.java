@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,8 @@ import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
-public class QualificacaoControle {
+public class QualificacaoControle implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private QualificacaoProfissional qualificacao = new QualificacaoProfissional();
 
@@ -101,8 +103,7 @@ public class QualificacaoControle {
 					| (q.getDataInicio().toString().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
 					| (q.getDataFim().toString().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
 					| (q.getDataCadastro().toString().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
-					| (q.getFuncionario().getNome().toLowerCase().contains(qualificacaoNome.toLowerCase().trim()))
-					);
+					| (q.getFuncionario().getNome().toLowerCase().contains(qualificacaoNome.toLowerCase().trim())));
 
 		qualificacoes = filter.collect(Collectors.toList());
 	}
@@ -112,7 +113,7 @@ public class QualificacaoControle {
 		listarTabela();
 		return null;
 	}
-	
+
 	// Limpar tabela da consulta
 	public String limpar() {
 		limparFiltros();
@@ -139,7 +140,7 @@ public class QualificacaoControle {
 		qualificacao = new QualificacaoProfissional();
 		return null;
 	}
-	
+
 	public void salvar(QualificacaoProfissional q) {
 		this.qualificacao = q;
 		salvar();

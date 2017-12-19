@@ -6,10 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.util.JPAUtil;
 
 public class UnidadeDeMedidaRepositorio {
+
+	static Logger logger = Logger.getLogger(UnidadeDeMedidaRepositorio.class);
 
 	// método que persiste um registro
 	public void adicionar(UnidadeDeMedida unidadeDeMedida) {
@@ -17,6 +21,7 @@ public class UnidadeDeMedidaRepositorio {
 		em.getTransaction().begin();
 		em.persist(unidadeDeMedida);
 		em.getTransaction().commit();
+		logger.info("objeto persistido com sucesso");
 		em.close();
 	}
 

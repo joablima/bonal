@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,8 @@ import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
-public class CategoriaControle {
+public class CategoriaControle implements Serializable{
+	private static final long serialVersionUID = 1L;
 
 	private Categoria categoria = new Categoria();
 
@@ -148,7 +150,7 @@ public class CategoriaControle {
 	// Remove um Categoria do banco de dados
 	public void remover() {
 		categoria.setStatus(0);
-		categoriaRepositorio.remover(categoria);
+		categoriaRepositorio.atualizar(categoria);
 		categorias = null;
 		listarTabela();
 		categoria = null;

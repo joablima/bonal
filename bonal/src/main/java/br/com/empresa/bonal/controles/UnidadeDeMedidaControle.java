@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,13 +11,18 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
-public class UnidadeDeMedidaControle {
+public class UnidadeDeMedidaControle implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	static Logger logger = Logger.getLogger(UnidadeDeMedidaControle.class);
 
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
@@ -130,8 +136,8 @@ public class UnidadeDeMedidaControle {
 			unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
 			message += "Unidade de Medida Atualizada com Sucesso.";
 		}
+		logger.info(message);
 		new FacesContextUtil().info(message);
-		System.out.println(message);
 		unidadeDeMedida = new UnidadeDeMedida();
 		return null;
 	}

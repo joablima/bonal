@@ -6,16 +6,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.util.JPAUtil;
 
 public class CategoriaRepositorio {
 
+	final static Logger logger = Logger.getLogger(CategoriaRepositorio.class);
+
 	// método que persiste um registro
 	public void adicionar(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		
+		logger.info("tudo ok sera");
 		em.persist(categoria);
 		em.getTransaction().commit();
 		em.close();
@@ -25,7 +29,6 @@ public class CategoriaRepositorio {
 	public void atualizar(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		
 		em.merge(categoria);
 		em.getTransaction().commit();
 		em.close();
@@ -35,7 +38,6 @@ public class CategoriaRepositorio {
 	public void remover(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		
 		em.merge(categoria);
 		em.getTransaction().commit();
 		em.close();
@@ -63,19 +65,19 @@ public class CategoriaRepositorio {
 	public List<Categoria> listarPorCriterios(String nome) {
 		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select c from Categoria c where ";
-		
-		if(nome!=null)
+
+		if (nome != null)
 			jpql += "(c.nome like :pnome or c.codigo like :pcodigo or c.descricao like :pdescricao);";
 		jpql += "1 = 1";
-		
+
 		TypedQuery<Categoria> query = em.createQuery(jpql, Categoria.class);
-		
-		if(nome!=null) {
+
+		if (nome != null) {
 			query.setParameter("pnome", '%' + nome + '%');
 			query.setParameter("pcodigo", '%' + nome + '%');
 			query.setParameter("pdescricao", '%' + nome + '%');
 		}
-		
+
 		System.out.println(jpql);
 		List<Categoria> list = query.getResultList();
 		em.close();

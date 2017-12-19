@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,8 @@ import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
-public class CargoControle {
+public class CargoControle implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private Cargo cargo = new Cargo();
 

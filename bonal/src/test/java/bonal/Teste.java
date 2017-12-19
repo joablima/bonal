@@ -10,7 +10,7 @@ import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
 public class Teste {
-
+	
 	public static void main(String[] args) {
 
 		Categoria categoria = new Categoria();

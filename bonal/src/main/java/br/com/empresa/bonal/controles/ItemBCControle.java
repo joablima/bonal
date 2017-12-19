@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,8 @@ import br.com.empresa.bonal.util.FacesContextUtil;
 
 @ManagedBean
 @ViewScoped
-public class ItemBCControle {
+public class ItemBCControle implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private ItemBC itemBC = new ItemBC();
 
@@ -107,7 +109,7 @@ public class ItemBCControle {
 		listarTabela();
 		return null;
 	}
-	
+
 	// Limpar tabela da consulta
 	public String limpar() {
 		limparFiltros();
@@ -134,7 +136,7 @@ public class ItemBCControle {
 		itemBC = new ItemBC();
 		return null;
 	}
-	
+
 	public void salvar(ItemBC i) {
 		this.itemBC = i;
 		salvar();

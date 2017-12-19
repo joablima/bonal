@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +21,8 @@ import br.com.empresa.bonal.util.enums.EnumSexo;
 
 @ManagedBean
 @ViewScoped
-public class FuncionarioControle {
+public class FuncionarioControle implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private Funcionario funcionario = new Funcionario();
 
