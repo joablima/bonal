@@ -5,24 +5,6 @@
 	<persistence-unit name="Bonal" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-		<!-- entidades mapeadas -->
-		<class>br.com.empresa.bonal.entidades.Endereco</class>
-		<class>br.com.empresa.bonal.entidades.Pessoa</class>
-		<class>br.com.empresa.bonal.entidades.PessoaFisica</class>
-		<class>br.com.empresa.bonal.entidades.PessoaJuridica</class>
-
-		<class>br.com.empresa.bonal.entidades.Cargo</class>
-		<class>br.com.empresa.bonal.entidades.Funcionario</class>
-		<class>br.com.empresa.bonal.entidades.QualificacaoProfissional</class>
-
-		<class>br.com.empresa.bonal.entidades.Fornecedor</class>
-		<class>br.com.empresa.bonal.entidades.Cliente</class>
-
-		<class>br.com.empresa.bonal.entidades.Insumo</class>
-		<class>br.com.empresa.bonal.entidades.UnidadeDeMedida</class>
-
-		<class>br.com.empresa.bonal.entidades.Venda</class>
-		<class>br.com.empresa.bonal.entidades.Produto</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
