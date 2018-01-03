@@ -26,6 +26,8 @@ public class UnidadeDeMedida {
 
 	@Version
 	private Integer version;
+	
+	
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")

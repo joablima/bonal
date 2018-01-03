@@ -77,7 +77,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 		return Collections.unmodifiableList(lista);
 	}
 
-	// verificar importancia dos métodos abaixo //verificar se estão trocados??
+	// verificar importancia dos mï¿½todos abaixo //verificar se estï¿½o trocados??
 	public Integer getTotalUnidadesDeMedida() {
 		return lista.size();
 	}
@@ -104,7 +104,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 		unidadesDeMedida = filter.collect(Collectors.toList());
 	}
 
-	// Método chamado ao carregar tabela
+	// Mï¿½todo chamado ao carregar tabela
 	public String listar() {
 		listarTabela();
 		return null;
@@ -126,7 +126,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 		salvar();
 	}
 
-	// Métodos que utilizam métodos do repositório
+	// Mï¿½todos que utilizam mï¿½todos do repositï¿½rio
 	public String salvar() {
 		String message = "";
 		if (unidadeDeMedida.getId() == null) {

@@ -15,7 +15,7 @@ public class UnidadeDeMedidaRepositorio {
 
 	static Logger logger = Logger.getLogger(UnidadeDeMedidaRepositorio.class);
 
-	// método que persiste um registro
+	// mï¿½todo que persiste um registro
 	public void adicionar(UnidadeDeMedida unidadeDeMedida) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -25,7 +25,7 @@ public class UnidadeDeMedidaRepositorio {
 		em.close();
 	}
 
-	// método que atualiza um registro
+	// mï¿½todo que atualiza um registro
 	public void atualizar(UnidadeDeMedida unidadeDeMedida) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -34,7 +34,7 @@ public class UnidadeDeMedidaRepositorio {
 		em.close();
 	}
 
-	// método que remove um registro
+	// mï¿½todo que remove um registro
 	public void remover(UnidadeDeMedida unidadeDeMedida) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -43,7 +43,7 @@ public class UnidadeDeMedidaRepositorio {
 		em.close();
 	}
 
-	// método que recupera um objeto pelo id
+	// mï¿½todo que recupera um objeto pelo id
 	public UnidadeDeMedida buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
 		UnidadeDeMedida medida = em.find(UnidadeDeMedida.class, id);
@@ -51,7 +51,7 @@ public class UnidadeDeMedidaRepositorio {
 		return medida;
 	}
 
-	// método que lista todos os registros
+	// mï¿½todo que lista todos os registros
 	public List<UnidadeDeMedida> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
 		CriteriaQuery<UnidadeDeMedida> query = em.getCriteriaBuilder().createQuery(UnidadeDeMedida.class);
@@ -61,7 +61,7 @@ public class UnidadeDeMedidaRepositorio {
 		return list;
 	}
 
-	// método que lista com critérios todos os registros
+	// mï¿½todo que lista com critï¿½rios todos os registros
 	public List<UnidadeDeMedida> listarPorCriterios(String nome) {
 		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select u from UnidadeDeMedida u where u.nome like :pnome or u.sigla like :psigla";
@@ -77,7 +77,7 @@ public class UnidadeDeMedidaRepositorio {
 		return list;
 	}
 
-	// método que lista todos os registros com paginação
+	// mï¿½todo que lista todos os registros com paginaï¿½ï¿½o
 	public List<UnidadeDeMedida> listarTodosPaginada(int firstResult, int maxResults) {
 		EntityManager em = JPAUtil.getEntityManager();
 		CriteriaQuery<UnidadeDeMedida> query = em.getCriteriaBuilder().createQuery(UnidadeDeMedida.class);

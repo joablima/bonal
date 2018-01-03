@@ -37,6 +37,8 @@ public class Categoria {
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
 	
+	private String tipo;
+	
 	private int status;
 	
 	public Long getId() {
@@ -82,6 +84,14 @@ public class Categoria {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override

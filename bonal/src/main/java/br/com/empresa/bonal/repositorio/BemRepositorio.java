@@ -13,23 +13,23 @@ import br.com.empresa.bonal.util.JPAUtil;
 
 public class BemRepositorio {
 
-	// método que persiste um registro
+	// mï¿½todo que persiste um registro
 	public void adicionar(Bem bem, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-
+		
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
 		Categoria categoria = em.find(Categoria.class, categoriaId);
 
 		bem.setUnidadeDeMedida(unidadeDeMedida);
 		bem.setCategoria(categoria);
-
+		
 		em.persist(bem);
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// método que atualiza um registro
+	// mï¿½todo que atualiza um registro
 	public void atualizar(Bem bem, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -45,7 +45,7 @@ public class BemRepositorio {
 		em.close();
 	}
 
-	// método que remove um registro
+	// mï¿½todo que remove um registro
 	public void remover(Bem bem) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -54,7 +54,7 @@ public class BemRepositorio {
 		em.close();
 	}
 
-	// método que recupera um objeto pelo id	
+	// mï¿½todo que recupera um objeto pelo id	
 	public Bem buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
 		Bem bem = em.find(Bem.class, id);
@@ -62,7 +62,7 @@ public class BemRepositorio {
 		return bem;
 	}
 
-	// método que lista todos os registros
+	// mï¿½todo que lista todos os registros
 	public List<Bem> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
 		CriteriaQuery<Bem> query = em.getCriteriaBuilder().createQuery(Bem.class);
@@ -72,7 +72,7 @@ public class BemRepositorio {
 		return list;
 	}	
 	
-	// método que lista com critérios todos os registros
+	// mï¿½todo que lista com critï¿½rios todos os registros
 	public List<Bem> listarPorCriterios(String nome, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select b from Bem b where ";

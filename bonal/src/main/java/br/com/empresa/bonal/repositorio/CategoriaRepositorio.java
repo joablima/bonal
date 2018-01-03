@@ -15,17 +15,17 @@ public class CategoriaRepositorio {
 
 	final static Logger logger = Logger.getLogger(CategoriaRepositorio.class);
 
-	// método que persiste um registro
+	// mï¿½todo que persiste um registro
 	public void adicionar(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		logger.info("tudo ok sera");
+		logger.info("Categoria sendo adicionada, irÃ¡ ser persistida nesse momento");
 		em.persist(categoria);
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// método que atualiza um registro
+	// mï¿½todo que atualiza um registro
 	public void atualizar(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -34,7 +34,7 @@ public class CategoriaRepositorio {
 		em.close();
 	}
 
-	// método que remove um registro
+	// mï¿½todo que remove um registro
 	public void remover(Categoria categoria) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -43,7 +43,7 @@ public class CategoriaRepositorio {
 		em.close();
 	}
 
-	// método que recupera um objeto pelo id
+	// mï¿½todo que recupera um objeto pelo id
 	public Categoria buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
 		Categoria categoria = em.find(Categoria.class, id);
@@ -51,7 +51,7 @@ public class CategoriaRepositorio {
 		return categoria;
 	}
 
-	// método que lista todos os registros
+	// mï¿½todo que lista todos os registros
 	public List<Categoria> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
 		CriteriaQuery<Categoria> query = em.getCriteriaBuilder().createQuery(Categoria.class);
@@ -61,7 +61,7 @@ public class CategoriaRepositorio {
 		return list;
 	}
 
-	// método que lista com critérios todos os registros
+	// mï¿½todo que lista com critï¿½rios todos os registros
 	public List<Categoria> listarPorCriterios(String nome) {
 		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select c from Categoria c where ";
