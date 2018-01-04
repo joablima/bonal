@@ -18,13 +18,22 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "tipo")
-public class Pessoa {
+@DiscriminatorColumn(name = "relacionamento")
+public abstract class Pessoa {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
+	//atributo que define se essa pessoa é do tipo fisico ou juridico
+	private String tipo;
+	
+	//cpf para pessoas fisicas e cnpj para pessoas juridicas
+	private String documento;
+	
+	//pode ser rg para pessoas fisicas e ie para pessoas juridicas
+	private String identificacao;
+	
 	@NotNull
 	private String nome;
 

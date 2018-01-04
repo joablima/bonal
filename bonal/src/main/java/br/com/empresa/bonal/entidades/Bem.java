@@ -25,6 +25,7 @@ public class Bem {
 	private String nome;
 	private String descricao;
 	private BigDecimal quantidade;
+	private BigDecimal precoMedio;
 
 	private String tipoBem;
 
@@ -110,6 +111,8 @@ public class Bem {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
+	
+	
 
 	// @PrePersist
 	// @PreUpdate
@@ -120,6 +123,14 @@ public class Bem {
 	// this.codigo = builder.toString();
 	// }
 
+	public BigDecimal getPrecoMedio() {
+		return precoMedio;
+	}
+
+	public void setPrecoMedio(BigDecimal precoMedio) {
+		this.precoMedio = precoMedio;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -128,6 +139,7 @@ public class Bem {
 		builder.append("\n\tnome= " + getNome());
 		builder.append("\n\tcodigo= " + getCodigo());
 		builder.append("\n\tdescricao= " + getDescricao());
+		builder.append("\n\tprecoMedio= " + getPrecoMedio());
 		builder.append("\n\tcategoria= " + getCategoria().getNome());
 		builder.append("\n\tunidadeDeMedida= " + getUnidadeDeMedida().getNome());
 		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());

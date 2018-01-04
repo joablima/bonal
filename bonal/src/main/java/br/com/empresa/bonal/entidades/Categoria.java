@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 /*
-	Esta classe irá categorizar os bens de consumo e permanentes, como por exemplo
+	Esta classe irï¿½ categorizar os bens de consumo e permanentes, como por exemplo
 	bens de consumos podem ser Produtos, Maquinas, equipamentos
 */
 import javax.persistence.Entity;
@@ -29,6 +29,8 @@ public class Categoria {
 	private String codigo;
 
 	private String descricao;
+	
+	private String tipo;
 
 	@Version
 	private Integer version;
@@ -37,7 +39,6 @@ public class Categoria {
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
 	
-	private String tipo;
 	
 	private int status;
 	
