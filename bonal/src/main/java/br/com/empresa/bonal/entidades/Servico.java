@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 @Entity
-public class Bem {
+public class Servico {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -24,10 +24,8 @@ public class Bem {
 	private String codigo;
 	private String nome;
 	private String descricao;
-	private BigDecimal quantidade;
 
-	private String tipoBem;
-
+	
 	@Version
 	private Integer version;
 
@@ -75,14 +73,6 @@ public class Bem {
 		this.descricao = descricao;
 	}
 
-	public BigDecimal getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(BigDecimal quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -93,14 +83,6 @@ public class Bem {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getTipoBem() {
-		return tipoBem;
-	}
-
-	public void setTipoBem(String tipoBem) {
-		this.tipoBem = tipoBem;
 	}
 
 	public Integer getVersion() {

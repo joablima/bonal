@@ -6,86 +6,86 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import br.com.empresa.bonal.entidades.Bem;
+import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.util.JPAUtil;
 
-public class BemRepositorio {
+public class ProdutoRepositorio {
 
 	// m�todo que persiste um registro
-	public void adicionar(Bem bem, Long categoriaId, Long unidadeDeMedidaId) {
+	public void adicionar(Produto produto, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
 		Categoria categoria = em.find(Categoria.class, categoriaId);
+
+		produto.setUnidadeDeMedida(unidadeDeMedida);
+		produto.setCategoria(categoria);
 		
-		bem.setUnidadeDeMedida(unidadeDeMedida);
-		bem.setCategoria(categoria);
-		
-		em.persist(bem);
+		em.persist(produto);
 		em.getTransaction().commit();
 		em.close();
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Bem bem, Long categoriaId, Long unidadeDeMedidaId) {
+	public void atualizar(Produto produto, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
 		Categoria categoria = em.find(Categoria.class, categoriaId);
 
-		bem.setUnidadeDeMedida(unidadeDeMedida);
-		bem.setCategoria(categoria);
+		produto.setUnidadeDeMedida(unidadeDeMedida);
+		produto.setCategoria(categoria);
 
-		em.merge(bem);
+		em.merge(produto);
 		em.getTransaction().commit();
 		em.close();
 	}
 
 	// m�todo que remove um registro
-	public void remover(Bem bem) {
+	public void remover(Produto produto) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.remove(em.merge(bem));
+		em.remove(em.merge(produto));
 		em.getTransaction().commit();
 		em.close();
 	}
 
 	// m�todo que recupera um objeto pelo id	
-	public Bem buscarPorId(Long id) {
+	public Produto buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
-		Bem bem = em.find(Bem.class, id);
+		Produto bem = em.find(Produto.class, id);
 		em.close();
 		return bem;
 	}
 
 	// m�todo que lista todos os registros
-	public List<Bem> listarTodos() {
+	public List<Produto> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<Bem> query = em.getCriteriaBuilder().createQuery(Bem.class);
-		query.select(query.from(Bem.class));
-		List<Bem> list = em.createQuery(query).getResultList();
+		CriteriaQuery<Produto> query = em.getCriteriaBuilder().createQuery(Produto.class);
+		query.select(query.from(Produto.class));
+		List<Produto> list = em.createQuery(query).getResultList();
 		em.close();
 		return list;
 	}	
 	
 	// m�todo que lista com crit�rios todos os registros
-	public List<Bem> listarPorCriterios(String nome, Long categoriaId, Long unidadeDeMedidaId) {
+	public List<Produto> listarPorCriterios(String nome, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
-		String jpql = "select b from Bem b where ";
+		String jpql = "select p from Produto p where ";
 
 		if (nome != null)
-			jpql += "(b.nome like :pnome or b.codigo like :pcodigo or b.descricao like :pdescricao) and ";
+			jpql += "(p.nome like :pnome or p.codigo like :pcodigo or p.descricao like :pdescricao) and ";
 		if (categoriaId != null)
-			jpql += "b.categoria.id = :pcategoria and ";
+			jpql += "p.categoria.id = :pcategoria and ";
 		if (unidadeDeMedidaId != null)
-			jpql += "b.unidadeDeMedida.id = :punidade and ";
+			jpql += "p.unidadeDeMedida.id = :punidade and ";
 		jpql += "1 = 1";
 
-		TypedQuery<Bem> query = em.createQuery(jpql, Bem.class);
+		TypedQuery<Produto> query = em.createQuery(jpql, Produto.class);
 
 		if (nome != null) {
 			query.setParameter("pnome", '%' + nome + '%');
@@ -98,7 +98,7 @@ public class BemRepositorio {
 			query.setParameter("punidade", unidadeDeMedidaId);
 
 		System.out.println(jpql);
-		List<Bem> list = query.getResultList();
+		List<Produto> list = query.getResultList();
 		em.close();
 		return list;
 	}
