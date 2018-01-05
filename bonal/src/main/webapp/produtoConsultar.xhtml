@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Produtos</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Novo Produto" outcome="produto" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formProdutoConsulta">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Codigo do Produto: " for="produtoNome" />
+					<p:inputText value="#{produtoControle.produtoNome}" id="produtoNome"
+						styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{produtoControle.listar}"
+							process="@form" update="@form :tabelaProdutos" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					<p:commandButton id="buscarProduto" value="Filtrar"
+						action="#{produtoControle.listar}" process="@form"
+						update="@form :tabelaProdutos" icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{produtoControle.limpar}" process="@form"
+						update="@form :tabelaProdutos" />
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="tabelaProdutos">
+			<p:dataTable id="produto" var="produto" value="#{produtoControle.produtos}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowKey="#{produto.id}" selection="#{produtoControle.produto}"
+				selectionMode="single" emptyMessage="Nenhum Produto Encontrado!"
+				styleClass="ui-g-12">
+
+				<p:column headerText="Codigo" sortBy="#{produto.codigo}">
+					<h:outputText value="#{produto.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{produto.nome}">
+					<h:outputText value="#{produto.nome}" />
+				</p:column>
+
+				<p:column headerText="Descricao" sortBy="#{produto.descricao}">
+					<h:outputText value="#{produto.descricao}" />
+				</p:column>
+
+				<p:column headerText="unidadeDeMedida"
+					sortBy="#{produto.unidadeDeMedida.nome}">
+					<h:outputText value="#{produto.unidadeDeMedida.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+						outcome="#{produtoControle.editar(produto)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+						action="#{produtoControle.remover(produto)}" update="@form"
+						process="@this @form" />
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{produtoControle.totalProdutos} de #{produtoControle.totalProdutosConsulta}" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:contextMenu for="produto">
+				<p:menuitem value="Edição" update="produtoEditar" icon="ui-icon-search"
+					oncomplete="PF('produtoDialog').show()" />
+				<p:menuitem value="Deletar" update="produto" icon="ui-icon-close"
+					action="#{produtoControle.remover}" />
+			</p:contextMenu>
+
+			<p:dialog header="Edição de Produtos" widgetVar="produtoDialog" modal="true"
+				showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel id="produtoEditar" style="text-align:center;">
+					<p:panelGrid columns="2" rendered="#{not empty produtoControle.produtos}"
+						columnClasses="label,value">
+						<f:facet name="header">
+						Titulo
+						</f:facet>
+						<h:outputText value="Codigo" />
+						<h:outputText value="#{produtoControle.produto.codigo}" />
+						<h:outputText value="Nome:" />
+						<h:outputText value="#{produtoControle.produto.nome}" />
+						<h:outputText value="#{produtoControle.produto.descricao}" />
+						<h:commandButton styleClass="botao" value="Excluir"
+							action="#{produtoControle.remover(produtoControle.produto)}" />
+						<h:link styleClass="botao" value="Editar"
+							outcome="#{produtoControle.editar(produtoControle.produto)}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

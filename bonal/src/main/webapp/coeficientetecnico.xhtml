@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="produtoId" value="#{produtoControle.produtoId}" />
+		<f:viewAction action="#{produtoControle.recuperarprodutoPorId}"
+			if="#{param.produtoId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText rendered="#{coeficienteTecnicoControle.bemId == null}"
+					value="Cadastro de Bens" />
+				<h:outputText rendered="#{coeficienteTecnicoControle.bemId != null}"
+					value="Edição de Bens" />
+			</h1>
+			<span><i class="fa fa-coffee" /> <p:link
+					value="Consultar Bens" outcome="bemConsultar" /> </span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formBem">
+			<p:focus context="formBem" />
+			<p:fieldset legend="Dados do Bem">
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Classificação do bem:" for="tipoBem" />
+						<p:selectOneMenu styleClass="form-normal"
+							value="#{coeficienteTecnicoControle.tipoBem}" id="tipoBem" required="true"
+							requiredMessage="Selecione uma opção de bem">
+							<f:selectItems value="#{coeficienteTecnicoControle.enumBem}" var="tipoBem"
+								itemValue="#{tipoBem}" itemLabel="#{tipoBem.label}" />
+							<p:ajax event="blur" process="@form" update="@form :categoriaId" />
+							<p:clientValidator event="blur" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-4">
+						<p:outputLabel value="Categoria:" for="categoriaId" />
+						<p:selectOneMenu value="#{coeficienteTecnicoControle.categoriaId}"
+							id="categoriaId" styleClass="form-normal">
+							
+							<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
+							<f:selectItems value="#{categoriaControle.categorias}"
+								var="categoria" itemLabel="#{categoria.nome}"
+								itemValue="#{categoria.id}" />
+							<p:ajax event="blur" listener="#{bemControle.listar}"
+								process="@form" update="@form :tabelaBens" />
+						</p:selectOneMenu>
+					</div>
+
+
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Quantidade:" for="quantidade" />
+						<p:inputText id="quantidade"
+							value="#{coeficienteTecnicoControle.bem.quantidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Quantidade da bem obrigatório"
+							validatorMessage="Quantidade da bem deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<f:convertNumber maxFractionDigits="3" locale="pt_BR" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="quantidade" id="quantidadeMessage" />
+					</div>
+				</div>
+			</p:fieldset>
+
+			<div class="botoes-cadastrar">
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{coeficienteControle.salvar}" process="@this @form"
+					update="@form :messages" icon="fa fa-fw fa-save"
+					validateClient="true" />
+
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
