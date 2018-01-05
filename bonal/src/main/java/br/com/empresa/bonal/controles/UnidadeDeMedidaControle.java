@@ -168,7 +168,11 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedida = unidadeDeMedida;
 		return editar();
 	}
-
+	
+	
+	public String cancelar(){
+		return "index";
+	}
 	public boolean cargoIdExiste() {
 		if (this.unidadeDeMedidaId == null)
 			return false;
