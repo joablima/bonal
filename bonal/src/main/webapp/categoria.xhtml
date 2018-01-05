@@ -92,6 +92,27 @@
 						<p:message for="descricao" id="descricaoMessage" />
 					</div>
 				</div>
+				
+				
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Tipo:" for="tipo" />
+						<p:selectOneMenu label="Tipo do Categoria"
+							styleClass="form-normal"
+							value="#{categoriaControle.categoria.tipo}" id="tipo"
+							required="true" requiredMessage="Selecione uma opção de tipo">
+							<f:selectItems value="#{categoriaControle.enumCategoria}" var="tipo"
+								itemValue="#{tipo}" itemLabel="#{tipo.label}" />
+							<p:clientValidator event="blur" /> 
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+						<p:message for="tipo" id="tipoMessage" />
+					</div>
+				</div>
+				
+				
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">

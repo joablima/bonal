@@ -24,7 +24,6 @@ public class BemTeste {
 		b.setNome("Bem de Teste");
 		b.setDescricao("Bem usado nos testes unitarios");
 		b.setQuantidade(new BigDecimal("0"));
-		b.setTipoBem("consumo");		
 		br.adicionar(b, 1L, 1L);
 
 		System.out.println("Bem adicionado");

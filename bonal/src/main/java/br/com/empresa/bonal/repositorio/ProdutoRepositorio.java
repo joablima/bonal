@@ -14,15 +14,13 @@ import br.com.empresa.bonal.util.JPAUtil;
 public class ProdutoRepositorio {
 
 	// m�todo que persiste um registro
-	public void adicionar(Produto produto, Long categoriaId, Long unidadeDeMedidaId) {
+	public void adicionar(Produto produto,Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
-		Categoria categoria = em.find(Categoria.class, categoriaId);
 
 		produto.setUnidadeDeMedida(unidadeDeMedida);
-		produto.setCategoria(categoria);
 		
 		em.persist(produto);
 		em.getTransaction().commit();
@@ -30,15 +28,13 @@ public class ProdutoRepositorio {
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Produto produto, Long categoriaId, Long unidadeDeMedidaId) {
+	public void atualizar(Produto produto, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
-		Categoria categoria = em.find(Categoria.class, categoriaId);
 
 		produto.setUnidadeDeMedida(unidadeDeMedida);
-		produto.setCategoria(categoria);
 
 		em.merge(produto);
 		em.getTransaction().commit();

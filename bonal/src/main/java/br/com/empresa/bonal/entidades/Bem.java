@@ -6,6 +6,8 @@ import java.util.Calendar;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
+import br.com.empresa.bonal.util.enums.EnumBem;
 
 @Entity
 public class Bem {
@@ -27,7 +31,8 @@ public class Bem {
 	private BigDecimal quantidade;
 	private BigDecimal precoMedio;
 
-	private String tipoBem;
+	@Enumerated(EnumType.STRING)
+	private EnumBem tipo;
 
 	@Version
 	private Integer version;
@@ -95,13 +100,13 @@ public class Bem {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public String getTipoBem() {
-		return tipoBem;
+	
+	public EnumBem getTipo() {
+		return tipo;
 	}
 
-	public void setTipoBem(String tipoBem) {
-		this.tipoBem = tipoBem;
+	public void setTipo(EnumBem tipo) {
+		this.tipo = tipo;
 	}
 
 	public Integer getVersion() {

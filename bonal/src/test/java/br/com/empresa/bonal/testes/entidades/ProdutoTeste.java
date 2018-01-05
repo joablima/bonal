@@ -3,11 +3,7 @@ package br.com.empresa.bonal.testes.entidades;
 import java.math.BigDecimal;
 
 import br.com.empresa.bonal.entidades.Produto;
-import br.com.empresa.bonal.entidades.Categoria;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ProdutoRepositorio;
-import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
-import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 
 public class ProdutoTeste {
 	
@@ -26,8 +22,7 @@ public class ProdutoTeste {
 		p.setDescricao("Produto usado nos testes unitarios");
 		p.setQuantidade(new BigDecimal("0"));
 		
-		pr.adicionar(p, 1L, 1L);
-
+		
 		System.out.println("Produto adicionado");
 		System.out.println(p.toString());
 
@@ -38,7 +33,6 @@ public class ProdutoTeste {
 		
 		System.out.println("Codigo irá ser editado para '002'");
 		aux.setCodigo("002");
-		pr.atualizar(aux, 1L, 1L);
 		
 		aux = pr.buscarPorId(aux.getId());
 		System.out.println("Produto editado");

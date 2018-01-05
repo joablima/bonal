@@ -14,21 +14,27 @@ import javax.faces.bean.ViewScoped;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.enums.EnumBem;
+import br.com.empresa.bonal.util.enums.EnumCategoria;
 
 @ManagedBean
 @ViewScoped
-public class CategoriaControle implements Serializable{
+public class CategoriaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Categoria categoria = new Categoria();
 
 	private Long categoriaId;
+	
+	private EnumBem tipoBem;
 
 	// Atributos para Consulta
 	private String categoriaNome = "";
 
 	// Listas para Consulta
 	private List<Categoria> categorias;
+	private List<Categoria> categoriasDeBem;
+	private List<Categoria> categoriasDeServico;
 	private List<Categoria> lista = new ArrayList<>();
 
 	// Repositorio
@@ -65,15 +71,44 @@ public class CategoriaControle implements Serializable{
 		this.categoriaNome = categoriaNome;
 	}
 
+	// ----- Carrega os Enums em Arrays -----
+	public EnumCategoria[] getEnumCategoria() {
+		return EnumCategoria.values();
+	}
+
 	public List<Categoria> getCategorias() {
 		return categorias;
+	}
+	
+	public EnumBem getTipoBem() {
+		return tipoBem;
+	}
+
+	public void setTipoBem(EnumBem tipoBem) {
+		this.tipoBem = tipoBem;
+	}
+
+	public List<Categoria> getCategoriasDeServico() {
+		categoriasDeServico = filtraTipo("servico");
+		return categoriasDeServico;
+	}
+
+	public List<Categoria> getCategoriasDeBem() {
+		 categoriasDeBem = filtraTipo("bem");
+		 return categoriasDeBem;
+	}
+
+	public List<Categoria> filtraTipo(String tipo) {
+		Stream<Categoria> stream = lista.stream();
+		stream = stream.filter(c -> (c.getTipo().toString().toLowerCase().contains(tipo)));
+		return stream.collect(Collectors.toList());
 	}
 
 	public List<Categoria> getLista() {
 		return Collections.unmodifiableList(lista);
 	}
 
-	// verificar importancia dos métodos abaixo //verificar se estão trocados??
+	// verificar importancia dos mï¿½todos abaixo //verificar se estï¿½o trocados??
 	public Integer getTotalCategorias() {
 		return lista.size();
 	}
@@ -102,7 +137,7 @@ public class CategoriaControle implements Serializable{
 		categorias = stream.collect(Collectors.toList());
 	}
 
-	// Método chamado ao carregar pagina de consulta para popular tabela
+	// Mï¿½todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
 		listarTabela();
 		return null;
@@ -125,11 +160,11 @@ public class CategoriaControle implements Serializable{
 		salvar();
 	}
 
-	// Métodos que utilizam métodos do repositório
+	// Mï¿½todos que utilizam mï¿½todos do repositï¿½rio
 	public String salvar() {
 		String message = "";
 		categoria.setStatus(1);
-		
+
 		if (categoria.getId() == null) {
 			categoriaRepositorio.adicionar(categoria);
 			message += "Categoria Cadastrada com Sucesso.";

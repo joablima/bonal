@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import br.com.empresa.bonal.util.enums.EnumCategoria;
+
 @Entity
 public class Categoria {
 
@@ -30,7 +32,7 @@ public class Categoria {
 
 	private String descricao;
 	
-	private String tipo;
+	private EnumCategoria tipo;
 
 	@Version
 	private Integer version;
@@ -77,8 +79,7 @@ public class Categoria {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-	
-	
+		
 	public int getStatus() {
 		return status;
 	}
@@ -87,11 +88,11 @@ public class Categoria {
 		this.status = status;
 	}
 	
-	public String getTipo() {
+	public EnumCategoria getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(EnumCategoria tipo) {
 		this.tipo = tipo;
 	}
 

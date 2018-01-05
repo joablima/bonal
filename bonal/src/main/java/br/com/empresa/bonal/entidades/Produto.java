@@ -31,12 +31,6 @@ public class Produto {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
-	
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "categoria")
-	private Categoria categoria;
-	
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "unidadeDeMedida")
@@ -72,16 +66,6 @@ public class Produto {
 
 	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
-	}
-
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
 	}
 
 
@@ -128,7 +112,6 @@ public class Produto {
 		builder.append("\n\tdescricao= " + getDescricao());
 		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
 		builder.append("\n\tquantidade=" + getQuantidade());
-		builder.append("\n\tcategoria=" + getCategoria());
 		builder.append("\n\tunidadeDeMedida=" + getUnidadeDeMedida());
 		builder.append("\n\tversion=" + getVersion());
 		builder.append("\n }");

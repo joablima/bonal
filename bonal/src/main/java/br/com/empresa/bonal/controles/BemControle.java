@@ -16,6 +16,7 @@ import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.enums.EnumBem;
 
 @ManagedBean
 @ViewScoped
@@ -85,6 +86,11 @@ public class BemControle implements Serializable {
 	public void setBemNome(String bemNome) {
 		this.bemNome = bemNome;
 	}
+	
+	// ----- Carrega os Enums em Arrays -----
+	public EnumBem[] getEnumBem() {
+		return EnumBem.values();
+	}
 
 	public List<Bem> getBens() {
 		return bens;
@@ -94,7 +100,7 @@ public class BemControle implements Serializable {
 		return Collections.unmodifiableList(lista);
 	}
 
-	// verificar importancia dos métodos abaixo //verificar se estão trocados??
+	// verificar importancia dos mï¿½todos abaixo //verificar se estï¿½o trocados??
 	public Integer getTotalBens() {
 		return lista.size();
 	}
@@ -131,7 +137,7 @@ public class BemControle implements Serializable {
 		bens = stream.collect(Collectors.toList());
 	}
 
-	// Método chamado ao carregar pagina de consulta para popular tabela
+	// Mï¿½todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
 		listarTabela();
 		return null;
@@ -157,7 +163,7 @@ public class BemControle implements Serializable {
 		salvar();
 	}
 
-	// Métodos que utilizam métodos do repositório
+	// Mï¿½todos que utilizam mï¿½todos do repositï¿½rio
 	public String salvar() {
 		String message = "";
 		if (bem.getId() == null) {
