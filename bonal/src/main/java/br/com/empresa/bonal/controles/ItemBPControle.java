@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.ItemBP;
 import br.com.empresa.bonal.repositorio.ItemBPRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -19,6 +21,8 @@ import br.com.empresa.bonal.util.FacesContextUtil;
 @ViewScoped
 public class ItemBPControle implements Serializable{
 	private static final long serialVersionUID = 1L;
+
+	final static Logger logger = Logger.getLogger(ItemBPControle.class);
 
 	private ItemBP itemBP = new ItemBP();
 
@@ -104,7 +108,7 @@ public class ItemBPControle implements Serializable{
 		itens = filter.collect(Collectors.toList());
 	}
 
-	// Método chamado ao carregar pagina de consulta para popular tabela
+	// Mï¿½todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
 		listarTabela();
 		return null;
@@ -121,7 +125,7 @@ public class ItemBPControle implements Serializable{
 		this.itemBPNome = "";
 	}
 
-	// Métodos que utilizam métodos do repositório
+	// Mï¿½todos que utilizam mï¿½todos do repositï¿½rio
 	public String salvar() {
 		String message = "";
 		if (itemBP.getId() == null) {
@@ -132,7 +136,7 @@ public class ItemBPControle implements Serializable{
 			message += "ItemBP atualizado com Sucesso.";
 		}
 		new FacesContextUtil().info(message);
-		System.out.println(message);
+		logger.info(message);
 		itemBP = new ItemBP();
 		return null;
 	}

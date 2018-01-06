@@ -70,7 +70,7 @@ public class TipoDePessoaRepositorio {
 
 		query.setParameter("pnome", '%' + nome + '%');
 
-		System.out.println(jpql);
+		logger.info(jpql);
 		List<TipoDePessoa> list = query.getResultList();
 		em.close();
 		return list;

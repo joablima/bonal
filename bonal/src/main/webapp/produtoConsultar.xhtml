@@ -5,7 +5,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="/template/main.xhtml">
 
@@ -23,9 +24,10 @@
 		<h:form id="formProdutoConsulta">
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
-					<p:outputLabel value="Nome ou Codigo do Produto: " for="produtoNome" />
-					<p:inputText value="#{produtoControle.produtoNome}" id="produtoNome"
-						styleClass="form-normal">
+					<p:outputLabel value="Nome ou Codigo do Produto: "
+						for="produtoNome" />
+					<p:inputText value="#{produtoControle.produtoNome}"
+						id="produtoNome" styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{produtoControle.listar}"
 							process="@form" update="@form :tabelaProdutos" />
 					</p:inputText>
@@ -43,13 +45,17 @@
 		</h:form>
 
 		<h:form id="tabelaProdutos">
-			<p:dataTable id="produto" var="produto" value="#{produtoControle.produtos}"
-				resizableColumns="true" reflow="true" rows="10" paginator="true"
+			<p:dataTable id="produto" var="produto"
+				value="#{produtoControle.produtos}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
 				rowKey="#{produto.id}" selection="#{produtoControle.produto}"
 				selectionMode="single" emptyMessage="Nenhum Produto Encontrado!"
 				styleClass="ui-g-12">
+				<p:ajax event="page" listener="#{produtoControle.carregandoDados}"
+					update="messages" onstart="PF('blockUIWidget2').block()"
+					oncomplete="PF('blockUIWidget2').unblock()" />
 
 				<p:column headerText="Codigo" sortBy="#{produto.codigo}">
 					<h:outputText value="#{produto.codigo}" />
@@ -87,16 +93,17 @@
 			</p:dataTable>
 
 			<p:contextMenu for="produto">
-				<p:menuitem value="Edição" update="produtoEditar" icon="ui-icon-search"
-					oncomplete="PF('produtoDialog').show()" />
+				<p:menuitem value="Edição" update="produtoEditar"
+					icon="ui-icon-search" oncomplete="PF('produtoDialog').show()" />
 				<p:menuitem value="Deletar" update="produto" icon="ui-icon-close"
 					action="#{produtoControle.remover}" />
 			</p:contextMenu>
 
-			<p:dialog header="Edição de Produtos" widgetVar="produtoDialog" modal="true"
-				showEffect="fade" hideEffect="fade" resizable="false">
+			<p:dialog header="Edição de Produtos" widgetVar="produtoDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
 				<p:outputPanel id="produtoEditar" style="text-align:center;">
-					<p:panelGrid columns="2" rendered="#{not empty produtoControle.produtos}"
+					<p:panelGrid columns="2"
+						rendered="#{not empty produtoControle.produtos}"
 						columnClasses="label,value">
 						<f:facet name="header">
 						Titulo
@@ -114,6 +121,18 @@
 				</p:outputPanel>
 			</p:dialog>
 
+
+			<pe:blockUI target="produto" content="blockUIContent"
+				widgetVar="blockUIWidget2" />
+
+			<h:panelGrid id="blockUIContent" columns="2"
+				style="display:none;table-layout:auto;">
+				<h:graphicImage library="img" name="icon/loading.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="Por favor aguarde, os dados estão sendo processados..."
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+			
 		</h:form>
 
 	</ui:define>

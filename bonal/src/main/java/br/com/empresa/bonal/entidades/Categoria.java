@@ -8,6 +8,8 @@ import javax.persistence.Column;
 	bens de consumos podem ser Produtos, Maquinas, equipamentos
 */
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,10 +30,13 @@ public class Categoria {
 	@NotNull
 	private String nome;
 
+	@NotNull
 	private String codigo;
 
 	private String descricao;
-	
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
 	private EnumCategoria tipo;
 
 	@Version
@@ -40,10 +45,10 @@ public class Categoria {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
-	
-	
-	private int status;
-	
+
+	@NotNull
+	private boolean status;
+
 	public Long getId() {
 		return id;
 	}
@@ -79,15 +84,15 @@ public class Categoria {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-		
-	public int getStatus() {
+
+	public boolean isStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
+
 	public EnumCategoria getTipo() {
 		return tipo;
 	}
@@ -109,6 +114,6 @@ public class Categoria {
 		builder.append("\n }");
 		return builder.toString();
 	}
-	
+
 	// TODO falta implementar equal e hashcode
 }

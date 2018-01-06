@@ -78,7 +78,7 @@ public class CategoriaRepositorio {
 			query.setParameter("pdescricao", '%' + nome + '%');
 		}
 
-		System.out.println(jpql);
+		logger.info(jpql);
 		List<Categoria> list = query.getResultList();
 		em.close();
 		return list;

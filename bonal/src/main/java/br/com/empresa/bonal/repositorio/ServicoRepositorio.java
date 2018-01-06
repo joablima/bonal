@@ -6,12 +6,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.Servico;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.util.JPAUtil;
 
 public class ServicoRepositorio {
+
+	final static Logger logger = Logger.getLogger(ServicoRepositorio.class);
 
 	// m�todo que persiste um registro
 	public void adicionar(Servico servico, Long categoriaId, Long unidadeDeMedidaId) {
@@ -97,7 +101,7 @@ public class ServicoRepositorio {
 		if (unidadeDeMedidaId != null)
 			query.setParameter("punidade", unidadeDeMedidaId);
 
-		System.out.println(jpql);
+		logger.info(jpql);
 		List<Servico> list = query.getResultList();
 		em.close();
 		return list;

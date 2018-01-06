@@ -24,14 +24,14 @@
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-4">
 					<p:outputLabel value="Categoria:" for="categoriaId" />
-					<p:selectOneMenu value="#{categoriaControle.categoriaId}"
+					<p:selectOneMenu value="#{bemControle.categoriaId}"
 						id="categoriaId" styleClass="form-normal">
 						<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
-						<f:selectItems value="#{categoriaControle.categorias}"
+						<f:selectItems value="#{categoriaControle.categoriasDeBem}"
 							var="categoria" itemLabel="#{categoria.nome}"
 							itemValue="#{categoria.id}" />
-						<p:ajax event="blur" listener="#{bemControle.listar}"
-							process="@form" update="@form :tabelaBens" />
+						<p:ajax event="valueChange" listener="#{bemControle.listar}"
+							process="@form" update=":tabelaBens" />
 					</p:selectOneMenu>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-4">
@@ -39,7 +39,7 @@
 					<p:inputText value="#{bemControle.bemNome}" id="bemNome"
 						styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{bemControle.listar}"
-							process="@form" update="@form :tabelaBens" />
+							process="@form" update=":tabelaBens" />
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">

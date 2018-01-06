@@ -71,7 +71,7 @@ public class NaturezaDaDespesaRepositorio {
 		query.setParameter("pnome", '%' + nome + '%');
 		query.setParameter("pcodigo", '%' + nome + '%');
 
-		System.out.println(jpql);
+		logger.info(jpql);
 		List<NaturezaDaDespesa> list = query.getResultList();
 		em.close();
 		return list;

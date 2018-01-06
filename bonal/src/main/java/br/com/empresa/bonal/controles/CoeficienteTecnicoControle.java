@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.Bem;
 import br.com.empresa.bonal.entidades.CoeficienteTecnico;
 import br.com.empresa.bonal.entidades.Produto;
@@ -23,15 +25,13 @@ import br.com.empresa.bonal.util.enums.EnumBem;
 public class CoeficienteTecnicoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	final static Logger logger = Logger.getLogger(CoeficienteTecnicoControle.class);
+
 	private CoeficienteTecnico coeficienteTecnico = new CoeficienteTecnico();
 
 	private Long coeficienteTecnicoId;
-
 	private Long produtoId;
 	private Long bemId;
-	
-	private EnumBem tipoBem;
-	private Long categoriaId;
 
 	// Atributos para Consulta
 	private String coeficienteTecnicoNome = "";
@@ -88,22 +88,6 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 	public void setCoeficienteTecnicoNome(String coeficienteTecnicoNome) {
 		this.coeficienteTecnicoNome = coeficienteTecnicoNome;
-	}
-	
-	public Long getCategoriaId() {
-		return categoriaId;
-	}
-	
-	public void setCategoriaId(Long categoriaId) {
-		this.categoriaId = categoriaId;
-	}
-
-	public EnumBem getTipoBem() {
-		return tipoBem;
-	}
-
-	public void setTipoBem(EnumBem tipoBem) {
-		this.tipoBem = tipoBem;
 	}
 
 	// ----- Carrega os Enums em Arrays -----
@@ -187,7 +171,7 @@ public class CoeficienteTecnicoControle implements Serializable {
 			message += "CoeficienteTecnico Atualizado com Sucesso.";
 		}
 		new FacesContextUtil().info(message);
-		System.out.println(message);
+		logger.info(message);
 		coeficienteTecnico = new CoeficienteTecnico();
 		return null;
 	}

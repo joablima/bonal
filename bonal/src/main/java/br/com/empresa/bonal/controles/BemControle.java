@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.Bem;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
@@ -23,15 +25,17 @@ import br.com.empresa.bonal.util.enums.EnumBem;
 public class BemControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	final static Logger logger = Logger.getLogger(BemControle.class);
+
 	private Bem bem = new Bem();
 
 	private Long bemId;
 
-	private Long categoriaId;
-	private Long unidadeDeMedidaId;
-
 	// Atributos para Consulta
 	private String bemNome = "";
+	private EnumBem tipoBem;
+	private Long categoriaId;
+	private Long unidadeDeMedidaId;
 
 	// Listas para Consulta
 	private List<Bem> bens;
@@ -86,7 +90,15 @@ public class BemControle implements Serializable {
 	public void setBemNome(String bemNome) {
 		this.bemNome = bemNome;
 	}
-	
+
+	public EnumBem getTipoBem() {
+		return tipoBem;
+	}
+
+	public void setTipoBem(EnumBem tipoBem) {
+		this.tipoBem = tipoBem;
+	}
+
 	// ----- Carrega os Enums em Arrays -----
 	public EnumBem[] getEnumBem() {
 		return EnumBem.values();
@@ -134,6 +146,10 @@ public class BemControle implements Serializable {
 		if (unidadeDeMedidaId != null)
 			stream = stream.filter(c -> (c.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
 
+		if (tipoBem != null) {
+			stream = stream.filter(c -> (c.getTipo().equals(tipoBem)));
+		}
+
 		bens = stream.collect(Collectors.toList());
 	}
 
@@ -174,7 +190,7 @@ public class BemControle implements Serializable {
 			message += "Bem Atualizado com Sucesso.";
 		}
 		new FacesContextUtil().info(message);
-		System.out.println(message);
+		logger.info(message);
 		bem = new Bem();
 		return null;
 	}

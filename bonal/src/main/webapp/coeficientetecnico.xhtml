@@ -11,93 +11,136 @@
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
 		<f:viewParam name="produtoId" value="#{produtoControle.produtoId}" />
-		<f:viewAction action="#{produtoControle.recuperarprodutoPorId}"
+		<f:viewAction action="#{produtoControle.recuperarProdutoPorId}"
 			if="#{param.produtoId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText rendered="#{coeficienteTecnicoControle.bemId == null}"
-					value="Cadastro de Bens" />
-				<h:outputText rendered="#{coeficienteTecnicoControle.bemId != null}"
-					value="Edição de Bens" />
+				<h:outputText
+					value="Coeficientes Técnicos do Bem #{produtoControle.produto.nome}" />
 			</h1>
 			<span><i class="fa fa-coffee" /> <p:link
-					value="Consultar Bens" outcome="bemConsultar" /> </span>
+					value="Consultar Produtos" outcome="produtoConsultar" /> </span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
 			<p:effect type="pulsate" event="load" delay="500" />
 		</p:messages>
 
-		<h:form id="formBem">
-			<p:focus context="formBem" />
-			<p:fieldset legend="Dados do Bem">
+		<h:form id="formCoeficiente">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Classificação do bem:" for="tipoBem" />
+					<p:selectOneMenu styleClass="form-normal"
+						value="#{bemControle.tipoBem}" id="tipoBem" required="true"
+						requiredMessage="Selecione uma opção de bem">
+						<f:selectItems value="#{bemControle.enumBem}" var="tipoBem"
+							itemValue="#{tipoBem}" itemLabel="#{tipoBem.label}" />
+						<p:ajax event="valueChange" listener="#{bemControle.listar}"
+							process="@form" update=":tabelaBens" />
+						<p:clientValidator event="blur" />
+					</p:selectOneMenu>
+				</div>
 
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Classificação do bem:" for="tipoBem" />
-						<p:selectOneMenu styleClass="form-normal"
-							value="#{coeficienteTecnicoControle.tipoBem}" id="tipoBem" required="true"
-							requiredMessage="Selecione uma opção de bem">
-							<f:selectItems value="#{coeficienteTecnicoControle.enumBem}" var="tipoBem"
-								itemValue="#{tipoBem}" itemLabel="#{tipoBem.label}" />
-							<p:ajax event="blur" process="@form" update="@form :categoriaId" />
-							<p:clientValidator event="blur" />
-						</p:selectOneMenu>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-4">
-						<p:outputLabel value="Categoria:" for="categoriaId" />
-						<p:selectOneMenu value="#{coeficienteTecnicoControle.categoriaId}"
-							id="categoriaId" styleClass="form-normal">
-							
-							<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
-							<f:selectItems value="#{categoriaControle.categorias}"
-								var="categoria" itemLabel="#{categoria.nome}"
-								itemValue="#{categoria.id}" />
-							<p:ajax event="blur" listener="#{bemControle.listar}"
-								process="@form" update="@form :tabelaBens" />
-						</p:selectOneMenu>
-					</div>
-
-
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Categoria:" for="categoriaId" />
+					<p:selectOneMenu value="#{bemControle.categoriaId}"
+						id="categoriaId" styleClass="form-normal">
+						<f:selectItem itemValue="" itemLabel="Escolha um Categoria" />
+						<f:selectItems value="#{categoriaControle.categorias}"
+							var="categoria" itemLabel="#{categoria.nome}"
+							itemValue="#{categoria.id}" />
+						<p:ajax event="valueChange" listener="#{bemControle.listar}"
+							process="@form" update=":tabelaBens" />
+					</p:selectOneMenu>
 				</div>
 
 
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Quantidade:" for="quantidade" />
-						<p:inputText id="quantidade"
-							value="#{coeficienteTecnicoControle.bem.quantidade}"
-							styleClass="form-normal" required="true"
-							requiredMessage="Quantidade da bem obrigatório"
-							validatorMessage="Quantidade da bem deve ter no minimo 2 caracteres"
-							maxlength="80">
-							<p:clientValidator event="blur" />
-							<f:convertNumber maxFractionDigits="3" locale="pt_BR" />
-						</p:inputText>
-					</div>
+				<!-- 				<div class="ui-g"> -->
+				<!-- 					<div class="ui-g-12 ui-md-6 ui-lg-6"> -->
+				<!-- 						<p:outputLabel value="Quantidade:" for="quantidade" /> -->
+				<!-- 						<p:inputText id="quantidade" -->
+				<!-- 							value="#{coeficienteTecnicoControle.bem.quantidade}" -->
+				<!-- 							styleClass="form-normal" required="true" -->
+				<!-- 							requiredMessage="Quantidade da bem obrigatório" -->
+				<!-- 							validatorMessage="Quantidade da bem deve ter no minimo 2 caracteres" -->
+				<!-- 							maxlength="80"> -->
+				<!-- 							<p:clientValidator event="blur" /> -->
+				<!-- 							<f:convertNumber maxFractionDigits="3" locale="pt_BR" /> -->
+				<!-- 						</p:inputText> -->
+				<!-- 					</div> -->
 
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="quantidade" id="quantidadeMessage" />
-					</div>
+				<!-- 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages"> -->
+				<!-- 						<p:message for="quantidade" id="quantidadeMessage" /> -->
+				<!-- 					</div> -->
+				<!-- 				</div> -->
+
+
+				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
+					<p:commandButton id="buscarBem" value="Filtrar"
+						action="#{bemControle.listar}" process="@form"
+						update="@form :tabelaBens" icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{bemControle.limpar}" process="@form"
+						update="@form :tabelaBens" />
 				</div>
-			</p:fieldset>
 
-			<div class="botoes-cadastrar">
-				<p:commandButton id="salvar" value="Salvar"
-					action="#{coeficienteControle.salvar}" process="@this @form"
-					update="@form :messages" icon="fa fa-fw fa-save"
-					validateClient="true" />
-
-				<p:commandButton value="Limpar" type="reset"
-					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
-
 		</h:form>
+
+		<h:form id="tabelaBens">
+			<p:dataTable id="bem" var="bem" value="#{bemControle.bens}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowKey="#{bem.id}" selection="#{bemControle.bem}"
+				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!"
+				styleClass="ui-g-12">
+
+				<p:column headerText="Codigo" sortBy="#{bem.codigo}">
+					<h:outputText value="#{bem.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{bem.nome}">
+					<h:outputText value="#{bem.nome}" />
+				</p:column>
+
+				<p:column headerText="Descricao" sortBy="#{bem.descricao}">
+					<h:outputText value="#{bem.descricao}" />
+				</p:column>
+
+				<p:column headerText="categoria" sortBy="#{bem.categoria.nome}">
+					<h:outputText value="#{bem.categoria.nome}" />
+				</p:column>
+
+				<p:column headerText="unidadeDeMedida"
+					sortBy="#{bem.unidadeDeMedida.nome}">
+					<h:outputText value="#{bem.unidadeDeMedida.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:commandButton styleClass="ui-icon  ui-icon-pencil"
+						value="Editar" type="button" onclick="PF('dlg2').show();" />
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{bemControle.totalBens} de #{bemControle.totalBensConsulta}" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog header="Cadastrar Coeficiente Técnico" widgetVar="dlg2"
+			modal="true" height="50%">
+			<h:outputText value="testando a popup" />
+			<!-- 				<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar" -->
+			<!-- 					outcome=" #{produtoControle.addCoeficiente(bem)}" /> -->
+		</p:dialog>
+
 	</ui:define>
 </ui:composition>
 </html>

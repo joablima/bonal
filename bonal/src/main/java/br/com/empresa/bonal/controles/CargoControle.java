@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -20,6 +22,8 @@ import br.com.empresa.bonal.util.FacesContextUtil;
 public class CargoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	final static Logger logger = Logger.getLogger(CargoControle.class);
+	
 	private Cargo cargo = new Cargo();
 
 	private Long cargoId;
@@ -73,7 +77,7 @@ public class CargoControle implements Serializable {
 		return Collections.unmodifiableList(lista);
 	}
 
-	// verificar importancia dos métodos abaixo //verificar se estão trocados??
+	// verificar importancia dos mï¿½todos abaixo //verificar se estï¿½o trocados??
 	public Integer getTotalCargos() {
 		return lista.size();
 	}
@@ -100,7 +104,7 @@ public class CargoControle implements Serializable {
 		cargos = stream.collect(Collectors.toList());
 	}
 
-	// Método chamado ao carregar pagina de consulta para popular tabela
+	// Mï¿½todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
 		listarTabela();
 		return null;
@@ -117,7 +121,7 @@ public class CargoControle implements Serializable {
 		this.cargoNome = "";
 	}
 
-	// Métodos que utilizam métodos do repositório
+	// Mï¿½todos que utilizam mï¿½todos do repositï¿½rio
 	public String salvar() {
 		String message = "";
 		if (cargo.getId() == null) {
@@ -128,7 +132,7 @@ public class CargoControle implements Serializable {
 			message += "Cargo Atualizado com Sucesso.";
 		}
 		new FacesContextUtil().info(message);
-		System.out.println(message);
+		logger.info(message);
 		cargo = new Cargo();
 		return null;
 	}

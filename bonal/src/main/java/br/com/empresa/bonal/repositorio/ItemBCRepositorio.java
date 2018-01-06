@@ -6,12 +6,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.ItemBC;
 import br.com.empresa.bonal.util.JPAUtil;
 
 public class ItemBCRepositorio {
 
-	// método que persiste um registro
+	final static Logger logger = Logger.getLogger(ItemBCRepositorio.class);
+
+	// mï¿½todo que persiste um registro
 	public void adicionar(ItemBC itemBC) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -20,7 +24,7 @@ public class ItemBCRepositorio {
 		em.close();
 	}
 
-	// método que atualiza um registro
+	// mï¿½todo que atualiza um registro
 	public void atualizar(ItemBC itemBC) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -29,7 +33,7 @@ public class ItemBCRepositorio {
 		em.close();
 	}
 
-	// método que remove um registro
+	// mï¿½todo que remove um registro
 	public void remover(ItemBC itemBC) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -38,7 +42,7 @@ public class ItemBCRepositorio {
 		em.close();
 	}
 
-	// método que recupera um objeto pelo id
+	// mï¿½todo que recupera um objeto pelo id
 	public ItemBC buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
 		ItemBC bc = em.find(ItemBC.class, id);
@@ -46,7 +50,7 @@ public class ItemBCRepositorio {
 		return bc;
 	}
 
-	// método que lista todos os registros
+	// mï¿½todo que lista todos os registros
 	public List<ItemBC> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
 		CriteriaQuery<ItemBC> query = em.getCriteriaBuilder().createQuery(ItemBC.class);
@@ -56,7 +60,7 @@ public class ItemBCRepositorio {
 		return list;
 	}
 
-	// método que lista com critérios todos os registros
+	// mï¿½todo que lista com critï¿½rios todos os registros
 	public List<ItemBC> listarPorCriterios(String nome) {
 		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select i from ItemBC i where i.id like :pid or i.data_de_validade like :pdataDeValidade or i.bem.nome like :pbem";
@@ -67,7 +71,7 @@ public class ItemBCRepositorio {
 		query.setParameter("pdataDeValidade", '%' + nome + '%');
 		query.setParameter("pbem", '%' + nome + '%');
 
-		System.out.println(jpql);
+		logger.info(jpql);
 		List<ItemBC> list = query.getResultList();
 		em.close();
 		return list;

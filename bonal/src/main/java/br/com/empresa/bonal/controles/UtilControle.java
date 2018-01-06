@@ -3,7 +3,11 @@ package br.com.empresa.bonal.controles;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 public class UtilControle {
+
+	final static Logger logger = Logger.getLogger(UtilControle.class);
 
 	private Date hoje = Calendar.getInstance().getTime();
 
@@ -26,8 +30,7 @@ public class UtilControle {
 		Date minDate = calendar.getTime();
 		return minDate;
 	}
-	
-	
+
 	public Date getMaxDateByMinDate(Date minDate, Integer dias) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(minDate);
@@ -35,5 +38,4 @@ public class UtilControle {
 		Date maxDate = calendar.getTime();
 		return maxDate;
 	}
-	
 }

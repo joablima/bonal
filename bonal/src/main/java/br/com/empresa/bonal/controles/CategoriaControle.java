@@ -11,10 +11,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.enums.EnumBem;
 import br.com.empresa.bonal.util.enums.EnumCategoria;
 
 @ManagedBean
@@ -22,12 +23,12 @@ import br.com.empresa.bonal.util.enums.EnumCategoria;
 public class CategoriaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	final static Logger logger = Logger.getLogger(CategoriaControle.class);
+	
 	private Categoria categoria = new Categoria();
 
 	private Long categoriaId;
 	
-	private EnumBem tipoBem;
-
 	// Atributos para Consulta
 	private String categoriaNome = "";
 
@@ -78,14 +79,6 @@ public class CategoriaControle implements Serializable {
 
 	public List<Categoria> getCategorias() {
 		return categorias;
-	}
-	
-	public EnumBem getTipoBem() {
-		return tipoBem;
-	}
-
-	public void setTipoBem(EnumBem tipoBem) {
-		this.tipoBem = tipoBem;
 	}
 
 	public List<Categoria> getCategoriasDeServico() {
@@ -156,14 +149,13 @@ public class CategoriaControle implements Serializable {
 
 	public void salvar(Categoria c) {
 		this.categoria = c;
-		this.categoria.setStatus(1);
 		salvar();
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
-		categoria.setStatus(1);
+		this.categoria.setStatus(true);
 
 		if (categoria.getId() == null) {
 			categoriaRepositorio.adicionar(categoria);
@@ -173,7 +165,7 @@ public class CategoriaControle implements Serializable {
 			message += "Categoria Atualizada com Sucesso.";
 		}
 		new FacesContextUtil().info(message);
-		System.out.println(message);
+		logger.info(message);
 		categoria = new Categoria();
 		return null;
 	}
@@ -184,7 +176,7 @@ public class CategoriaControle implements Serializable {
 
 	// Remove um Categoria do banco de dados
 	public void remover() {
-		categoria.setStatus(0);
+		categoria.setStatus(false);
 		categoriaRepositorio.atualizar(categoria);
 		categorias = null;
 		listarTabela();
@@ -193,7 +185,6 @@ public class CategoriaControle implements Serializable {
 
 	public void remover(Categoria c) {
 		this.categoria = c;
-		this.categoria.setStatus(0);
 		remover();
 	}
 

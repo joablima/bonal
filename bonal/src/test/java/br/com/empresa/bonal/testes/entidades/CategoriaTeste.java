@@ -13,7 +13,7 @@ public class CategoriaTeste {
 		c.setNome("Categoria de Teste Unitario");
 		c.setCodigo("001");
 		c.setDescricao("Categoria criada para validacao de teste");
-		c.setStatus(1);
+		c.setStatus(true);
 
 		cr.adicionar(c);
 

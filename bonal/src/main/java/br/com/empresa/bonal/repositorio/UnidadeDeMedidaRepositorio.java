@@ -71,7 +71,7 @@ public class UnidadeDeMedidaRepositorio {
 		query.setParameter("pnome", '%' + nome + '%');
 		query.setParameter("psigla", '%' + nome + '%');
 
-		System.out.println(jpql);
+		logger.info(jpql);
 		List<UnidadeDeMedida> list = query.getResultList();
 		em.close();
 		return list;

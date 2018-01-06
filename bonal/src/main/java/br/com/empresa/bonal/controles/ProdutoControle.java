@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.log4j.Logger;
+
 import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ProdutoRepositorio;
@@ -20,6 +22,8 @@ import br.com.empresa.bonal.util.FacesContextUtil;
 @ViewScoped
 public class ProdutoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	final static Logger logger = Logger.getLogger(ProdutoControle.class);
 
 	private Produto produto = new Produto();
 
@@ -58,7 +62,6 @@ public class ProdutoControle implements Serializable {
 	public void setProdutoId(Long produtoId) {
 		this.produtoId = produtoId;
 	}
-
 
 	public Long getUnidadeDeMedidaId() {
 		return unidadeDeMedidaId;
@@ -136,9 +139,10 @@ public class ProdutoControle implements Serializable {
 		this.unidadeDeMedidaId = null;
 	}
 
-	public void salvar(Produto b, UnidadeDeMedida u) {
-		this.produto = b;
-		this.unidadeDeMedidaId = u.getId();
+	public void salvar(Produto produto, UnidadeDeMedida unidade) {
+		this.produto = produto;
+		this.produtoId = produto.getId();
+		this.unidadeDeMedidaId = unidade.getId();
 		salvar();
 	}
 
@@ -146,15 +150,15 @@ public class ProdutoControle implements Serializable {
 	public String salvar() {
 		String message = "";
 		if (produto.getId() == null) {
-			produtoRepositorio.adicionar(produto,unidadeDeMedidaId);
+			produtoRepositorio.adicionar(produto, unidadeDeMedidaId);
 			message += "Produto Cadastrado com Sucesso.";
 		} else {
 			produtoRepositorio.atualizar(produto, unidadeDeMedidaId);
 			message += "Produto Atualizado com Sucesso.";
 		}
 		new FacesContextUtil().info(message);
-		System.out.println(message);
-		produto = new Produto();
+		logger.info(message);
+		this.produto = new Produto();
 		return null;
 	}
 
@@ -181,6 +185,10 @@ public class ProdutoControle implements Serializable {
 		return "produto?produtoId=" + produtoId;
 	}
 
+	public String addCoeficientes() {
+		return "coeficientetecnico?produtoId=" + this.produtoId;
+	}
+
 	public String editar(Produto produto) {
 		this.produto = produto;
 		return editar();
@@ -192,4 +200,13 @@ public class ProdutoControle implements Serializable {
 		return true;
 	}
 
+	// vou tirar isso daqui não se preocupe
+	public void carregandoDados() {
+		try {
+			// simulate a long running request
+			Thread.sleep(1500);
+		} catch (Exception e) {
+			// ignore
+		}
+	}
 }
