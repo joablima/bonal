@@ -1,6 +1,5 @@
 package br.com.empresa.bonal.entidades;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 
 import javax.persistence.CascadeType;

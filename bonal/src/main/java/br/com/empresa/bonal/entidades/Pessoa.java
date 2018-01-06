@@ -24,16 +24,16 @@ public abstract class Pessoa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	//atributo que define se essa pessoa é do tipo fisico ou juridico
+
+	// atributo que define se essa pessoa é do tipo fisico ou juridico
 	private String tipo;
-	
-	//cpf para pessoas fisicas e cnpj para pessoas juridicas
+
+	// cpf para pessoas fisicas e cnpj para pessoas juridicas
 	private String documento;
-	
-	//pode ser rg para pessoas fisicas e ie para pessoas juridicas
+
+	// pode ser rg para pessoas fisicas e ie para pessoas juridicas
 	private String identificacao;
-	
+
 	@NotNull
 	private String nome;
 
@@ -50,9 +50,9 @@ public abstract class Pessoa {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
-	
+
 	private int status;
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -81,6 +81,30 @@ public abstract class Pessoa {
 		return endereco;
 	}
 
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(String documento) {
+		this.documento = documento;
+	}
+
+	public String getIdentificacao() {
+		return identificacao;
+	}
+
+	public void setIdentificacao(String identificacao) {
+		this.identificacao = identificacao;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -92,7 +116,7 @@ public abstract class Pessoa {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-	
+
 	public int getStatus() {
 		return status;
 	}

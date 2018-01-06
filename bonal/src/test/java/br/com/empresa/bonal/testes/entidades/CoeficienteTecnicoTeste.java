@@ -3,11 +3,7 @@ package br.com.empresa.bonal.testes.entidades;
 import java.math.BigDecimal;
 
 import br.com.empresa.bonal.entidades.CoeficienteTecnico;
-import br.com.empresa.bonal.entidades.Categoria;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.CoeficienteTecnicoRepositorio;
-import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
-import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 
 public class CoeficienteTecnicoTeste {
 	

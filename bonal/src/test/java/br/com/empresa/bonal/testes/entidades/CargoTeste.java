@@ -2,9 +2,6 @@ package br.com.empresa.bonal.testes.entidades;
 
 import java.math.BigDecimal;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 

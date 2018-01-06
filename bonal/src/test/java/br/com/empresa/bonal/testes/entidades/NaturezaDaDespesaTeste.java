@@ -1,6 +1,5 @@
 package br.com.empresa.bonal.testes.entidades;
 
-import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.NaturezaDaDespesa;
 import br.com.empresa.bonal.repositorio.NaturezaDaDespesaRepositorio;
 

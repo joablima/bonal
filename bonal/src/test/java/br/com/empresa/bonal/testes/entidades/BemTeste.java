@@ -3,11 +3,7 @@ package br.com.empresa.bonal.testes.entidades;
 import java.math.BigDecimal;
 
 import br.com.empresa.bonal.entidades.Bem;
-import br.com.empresa.bonal.entidades.Categoria;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemRepositorio;
-import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
-import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 
 public class BemTeste {
 	
