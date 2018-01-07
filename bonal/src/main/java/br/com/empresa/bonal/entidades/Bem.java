@@ -25,11 +25,17 @@ public class Bem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "codigo", unique = true, nullable = false)
 	private String codigo;
+
 	private String nome;
+
 	private String descricao;
+
 	private BigDecimal quantidade;
+
 	private BigDecimal precoMedio;
+
 	private Boolean status;
 
 	@Enumerated(EnumType.STRING)
@@ -101,7 +107,7 @@ public class Bem {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public EnumBem getTipo() {
 		return tipo;
 	}
@@ -117,25 +123,6 @@ public class Bem {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-	
-	
-
-	// @PrePersist
-	// @PreUpdate
-	// public void gerarCodigo() {
-	// StringBuilder builder = new StringBuilder();
-	// builder.append(this.tipoBem);
-	// builder.append(codigo);
-	// this.codigo = builder.toString();
-	// }
-
-	public Boolean getStatus() {
-		return status;
-	}
-
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
 
 	public BigDecimal getPrecoMedio() {
 		return precoMedio;
@@ -143,6 +130,14 @@ public class Bem {
 
 	public void setPrecoMedio(BigDecimal precoMedio) {
 		this.precoMedio = precoMedio;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	@Override
@@ -159,6 +154,17 @@ public class Bem {
 		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
 		builder.append("\n\tversion=" + getVersion());
 		builder.append("\n }");
+		return builder.toString();
+	}
+
+	public String resumo() {
+		StringBuilder builder = new StringBuilder();
+		String status = getStatus() ? "ativo" : "inativo";
+		builder.append(" " + getCodigo())
+		.append(" - " + getUnidadeDeMedida().getNome() +" "+ getNome())
+		.append(" - " + getPrecoMedio()+" R$")
+		.append(" - " + getDescricao())
+		.append(" - " + status);
 		return builder.toString();
 	}
 

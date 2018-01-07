@@ -15,7 +15,6 @@ public class CargoTeste {
 		Cargo c = new Cargo();
 		c.setNome("Programador de marte");
 		c.setSalario(new BigDecimal("28.000"));
-		c.setPermissao(1);
 
 		cr.adicionar(c);
 

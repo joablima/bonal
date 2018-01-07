@@ -92,13 +92,14 @@ public class CategoriaRepositorio {
 		TypedQuery<Categoria> query = em.createQuery(jpql, Categoria.class);
 		query.setParameter("pcodigo", categoria.getCodigo());
 
-		logger.info(jpql);
 		try {
 			Categoria novaCategoria = query.getSingleResult();
-			em.close();
 			return novaCategoria;
 		} catch (Exception e) {
 			return null;
+		} finally {
+			logger.info(jpql);
+			em.close();
 		}
 	}
 }

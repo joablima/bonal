@@ -182,10 +182,15 @@ public class BemControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
-		
 		this.bem.setStatus(true);
 		
 		if (bem.getId() == null) {
+			Bem existe = bemRepositorio.codigoExiste(bem);
+			if (existe != null) {
+				message += "Já existe um Bem registrado com esse código." + existe.resumo();
+				new FacesContextUtil().warn(message);
+				return null;
+			}
 			bemRepositorio.adicionar(bem, categoriaId, unidadeDeMedidaId);
 			message += "Bem Cadastrado com Sucesso.";
 		} else {

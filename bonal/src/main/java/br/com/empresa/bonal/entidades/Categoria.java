@@ -48,7 +48,7 @@ public class Categoria {
 	private Calendar dataCadastro = Calendar.getInstance();
 
 	@NotNull
-	private boolean status;
+	private Boolean status;
 
 	public Long getId() {
 		return id;
@@ -86,11 +86,11 @@ public class Categoria {
 		return dataCadastro;
 	}
 
-	public boolean isStatus() {
+	public Boolean getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
 	}
 
@@ -118,7 +118,7 @@ public class Categoria {
 
 	public String resumo() {
 		StringBuilder builder = new StringBuilder();
-		String status = isStatus() ? "ativo" : "inativo";
+		String status = getStatus() ? "ativo" : "inativo";
 		builder.append(" " + getCodigo()).append(" - " + getNome()).append(" - " + getDescricao())
 				.append(" - " + status);
 		return builder.toString();

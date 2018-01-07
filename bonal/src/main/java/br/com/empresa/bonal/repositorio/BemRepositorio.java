@@ -21,13 +21,13 @@ public class BemRepositorio {
 	public void adicionar(Bem bem, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		
+
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
 		Categoria categoria = em.find(Categoria.class, categoriaId);
-		
+
 		bem.setUnidadeDeMedida(unidadeDeMedida);
 		bem.setCategoria(categoria);
-		
+
 		em.persist(bem);
 		em.getTransaction().commit();
 		em.close();
@@ -58,7 +58,7 @@ public class BemRepositorio {
 		em.close();
 	}
 
-	// m�todo que recupera um objeto pelo id	
+	// m�todo que recupera um objeto pelo id
 	public Bem buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
 		Bem bem = em.find(Bem.class, id);
@@ -74,8 +74,8 @@ public class BemRepositorio {
 		List<Bem> list = em.createQuery(query).getResultList();
 		em.close();
 		return list;
-	}	
-	
+	}
+
 	// m�todo que lista com crit�rios todos os registros
 	public List<Bem> listarPorCriterios(String nome, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
@@ -97,7 +97,7 @@ public class BemRepositorio {
 			query.setParameter("pdescricao", '%' + nome + '%');
 		}
 		if (categoriaId != null)
-			query.setParameter("pcategoria", categoriaId);	
+			query.setParameter("pcategoria", categoriaId);
 		if (unidadeDeMedidaId != null)
 			query.setParameter("punidade", unidadeDeMedidaId);
 
@@ -105,5 +105,24 @@ public class BemRepositorio {
 		List<Bem> list = query.getResultList();
 		em.close();
 		return list;
+	}
+
+	// método que verifica se elemento existe
+	public Bem codigoExiste(Bem bem) {
+		EntityManager em = JPAUtil.getEntityManager();
+		String jpql = "select b from Bem b where b.codigo = :pcodigo";
+
+		TypedQuery<Bem> query = em.createQuery(jpql, Bem.class);
+		query.setParameter("pcodigo", bem.getCodigo());
+
+		try {
+			Bem novoBem = query.getSingleResult();
+			return novoBem;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			logger.info(jpql);
+			em.close();
+		}
 	}
 }
