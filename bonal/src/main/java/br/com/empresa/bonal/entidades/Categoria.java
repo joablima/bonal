@@ -31,6 +31,7 @@ public class Categoria {
 	private String nome;
 
 	@NotNull
+	@Column(name = "codigo", unique = true)
 	private String codigo;
 
 	private String descricao;
@@ -112,6 +113,14 @@ public class Categoria {
 		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
 		builder.append("\n\tversion=" + getVersion());
 		builder.append("\n }");
+		return builder.toString();
+	}
+
+	public String resumo() {
+		StringBuilder builder = new StringBuilder();
+		String status = isStatus() ? "ativo" : "inativo";
+		builder.append(" " + getCodigo()).append(" - " + getNome()).append(" - " + getDescricao())
+				.append(" - " + status);
 		return builder.toString();
 	}
 

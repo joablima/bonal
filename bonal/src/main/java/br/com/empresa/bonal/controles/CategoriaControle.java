@@ -24,11 +24,11 @@ public class CategoriaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	final static Logger logger = Logger.getLogger(CategoriaControle.class);
-	
+
 	private Categoria categoria = new Categoria();
 
 	private Long categoriaId;
-	
+
 	// Atributos para Consulta
 	private String categoriaNome = "";
 
@@ -87,8 +87,8 @@ public class CategoriaControle implements Serializable {
 	}
 
 	public List<Categoria> getCategoriasDeBem() {
-		 categoriasDeBem = filtraTipo("bem");
-		 return categoriasDeBem;
+		categoriasDeBem = filtraTipo("bem");
+		return categoriasDeBem;
 	}
 
 	public List<Categoria> filtraTipo(String tipo) {
@@ -158,6 +158,12 @@ public class CategoriaControle implements Serializable {
 		this.categoria.setStatus(true);
 
 		if (categoria.getId() == null) {
+			Categoria existe = categoriaRepositorio.codigoExiste(categoria);
+			if (existe != null) {
+				message += "Já existe uma Categoria registrada com esse código." + existe.resumo();
+				new FacesContextUtil().warn(message);
+				return null;
+			}
 			categoriaRepositorio.adicionar(categoria);
 			message += "Categoria Cadastrada com Sucesso.";
 		} else {

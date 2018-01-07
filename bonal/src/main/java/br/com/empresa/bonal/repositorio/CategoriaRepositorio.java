@@ -83,4 +83,22 @@ public class CategoriaRepositorio {
 		em.close();
 		return list;
 	}
+
+	// método que verifica se elemento existe
+	public Categoria codigoExiste(Categoria categoria) {
+		EntityManager em = JPAUtil.getEntityManager();
+		String jpql = "select c from Categoria c where c.codigo = :pcodigo";
+
+		TypedQuery<Categoria> query = em.createQuery(jpql, Categoria.class);
+		query.setParameter("pcodigo", categoria.getCodigo());
+
+		logger.info(jpql);
+		try {
+			Categoria novaCategoria = query.getSingleResult();
+			em.close();
+			return novaCategoria;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }
