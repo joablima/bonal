@@ -1,16 +1,16 @@
 package br.com.empresa.bonal.testes.entidades;
 
-import br.com.empresa.bonal.entidades.NaturezaDaDespesa;
-import br.com.empresa.bonal.repositorio.NaturezaDaDespesaRepositorio;
+import br.com.empresa.bonal.entidades.Operacao;
+import br.com.empresa.bonal.repositorio.OperacaoRepositorio;
 
 public class NaturezaDaDespesaTeste {
 	
 	
 	public static void main(String[] args) {
 		
-		NaturezaDaDespesaRepositorio ndr = new NaturezaDaDespesaRepositorio();
+		OperacaoRepositorio ndr = new OperacaoRepositorio();
 		
-		NaturezaDaDespesa d = new NaturezaDaDespesa();
+		Operacao d = new Operacao();
 		
 		d.setNome("Natureza de Teste");
 		d.setCodigo("01");
@@ -21,7 +21,7 @@ public class NaturezaDaDespesaTeste {
 		System.out.println("Natureza da Despesa adicionada");
 		System.out.println(d.toString());
 
-		NaturezaDaDespesa aux = new NaturezaDaDespesa();
+		Operacao aux = new Operacao();
 		aux = ndr.buscarPorId(d.getId());
 		System.out.println("Natureza da Despesa recuperada");
 		System.out.println(aux.toString());

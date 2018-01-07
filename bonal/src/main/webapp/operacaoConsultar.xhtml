@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Operacoes</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar/Editar Operacao"
+					outcome="unidadeDeMedida" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formOperacaoConsulta">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Codigo da Operacao: "
+						for="operacaoNome" />
+					<p:inputText value="#{operacaoControle.operacaoNome}"
+						id="operacaoNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{operacaoControle.listar}"
+							process="@form" update="@form :tabelaOperacoes" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					<p:commandButton id="buscarOperacao" value="Filtrar"
+						action="#{operacaoControle.listar}" process="@form"
+						update="@form :tabelaOperacoes" icon="fa fa-fw fa-filter" />
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{operacaoControle.limpar}" process="@form"
+						update="@form :tabelaOperacoes" />
+				</div>
+			</div>
+		</h:form>
+
+
+		<h:form id="tabelaOperacoes">
+			<p:dataTable id="operacao" var="operacao"
+				value="#{operacaoControle.operacoes}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowKey="#{operacao.id}"
+				selection="#{operacaoControle.operacao}"
+				selectionMode="single"
+				emptyMessage="Nenhuma operacao Encontrado!"
+				styleClass="ui-g-12">
+
+				<p:column headerText="Codigo" sortBy="#{operacao.codigo}">
+					<h:outputText value="#{operacao.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{operacao.nome}">
+					<h:outputText value="#{operacao.nome}" />
+				</p:column>
+				
+				<p:column headerText="Descricao" sortBy="#{operacao.descricao}">
+					<h:outputText value="#{operacao.descricao}" />
+				</p:column>
+				
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+						outcome="#{operacaoControle.editar(operacao)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+						action="#{operacaoControle.remover(operacao)}"
+						update="@form" process="@this @form" />
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{operacaoControle.totalOperacoes} de #{operacaoControle.totalOperacoesConsulta}" />
+				</f:facet>
+			</p:dataTable>
+
+			<p:contextMenu for="operacao">
+				<p:menuitem value="Edição" update="operacaoEditar"
+					icon="ui-icon-search"
+					oncomplete="PF('operacaoDialog').show()" />
+				<p:menuitem value="Deletar" update="operacao"
+					icon="ui-icon-close" action="#{operacaoControle.remover}" />
+			</p:contextMenu>
+
+			<p:dialog header="Edição de operacao"
+				widgetVar="operacaoDialog" modal="true" showEffect="fade"
+				hideEffect="fade" resizable="false">
+				<p:outputPanel id="operacaoEditar" style="text-align:center;">
+					<p:panelGrid columns="2"
+						rendered="#{not empty operacaoControle.operacoes}"
+						columnClasses="label,value">
+						<f:facet name="header">
+						Titulo
+						</f:facet>
+						<h:outputText value="Codigo" />
+						<h:outputText
+							value="#{operacaoControle.operacao.codigo}" />
+						<h:outputText value="Nome:" />
+						<h:outputText
+							value="#{operacaoControle.operacao.nome}" />
+						<h:commandButton styleClass="botao" value="Excluir"
+							action="#{operacaoControle.remover(operacaoControle.operacao)}" />
+						<h:link styleClass="botao" value="Editar"
+							outcome="#{operacaoControle.editar(operacaoControle.operacao)}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

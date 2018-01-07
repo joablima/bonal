@@ -8,15 +8,15 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
 
-import br.com.empresa.bonal.entidades.NaturezaDaDespesa;
+import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.util.JPAUtil;
 
-public class NaturezaDaDespesaRepositorio {
+public class OperacaoRepositorio {
 
-	static Logger logger = Logger.getLogger(NaturezaDaDespesaRepositorio.class);
+	static Logger logger = Logger.getLogger(OperacaoRepositorio.class);
 
 	// m�todo que persiste um registro
-	public void adicionar(NaturezaDaDespesa naturezaDaDespesa) {
+	public void adicionar(Operacao naturezaDaDespesa) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.persist(naturezaDaDespesa);
@@ -26,7 +26,7 @@ public class NaturezaDaDespesaRepositorio {
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(NaturezaDaDespesa naturezaDaDespesa) {
+	public void atualizar(Operacao naturezaDaDespesa) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.merge(naturezaDaDespesa);
@@ -35,7 +35,7 @@ public class NaturezaDaDespesaRepositorio {
 	}
 
 	// m�todo que remove um registro
-	public void remover(NaturezaDaDespesa naturezaDaDespesa) {
+	public void remover(Operacao naturezaDaDespesa) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		em.remove(em.merge(naturezaDaDespesa));
@@ -44,45 +44,45 @@ public class NaturezaDaDespesaRepositorio {
 	}
 
 	// m�todo que recupera um objeto pelo id
-	public NaturezaDaDespesa buscarPorId(Long id) {
+	public Operacao buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
-		NaturezaDaDespesa medida = em.find(NaturezaDaDespesa.class, id);
+		Operacao medida = em.find(Operacao.class, id);
 		em.close();
 		return medida;
 	}
 
 	// m�todo que lista todos os registros
-	public List<NaturezaDaDespesa> listarTodos() {
+	public List<Operacao> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<NaturezaDaDespesa> query = em.getCriteriaBuilder().createQuery(NaturezaDaDespesa.class);
-		query.select(query.from(NaturezaDaDespesa.class));
-		List<NaturezaDaDespesa> list = em.createQuery(query).getResultList();
+		CriteriaQuery<Operacao> query = em.getCriteriaBuilder().createQuery(Operacao.class);
+		query.select(query.from(Operacao.class));
+		List<Operacao> list = em.createQuery(query).getResultList();
 		em.close();
 		return list;
 	}
 
 	// m�todo que lista com crit�rios todos os registros
-	public List<NaturezaDaDespesa> listarPorCriterios(String nome) {
+	public List<Operacao> listarPorCriterios(String nome) {
 		EntityManager em = JPAUtil.getEntityManager();
 		String jpql = "select n from NaturezaDaDespesa n where n.nome like :pnome or n.codigo like :pcodigo";
 
-		TypedQuery<NaturezaDaDespesa> query = em.createQuery(jpql, NaturezaDaDespesa.class);
+		TypedQuery<Operacao> query = em.createQuery(jpql, Operacao.class);
 
 		query.setParameter("pnome", '%' + nome + '%');
 		query.setParameter("pcodigo", '%' + nome + '%');
 
 		logger.info(jpql);
-		List<NaturezaDaDespesa> list = query.getResultList();
+		List<Operacao> list = query.getResultList();
 		em.close();
 		return list;
 	}
 
 	// m�todo que lista todos os registros com pagina��o
-	public List<NaturezaDaDespesa> listarTodosPaginada(int firstResult, int maxResults) {
+	public List<Operacao> listarTodosPaginada(int firstResult, int maxResults) {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<NaturezaDaDespesa> query = em.getCriteriaBuilder().createQuery(NaturezaDaDespesa.class);
-		query.select(query.from(NaturezaDaDespesa.class));
-		List<NaturezaDaDespesa> list = em.createQuery(query).setFirstResult(firstResult).setMaxResults(maxResults)
+		CriteriaQuery<Operacao> query = em.getCriteriaBuilder().createQuery(Operacao.class);
+		query.select(query.from(Operacao.class));
+		List<Operacao> list = em.createQuery(query).setFirstResult(firstResult).setMaxResults(maxResults)
 				.getResultList();
 		em.close();
 		return list;

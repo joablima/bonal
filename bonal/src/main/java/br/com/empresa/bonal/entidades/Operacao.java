@@ -13,7 +13,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class NaturezaDaDespesa {
+public class Operacao {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

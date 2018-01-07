@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="operacaoId"
+			value="#{operacaoControle.operacaoId}" />
+		<f:viewAction
+			action="#{operacaoControle.recuperarOperacaoPorId}"
+			if="#{param.operacaoId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText
+					rendered="#{operacaoControle.operacaoId == null}"
+					value="Cadastro de Operacao" />
+				<h:outputText
+					rendered="#{operacaoControle.operacaoId != null}"
+					value="Edição de Operacao" />
+			</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Consultar Operacao"
+					outcome="operacaoConsultar" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formOperacao">
+			<p:focus context="formOperacao" />
+			<p:fieldset legend="Dados da Operacao">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Codigo:" for="codigo" />
+						<p:inputText id="codigo"
+							value="#{operacaoControle.operacao.codigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da operacao obrigatório"
+							validatorMessage="Codigo da operacao deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="codigo" id="codigoMessage" />
+					</div>
+				</div>
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome"
+							value="#{operacaoControle.operacao.nome}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Nome da operacao obrigatório"
+							validatorMessage="Nome da operacao deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="nome" id="nomeMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Descricao:" for="descricao" />
+						<p:inputText id="descricao"
+							value="#{operacaoControle.operacao.descricao}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Descricao da operacao obrigatório"
+							validatorMessage="Descricao da operacao deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="descricao" id="descricaoMessage" />
+					</div>
+				</div>
+				
+			</p:fieldset>
+
+			<div class="botoes-cadastrar">
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{operacaoControle.salvar}" process="@this @form"
+					update="@form :messages" icon="fa fa-fw fa-save"
+					validateClient="true" />
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>
