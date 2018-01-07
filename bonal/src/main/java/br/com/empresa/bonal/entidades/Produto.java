@@ -26,7 +26,7 @@ public class Produto {
 	private String nome;
 	private String descricao;
 	private BigDecimal quantidade;
-	
+	private Boolean status;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
@@ -101,6 +101,18 @@ public class Produto {
 	public Integer getVersion() {
 		return version;
 	}
+	
+	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 
 	@Override
 	public String toString() {

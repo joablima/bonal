@@ -30,6 +30,7 @@ public class Bem {
 	private String descricao;
 	private BigDecimal quantidade;
 	private BigDecimal precoMedio;
+	private Boolean status;
 
 	@Enumerated(EnumType.STRING)
 	private EnumBem tipo;
@@ -127,6 +128,14 @@ public class Bem {
 	// builder.append(codigo);
 	// this.codigo = builder.toString();
 	// }
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	public BigDecimal getPrecoMedio() {
 		return precoMedio;

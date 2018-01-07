@@ -23,6 +23,7 @@ public class UnidadeDeMedida {
 	private String nome;
 
 	private String sigla;
+	private Boolean status;
 
 	@Version
 	private Integer version;
@@ -59,6 +60,16 @@ public class UnidadeDeMedida {
 
 	public Calendar getDataCadastro() {
 		return dataCadastro;
+	}
+	
+	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	@Override

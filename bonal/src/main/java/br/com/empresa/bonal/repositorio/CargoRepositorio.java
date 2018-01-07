@@ -37,7 +37,7 @@ public class CargoRepositorio {
 	public void remover(Cargo cargo) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.remove(em.merge(cargo));
+		em.merge(cargo);
 		em.getTransaction().commit();
 		em.close();
 	}

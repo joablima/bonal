@@ -48,7 +48,7 @@ public class ProdutoRepositorio {
 	public void remover(Produto produto) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.remove(em.merge(produto));
+		em.merge(produto);
 		em.getTransaction().commit();
 		em.close();
 	}

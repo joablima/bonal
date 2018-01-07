@@ -27,7 +27,7 @@ public class Operacao {
 	
 	private String descricao;
 	
-	
+	private Boolean status;
 	
 
 	@Version
@@ -79,6 +79,16 @@ public class Operacao {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	@Override

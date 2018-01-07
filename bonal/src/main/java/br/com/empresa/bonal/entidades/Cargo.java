@@ -5,6 +5,8 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+
+import br.com.empresa.bonal.util.enums.EnumPermissao;
 
 @Entity
 public class Cargo {
@@ -22,14 +26,16 @@ public class Cargo {
 
 	@NotNull
 	private String nome;
+	
+	private Boolean status;
 
 	// define um salario para o cargo
 	@Column(precision = 10, scale = 2, nullable = true)
 	private BigDecimal salario;
 
 	// define niveis de acesso ao sistema
-	@NotNull
-	private Integer permissao;
+	@Enumerated(EnumType.STRING)
+	private EnumPermissao permissao;
 
 	@Version
 	private Integer version;
@@ -57,12 +63,15 @@ public class Cargo {
 	public void setSalario(BigDecimal salario) {
 		this.salario = salario;
 	}
+	
+	
+	
 
-	public Integer getPermissao() {
+	public EnumPermissao getPermissao() {
 		return permissao;
 	}
 
-	public void setPermissao(Integer permissao) {
+	public void setPermissao(EnumPermissao permissao) {
 		this.permissao = permissao;
 	}
 
@@ -72,6 +81,16 @@ public class Cargo {
 
 	public Calendar getDataCadastro() {
 		return dataCadastro;
+	}
+	
+	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	@Override

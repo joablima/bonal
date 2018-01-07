@@ -149,6 +149,8 @@ public class ProdutoControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
+		
+		this.produto.setStatus(true);
 		if (produto.getId() == null) {
 			produtoRepositorio.adicionar(produto, unidadeDeMedidaId);
 			message += "Produto Cadastrado com Sucesso.";
@@ -168,6 +170,8 @@ public class ProdutoControle implements Serializable {
 
 	// Remove um Produto do banco de dados
 	public void remover() {
+
+		this.produto.setStatus(false);
 		produtoRepositorio.remover(produto);
 		produtos = null;
 		listarTabela();

@@ -71,17 +71,17 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Nível de Permissão do Cargo:"
-							for="permissao" />
-						<p:selectOneMenu value="#{cargoControle.cargo.permissao}"
-							id="permissao" styleClass="form-normal" required="true"
-							requiredMessage="Nível de permissão obrigatório">
-							<f:selectItem itemValue="0"
-								itemLabel="funcionario sem acesso ao sistema" />
-							<f:selectItem itemValue="1" itemLabel="Administrador" />
-							<f:selectItem itemValue="2" itemLabel="Gerente" />
-							<p:clientValidator event="blur" />
+						
+						<p:outputLabel value="Permissão no sistema:" for="permissao" />
+						<p:selectOneMenu label="Permissão"
+							styleClass="form-normal"
+							value="#{cargoControle.cargo.permissao}" id="permissao"
+							required="true" requiredMessage="Selecione uma permissao">
+							<f:selectItems value="#{cargoControle.enumPermissao}" var="permissao"
+								itemValue="#{permissao}" itemLabel="#{permissao.label}" />
+							<p:clientValidator event="blur" /> 
 						</p:selectOneMenu>
+						
 					</div>
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="permissao" id="permissaoMessage" />

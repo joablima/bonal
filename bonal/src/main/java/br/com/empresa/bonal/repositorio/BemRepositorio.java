@@ -53,7 +53,7 @@ public class BemRepositorio {
 	public void remover(Bem bem) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.remove(em.merge(bem));
+		em.merge(bem);
 		em.getTransaction().commit();
 		em.close();
 	}

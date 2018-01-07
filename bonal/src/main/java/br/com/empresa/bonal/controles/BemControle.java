@@ -182,6 +182,9 @@ public class BemControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
+		
+		this.bem.setStatus(true);
+		
 		if (bem.getId() == null) {
 			bemRepositorio.adicionar(bem, categoriaId, unidadeDeMedidaId);
 			message += "Bem Cadastrado com Sucesso.";
@@ -201,6 +204,8 @@ public class BemControle implements Serializable {
 
 	// Remove um Bem do banco de dados
 	public void remover() {
+		this.bem.setStatus(false);
+		
 		bemRepositorio.remover(bem);
 		bens = null;
 		listarTabela();

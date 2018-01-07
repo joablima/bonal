@@ -16,29 +16,29 @@ public class OperacaoRepositorio {
 	static Logger logger = Logger.getLogger(OperacaoRepositorio.class);
 
 	// m�todo que persiste um registro
-	public void adicionar(Operacao naturezaDaDespesa) {
+	public void adicionar(Operacao operacao) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.persist(naturezaDaDespesa);
+		em.persist(operacao);
 		em.getTransaction().commit();
 		logger.info("objeto persistido com sucesso");
 		em.close();
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Operacao naturezaDaDespesa) {
+	public void atualizar(Operacao operacao) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.merge(naturezaDaDespesa);
+		em.merge(operacao);
 		em.getTransaction().commit();
 		em.close();
 	}
 
 	// m�todo que remove um registro
-	public void remover(Operacao naturezaDaDespesa) {
+	public void remover(Operacao operacao) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.remove(em.merge(naturezaDaDespesa));
+		em.merge(operacao);
 		em.getTransaction().commit();
 		em.close();
 	}
@@ -64,12 +64,13 @@ public class OperacaoRepositorio {
 	// m�todo que lista com crit�rios todos os registros
 	public List<Operacao> listarPorCriterios(String nome) {
 		EntityManager em = JPAUtil.getEntityManager();
-		String jpql = "select n from NaturezaDaDespesa n where n.nome like :pnome or n.codigo like :pcodigo";
+		String jpql = "select o from Operacao o where o.nome like :pnome or o.codigo like :pcodigo or o.descricao like :pdescricao";
 
 		TypedQuery<Operacao> query = em.createQuery(jpql, Operacao.class);
 
 		query.setParameter("pnome", '%' + nome + '%');
 		query.setParameter("pcodigo", '%' + nome + '%');
+		query.setParameter("pdescricao", '%' + nome + '%');
 
 		logger.info(jpql);
 		List<Operacao> list = query.getResultList();

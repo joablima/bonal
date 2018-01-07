@@ -38,7 +38,7 @@ public class UnidadeDeMedidaRepositorio {
 	public void remover(UnidadeDeMedida unidadeDeMedida) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		em.remove(em.merge(unidadeDeMedida));
+		em.merge(unidadeDeMedida);
 		em.getTransaction().commit();
 		em.close();
 	}

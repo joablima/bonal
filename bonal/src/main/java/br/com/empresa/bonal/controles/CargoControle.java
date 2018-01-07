@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.enums.EnumBem;
+import br.com.empresa.bonal.util.enums.EnumPermissao;
 
 @ManagedBean
 @ViewScoped
@@ -25,6 +27,7 @@ public class CargoControle implements Serializable {
 	final static Logger logger = Logger.getLogger(CargoControle.class);
 	
 	private Cargo cargo = new Cargo();
+	private EnumPermissao permissao;
 
 	private Long cargoId;
 
@@ -68,7 +71,21 @@ public class CargoControle implements Serializable {
 	public void setCargoNome(String cargoNome) {
 		this.cargoNome = cargoNome;
 	}
+	
+	
+	
+	public EnumPermissao getPermissao() {
+		return permissao;
+	}
 
+	public void setPermissao(EnumPermissao permissao) {
+		this.permissao = permissao;
+	}
+
+	// ----- Carrega os Enums em Arrays -----
+	public EnumPermissao[] getEnumPermissao() {
+		return EnumPermissao.values();
+	}
 	public List<Cargo> getCargos() {
 		return cargos;
 	}
@@ -120,10 +137,14 @@ public class CargoControle implements Serializable {
 	public void limparFiltros() {
 		this.cargoNome = "";
 	}
-
+	public void salvar(Cargo c) {
+		this.cargo = c;
+		salvar();
+	}
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
+		this.cargo.setStatus(true);
 		if (cargo.getId() == null) {
 			cargoRepositorio.adicionar(cargo);
 			message += "Cargo Cadastrado com Sucesso.";
@@ -143,6 +164,7 @@ public class CargoControle implements Serializable {
 
 	// Remove um cargo do banco de dados
 	public void remover() {
+		this.cargo.setStatus(false);
 		cargoRepositorio.remover(cargo);
 		cargos = null;
 		listarTabela();

@@ -129,6 +129,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
+		this.unidadeDeMedida.setStatus(true);
 		if (unidadeDeMedida.getId() == null) {
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
 			message += "Unidade de Medida Cadastrada com Sucesso.";
@@ -148,6 +149,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// Remove um cargo do banco de dados
 	public void remover() {
+		this.unidadeDeMedida.setStatus(false);
 		unidadeDeMedidaRepositorio.remover(unidadeDeMedida);
 		unidadesDeMedida = null;
 		listar();

@@ -130,6 +130,7 @@ public class OperacaoControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
+		this.operacao.setStatus(true);
 		if (operacao.getId() == null) {
 			operacaoRepositorio.adicionar(operacao);
 			message += "Operacao Cadastrada com Sucesso.";
@@ -149,6 +150,8 @@ public class OperacaoControle implements Serializable {
 
 	// Remove um cargo do banco de dados
 	public void remover() {
+
+		this.operacao.setStatus(false);
 		operacaoRepositorio.remover(operacao);
 		operacoes = null;
 		listar();
