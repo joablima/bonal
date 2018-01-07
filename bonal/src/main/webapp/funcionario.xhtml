@@ -27,9 +27,8 @@
 					rendered="#{funcionarioControle.funcionarioId != null}"
 					value="Edição de Funcionarios" />
 			</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar Funcionarios" outcome="cargoConsultar" />
-			</span>
+			<span><i class="fa fa-coffee" /> <p:link
+					value="Consultar Funcionarios" outcome="funcionarioConsultar" /> </span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
@@ -39,6 +38,25 @@
 		<h:form id="formFuncionario">
 			<p:focus context="formFuncionario" />
 			<p:fieldset legend="Dados do Funcionario">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Cpf:" for="documento" />
+						<p:inputText id="documento"
+							value="#{funcionarioControle.funcionario.documento}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Cpf da funcionario obrigatório"
+							validatorMessage="Cpf da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="documento" id="documentoMessage" />
+					</div>
+				</div>
+
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
@@ -59,105 +77,25 @@
 				</div>
 
 
+
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="CPF:" for="cpf" />
-						<p:inputText id="cpf"
-							value="#{funcionarioControle.funcionario.cpf}"
+						<p:outputLabel value="Rg:" for="identificacao" />
+						<p:inputText id="identificacao"
+							value="#{funcionarioControle.funcionario.identificacao}"
 							styleClass="form-normal" required="true"
-							requiredMessage="cpf do funcionario obrigatório" maxlength="14">
+							requiredMessage="Rg da funcionario obrigatório"
+							validatorMessage="RG da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="cpf" id="cpfMessage" />
+						<p:message for="identificacao" id="identificacaoMessage" />
 					</div>
 				</div>
 
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<p:outputLabel value="Sexo:" for="sexo" />
-						<h:selectOneRadio label="Sexo do Funcionário"
-							styleClass="form-normal"
-							value="#{funcionarioControle.funcionario.sexo}" id="sexo"
-							required="true" requiredMessage="Selecione uma opção de sexo">
-							<f:selectItems value="#{funcionarioControle.enumSexo}" var="sexo"
-								itemValue="#{sexo}" itemLabel="#{sexo.label}" />
-							<p:clientValidator event="blur" />
-						</h:selectOneRadio>
-					</div>
-					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
-						<p:message for="sexo" id="sexoMessage" />
-					</div>
-				</div>
-
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Email:" for="email" />
-						<p:inputText id="email"
-							value="#{funcionarioControle.funcionario.email}"
-							styleClass="form-normal" required="false" maxlength="80">
-							<p:clientValidator event="blur" />
-						</p:inputText>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="email" id="emailMessage" />
-					</div>
-				</div>
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Telefone:" for="telefone" />
-						<p:inputText id="telefone"
-							value="#{funcionarioControle.funcionario.telefone}"
-							styleClass="form-normal" required="false" maxlength="80">
-							<p:clientValidator event="blur" />
-						</p:inputText>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="telefone" id="telefoneMessage" />
-					</div>
-				</div>
-
-
-				<!-- formação -->
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<p:outputLabel value="Formaçao:" for="formacao" />
-						<p:selectOneMenu
-							value="#{funcionarioControle.funcionario.formacao}" id="formacao"
-							styleClass="form-normal">
-							<c:choose>
-								<c:when
-									test="#{funcionarioControle.funcionario.formacao == null}">
-									<f:selectItem itemValue=""
-										itemLabel="Escolha um nivel de formação" />
-								</c:when>
-								<c:when
-									test="#{funcionarioControle.funcionario.formacao != null}">
-									<f:selectItem
-										itemValue="#{funcionarioControle.funcionario.formacao}"
-										itemLabel="#{funcionarioControle.funcionario.formacao.label}" />
-								</c:when>
-							</c:choose>
-							<f:selectItems value="#{funcionarioControle.enumFormacoes}"
-								var="formacao" itemLabel="#{formacao.label}"
-								itemValue="#{formacao}" />
-							<p:clientValidator event="blur" />
-						</p:selectOneMenu>
-					</div>
-					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
-						<p:message for="formacao" id="formacaoMessage" />
-					</div>
-				</div>
-
-
-				<!-- cargo -->
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<p:outputLabel value="Cargo:" for="cargoId" />
@@ -166,7 +104,7 @@
 							<c:choose>
 								<c:when
 									test="#{funcionarioControle.funcionario.cargo.id == null}">
-									<f:selectItem itemValue="" itemLabel="Escolha um cargo" />
+									<f:selectItem itemValue="" itemLabel="Escolha um Cargo" />
 								</c:when>
 								<c:when
 									test="#{funcionarioControle.funcionario.cargo.id != null}">
@@ -182,132 +120,177 @@
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
 						<i class="fa fa-coffee" />
-						<p:link value="Cadastrar Novo Cargo" outcome="cargo" />
+						<p:link value="Cadastrar Nova Cargo" outcome="cargo" />
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
 						<p:message for="cargoId" id="cargoMessage" />
 					</div>
 				</div>
 
-			</p:fieldset>
-
-
-			<!-- Dados do Endereço -->
-			<p:fieldset legend="Endereço do Funcionario">
 				<div class="ui-g">
-					<div class="ui-g-8 ui-md-8 ui-lg-6">
-						<p:outputLabel value="Logradouro:" for="logradouro" />
-						<p:inputText id="logradouro"
-							value="#{funcionarioControle.funcionario.endereco.logradouro}"
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Email:" for="email" />
+						<p:inputText id="email"
+							value="#{funcionarioControle.funcionario.email}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Endereço do Funcionário obrigatório"
-							validatorMessage="Logradouro deve ter no minimo 5 caracteres"
+							requiredMessage="email da funcionario obrigatório"
+							validatorMessage="email da funcionario deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
-					<div class="ui-g-4 ui-md-4 ui-lg-2">
-						<p:outputLabel value="Número:" for="numero" />
-						<p:inputText id="numero"
-							value="#{funcionarioControle.funcionario.endereco.numero}"
-							styleClass="form-normal" required="true"
-							requiredMessage="Endereço do Funcionário obrigatório"
-							validatorMessage="Logradouro deve ter no minimo 5 caracteres"
-							maxlength="10">
-							<p:clientValidator event="blur" />
-						</p:inputText>
-					</div>
-					<div class="ui-g-12 ui-md-12 ui-lg-4 form-messages">
-						<p:message for="logradouro" id="logradouroMessage" />
-						<p:message for="numero" id="numeroMessage" />
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="email" id="emailMessage" />
 					</div>
 				</div>
 
-
-
-
 				<div class="ui-g">
-					<div class="ui-g-8 ui-md-8 ui-lg-6">
-						<p:outputLabel value="Bairro:" for="bairro" />
-						<p:inputText id="bairro"
-							value="#{funcionarioControle.funcionario.endereco.bairro}"
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Telefone:" for="telefone" />
+						<p:inputText id="telefone"
+							value="#{funcionarioControle.funcionario.telefone}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Endereço do Funcionário obrigatório"
-							validatorMessage="Bairro deve ter no minimo 5 caracteres"
-							maxlength="60">
+							requiredMessage="telefone da funcionario obrigatório"
+							validatorMessage="telefone da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
-					<div class="ui-g-4 ui-md-4 ui-lg-2">
-						<p:outputLabel value="CEP:" for="cep" />
-						<p:inputMask id="cep"
-							value="#{funcionarioControle.funcionario.endereco.cep}"
-							styleClass="form-normal" required="true"
-							requiredMessage="Endereço do Funcionário obrigatório"
-							validatorMessage="CEP deve ter no minimo 5 caracteres"
-							maxlength="9" mask="99999-999">
-							<p:clientValidator event="blur" />
-						</p:inputMask>
-					</div>
-					<div class="ui-g-12 ui-md-12 ui-lg-4 form-messages">
-						<p:message for="bairro" id="bairroMessage" />
-						<p:message for="cep" id="cepMessage" />
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="telefone" id="telefoneMessage" />
 					</div>
 				</div>
 
-
-
 				<div class="ui-g">
-					<div class="ui-g-8 ui-md-8 ui-lg-6">
-						<p:outputLabel value="Cidade:" for="cidade" />
-						<p:inputText id="cidade"
-							value="#{funcionarioControle.funcionario.endereco.cidade}"
-							styleClass="form-normal" required="true"
-							requiredMessage="Cidade do Funcionário obrigatório"
-							validatorMessage="Cidade deve ter no minimo 5 caracteres"
-							maxlength="30">
-							<p:clientValidator event="blur" />
-						</p:inputText>
-					</div>
-					<div class="ui-g-4 ui-md-4 ui-lg-2">
-						<p:outputLabel value="UF:" for="uf" />
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="País:" for="uf" />
 						<p:inputText id="uf"
 							value="#{funcionarioControle.funcionario.endereco.uf}"
 							styleClass="form-normal" required="true"
-							requiredMessage="UF do Funcionário obrigatório"
-							validatorMessage="UF deve ter no minimo 5 caracteres"
-							maxlength="2">
+							requiredMessage="País da funcionario obrigatório"
+							validatorMessage="País da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
-					<div class="ui-g-12 ui-md-12 ui-lg-4 form-messages">
-						<p:message for="cidade" id="cidadeMessage" />
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="uf" id="ufMessage" />
 					</div>
 				</div>
 
-
 				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<p:outputLabel value="Complemento:" for="complemento" />
-						<p:inputText id="complemento"
-							value="#{funcionarioControle.funcionario.endereco.complemento}"
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Cep:" for="cep" />
+						<p:inputText id="cep"
+							value="#{funcionarioControle.funcionario.endereco.cep}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Endereço do Funcionário obrigatório"
-							validatorMessage="complemento deve ter no minimo 5 caracteres"
+							requiredMessage="cep da funcionario obrigatório"
+							validatorMessage="cep da funcionario deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
-					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="cep" id="cepMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Cidade:" for="cidade" />
+						<p:inputText id="cidade"
+							value="#{funcionarioControle.funcionario.endereco.cidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="cidade da funcionario obrigatório"
+							validatorMessage="cidade da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="cidade" id="cidadeMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Bairro:" for="bairro" />
+						<p:inputText id="bairro"
+							value="#{funcionarioControle.funcionario.endereco.bairro}"
+							styleClass="form-normal" required="true"
+							requiredMessage="bairro da funcionario obrigatório"
+							validatorMessage="bairro da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="bairro" id="bairroMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Logradouro:" for="logradouro" />
+						<p:inputText id="logradouro"
+							value="#{funcionarioControle.funcionario.endereco.logradouro}"
+							styleClass="form-normal" required="true"
+							requiredMessage="logradouro da funcionario obrigatório"
+							validatorMessage="logradouro da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="logradouro" id="logradouroMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Numero:" for="numero" />
+						<p:inputText id="numero"
+							value="#{funcionarioControle.funcionario.endereco.numero}"
+							styleClass="form-normal" required="true"
+							requiredMessage="numero da funcionario obrigatório"
+							validatorMessage="numero da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="numero" id="numeroMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Complemento:" for="complemento" />
+						<p:inputText id="complemento"
+							value="#{funcionarioControle.funcionario.endereco.complemento}"
+							styleClass="form-normal" required="true"
+							requiredMessage="complemento da funcionario obrigatório"
+							validatorMessage="complemento da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="complemento" id="complementoMessage" />
 					</div>
 				</div>
 
+
 			</p:fieldset>
-
-
-
 
 			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
@@ -318,6 +301,7 @@
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
+
 		</h:form>
 	</ui:define>
 </ui:composition>
