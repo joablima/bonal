@@ -49,33 +49,36 @@
 				value="#{produtoControle.produtos}" resizableColumns="true"
 				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{produto.id}" selection="#{produtoControle.produto}"
 				selectionMode="single" emptyMessage="Nenhum Produto Encontrado!"
 				styleClass="ui-g-12">
+
 				<p:ajax event="page" listener="#{produtoControle.carregandoDados}"
 					update="messages" onstart="PF('blockUIWidget2').block()"
 					oncomplete="PF('blockUIWidget2').unblock()" />
 
+				<f:facet name="header">Lista de Produtos</f:facet>
+
 				<p:column headerText="Codigo" sortBy="#{produto.codigo}">
-					<h:outputText value="#{produto.codigo}" />
+					<p:outputLabel value="#{produto.codigo}" />
 				</p:column>
 
 				<p:column headerText="Nome" sortBy="#{produto.nome}">
-					<h:outputText value="#{produto.nome}" />
+					<p:outputLabel value="#{produto.nome}" />
 				</p:column>
 
 				<p:column headerText="Descricao" sortBy="#{produto.descricao}">
-					<h:outputText value="#{produto.descricao}" />
+					<p:outputLabel value="#{produto.descricao}" />
 				</p:column>
 
 				<p:column headerText="unidadeDeMedida"
 					sortBy="#{produto.unidadeDeMedida.nome}">
-					<h:outputText value="#{produto.unidadeDeMedida.nome}" />
+					<p:outputLabel value="#{produto.unidadeDeMedida.nome}" />
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
 						outcome="#{produtoControle.editar(produto)}" />
 				</p:column>
 
@@ -87,17 +90,13 @@
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<h:outputText
+					<p:outputLabel
 						value=" #{produtoControle.totalProdutos} de #{produtoControle.totalProdutosConsulta}" />
 				</f:facet>
-			</p:dataTable>
 
-			<p:contextMenu for="produto">
-				<p:menuitem value="Edição" update="produtoEditar"
-					icon="ui-icon-search" oncomplete="PF('produtoDialog').show()" />
-				<p:menuitem value="Deletar" update="produto" icon="ui-icon-close"
-					action="#{produtoControle.remover}" />
-			</p:contextMenu>
+				<p:ajax event="rowDblselect" oncomplete="PF('produtoDialog').show()"
+					update="@form" global="false" />
+			</p:dataTable>
 
 			<p:dialog header="Edição de Produtos" widgetVar="produtoDialog"
 				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
@@ -108,14 +107,14 @@
 						<f:facet name="header">
 						Titulo
 						</f:facet>
-						<h:outputText value="Codigo" />
-						<h:outputText value="#{produtoControle.produto.codigo}" />
-						<h:outputText value="Nome:" />
-						<h:outputText value="#{produtoControle.produto.nome}" />
-						<h:outputText value="#{produtoControle.produto.descricao}" />
-						<h:commandButton styleClass="botao" value="Excluir"
+						<p:outputLabel value="Codigo" />
+						<p:outputLabel value="#{produtoControle.produto.codigo}" />
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{produtoControle.produto.nome}" />
+						<p:outputLabel value="#{produtoControle.produto.descricao}" />
+						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{produtoControle.remover(produtoControle.produto)}" />
-						<h:link styleClass="botao" value="Editar"
+						<p:link styleClass="botao" value="Editar"
 							outcome="#{produtoControle.editar(produtoControle.produto)}" />
 					</p:panelGrid>
 				</p:outputPanel>
@@ -129,10 +128,11 @@
 				style="display:none;table-layout:auto;">
 				<h:graphicImage library="img" name="icon/loading.gif"
 					style="margin-right: 12px; vertical-align: middle;" />
-				<h:outputText value="Por favor aguarde, os dados estão sendo processados..."
+				<p:outputLabel
+					value="Por favor aguarde, os dados estão sendo processados..."
 					style="white-space: nowrap;" />
 			</h:panelGrid>
-			
+
 		</h:form>
 
 	</ui:define>

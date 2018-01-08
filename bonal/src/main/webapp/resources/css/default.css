@@ -74,7 +74,7 @@ h1, legend {
 	margin-right: 1em;
 	display: inline-block;
 	cursor: pointer;
-	border: 1px solid #cbc3be;
+	/* 	border: 1px solid #cbc3be; */
 	/* 	margin: .5em 1em; */
 }
 
@@ -160,13 +160,14 @@ input[type="radio"] {
 }
 
 #header h1 {
-	color: #4F5D73;
 	font-size: 4em;
 	margin: 0 .1em;
 	text-shadow: 4px 0px 0px #000;
 	transition: all 1s linear;
 	transform: skewX(-10deg);
 	font-weight: 700;
+	border:none;
+	background: transparent;
 }
 
 #img-logo {
@@ -185,7 +186,6 @@ input[type="radio"] {
 
 #rodape {
 	padding: 1rem .5rem;
-	border-top: 1px solid #000;
 }
 
 /* --------------------- Elementos do #content --------------------- */

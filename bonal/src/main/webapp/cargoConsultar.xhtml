@@ -29,7 +29,7 @@
 							process="@form" update="@form :tabelaCargos" />
 					</p:inputText>
 				</div>
-				
+
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
 					<p:commandButton id="buscarCargo" value="Filtrar"
 						action="#{cargoControle.listar}" process="@form"
@@ -38,7 +38,7 @@
 						action="#{cargoControle.limpar}" process="@form"
 						update="@form :tabelaCargos" />
 				</div>
-				
+
 			</div>
 		</h:form>
 
@@ -46,25 +46,27 @@
 			<p:dataTable id="cargo" var="cargo" value="#{cargoControle.cargos}"
 				resizableColumns="true" reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{cargo.id}" selection="#{cargoControle.cargo}"
-				selectionMode="single" emptyMessage="Nenhuma Cargo Encontrado!"
+				selectionMode="single" emptyMessage="Nenhum Cargo Encontrado!"
 				styleClass="ui-g-12">
 
+				<f:facet name="header">Lista de Cargos</f:facet>
+
 				<p:column headerText="Nome" sortBy="#{cargo.nome}">
-					<h:outputText value="#{cargo.nome}" />
+					<p:outputLabel value="#{cargo.nome}" />
 				</p:column>
 
 				<p:column headerText="Salário" sortBy="#{cargo.salario}">
-					<h:outputText value="#{cargo.salario}" />
+					<p:outputLabel value="#{cargo.salario}" />
 				</p:column>
 
 				<p:column headerText="Permissão" sortBy="#{cargo.permissao}">
-					<h:outputText value="#{cargo.permissao}" />
+					<p:outputLabel value="#{cargo.permissao}" />
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
 						outcome="#{cargoControle.editar(cargo)}" />
 				</p:column>
 
@@ -76,17 +78,14 @@
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<h:outputText
+					<p:outputLabel
 						value=" #{cargoControle.totalCargos} de #{cargoControle.totalCargosConsulta}" />
 				</f:facet>
+				
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('cargoDialog').show()" update="@form"
+					global="false" />
 			</p:dataTable>
-
-			<p:contextMenu for="cargo">
-				<p:menuitem value="Edição" update="cargoEditar"
-					icon="ui-icon-search" oncomplete="PF('cargoDialog').show()" />
-				<p:menuitem value="Deletar" update="cargo" icon="ui-icon-close"
-					action="#{cargoControle.remover}" />
-			</p:contextMenu>
 
 			<p:dialog header="Edição de Cargo" widgetVar="cargoDialog"
 				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
@@ -94,17 +93,15 @@
 					<p:panelGrid columns="2"
 						rendered="#{not empty cargoControle.cargos}"
 						columnClasses="label,value">
-						<f:facet name="header">
-						Titulo
-						</f:facet>
-						<h:outputText value="Nome:" />
-						<h:outputText value="#{cargoControle.cargo.nome}" />
-						<h:outputText value="Salário:" />
-						<h:outputText value="#{cargoControle.cargo.salario}" />
-						<h:outputText value="#{cargoControle.cargo.permissao}" />
-						<h:commandButton styleClass="botao" value="Excluir"
+						<f:facet name="header">Titulo</f:facet>
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{cargoControle.cargo.nome}" />
+						<p:outputLabel value="Salário:" />
+						<p:outputLabel value="#{cargoControle.cargo.salario}" />
+						<p:outputLabel value="#{cargoControle.cargo.permissao}" />
+						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{cargoControle.remover(cargoControle.cargo)}" />
-						<h:link styleClass="botao" value="Editar"
+						<p:link styleClass="botao" value="Editar"
 							outcome="#{cargoControle.editar(cargoControle.cargo)}" />
 					</p:panelGrid>
 				</p:outputPanel>

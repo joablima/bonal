@@ -58,13 +58,15 @@
 				value="#{unidadeDeMedidaControle.unidadesDeMedida}"
 				resizableColumns="true" reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{unidadeDeMedida.id}"
 				selection="#{unidadeDeMedidaControle.unidadeDeMedida}"
 				selectionMode="single"
 				emptyMessage="Nenhuma unidade de Medida Encontrado!"
 				styleClass="ui-g-12">
 
+				<f:facet name="header">Lista de Unidades de Medida</f:facet>
+				
 				<p:column headerText="Sigla" sortBy="#{unidadeDeMedida.sigla}">
 					<h:outputText value="#{unidadeDeMedida.sigla}" />
 				</p:column>
@@ -98,12 +100,13 @@
 					<h:outputText
 						value=" #{unidadeDeMedidaControle.totalUnidadesDeMedida} de #{unidadeDeMedidaControle.totalUnidadesDeMedidaConsulta}" />
 				</f:facet>
-				
-				<p:ajax event="rowDblselect" oncomplete="PF('unidadeDeMedidaDialog').show()" 
-    update="@form" global="false" />
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('unidadeDeMedidaDialog').show()" update="@form"
+					global="false" />
 			</p:dataTable>
 
-			
+
 
 			<p:dialog header="Edição de unidade De Medida"
 				widgetVar="unidadeDeMedidaDialog" modal="true" showEffect="fade"

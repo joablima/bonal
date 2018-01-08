@@ -13,8 +13,7 @@
 		<div class="ui-g-12 titulo">
 			<h1>Consultar Operacoes</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar/Editar Operacao"
-					outcome="unidadeDeMedida" />
+					value="Cadastrar/Editar Operacao" outcome="unidadeDeMedida" />
 			</span>
 		</div>
 
@@ -45,73 +44,64 @@
 
 		<h:form id="tabelaOperacoes">
 			<p:dataTable id="operacao" var="operacao"
-				value="#{operacaoControle.operacoes}"
-				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				value="#{operacaoControle.operacoes}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
-				rowKey="#{operacao.id}"
-				selection="#{operacaoControle.operacao}"
-				selectionMode="single"
-				emptyMessage="Nenhuma operacao Encontrado!"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{operacao.id}" selection="#{operacaoControle.operacao}"
+				selectionMode="single" emptyMessage="Nenhuma operacao Encontrado!"
 				styleClass="ui-g-12">
 
+				<f:facet name="header">Lista de Operações</f:facet>
+
 				<p:column headerText="Codigo" sortBy="#{operacao.codigo}">
-					<h:outputText value="#{operacao.codigo}" />
+					<p:outputLabel value="#{operacao.codigo}" />
 				</p:column>
 
 				<p:column headerText="Nome" sortBy="#{operacao.nome}">
-					<h:outputText value="#{operacao.nome}" />
+					<p:outputLabel value="#{operacao.nome}" />
 				</p:column>
-				
+
 				<p:column headerText="Descricao" sortBy="#{operacao.descricao}">
-					<h:outputText value="#{operacao.descricao}" />
+					<p:outputLabel value="#{operacao.descricao}" />
 				</p:column>
-				
+
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
 						outcome="#{operacaoControle.editar(operacao)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
-						action="#{operacaoControle.remover(operacao)}"
-						update="@form" process="@this @form" />
+						action="#{operacaoControle.remover(operacao)}" update="@form"
+						process="@this @form" />
 				</p:column>
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<h:outputText
+					<p:outputLabel
 						value=" #{operacaoControle.totalOperacoes} de #{operacaoControle.totalOperacoesConsulta}" />
 				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('operacaoDialog').show()" update="@form"
+					global="false" />
 			</p:dataTable>
 
-			<p:contextMenu for="operacao">
-				<p:menuitem value="Edição" update="operacaoEditar"
-					icon="ui-icon-search"
-					oncomplete="PF('operacaoDialog').show()" />
-				<p:menuitem value="Deletar" update="operacao"
-					icon="ui-icon-close" action="#{operacaoControle.remover}" />
-			</p:contextMenu>
-
-			<p:dialog header="Edição de operacao"
-				widgetVar="operacaoDialog" modal="true" showEffect="fade"
-				hideEffect="fade" resizable="false">
+			<p:dialog header="Edição de operacao" widgetVar="operacaoDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
 				<p:outputPanel id="operacaoEditar" style="text-align:center;">
 					<p:panelGrid columns="2"
 						rendered="#{not empty operacaoControle.operacoes}"
 						columnClasses="label,value">
-						<f:facet name="header">
-						Titulo
-						</f:facet>
-						<h:outputText value="Codigo" />
-						<h:outputText
-							value="#{operacaoControle.operacao.codigo}" />
-						<h:outputText value="Nome:" />
-						<h:outputText
-							value="#{operacaoControle.operacao.nome}" />
-						<h:commandButton styleClass="botao" value="Excluir"
+						<f:facet name="header">Titulo</f:facet>
+						<p:outputLabel value="Codigo" />
+						<p:outputLabel value="#{operacaoControle.operacao.codigo}" />
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{operacaoControle.operacao.nome}" />
+						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{operacaoControle.remover(operacaoControle.operacao)}" />
-						<h:link styleClass="botao" value="Editar"
+						<p:link styleClass="botao" value="Editar"
 							outcome="#{operacaoControle.editar(operacaoControle.operacao)}" />
 					</p:panelGrid>
 				</p:outputPanel>

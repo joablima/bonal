@@ -46,16 +46,12 @@
 				value="#{categoriaControle.categorias}" resizableColumns="true"
 				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{categoria.id}" selection="#{categoriaControle.categoria}"
 				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Categorias
-            		<p:commandButton id="toggler" type="button"
-						value="Columns" style="float:right" icon="ui-icon-calculator" />
-					<p:columnToggler datasource="categoria" trigger="toggler" />
-				</f:facet>
+				<f:facet name="header">Lista de Categorias</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{categoria.codigo}">
 					<h:outputText value="#{categoria.codigo}" />
@@ -70,7 +66,7 @@
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
 						outcome="#{categoriaControle.editar(categoria)}" />
 				</p:column>
 
@@ -85,14 +81,11 @@
 					<h:outputText
 						value=" #{categoriaControle.totalCategorias} de #{categoriaControle.totalCategoriasConsulta}" />
 				</f:facet>
-			</p:dataTable>
 
-			<p:contextMenu for="categoria">
-				<p:menuitem value="Edição" update="categoriaEditar"
-					icon="ui-icon-search" oncomplete="PF('categoriaDialog').show()" />
-				<p:menuitem value="Deletar" update="categoria" icon="ui-icon-close"
-					action="#{categoriaControle.remover}" />
-			</p:contextMenu>
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('categoriaDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
 
 			<p:dialog header="Edição de Categoria" widgetVar="categoriaDialog"
 				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
@@ -100,17 +93,15 @@
 					<p:panelGrid columns="2"
 						rendered="#{not empty categoriaControle.categorias}"
 						columnClasses="label,value">
-						<f:facet name="header">
-						Titulo
-						</f:facet>
-						<h:outputText value="Codigo" />
-						<h:outputText value="#{categoriaControle.categoria.codigo}" />
-						<h:outputText value="Nome:" />
-						<h:outputText value="#{categoriaControle.categoria.nome}" />
-						<h:outputText value="#{categoriaControle.categoria.descricao}" />
-						<h:commandButton styleClass="botao" value="Excluir"
+						<f:facet name="header">Titulo</f:facet>
+						<p:outputLabel value="Codigo" />
+						<p:outputLabel value="#{categoriaControle.categoria.codigo}" />
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{categoriaControle.categoria.nome}" />
+						<p:outputLabel value="#{categoriaControle.categoria.descricao}" />
+						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{categoriaControle.remover(categoriaControle.categoria)}" />
-						<h:link styleClass="botao" value="Editar"
+						<p:link styleClass="botao" value="Editar"
 							outcome="#{categoriaControle.editar(categoriaControle.categoria)}" />
 					</p:panelGrid>
 				</p:outputPanel>

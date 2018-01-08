@@ -58,34 +58,36 @@
 			<p:dataTable id="bem" var="bem" value="#{bemControle.bens}"
 				resizableColumns="true" reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{bem.id}" selection="#{bemControle.bem}"
-				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!"
+				selectionMode="single" emptyMessage="Nenhum Bens Encontrado!"
 				styleClass="ui-g-12">
 
+				<f:facet name="header">Lista de Bens</f:facet>
+
 				<p:column headerText="Codigo" sortBy="#{bem.codigo}">
-					<h:outputText value="#{bem.codigo}" />
+					<p:outputLabel value="#{bem.codigo}" />
 				</p:column>
 
 				<p:column headerText="Nome" sortBy="#{bem.nome}">
-					<h:outputText value="#{bem.nome}" />
+					<p:outputLabel value="#{bem.nome}" />
 				</p:column>
 
 				<p:column headerText="Descricao" sortBy="#{bem.descricao}">
-					<h:outputText value="#{bem.descricao}" />
+					<p:outputLabel value="#{bem.descricao}" />
 				</p:column>
 
 				<p:column headerText="categoria" sortBy="#{bem.categoria.nome}">
-					<h:outputText value="#{bem.categoria.nome}" />
+					<p:outputLabel value="#{bem.categoria.nome}" />
 				</p:column>
 
 				<p:column headerText="unidadeDeMedida"
 					sortBy="#{bem.unidadeDeMedida.nome}">
-					<h:outputText value="#{bem.unidadeDeMedida.nome}" />
+					<p:outputLabel value="#{bem.unidadeDeMedida.nome}" />
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
 						outcome="#{bemControle.editar(bem)}" />
 				</p:column>
 
@@ -97,17 +99,15 @@
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<h:outputText
+					<p:outputLabel
 						value=" #{bemControle.totalBens} de #{bemControle.totalBensConsulta}" />
 				</f:facet>
+				
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('bemDialog').show()" update="@form"
+					global="false" />
 			</p:dataTable>
 
-			<p:contextMenu for="bem">
-				<p:menuitem value="Edição" update="bemEditar" icon="ui-icon-search"
-					oncomplete="PF('bemDialog').show()" />
-				<p:menuitem value="Deletar" update="bem" icon="ui-icon-close"
-					action="#{bemControle.remover}" />
-			</p:contextMenu>
 
 			<p:dialog header="Edição de Bens" widgetVar="bemDialog" modal="true"
 				showEffect="fade" hideEffect="fade" resizable="false">
@@ -117,14 +117,14 @@
 						<f:facet name="header">
 						Titulo
 						</f:facet>
-						<h:outputText value="Codigo" />
-						<h:outputText value="#{bemControle.bem.codigo}" />
-						<h:outputText value="Nome:" />
-						<h:outputText value="#{bemControle.bem.nome}" />
-						<h:outputText value="#{bemControle.bem.descricao}" />
-						<h:commandButton styleClass="botao" value="Excluir"
+						<p:outputLabel value="Codigo" />
+						<p:outputLabel value="#{bemControle.bem.codigo}" />
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{bemControle.bem.nome}" />
+						<p:outputLabel value="#{bemControle.bem.descricao}" />
+						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{bemControle.remover(bemControle.bem)}" />
-						<h:link styleClass="botao" value="Editar"
+						<p:link styleClass="botao" value="Editar"
 							outcome="#{bemControle.editar(bemControle.bem)}" />
 					</p:panelGrid>
 				</p:outputPanel>
