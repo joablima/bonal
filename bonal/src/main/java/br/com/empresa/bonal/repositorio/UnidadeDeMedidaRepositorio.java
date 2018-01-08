@@ -54,11 +54,14 @@ public class UnidadeDeMedidaRepositorio {
 	// m�todo que lista todos os registros
 	public List<UnidadeDeMedida> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<UnidadeDeMedida> query = em.getCriteriaBuilder().createQuery(UnidadeDeMedida.class);
-		query.select(query.from(UnidadeDeMedida.class));
-		List<UnidadeDeMedida> list = em.createQuery(query).getResultList();
-		em.close();
-		return list;
+		try {
+			return em.createQuery("select u from UnidadeDeMedida u", UnidadeDeMedida.class)
+					.getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
@@ -86,6 +89,24 @@ public class UnidadeDeMedidaRepositorio {
 				.getResultList();
 		em.close();
 		return list;
+	}
+
+	// método que verifica se elemento existe
+	public UnidadeDeMedida unidadeMedidaExiste(UnidadeDeMedida unidade) {
+		EntityManager em = JPAUtil.getEntityManager();
+
+		TypedQuery<UnidadeDeMedida> query = em
+				.createQuery("select u from UnidadeDeMedida u where u.sigla = :sigla", UnidadeDeMedida.class)
+				.setParameter("sigla", unidade.getSigla());
+
+		try {
+			UnidadeDeMedida novaUnidade = query.getSingleResult();
+			return novaUnidade;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 }

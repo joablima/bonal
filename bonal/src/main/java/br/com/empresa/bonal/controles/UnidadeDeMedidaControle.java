@@ -27,6 +27,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
 	private Long unidadeDeMedidaId;
+	private Boolean status = true;
 
 	// Atributos para Consulta
 	private String unidadeDeMedidaNome = "";
@@ -55,6 +56,14 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	public Long getUnidadeDeMedidaId() {
 		return unidadeDeMedidaId;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	public void setUnidadeDeMedidaId(Long unidadeDeMedidaId) {
@@ -97,11 +106,13 @@ public class UnidadeDeMedidaControle implements Serializable {
 	}
 
 	public void filtrarTabela() {
-		Stream<UnidadeDeMedida> filter = lista.stream();
+		Stream<UnidadeDeMedida> stream = lista.stream();
 
-		filter = filter.filter(c -> (c.getNome().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim())));
+		stream = stream.filter(u -> (u.getNome().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim())));
 
-		unidadesDeMedida = filter.collect(Collectors.toList());
+		stream = stream.filter(u -> (u.getStatus().equals(status)));
+
+		unidadesDeMedida = stream.collect(Collectors.toList());
 	}
 
 	// M�todo chamado ao carregar tabela
@@ -131,6 +142,11 @@ public class UnidadeDeMedidaControle implements Serializable {
 		String message = "";
 		this.unidadeDeMedida.setStatus(true);
 		if (unidadeDeMedida.getId() == null) {
+			UnidadeDeMedida existe = unidadeDeMedidaRepositorio.unidadeMedidaExiste(unidadeDeMedida);
+			if (existe != null) {
+				new FacesContextUtil().warn("Já existe essa unidade de medida registrada.");
+				return null;
+			}
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
 			message += "Unidade de Medida Cadastrada com Sucesso.";
 		} else {
@@ -170,11 +186,11 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedida = unidadeDeMedida;
 		return editar();
 	}
-	
-	
-	public String cancelar(){
+
+	public String cancelar() {
 		return "index";
 	}
+
 	public boolean cargoIdExiste() {
 		if (this.unidadeDeMedidaId == null)
 			return false;

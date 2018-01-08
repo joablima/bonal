@@ -40,6 +40,16 @@
 						update="@form :tabelaUnidadesDeMedida" />
 				</div>
 			</div>
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{unidadeDeMedidaControle.status}">
+					<p:ajax update="@form :tabelaUnidadesDeMedida"
+						listener="#{unidadeDeMedidaControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{unidadeDeMedidaControle.status == true}" />
+				<h:outputText value="Visualizar somente itens desativados"
+					rendered="#{unidadeDeMedidaControle.status == false}" />
+			</div>
 		</h:form>
 
 
@@ -64,7 +74,7 @@
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
 						outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedida)}" />
 				</p:column>
 
@@ -107,7 +117,7 @@
 							value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}" />
 						<h:commandButton styleClass="botao" value="Excluir"
 							action="#{unidadeDeMedidaControle.remover(unidadeDeMedidaControle.unidadeDeMedida)}" />
-						<h:link styleClass="botao" value="Editar"
+						<p:link styleClass="botao" value="Editar"
 							outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedidaControle.unidadeDeMedida)}" />
 					</p:panelGrid>
 				</p:outputPanel>

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
 
@@ -53,11 +52,13 @@ public class CargoRepositorio {
 	// m�todo que lista todos os registros
 	public List<Cargo> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<Cargo> query = em.getCriteriaBuilder().createQuery(Cargo.class);
-		query.select(query.from(Cargo.class));
-		List<Cargo> list = em.createQuery(query).getResultList();
-		em.close();
-		return list;
+		try {
+			return em.createQuery("select c from Cargo c where c.status = true", Cargo.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
@@ -73,5 +74,22 @@ public class CargoRepositorio {
 		List<Cargo> list = query.getResultList();
 		em.close();
 		return list;
+	}
+
+	// método que verifica se elemento existe
+	public Cargo cargoExiste(Cargo cargo) {
+		EntityManager em = JPAUtil.getEntityManager();
+
+		TypedQuery<Cargo> query = em.createQuery("select c from Cargo c where c.nome = :nome", Cargo.class)
+				.setParameter("nome", cargo.getNome());
+
+		try {
+			Cargo novocargo = query.getSingleResult();
+			return novocargo;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 }

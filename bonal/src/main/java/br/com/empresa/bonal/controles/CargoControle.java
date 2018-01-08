@@ -146,6 +146,11 @@ public class CargoControle implements Serializable {
 		String message = "";
 		this.cargo.setStatus(true);
 		if (cargo.getId() == null) {
+			Cargo existe = cargoRepositorio.cargoExiste(cargo);
+			if (existe != null) {
+				new FacesContextUtil().warn("Já existe esse cargo registrado.");
+				return null;
+			}
 			cargoRepositorio.adicionar(cargo);
 			message += "Cargo Cadastrado com Sucesso.";
 		} else {

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
 
@@ -17,14 +16,14 @@ public class ProdutoRepositorio {
 	final static Logger logger = Logger.getLogger(ProdutoRepositorio.class);
 
 	// m�todo que persiste um registro
-	public void adicionar(Produto produto,Long unidadeDeMedidaId) {
+	public void adicionar(Produto produto, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		
+
 		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
 
 		produto.setUnidadeDeMedida(unidadeDeMedida);
-		
+
 		em.persist(produto);
 		em.getTransaction().commit();
 		em.close();
@@ -53,7 +52,7 @@ public class ProdutoRepositorio {
 		em.close();
 	}
 
-	// m�todo que recupera um objeto pelo id	
+	// m�todo que recupera um objeto pelo id
 	public Produto buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
 		Produto bem = em.find(Produto.class, id);
@@ -64,13 +63,15 @@ public class ProdutoRepositorio {
 	// m�todo que lista todos os registros
 	public List<Produto> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<Produto> query = em.getCriteriaBuilder().createQuery(Produto.class);
-		query.select(query.from(Produto.class));
-		List<Produto> list = em.createQuery(query).getResultList();
-		em.close();
-		return list;
-	}	
-	
+		try {
+			return em.createQuery("select p from Produto p where p.status = true", Produto.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	// m�todo que lista com crit�rios todos os registros
 	public List<Produto> listarPorCriterios(String nome, Long categoriaId, Long unidadeDeMedidaId) {
 		EntityManager em = JPAUtil.getEntityManager();
@@ -92,7 +93,7 @@ public class ProdutoRepositorio {
 			query.setParameter("pdescricao", '%' + nome + '%');
 		}
 		if (categoriaId != null)
-			query.setParameter("pcategoria", categoriaId);	
+			query.setParameter("pcategoria", categoriaId);
 		if (unidadeDeMedidaId != null)
 			query.setParameter("punidade", unidadeDeMedidaId);
 
@@ -100,5 +101,22 @@ public class ProdutoRepositorio {
 		List<Produto> list = query.getResultList();
 		em.close();
 		return list;
+	}
+
+	// método que verifica se elemento existe
+	public Produto codigoExiste(Produto produto) {
+		EntityManager em = JPAUtil.getEntityManager();
+
+		TypedQuery<Produto> query = em.createQuery("select p from Produto p where p.codigo = :codigo", Produto.class)
+				.setParameter("codigo", produto.getCodigo());
+
+		try {
+			Produto novoProduto = query.getSingleResult();
+			return novoProduto;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 }

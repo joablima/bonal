@@ -22,13 +22,13 @@ public class CoeficienteTecnicoRepositorio {
 	public void adicionar(CoeficienteTecnico coeficiente, Long bemId, Long produtoId) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
-		
+
 		Produto produto = em.find(Produto.class, produtoId);
 		Bem bem = em.find(Bem.class, bemId);
-		
+
 		coeficiente.setProduto(produto);
 		coeficiente.setBem(bem);
-		
+
 		em.persist(coeficiente);
 		em.getTransaction().commit();
 		em.close();
@@ -54,12 +54,16 @@ public class CoeficienteTecnicoRepositorio {
 	public void remover(CoeficienteTecnico coeficiente) {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
+
+		coeficiente.setProduto(null);
+		coeficiente.setBem(null);
+		
 		em.remove(em.merge(coeficiente));
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	// m�todo que recupera um objeto pelo id	
+	// m�todo que recupera um objeto pelo id
 	public CoeficienteTecnico buscarPorId(Long id) {
 		EntityManager em = JPAUtil.getEntityManager();
 		CoeficienteTecnico bem = em.find(CoeficienteTecnico.class, id);
@@ -75,8 +79,8 @@ public class CoeficienteTecnicoRepositorio {
 		List<CoeficienteTecnico> list = em.createQuery(query).getResultList();
 		em.close();
 		return list;
-	}	
-	
+	}
+
 	// m�todo que lista com crit�rios todos os registros
 	public List<CoeficienteTecnico> listarPorCriterios(BigDecimal quantidade, Long bemId, Long produtoId) {
 		EntityManager em = JPAUtil.getEntityManager();
@@ -85,9 +89,9 @@ public class CoeficienteTecnicoRepositorio {
 		if (quantidade != null)
 			jpql += "(c.quantidade like :pquantidade) and ";
 		if (bemId != null)
-			jpql += "s.bem.id = :pbem and ";
+			jpql += "c.bem.id = :pbem and ";
 		if (produtoId != null)
-			jpql += "s.produto.id = :pproduto and ";
+			jpql += "c.produto.id = :pproduto and ";
 		jpql += "1 = 1";
 
 		TypedQuery<CoeficienteTecnico> query = em.createQuery(jpql, CoeficienteTecnico.class);
@@ -96,7 +100,7 @@ public class CoeficienteTecnicoRepositorio {
 			query.setParameter("pnome", '%' + quantidade.toString() + '%');
 		}
 		if (bemId != null)
-			query.setParameter("pbem", bemId);	
+			query.setParameter("pbem", bemId);
 		if (produtoId != null)
 			query.setParameter("pproduto", produtoId);
 
@@ -104,5 +108,16 @@ public class CoeficienteTecnicoRepositorio {
 		List<CoeficienteTecnico> list = query.getResultList();
 		em.close();
 		return list;
+	}
+
+	public List<CoeficienteTecnico> buscarCoeficienteDoProduto(Long produtoId) {
+		EntityManager em = JPAUtil.getEntityManager();
+		List<CoeficienteTecnico> lista = em
+				.createQuery("select c from CoeficienteTecnico c where c.produto.id = :produto",
+						CoeficienteTecnico.class)
+				.setParameter("produto", produtoId).getResultList();
+
+		em.close();
+		return lista;
 	}
 }

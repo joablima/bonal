@@ -24,7 +24,6 @@ public class Servico {
 	private String nome;
 	private String descricao;
 
-	
 	@Version
 	private Integer version;
 

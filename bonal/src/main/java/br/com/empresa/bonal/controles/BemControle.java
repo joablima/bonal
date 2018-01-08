@@ -187,8 +187,7 @@ public class BemControle implements Serializable {
 		if (bem.getId() == null) {
 			Bem existe = bemRepositorio.codigoExiste(bem);
 			if (existe != null) {
-				message += "Já existe um Bem registrado com esse código." + existe.resumo();
-				new FacesContextUtil().warn(message);
+				new FacesContextUtil().warn("Já existe um Bem registrado com esse código." + existe.resumo());
 				return null;
 			}
 			bemRepositorio.adicionar(bem, categoriaId, unidadeDeMedidaId);

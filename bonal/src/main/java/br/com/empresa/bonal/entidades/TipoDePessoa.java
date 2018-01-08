@@ -22,11 +22,8 @@ public class TipoDePessoa {
 	@NotNull
 	private String nome;
 
-
 	@Version
 	private Integer version;
-	
-	
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
@@ -43,8 +40,6 @@ public class TipoDePessoa {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	
 
 	public Integer getVersion() {
 		return version;

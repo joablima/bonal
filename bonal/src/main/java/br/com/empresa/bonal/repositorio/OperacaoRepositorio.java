@@ -54,11 +54,13 @@ public class OperacaoRepositorio {
 	// m�todo que lista todos os registros
 	public List<Operacao> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<Operacao> query = em.getCriteriaBuilder().createQuery(Operacao.class);
-		query.select(query.from(Operacao.class));
-		List<Operacao> list = em.createQuery(query).getResultList();
-		em.close();
-		return list;
+		try {
+			return em.createQuery("select o from Operacao o where o.status = true", Operacao.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros

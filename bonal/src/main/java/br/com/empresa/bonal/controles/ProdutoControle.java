@@ -149,9 +149,13 @@ public class ProdutoControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
-		
 		this.produto.setStatus(true);
 		if (produto.getId() == null) {
+			Produto existe = produtoRepositorio.codigoExiste(produto);
+			if (existe != null) {
+				new FacesContextUtil().warn("Já existe um produto registrado com esse código.");
+				return null; 
+			}
 			produtoRepositorio.adicionar(produto, unidadeDeMedidaId);
 			message += "Produto Cadastrado com Sucesso.";
 		} else {
@@ -160,12 +164,12 @@ public class ProdutoControle implements Serializable {
 		}
 		new FacesContextUtil().info(message);
 		logger.info(message);
-		this.produto = new Produto();
+		 this.produto = new Produto();
 		return null;
 	}
 
 	public void recuperarProdutoPorId() {
-		produto = produtoRepositorio.buscarPorId(produtoId);
+		this.produto = produtoRepositorio.buscarPorId(produtoId);
 	}
 
 	// Remove um Produto do banco de dados

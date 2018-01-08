@@ -16,6 +16,9 @@
 	</f:metadata>
 
 	<ui:define name="content">
+		<f:event type="preRenderView"
+			listener="#{coeficienteTecnicoControle.setProdutoId(produtoControle.produto.id)}" />
+			
 		<div class="ui-g-12 titulo">
 			<h1>
 				<h:outputText
@@ -59,8 +62,9 @@
 
 				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
 					<p:commandButton id="buscarBem" value="Filtrar"
-						action="#{bemControle.listar}" process="@form"
-						update="@form :tabelaBens" icon="fa fa-fw fa-filter" />
+						action="#{coeficienteTecnicoControle.listar}"
+						process="@form" update="@form :tabelaBens :listaCoeficientes"
+						icon="fa fa-fw fa-filter" />
 
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
 						action="#{bemControle.limpar}" process="@form"
@@ -74,7 +78,7 @@
 			<p:dataTable id="bem" var="bem" value="#{bemControle.bens}"
 				resizableColumns="true" reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{bem.id}" selection="#{bemControle.bem}"
 				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!"
 				styleClass="ui-g-12">
@@ -103,7 +107,7 @@
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:commandButton value="adicionar" oncomplete="PF('dlg2').show();"
 						actionListener="#{coeficienteTecnicoControle.carregarDados(bem.id, produtoControle.produto.id)}"
-						process="@this" update="formAddCoeficiente" />
+						process="@this" update="formAddCoeficiente" icon="fa fa-fw fa-plus-circle"/>
 				</p:column>
 
 				<f:facet name="footer">
@@ -116,11 +120,13 @@
 
 
 		<p:dialog header="cadastrar coeficientes" widgetVar="dlg2"
-			modal="true" showEffect="fade" height="500" appendTo="@(body)"
-			resizable="false">
+			modal="true" showEffect="fade" hideEffect="fade" height="500"
+			appendTo="@(body)" resizable="false" closable="true" draggable="true"
+			dynamic="true">
 
 			<h:form id="formAddCoeficiente">
-				<p:outputLabel value="bemId  - #{coeficienteTecnicoControle.bemId}." />
+				<p:outputLabel
+					value="bemId  - #{coeficienteTecnicoControle.bemId}. " />
 				<p:outputLabel
 					value="produtoId  - #{coeficienteTecnicoControle.produtoId}." />
 				<br />
@@ -144,15 +150,41 @@
 				<div class="botoes-cadastrar">
 					<p:commandButton id="salvar" value="Salvar"
 						action="#{coeficienteTecnicoControle.salvar}"
-						process="@this @form" update="@form :messages"
+						oncomplete="PF('dlg2').hide();" process="@this @form"
+						update="@form :messages :listaCoeficientes"
 						icon="fa fa-fw fa-save" validateClient="true" />
 
-					<p:commandButton value="Cancelar"
-						action="#{coeficienteTecnicoControle.fecharModal}"
-						icon="fa fa-fw fa-eraser" update="@form" />
+					<p:commandButton value="Cancelar" oncomplete="PF('dlg2').hide();"
+						icon="ui-icon-close" update="@none" process="@this"
+						immediate="true" />
 				</div>
 			</h:form>
 		</p:dialog>
+
+
+		<h:form id="listaCoeficientes">
+			<p:dataTable id="coef" var="coef"
+				value="#{coeficienteTecnicoControle.coeficientesDoProduto}"
+				resizableColumns="true" reflow="true" rows="10" rowKey="#{coef.id}"
+				selection="#{coeficienteTecnicoControle.coeficienteTecnico}"
+				selectionMode="single" emptyMessage="Nenhum Coeficiente Encontrado!"
+				styleClass="ui-g-12">
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{coef.bem.nome}" />
+				</p:column>
+
+				<p:column headerText="Quantidade">
+					<h:outputText value="#{coef.quantidade}" />
+				</p:column>
+				
+				<p:column headerText="Excluir" style="width: 7ch;">
+					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+						action="#{coeficienteTecnicoControle.remover(coef)}" update="@form"
+						process="@this" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
 
 	</ui:define>
 </ui:composition>

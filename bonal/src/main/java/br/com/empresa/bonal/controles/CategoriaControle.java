@@ -160,8 +160,7 @@ public class CategoriaControle implements Serializable {
 		if (categoria.getId() == null) {
 			Categoria existe = categoriaRepositorio.codigoExiste(categoria);
 			if (existe != null) {
-				message += "Já existe uma Categoria registrada com esse código." + existe.resumo();
-				new FacesContextUtil().warn(message);
+				new FacesContextUtil().warn("Já existe uma Categoria registrada com esse código." + existe.resumo());
 				return null;
 			}
 			categoriaRepositorio.adicionar(categoria);

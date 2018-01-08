@@ -40,6 +40,8 @@ public class CoeficienteTecnicoControle implements Serializable {
 	private List<CoeficienteTecnico> coeficienteTecnicos;
 	private List<CoeficienteTecnico> lista = new ArrayList<>();
 
+	private List<CoeficienteTecnico> coeficientesDoProduto;
+
 	// Repositorio
 	private CoeficienteTecnicoRepositorio coeficienteTecnicoRepositorio;
 
@@ -95,6 +97,11 @@ public class CoeficienteTecnicoControle implements Serializable {
 		return EnumBem.values();
 	}
 
+	public List<CoeficienteTecnico> getCoeficientesDoProduto() {
+		this.coeficientesDoProduto = coeficienteTecnicoRepositorio.buscarCoeficienteDoProduto(this.produtoId);
+		return coeficientesDoProduto;
+	}
+
 	public List<CoeficienteTecnico> getCoeficienteTecnicos() {
 		return coeficienteTecnicos;
 	}
@@ -115,6 +122,9 @@ public class CoeficienteTecnicoControle implements Serializable {
 	// ----------------- METODOS ----------------------
 	@PostConstruct
 	public void listarTabela() {
+		if (this.produtoId != null)
+			getCoeficientesDoProduto();
+
 		if (this.coeficienteTecnicos == null) {
 			lista = coeficienteTecnicoRepositorio.listarTodos();
 			coeficienteTecnicos = new ArrayList<>(lista);
@@ -163,46 +173,36 @@ public class CoeficienteTecnicoControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
-		if (coeficienteTecnico.getId() == null) {
-			coeficienteTecnicoRepositorio.adicionar(coeficienteTecnico, bemId, produtoId);
-			message += "CoeficienteTecnico Cadastrado com Sucesso.";
+		if (!produtoContemCoeficiente()) {
+			coeficienteTecnicoRepositorio.adicionar(this.coeficienteTecnico, bemId, produtoId);
+			new FacesContextUtil().info("CoeficienteTecnico Cadastrado com Sucesso.");
 		} else {
-			coeficienteTecnicoRepositorio.atualizar(coeficienteTecnico, bemId, produtoId);
-			message += "CoeficienteTecnico Atualizado com Sucesso.";
+			new FacesContextUtil().warn("CoeficienteTecnico já encontra-se registrado no produto.");
 		}
-		new FacesContextUtil().info(message);
 		logger.info(message);
-		coeficienteTecnico = new CoeficienteTecnico();
+		this.coeficienteTecnico = new CoeficienteTecnico();
 		return null;
 	}
 
 	public void recuperarCoeficienteTecnicoPorId() {
-		coeficienteTecnico = coeficienteTecnicoRepositorio.buscarPorId(coeficienteTecnicoId);
+		this.coeficienteTecnico = coeficienteTecnicoRepositorio.buscarPorId(coeficienteTecnicoId);
 	}
 
 	// Remove um CoeficienteTecnico do banco de dados
-	public void remover() {
-		coeficienteTecnicoRepositorio.remover(coeficienteTecnico);
+	public String remover() {
+		coeficienteTecnicoRepositorio.remover(this.coeficienteTecnico);
 		coeficienteTecnicos = null;
 		listarTabela();
-		coeficienteTecnico = null;
+		coeficienteTecnico = new CoeficienteTecnico();
+		new FacesContextUtil().info("Coeficiente Técnico do removido com sucesso.");
+		logger.info("Coeficiente removido com sucesso");
+		return null; 
 	}
 
 	public void remover(CoeficienteTecnico coeficienteTecnico) {
 		this.coeficienteTecnico = coeficienteTecnico;
 		remover();
 	}
-
-	// Editar um CoeficienteTecnico
-	// public String editar() {
-	// coeficienteTecnicoId = this.coeficienteTecnico.getId();
-	// return "coeficienteTecnico?coeficienteTecnicoId=" + coeficienteTecnicoId;
-	// }
-	//
-	// public String editar(CoeficienteTecnico coeficienteTecnico) {
-	// this.coeficienteTecnico = coeficienteTecnico;
-	// return editar();
-	// }
 
 	public boolean CoeficienteTecnicoIdExiste() {
 		if (this.coeficienteTecnicoId == null)
@@ -213,6 +213,14 @@ public class CoeficienteTecnicoControle implements Serializable {
 	public void carregarDados(Long bem, Long produto) {
 		this.produtoId = produto;
 		this.bemId = bem;
+	}
+
+	public Boolean produtoContemCoeficiente() {
+		for (CoeficienteTecnico coeficiente : coeficientesDoProduto) {
+			if (coeficiente.getBem().getId().equals(this.bemId))
+				return true;
+		}
+		return false;
 	}
 
 }

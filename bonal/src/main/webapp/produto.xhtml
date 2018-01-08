@@ -74,7 +74,8 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Descrição:" for="descricao" />
-						<p:inputText id="descricao" value="#{produtoControle.produto.descricao}"
+						<p:inputText id="descricao"
+							value="#{produtoControle.produto.descricao}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Descrição da produto obrigatório"
 							validatorMessage="Descrição da produto deve ter no minimo 2 caracteres"
@@ -94,12 +95,15 @@
 						<p:selectOneMenu value="#{produtoControle.unidadeDeMedidaId}"
 							id="unidadeDeMedidaId" styleClass="form-normal">
 							<c:choose>
-								<c:when test="#{produtoControle.produto.unidadeDeMedida.id == null}">
+								<c:when
+									test="#{produtoControle.produto.unidadeDeMedida.id == null}">
 									<f:selectItem itemValue=""
 										itemLabel="Escolha um Unidade de Medida" />
 								</c:when>
-								<c:when test="#{produtoControle.produto.unidadeDeMedida.id != null}">
-									<f:selectItem itemValue="#{produtoControle.produto.unidadeDeMedida.id}"
+								<c:when
+									test="#{produtoControle.produto.unidadeDeMedida.id != null}">
+									<f:selectItem
+										itemValue="#{produtoControle.produto.unidadeDeMedida.id}"
 										itemLabel="#{produtoControle.produto.unidadeDeMedida.nome}" />
 								</c:when>
 							</c:choose>
@@ -122,16 +126,15 @@
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
-				<p:commandButton id="salvar" value="Salvar e Cadastrar Coeficientes"
-					action="#{produtoControle.salvar}" actionListener="#{produtoControle.addCoeficientes}" process="@this @form"
-					update="@form :messages" icon="fa fa-fw fa-save"
-					validateClient="true" />
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{produtoControle.salvar}" process="@this @form"
+					update="@form" icon="fa fa-fw fa-save" validateClient="true" />
 
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
-
 		</h:form>
+
 	</ui:define>
 </ui:composition>
 </html>

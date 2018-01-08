@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
 
@@ -69,11 +68,13 @@ public class BemRepositorio {
 	// m�todo que lista todos os registros
 	public List<Bem> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<Bem> query = em.getCriteriaBuilder().createQuery(Bem.class);
-		query.select(query.from(Bem.class));
-		List<Bem> list = em.createQuery(query).getResultList();
-		em.close();
-		return list;
+		try {
+			return em.createQuery("select b from Bem b where b.status = true", Bem.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
@@ -110,10 +111,9 @@ public class BemRepositorio {
 	// método que verifica se elemento existe
 	public Bem codigoExiste(Bem bem) {
 		EntityManager em = JPAUtil.getEntityManager();
-		String jpql = "select b from Bem b where b.codigo = :pcodigo";
 
-		TypedQuery<Bem> query = em.createQuery(jpql, Bem.class);
-		query.setParameter("pcodigo", bem.getCodigo());
+		TypedQuery<Bem> query = em.createQuery("select b from Bem b where b.codigo = :pcodigo", Bem.class)
+				.setParameter("pcodigo", bem.getCodigo());
 
 		try {
 			Bem novoBem = query.getSingleResult();
@@ -121,7 +121,6 @@ public class BemRepositorio {
 		} catch (Exception e) {
 			return null;
 		} finally {
-			logger.info(jpql);
 			em.close();
 		}
 	}

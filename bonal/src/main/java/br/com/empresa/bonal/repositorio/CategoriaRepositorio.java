@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
 
@@ -54,11 +53,13 @@ public class CategoriaRepositorio {
 	// m�todo que lista todos os registros
 	public List<Categoria> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
-		CriteriaQuery<Categoria> query = em.getCriteriaBuilder().createQuery(Categoria.class);
-		query.select(query.from(Categoria.class));
-		List<Categoria> list = em.createQuery(query).getResultList();
-		em.close();
-		return list;
+		try {
+			return em.createQuery("select c from Categoria c where c.status = true", Categoria.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros

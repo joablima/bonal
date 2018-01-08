@@ -43,17 +43,15 @@ public abstract class Pessoa {
 
 	@Embedded
 	private Endereco endereco;
-	
-	
+
 	private Boolean status;
-	
+
 	@Version
 	private Integer version;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
-
 
 	public String getNome() {
 		return nome;
@@ -82,7 +80,7 @@ public abstract class Pessoa {
 	public Endereco getEndereco() {
 		return endereco;
 	}
-	
+
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
@@ -122,8 +120,6 @@ public abstract class Pessoa {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-
-	
 
 	public Boolean getStatus() {
 		return status;
