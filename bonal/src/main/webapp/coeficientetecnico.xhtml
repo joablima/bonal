@@ -19,7 +19,7 @@
 		<div class="ui-g-12 titulo">
 			<h1>
 				<h:outputText
-					value="Coeficientes Técnicos do Bem #{produtoControle.produto.nome}" />
+					value="Coeficientes Técnicos do produto #{produtoControle.produto.nome}" />
 			</h1>
 			<span><i class="fa fa-coffee" /> <p:link
 					value="Consultar Produtos" outcome="produtoConsultar" /> </span>
@@ -56,27 +56,6 @@
 							process="@form" update=":tabelaBens" />
 					</p:selectOneMenu>
 				</div>
-
-
-				<!-- 				<div class="ui-g"> -->
-				<!-- 					<div class="ui-g-12 ui-md-6 ui-lg-6"> -->
-				<!-- 						<p:outputLabel value="Quantidade:" for="quantidade" /> -->
-				<!-- 						<p:inputText id="quantidade" -->
-				<!-- 							value="#{coeficienteTecnicoControle.bem.quantidade}" -->
-				<!-- 							styleClass="form-normal" required="true" -->
-				<!-- 							requiredMessage="Quantidade da bem obrigatório" -->
-				<!-- 							validatorMessage="Quantidade da bem deve ter no minimo 2 caracteres" -->
-				<!-- 							maxlength="80"> -->
-				<!-- 							<p:clientValidator event="blur" /> -->
-				<!-- 							<f:convertNumber maxFractionDigits="3" locale="pt_BR" /> -->
-				<!-- 						</p:inputText> -->
-				<!-- 					</div> -->
-
-				<!-- 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages"> -->
-				<!-- 						<p:message for="quantidade" id="quantidadeMessage" /> -->
-				<!-- 					</div> -->
-				<!-- 				</div> -->
-
 
 				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
 					<p:commandButton id="buscarBem" value="Filtrar"
@@ -122,8 +101,9 @@
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:commandButton styleClass="ui-icon  ui-icon-pencil"
-						value="Editar" type="button" onclick="PF('dlg2').show();" />
+					<p:commandButton value="adicionar" oncomplete="PF('dlg2').show();"
+						actionListener="#{coeficienteTecnicoControle.carregarDados(bem.id, produtoControle.produto.id)}"
+						process="@this" update="formAddCoeficiente" />
 				</p:column>
 
 				<f:facet name="footer">
@@ -134,11 +114,44 @@
 			</p:dataTable>
 		</h:form>
 
-		<p:dialog header="Cadastrar Coeficiente Técnico" widgetVar="dlg2"
-			modal="true" height="50%">
-			<h:outputText value="testando a popup" />
-			<!-- 				<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar" -->
-			<!-- 					outcome=" #{produtoControle.addCoeficiente(bem)}" /> -->
+
+		<p:dialog header="cadastrar coeficientes" widgetVar="dlg2"
+			modal="true" showEffect="fade" height="500" appendTo="@(body)"
+			resizable="false">
+
+			<h:form id="formAddCoeficiente">
+				<p:outputLabel value="bemId  - #{coeficienteTecnicoControle.bemId}." />
+				<p:outputLabel
+					value="produtoId  - #{coeficienteTecnicoControle.produtoId}." />
+				<br />
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-12">
+						<p:outputLabel value="Quantidade:" for="quantidade" />
+						<p:inputText id="quantidade"
+							value="#{coeficienteTecnicoControle.coeficienteTecnico.quantidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Quantidade de bens obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+							<f:convertNumber maxFractionDigits="3" locale="pt_BR" />
+						</p:inputText>
+					</div>
+					<div class="ui-g-12 ui-md-6 ui-lg-12 form-messages">
+						<p:message for="quantidade" id="quantidadeMessage" />
+					</div>
+				</div>
+
+				<div class="botoes-cadastrar">
+					<p:commandButton id="salvar" value="Salvar"
+						action="#{coeficienteTecnicoControle.salvar}"
+						process="@this @form" update="@form :messages"
+						icon="fa fa-fw fa-save" validateClient="true" />
+
+					<p:commandButton value="Cancelar"
+						action="#{coeficienteTecnicoControle.fecharModal}"
+						icon="fa fa-fw fa-eraser" update="@form" />
+				</div>
+			</h:form>
 		</p:dialog>
 
 	</ui:define>

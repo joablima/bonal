@@ -194,20 +194,25 @@ public class CoeficienteTecnicoControle implements Serializable {
 	}
 
 	// Editar um CoeficienteTecnico
-	public String editar() {
-		coeficienteTecnicoId = this.coeficienteTecnico.getId();
-		return "coeficienteTecnico?coeficienteTecnicoId=" + coeficienteTecnicoId;
-	}
-
-	public String editar(CoeficienteTecnico coeficienteTecnico) {
-		this.coeficienteTecnico = coeficienteTecnico;
-		return editar();
-	}
+	// public String editar() {
+	// coeficienteTecnicoId = this.coeficienteTecnico.getId();
+	// return "coeficienteTecnico?coeficienteTecnicoId=" + coeficienteTecnicoId;
+	// }
+	//
+	// public String editar(CoeficienteTecnico coeficienteTecnico) {
+	// this.coeficienteTecnico = coeficienteTecnico;
+	// return editar();
+	// }
 
 	public boolean CoeficienteTecnicoIdExiste() {
 		if (this.coeficienteTecnicoId == null)
 			return false;
 		return true;
+	}
+
+	public void carregarDados(Long bem, Long produto) {
+		this.produtoId = produto;
+		this.bemId = bem;
 	}
 
 }
