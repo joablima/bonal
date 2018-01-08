@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
@@ -147,14 +149,13 @@ public class ProdutoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	public String salvar() {
+	public void salvar() {
 		String message = "";
 		this.produto.setStatus(true);
 		if (produto.getId() == null) {
 			Produto existe = produtoRepositorio.codigoExiste(produto);
 			if (existe != null) {
 				new FacesContextUtil().warn("Já existe um produto registrado com esse código.");
-				return null; 
 			}
 			produtoRepositorio.adicionar(produto, unidadeDeMedidaId);
 			message += "Produto Cadastrado com Sucesso.";
@@ -162,10 +163,13 @@ public class ProdutoControle implements Serializable {
 			produtoRepositorio.atualizar(produto, unidadeDeMedidaId);
 			message += "Produto Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
-		logger.info(message);
-		 this.produto = new Produto();
-		return null;
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("coeficientetecnico.xhtml?produtoId=" + this.produto.getId());
+		} catch (IOException e) {
+			new FacesContextUtil().info(message);
+			logger.info(message);
+			 this.produto = new Produto();
+		}
 	}
 
 	public void recuperarProdutoPorId() {
