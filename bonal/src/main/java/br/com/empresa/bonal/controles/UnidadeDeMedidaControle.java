@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
@@ -177,14 +179,19 @@ public class UnidadeDeMedidaControle implements Serializable {
 	}
 
 	// Editar um cargo
-	public String editar() {
+	public void editar() {
 		unidadeDeMedidaId = this.unidadeDeMedida.getId();
-		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedidaId;
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("unidadeDeMedida.xhtml?unidadeDeMedidaId=" + unidadeDeMedida.getId());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public String editar(UnidadeDeMedida unidadeDeMedida) {
+	public void editar(UnidadeDeMedida unidadeDeMedida) {
 		this.unidadeDeMedida = unidadeDeMedida;
-		return editar();
+		editar();
 	}
 
 	public String cancelar() {
