@@ -18,6 +18,7 @@ body {
 	background: #fff;
 }
 
+
 html, body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea,
 	.ui-widget button {
 	font-size: 14px !important;
@@ -213,4 +214,15 @@ input[type="radio"] {
 
 .botoes-cadastrar button {
 	margin-left: 4rem;
+}
+
+/* --------------------- Elementos dos dialog --------------------- */
+.dialog{
+    margin: 0;
+    border:0;
+}
+
+.ui-dialog{
+left: calc(50% - (500px / 2)) !important;
+    top: calc(50vh - 250px) !important;
 }

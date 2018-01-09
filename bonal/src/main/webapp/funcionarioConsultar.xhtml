@@ -52,19 +52,19 @@
 				styleClass="ui-g-12">
 
 				<p:column headerText="Nome" sortBy="#{cargo.nome}">
-					<h:outputText value="#{cargo.nome}" />
+					<p:outputLabel value="#{cargo.nome}" />
 				</p:column>
 
 				<p:column headerText="Salário" sortBy="#{cargo.salario}">
-					<h:outputText value="#{cargo.salario}" />
+					<p:outputLabel value="#{cargo.salario}" />
 				</p:column>
 
 				<p:column headerText="Permissão" sortBy="#{cargo.permissao}">
-					<h:outputText value="#{cargo.permissao}" />
+					<p:outputLabel value="#{cargo.permissao}" />
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<h:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
 						outcome="#{cargoControle.editar(cargo)}" />
 				</p:column>
 
@@ -76,7 +76,7 @@
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<h:outputText
+					<p:outputLabel
 						value=" #{cargoControle.totalCargos} de #{cargoControle.totalCargosConsulta}" />
 				</f:facet>
 			</p:dataTable>
@@ -97,14 +97,14 @@
 						<f:facet name="header">
 						Titulo
 						</f:facet>
-						<h:outputText value="Nome:" />
-						<h:outputText value="#{cargoControle.cargo.nome}" />
-						<h:outputText value="Salário:" />
-						<h:outputText value="#{cargoControle.cargo.salario}" />
-						<h:outputText value="#{cargoControle.cargo.permissao}" />
-						<h:commandButton styleClass="botao" value="Excluir"
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{cargoControle.cargo.nome}" />
+						<p:outputLabel value="Salário:" />
+						<p:outputLabel value="#{cargoControle.cargo.salario}" />
+						<p:outputLabel value="#{cargoControle.cargo.permissao}" />
+						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{cargoControle.remover(cargoControle.cargo)}" />
-						<h:link styleClass="botao" value="Editar"
+						<p:link styleClass="botao" value="Editar"
 							outcome="#{cargoControle.editar(cargoControle.cargo)}" />
 					</p:panelGrid>
 				</p:outputPanel>

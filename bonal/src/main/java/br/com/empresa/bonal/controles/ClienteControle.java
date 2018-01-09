@@ -17,7 +17,6 @@ import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.repositorio.ClienteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.enums.EnumBem;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
 
 @ManagedBean

@@ -120,7 +120,12 @@
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
 						<i class="fa fa-coffee" />
-						<p:link value="Cadastrar Nova Cargo" outcome="cargo" />
+						<p:commandLink value="Cadastrar Nova Cargo" process="@this"
+							update="cargoId"
+							actionListener="#{cargoControle.cargoDialogShow}">
+							<p:ajax event="dialogReturn" update="formFuncionario"
+								listener="#{cargoControle.cargoDialogReturn}" />
+							</p:commandLink>
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
 						<p:message for="cargoId" id="cargoMessage" />
@@ -165,13 +170,13 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="País:" for="uf" />
+						<p:outputLabel value="Estado:" for="uf" />
 						<p:inputText id="uf"
 							value="#{funcionarioControle.funcionario.endereco.uf}"
 							styleClass="form-normal" required="true"
-							requiredMessage="País da funcionario obrigatório"
-							validatorMessage="País da funcionario deve ter no minimo 2 caracteres"
-							maxlength="80">
+							requiredMessage="Estado da funcionario obrigatório"
+							validatorMessage="Estado da funcionario deve ter 2 caracteres"
+							maxlength="2">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>

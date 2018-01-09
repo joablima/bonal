@@ -3,7 +3,9 @@ package br.com.empresa.bonal.controles;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,6 +14,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
@@ -197,4 +201,29 @@ public class CargoControle implements Serializable {
 			return false;
 		return true;
 	}
+
+	public void cargoDialogShow() {
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("modal", true);
+		options.put("draggable", false);
+		options.put("resizable", false);
+		options.put("contentWidth", 500);
+		options.put("contentHeight", 500);
+//		options.put("includeViewParams", true);
+
+		RequestContext.getCurrentInstance().openDialog("cargoDialog", options, null);
+	}
+
+	public void cargoDialogReturn(SelectEvent event) {
+		Object objeto = event.getObject();
+		new FacesContextUtil().info("Cargo " + objeto + " cadastrado com sucesso");
+	}
+
+	public void salvarDialog() {
+        RequestContext.getCurrentInstance().closeDialog(salvar());
+    }
+
+    public void fecharDialog() {
+        RequestContext.getCurrentInstance().closeDialog(0);
+    }
 }

@@ -9,7 +9,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.Cliente;
-import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.util.JPAUtil;
 
 public class ClienteRepositorio {
