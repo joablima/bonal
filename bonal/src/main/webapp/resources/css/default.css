@@ -5,17 +5,9 @@
 	padding: 0;
 }
 
-form {
-	height: 100%;
-	width: 100%;
-}
-
 body {
-	margin: 0 5em;
 	min-height: 100vh;
-	border-right: 1px solid rgba(79, 93, 115, 1);
-	border-left: 1px solid rgba(79, 93, 115, 1);
-	background: #fff;
+    overflow-x: hidden;
 }
 
 
@@ -28,15 +20,25 @@ html, body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea
 
 #body, #content {
 	display: flex;
-	flex-direction: column;
+	flex-direction: inherit;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 #content {
 	margin: 1rem 2rem;
 }
 
-#nav, #footer {
-	width: 100.1%;
+#nav, #footer, form {
+	width: 100%;
+}
+
+form {
+	height: 100%;
 }
 
 h1, legend {
@@ -155,7 +157,20 @@ input[type="radio"] {
 	background: transparent;
 }
 
+/* --------------------- Elementos do #menu --------------------- */
+#menu{
+	border-top: 0;
+    border-left: 0;
+    border-bottom: 0;
+}
+
 /* --------------------- Elementos do #header --------------------- */
+#header{
+	border-right: 0;
+    border-left: 0;
+    border-top: 0;
+}
+
 #header a {
 	text-decoration: none
 }
@@ -183,6 +198,9 @@ input[type="radio"] {
 #footer {
 	text-align: center;
 	margin: auto auto 0 auto;
+	border-right: 0;
+    border-left: 0;
+    border-bottom: 0;
 }
 
 #rodape {

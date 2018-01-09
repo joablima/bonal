@@ -24,21 +24,24 @@
 
 <h:body id="body">
 
-	<div id="header">
-		<ui:include src="header.xhtml" />
+	<div id="menu" class="ui-widget-content">
+		<ui:include src="menu.xhtml" />
 	</div>
 
-	<div id="nav">
-		<ui:include src="nav.xhtml" />
-	</div>
+	<div id="container">
+		<div id="header" class="ui-widget-content">
+			<ui:include src="header.xhtml" />
+		</div>
 
-	<div id="content">
-		<ui:insert name="content" />
-	</div>
+		<!-- nav -->
 
-	<div id="footer">
-		<ui:include src="footer.xhtml" />
-	</div>
+		<div id="content">
+			<ui:insert name="content" />
+		</div>
 
+		<div id="footer" class="ui-widget-content">
+			<ui:include src="footer.xhtml" />
+		</div>
+	</div>
 </h:body>
 </html>

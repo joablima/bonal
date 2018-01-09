@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<nav>
+	<h:form id="menuLateral">
+		<p:panelMenu style="width:360px">
+			<p:submenu label="Cadastros">
+				<p:menuitem value="Categoria" outcome="categoria"
+					icon="ui-icon-disk" />
+				<p:menuitem value="Produto" outcome="produto"
+					icon="ui-icon-arrowrefresh-1-w" />
+				<p:menuitem value="Unidade de Medida" outcome="unidadeDeMedida"
+					icon="ui-icon-disk" />
+			</p:submenu>
+
+			<p:submenu label="Consultas">
+				<p:submenu label="Categoria">
+					<p:menuitem value="Cadastro" outcome="categoria"
+						icon="ui-icon-signal" />
+					<p:menuitem value="Consulta" outcome="categoriaConsultar"
+						icon="ui-icon-signal" />
+				</p:submenu>
+
+				<p:menuitem value="Unidade de Medida" actionListener="#{unidadeDeMedidaControle.editar}"
+					icon="ui-icon-disk" />
+			</p:submenu>
+			
+			<p:submenu label="Ajuda">
+				<p:menuitem value="Bem Vindo" outcome="index"
+					icon="ui-icon-disk" />
+				<p:menuitem value="Como usar" outcome="index"
+					icon="ui-icon-arrowrefresh-1-w" />
+				<p:menuitem value="Sobre o software" outcome="index"
+					icon="ui-icon-disk" />
+			</p:submenu>
+		</p:panelMenu>
+	</h:form>
+</nav>
+</html>
