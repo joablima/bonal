@@ -207,8 +207,8 @@ public class CargoControle implements Serializable {
 		options.put("modal", true);
 		options.put("draggable", false);
 		options.put("resizable", false);
-		options.put("contentWidth", 500);
-		options.put("contentHeight", 500);
+		options.put("contentWidth", 620);
+//		options.put("contentHeight", 500);
 //		options.put("includeViewParams", true);
 
 		RequestContext.getCurrentInstance().openDialog("cargoDialog", options, null);
