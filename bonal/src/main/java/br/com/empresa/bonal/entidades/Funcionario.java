@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 @Entity
-@DiscriminatorValue("Editor")
+@DiscriminatorValue("Funcionario")
 public class Funcionario extends Pessoa{
 	
 	private Calendar dataDeAdmissao;
