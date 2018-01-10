@@ -55,10 +55,9 @@ public class CoeficienteTecnicoRepositorio {
 		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
-		coeficiente.setProduto(null);
-		coeficiente.setBem(null);
 		
-		em.remove(em.merge(coeficiente));
+		
+		em.merge(coeficiente);
 		em.getTransaction().commit();
 		em.close();
 	}

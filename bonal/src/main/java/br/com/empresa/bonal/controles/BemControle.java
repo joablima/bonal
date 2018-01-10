@@ -40,7 +40,9 @@ public class BemControle implements Serializable {
 	// Listas para Consulta
 	private List<Bem> bens;
 	private List<Bem> lista = new ArrayList<>();
-
+	
+	private Boolean status = true;
+	
 	// Repositorio
 	private BemRepositorio bemRepositorio;
 
@@ -120,6 +122,15 @@ public class BemControle implements Serializable {
 	public Integer getTotalBensConsulta() {
 		return bens.size();
 	}
+	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -135,20 +146,21 @@ public class BemControle implements Serializable {
 		Stream<Bem> stream = lista.stream();
 
 		if (!bemNome.equals(null)) {
-			stream = stream.filter(c -> (c.getNome().toLowerCase().contains(bemNome.toLowerCase().trim()))
-					| (c.getCodigo().toLowerCase().contains(bemNome.toLowerCase().trim()))
-					| c.getDescricao().toLowerCase().contains(bemNome.toLowerCase().trim()));
+			stream = stream.filter(b -> (b.getNome().toLowerCase().contains(bemNome.toLowerCase().trim()))
+					| (b.getCodigo().toLowerCase().contains(bemNome.toLowerCase().trim()))
+					| b.getDescricao().toLowerCase().contains(bemNome.toLowerCase().trim()));
 		}
 
 		if (categoriaId != null)
-			stream = stream.filter(c -> (c.getCategoria().getId().equals(categoriaId)));
+			stream = stream.filter(b -> (b.getCategoria().getId().equals(categoriaId)));
 
 		if (unidadeDeMedidaId != null)
-			stream = stream.filter(c -> (c.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
+			stream = stream.filter(b -> (b.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
 
 		if (tipoBem != null) {
-			stream = stream.filter(c -> (c.getTipo().equals(tipoBem)));
+			stream = stream.filter(b -> (b.getTipo().equals(tipoBem)));
 		}
+		stream = stream.filter(b -> (b.getStatus().equals(status)));
 
 		bens = stream.collect(Collectors.toList());
 	}

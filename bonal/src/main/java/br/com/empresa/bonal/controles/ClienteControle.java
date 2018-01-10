@@ -37,7 +37,9 @@ public class ClienteControle implements Serializable {
 	// Listas para Consulta
 	private List<Cliente> clientes;
 	private List<Cliente> lista = new ArrayList<>();
-
+	
+	
+	private Boolean status = true;
 	// Repositorio
 	private ClienteRepositorio clienteRepositorio;
 
@@ -102,6 +104,15 @@ public class ClienteControle implements Serializable {
 	public EnumPessoa[] getEnumPessoa() {
 		return EnumPessoa.values();
 	}
+	
+	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -123,6 +134,7 @@ public class ClienteControle implements Serializable {
 					| c.getIdentificacao().toLowerCase().contains(clienteNome.toLowerCase().trim()));
 		}
 
+		stream = stream.filter(c -> (c.getStatus().equals(status)));
 		clientes = stream.collect(Collectors.toList());
 	}
 
@@ -155,7 +167,6 @@ public class ClienteControle implements Serializable {
 		String message = "";
 
 		this.cliente.setStatus(true);
-		this.cliente.setTipo("FISICA");
 		if (cliente.getId() == null) {
 			clienteRepositorio.adicionar(cliente);
 			message += "Cliente Cadastrado com Sucesso.";

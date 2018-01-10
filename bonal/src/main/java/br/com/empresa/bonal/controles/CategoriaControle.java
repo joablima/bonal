@@ -31,7 +31,8 @@ public class CategoriaControle implements Serializable {
 
 	// Atributos para Consulta
 	private String categoriaNome = "";
-
+	
+	private Boolean status = true; 
 	// Listas para Consulta
 	private List<Categoria> categorias;
 	private List<Categoria> categoriasDeBem;
@@ -110,6 +111,14 @@ public class CategoriaControle implements Serializable {
 		return categorias.size();
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 	// ----------------- METODOS ----------------------
 	@PostConstruct
 	public void listarTabela() {
@@ -127,6 +136,7 @@ public class CategoriaControle implements Serializable {
 				| (c.getCodigo().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
 				| c.getDescricao().toLowerCase().contains(categoriaNome.toLowerCase().trim()));
 
+		stream = stream.filter(c -> (c.getStatus().equals(status)));
 		categorias = stream.collect(Collectors.toList());
 	}
 

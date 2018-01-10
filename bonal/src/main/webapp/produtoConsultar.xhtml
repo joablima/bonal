@@ -42,6 +42,13 @@
 						update="@form :tabelaProdutos" />
 				</div>
 			</div>
+			
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{produtoControle.status}">
+					<p:ajax update="@form :tabelaProdutos" listener="#{produtoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente produtos ativos" />
+			</div>
 		</h:form>
 
 		<h:form id="tabelaProdutos">

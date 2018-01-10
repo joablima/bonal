@@ -42,7 +42,7 @@ public abstract class Pessoa {
 	private String telefone;
 
 	@Embedded
-	private Endereco endereco;
+	private Endereco endereco = new Endereco();
 
 	private Boolean status;
 

@@ -52,6 +52,12 @@
 						update="@form :tabelaBens" />
 				</div>
 			</div>
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{bemControle.status}">
+					<p:ajax update="@form :tabelaBens" listener="#{bemControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente bens ativos" />
+			</div>
 		</h:form>
 
 		<h:form id="tabelaBens">
@@ -102,10 +108,9 @@
 					<p:outputLabel
 						value=" #{bemControle.totalBens} de #{bemControle.totalBensConsulta}" />
 				</f:facet>
-				
-				<p:ajax event="rowDblselect"
-					oncomplete="PF('bemDialog').show()" update="@form"
-					global="false" />
+
+				<p:ajax event="rowDblselect" oncomplete="PF('bemDialog').show()"
+					update="@form" global="false" />
 			</p:dataTable>
 
 

@@ -34,7 +34,9 @@ public class ProdutoControle implements Serializable {
 
 	// Atributos para Consulta
 	private String produtoNome = "";
-
+	
+	private Boolean status = true;
+	
 	// Listas para Consulta
 	private List<Produto> produtos;
 	private List<Produto> lista = new ArrayList<>();
@@ -97,6 +99,14 @@ public class ProdutoControle implements Serializable {
 	public Integer getTotalProdutosConsulta() {
 		return produtos.size();
 	}
+	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -112,14 +122,16 @@ public class ProdutoControle implements Serializable {
 		Stream<Produto> stream = lista.stream();
 
 		if (!produtoNome.equals(null)) {
-			stream = stream.filter(c -> (c.getNome().toLowerCase().contains(produtoNome.toLowerCase().trim()))
-					| (c.getCodigo().toLowerCase().contains(produtoNome.toLowerCase().trim()))
-					| c.getDescricao().toLowerCase().contains(produtoNome.toLowerCase().trim()));
+			stream = stream.filter(p -> (p.getNome().toLowerCase().contains(produtoNome.toLowerCase().trim()))
+					| (p.getCodigo().toLowerCase().contains(produtoNome.toLowerCase().trim()))
+					| p.getDescricao().toLowerCase().contains(produtoNome.toLowerCase().trim()));
 		}
 
 		if (unidadeDeMedidaId != null)
-			stream = stream.filter(c -> (c.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
+			stream = stream.filter(p -> (p.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
+		
 
+		stream = stream.filter(p -> (p.getStatus().equals(status)));
 		produtos = stream.collect(Collectors.toList());
 	}
 

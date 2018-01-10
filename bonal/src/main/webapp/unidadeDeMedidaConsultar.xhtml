@@ -45,10 +45,8 @@
 					<p:ajax update="@form :tabelaUnidadesDeMedida"
 						listener="#{unidadeDeMedidaControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente itens ativados"
-					rendered="#{unidadeDeMedidaControle.status == true}" />
-				<h:outputText value="Visualizar somente itens desativados"
-					rendered="#{unidadeDeMedidaControle.status == false}" />
+				<h:outputText value="Visualizar somente itens ativos"/>
+				
 			</div>
 		</h:form>
 

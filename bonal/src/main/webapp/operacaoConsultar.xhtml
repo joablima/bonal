@@ -39,6 +39,13 @@
 						update="@form :tabelaOperacoes" />
 				</div>
 			</div>
+			
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{operacaoControle.status}">
+					<p:ajax update="@form :tabelaOperacoes" listener="#{operacaoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente operações ativas" />
+			</div>
 		</h:form>
 
 

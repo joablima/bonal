@@ -28,6 +28,7 @@ public class FuncionarioControle implements Serializable {
 
 	private Funcionario funcionario = new Funcionario();
 	
+	private Boolean status = true;
 
 	private Long funcionarioId;
 	private Long cargoId;
@@ -106,6 +107,16 @@ public class FuncionarioControle implements Serializable {
 	public Integer getTotalFuncionariosConsulta() {
 		return funcionarios.size();
 	}
+	
+	
+	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -126,6 +137,8 @@ public class FuncionarioControle implements Serializable {
 					| (f.getEmail().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
 					| f.getIdentificacao().toLowerCase().contains(funcionarioNome.toLowerCase().trim()));
 		}
+		
+		stream = stream.filter(f -> (f.getStatus().equals(status)));
 
 		if (cargoId != null)
 			stream = stream.filter(c -> (c.getCargo().getId().equals(cargoId)));
@@ -163,7 +176,7 @@ public class FuncionarioControle implements Serializable {
 		String message = "";
 		
 		this.funcionario.setStatus(true);
-		this.funcionario.setTipo("FISICA");
+		this.funcionario.setTipo("PESSOA_FISICA");
 		if (funcionario.getId() == null) {
 			funcionarioRepositorio.adicionar(funcionario, cargoId);
 			message += "Funcionario Cadastrado com Sucesso.";

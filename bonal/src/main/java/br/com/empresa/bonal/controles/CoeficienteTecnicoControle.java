@@ -32,6 +32,8 @@ public class CoeficienteTecnicoControle implements Serializable {
 	private Long coeficienteTecnicoId;
 	private Long produtoId;
 	private Long bemId;
+	
+	private Boolean status = true;
 
 	// Atributos para Consulta
 	private String coeficienteTecnicoNome = "";
@@ -118,6 +120,16 @@ public class CoeficienteTecnicoControle implements Serializable {
 	public Integer getTotalCoeficienteTecnicosConsulta() {
 		return coeficienteTecnicos.size();
 	}
+	
+	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -141,6 +153,8 @@ public class CoeficienteTecnicoControle implements Serializable {
 		if (bemId != null)
 			stream = stream.filter(c -> (c.getBem().getId().equals(bemId)));
 
+		stream = stream.filter(c -> (c.getStatus().equals(status)));
+		
 		coeficienteTecnicos = stream.collect(Collectors.toList());
 	}
 
@@ -173,6 +187,8 @@ public class CoeficienteTecnicoControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	public String salvar() {
 		String message = "";
+
+		this.coeficienteTecnico.setStatus(true);
 		if (!produtoContemCoeficiente()) {
 			coeficienteTecnicoRepositorio.adicionar(this.coeficienteTecnico, bemId, produtoId);
 			new FacesContextUtil().info("CoeficienteTecnico Cadastrado com Sucesso.");
@@ -190,6 +206,8 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 	// Remove um CoeficienteTecnico do banco de dados
 	public String remover() {
+
+		this.coeficienteTecnico.setStatus(false);
 		coeficienteTecnicoRepositorio.remover(this.coeficienteTecnico);
 		coeficienteTecnicos = null;
 		listarTabela();

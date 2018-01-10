@@ -12,100 +12,148 @@
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
-			<h1>Consultar Cargos</h1>
-			<span> <i class="fa fa-coffee" style="margin-right: 5px;" />
-				<p:link value="Cadastrar Novo Cargo" outcome="cargo" /></span>
+			<h1>Consultar Funcionarios</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Novo Funcionario" outcome="funcionario" />
+			</span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
-		<h:form id="formCargoConsulta">
+		<h:form id="formFuncionarioConsulta">
 			<div class="filtros-consultar">
-				<div class="ui-g-12 ui-md-6 ui-lg-6">
-					<p:outputLabel value="Nome do Cargo: " for="cargoNome" />
-					<p:inputText value="#{cargoControle.cargoNome}" id="cargoNome"
-						styleClass="form-normal">
-						<p:ajax event="keyup" listener="#{cargoControle.listar}"
-							process="@form" update="@form :tabelaCargos" />
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Cargo:" for="cargoId" />
+					<p:selectOneMenu value="#{funcionarioControle.cargoId}"
+						id="cargoId" styleClass="form-normal">
+						<f:selectItem itemValue="" itemLabel="Escolha um Cargo" />
+						<f:selectItems value="#{cargoControle.cargos}" var="cargo"
+							itemLabel="#{cargo.nome}" itemValue="#{cargo.id}" />
+						<p:ajax event="valueChange"
+							listener="#{funcionarioControle.listar}" process="@form"
+							update=":tabelaFuncionarios" />
+					</p:selectOneMenu>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Nome ou Cpf do Funcionario: "
+						for="funcionarioNome" />
+					<p:inputText value="#{funcionarioControle.funcionarioNome}"
+						id="funcionarioNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{funcionarioControle.listar}"
+							process="@form" update=":tabelaFuncionarios" />
 					</p:inputText>
 				</div>
-				
-				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarCargo" value="Filtrar"
-						action="#{cargoControle.listar}" process="@form"
-						update="@form :tabelaCargos" icon="fa fa-fw fa-filter" />
+				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
+					<p:commandButton id="buscarFuncionario" value="Filtrar"
+						action="#{funcionarioControle.listar}" process="@form"
+						update="@form :tabelaFuncionarios" icon="fa fa-fw fa-filter" />
+
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{cargoControle.limpar}" process="@form"
-						update="@form :tabelaCargos" />
+						action="#{funcionarioControle.limpar}" process="@form"
+						update="@form :tabelaFuncionarios" />
 				</div>
-				
+			</div>
+			
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{funcionarioControle.status}">
+					<p:ajax update="@form :tabelaFuncionarios" listener="#{funcionarioControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente funcionarios ativos" />
 			</div>
 		</h:form>
 
-		<h:form id="tabelaCargos">
-			<p:dataTable id="cargo" var="cargo" value="#{cargoControle.cargos}"
-				resizableColumns="true" reflow="true" rows="10" paginator="true"
+		<h:form id="tabelaFuncionarios">
+			<p:dataTable id="funcionario" var="funcionario"
+				value="#{funcionarioControle.funcionarios}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,25,50" draggableColumns="true"
-				rowKey="#{cargo.id}" selection="#{cargoControle.cargo}"
-				selectionMode="single" emptyMessage="Nenhuma Cargo Encontrado!"
-				styleClass="ui-g-12">
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{funcionario.id}"
+				selection="#{funcionarioControle.funcionario}"
+				selectionMode="single"
+				emptyMessage="Nenhum Funcionarios Encontrado!" styleClass="ui-g-12">
 
-				<p:column headerText="Nome" sortBy="#{cargo.nome}">
-					<p:outputLabel value="#{cargo.nome}" />
+				<f:facet name="header">Lista de Funcionarios</f:facet>
+
+				<p:column headerText="Nome" sortBy="#{funcionario.nome}">
+					<p:outputLabel value="#{funcionario.nome}" />
 				</p:column>
 
-				<p:column headerText="Salário" sortBy="#{cargo.salario}">
-					<p:outputLabel value="#{cargo.salario}" />
+				<p:column headerText="Cpf" sortBy="#{funcionario.documento}">
+					<p:outputLabel value="#{funcionario.documento}" />
 				</p:column>
 
-				<p:column headerText="Permissão" sortBy="#{cargo.permissao}">
-					<p:outputLabel value="#{cargo.permissao}" />
+				<p:column headerText="Rg" sortBy="#{funcionario.identificacao}">
+					<p:outputLabel value="#{funcionario.identificacao}" />
 				</p:column>
 
+				<p:column headerText="cargo" sortBy="#{funcionario.cargo.nome}">
+					<p:outputLabel value="#{funcionario.cargo.nome}" />
+				</p:column>
+
+				<p:column headerText="Email" sortBy="#{funcionario.email}">
+					<p:outputLabel value="#{funcionario.email}" />
+				</p:column>
+				
+				<p:column headerText="Email" sortBy="#{funcionario.email}">
+					<p:outputLabel value="#{funcionario.email}" />
+				</p:column>
+				
+				<p:column headerText="Telefone" sortBy="#{funcionario.telefone}">
+					<p:outputLabel value="#{funcionario.telefone}" />
+				</p:column>
+				
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
-						outcome="#{cargoControle.editar(cargo)}" />
+					<p:commandButton icon="fa fa-fw fa-pencil" value="Editar"
+						action="#{funcionarioControle.editar(funcionario)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
-						action="#{cargoControle.remover(cargo)}" update="@form"
-						process="@this @form" />
+					<p:commandButton icon="fa fa-fw fa-times" value="Desativar"
+						action="#{funcionarioControle.remover(funcionario)}"
+						update="@form" process="@this @form"
+						rendered="#{funcionarioControle.status == true}">
+						<p:ajax listener="#{funcionarioControle.listar}" />
+					</p:commandButton>
+					<p:commandButton icon="fa fa-fw fa-refresh" value="Ativar"
+						action="#{funcionarioControle.salvar(funcionario)}"
+						update="@form" process="@this @form"
+						rendered="#{funcionarioControle.status == false}">
+						<p:ajax listener="#{funcionarioControle.listar}" />
+					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
 					<p:outputLabel
-						value=" #{cargoControle.totalCargos} de #{cargoControle.totalCargosConsulta}" />
+						value=" #{funcionarioControle.totalFuncionarios} de #{funcionarioControle.totalFuncionariosConsulta}" />
 				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('funcionarioDialog').show()" update="@form"
+					global="false" />
 			</p:dataTable>
 
-			<p:contextMenu for="cargo">
-				<p:menuitem value="Edição" update="cargoEditar"
-					icon="ui-icon-search" oncomplete="PF('cargoDialog').show()" />
-				<p:menuitem value="Deletar" update="cargo" icon="ui-icon-close"
-					action="#{cargoControle.remover}" />
-			</p:contextMenu>
 
-			<p:dialog header="Edição de Cargo" widgetVar="cargoDialog"
-				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="cargoEditar" style="text-align:center;">
+			<p:dialog header="Edição de Funcionarios"
+				widgetVar="funcionarioDialog" modal="true" showEffect="fade"
+				hideEffect="fade" resizable="false">
+				<p:outputPanel id="funcionarioEditar" style="text-align:center;">
 					<p:panelGrid columns="2"
-						rendered="#{not empty cargoControle.cargos}"
+						rendered="#{not empty funcionarioControle.funcionarios}"
 						columnClasses="label,value">
 						<f:facet name="header">
 						Titulo
 						</f:facet>
+						<p:outputLabel value="Cpf" />
+						<p:outputLabel value="#{funcionarioControle.funcionario.documento}" />
 						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{cargoControle.cargo.nome}" />
-						<p:outputLabel value="Salário:" />
-						<p:outputLabel value="#{cargoControle.cargo.salario}" />
-						<p:outputLabel value="#{cargoControle.cargo.permissao}" />
+						<p:outputLabel value="#{funcionarioControle.funcionario.nome}" />
+						
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{cargoControle.remover(cargoControle.cargo)}" />
+							action="#{funcionarioControle.remover(funcionarioControle.funcionario)}" />
 						<p:link styleClass="botao" value="Editar"
-							outcome="#{cargoControle.editar(cargoControle.cargo)}" />
+							outcome="#{funcionarioControle.editar(funcionarioControle.funcionario)}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

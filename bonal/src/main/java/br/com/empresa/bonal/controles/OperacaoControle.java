@@ -34,7 +34,9 @@ public class OperacaoControle implements Serializable {
 	// Listas para Consulta
 	private List<Operacao> operacoes;
 	private List<Operacao> lista = new ArrayList<>();
-
+	
+	private Boolean status = true;
+	
 	// Repositorio
 	private OperacaoRepositorio operacaoRepositorio;
 
@@ -85,6 +87,15 @@ public class OperacaoControle implements Serializable {
 	public Integer getTotalOperacoesConsulta() {
 		return operacoes.size();
 	}
+	
+	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -97,12 +108,13 @@ public class OperacaoControle implements Serializable {
 	}
 
 	public void filtrarTabela() {
-		Stream<Operacao> filter = lista.stream();
+		Stream<Operacao> stream = lista.stream();
 
-		filter = filter.filter(o -> (o.getNome().toLowerCase().contains(operacaoNome.toLowerCase().trim()))
+		stream = stream.filter(o -> (o.getNome().toLowerCase().contains(operacaoNome.toLowerCase().trim()))
 				| o.getCodigo().toLowerCase().contains(operacaoNome.toLowerCase().trim()));;
 
-		operacoes = filter.collect(Collectors.toList());
+		stream = stream.filter(o -> (o.getStatus().equals(status)));
+		operacoes = stream.collect(Collectors.toList());
 	}
 
 	// M�todo chamado ao carregar tabela

@@ -23,8 +23,10 @@ public class Servico {
 	private String codigo;
 	private String nome;
 	private String descricao;
-
-	@Version
+	
+	private Boolean status;
+	
+	@Version	
 	private Integer version;
 
 	@Temporal(TemporalType.DATE)
@@ -90,7 +92,9 @@ public class Servico {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-
+	
+	
+	
 	// @PrePersist
 	// @PreUpdate
 	// public void gerarCodigo() {
@@ -99,6 +103,14 @@ public class Servico {
 	// builder.append(codigo);
 	// this.codigo = builder.toString();
 	// }
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {

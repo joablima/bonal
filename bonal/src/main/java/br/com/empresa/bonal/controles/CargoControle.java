@@ -33,7 +33,8 @@ public class CargoControle implements Serializable {
 	private EnumPermissao permissao;
 
 	private Long cargoId;
-
+	
+	private Boolean status = true;
 	// Atributos para Consulta
 	private String cargoNome = "";
 
@@ -83,6 +84,14 @@ public class CargoControle implements Serializable {
 		this.permissao = permissao;
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 	// ----- Carrega os Enums em Arrays -----
 	public EnumPermissao[] getEnumPermissao() {
 		return EnumPermissao.values();
@@ -120,6 +129,7 @@ public class CargoControle implements Serializable {
 
 		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim())));
 
+		stream = stream.filter(c -> (c.getStatus().equals(status)));
 		cargos = stream.collect(Collectors.toList());
 	}
 

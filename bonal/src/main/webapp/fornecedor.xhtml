@@ -10,38 +10,38 @@
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="clienteId" value="#{clienteControle.clienteId}" />
-		<f:viewAction action="#{clienteControle.recuperarClientePorId}"
-			if="#{param.clienteId != null}" />
+		<f:viewParam name="fornecedorId" value="#{fornecedorControle.fornecedorId}" />
+		<f:viewAction action="#{fornecedorControle.recuperarFornecedorPorId}"
+			if="#{param.fornecedorId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText rendered="#{clienteControle.clienteId == null}"
-					value="Cadastro de Clientes" />
-				<h:outputText rendered="#{clienteControle.clienteId != null}"
-					value="Edição de Clientes" />
+				<h:outputText rendered="#{fornecedorControle.fornecedorId == null}"
+					value="Cadastro de Fornecedores" />
+				<h:outputText rendered="#{fornecedorControle.fornecedorId != null}"
+					value="Edição de Fornecedores" />
 			</h1>
 			<span><i class="fa fa-coffee" /> <p:link
-					value="Consultar Clientes" outcome="clienteConsultar" /> </span>
+					value="Consultar Fornecedores" outcome="index" /> </span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
 			<p:effect type="pulsate" event="load" delay="500" />
 		</p:messages>
 
-		<h:form id="formCliente">
-			<p:focus context="formCliente" />
-			<p:fieldset legend="Dados do Cliente">
+		<h:form id="formFornecedor">
+			<p:focus context="formFornecedor" />
+			<p:fieldset legend="Dados do Fornecedor">
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Selecione o Tipo" for="tipo" />
 						<p:selectOneMenu label="Selecione o Tipo" styleClass="form-normal"
-							value="#{clienteControle.cliente.tipo}" id="tipo" required="true"
+							value="#{fornecedorControle.fornecedor.tipo}" id="tipo" required="true"
 							requiredMessage="Selecione o tipo" process="@this @form" update="@form">
-							<f:selectItems value="#{clienteControle.enumPessoa}" var="tipo"
+							<f:selectItems value="#{fornecedorControle.enumPessoa}" var="tipo"
 								itemValue="#{tipo}" itemLabel="#{tipo.label}" />
 							<p:clientValidator event="blur" />
 						</p:selectOneMenu>
@@ -55,10 +55,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="CPF/CNPJ" for="documento" />
 						<p:inputText id="documento"
-							value="#{clienteControle.cliente.documento}"
+							value="#{fornecedorControle.fornecedor.documento}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Cpf da cliente obrigatório"
-							validatorMessage="Cpf da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="Cpf da fornecedor obrigatório"
+							validatorMessage="Cpf da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -73,10 +73,10 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Nome:" for="nome" />
-						<p:inputText id="nome" value="#{clienteControle.cliente.nome}"
+						<p:inputText id="nome" value="#{fornecedorControle.fornecedor.nome}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Nome da cliente obrigatório"
-							validatorMessage="Nome da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="Nome da fornecedor obrigatório"
+							validatorMessage="Nome da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -93,10 +93,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="RG/IE" for="identificacao" />
 						<p:inputText id="identificacao"
-							value="#{clienteControle.cliente.identificacao}"
+							value="#{fornecedorControle.fornecedor.identificacao}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Rg da cliente obrigatório"
-							validatorMessage="RG da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="Rg da fornecedor obrigatório"
+							validatorMessage="RG da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -110,10 +110,10 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Email:" for="email" />
-						<p:inputText id="email" value="#{clienteControle.cliente.email}"
+						<p:inputText id="email" value="#{fornecedorControle.fornecedor.email}"
 							styleClass="form-normal" required="true"
-							requiredMessage="email da cliente obrigatório"
-							validatorMessage="email da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="email da fornecedor obrigatório"
+							validatorMessage="email da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -128,10 +128,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Telefone:" for="telefone" />
 						<p:inputText id="telefone"
-							value="#{clienteControle.cliente.telefone}"
+							value="#{fornecedorControle.fornecedor.telefone}"
 							styleClass="form-normal" required="true"
-							requiredMessage="telefone da cliente obrigatório"
-							validatorMessage="telefone da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="telefone da fornecedor obrigatório"
+							validatorMessage="telefone da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -146,10 +146,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="País:" for="uf" />
 						<p:inputText id="uf"
-							value="#{clienteControle.cliente.endereco.uf}"
+							value="#{fornecedorControle.fornecedor.endereco.uf}"
 							styleClass="form-normal" required="true"
-							requiredMessage="País da cliente obrigatório"
-							validatorMessage="País da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="País da fornecedor obrigatório"
+							validatorMessage="País da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -164,10 +164,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Cep:" for="cep" />
 						<p:inputText id="cep"
-							value="#{clienteControle.cliente.endereco.cep}"
+							value="#{fornecedorControle.fornecedor.endereco.cep}"
 							styleClass="form-normal" required="true"
-							requiredMessage="cep da cliente obrigatório"
-							validatorMessage="cep da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="cep da fornecedor obrigatório"
+							validatorMessage="cep da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -182,10 +182,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Cidade:" for="cidade" />
 						<p:inputText id="cidade"
-							value="#{clienteControle.cliente.endereco.cidade}"
+							value="#{fornecedorControle.fornecedor.endereco.cidade}"
 							styleClass="form-normal" required="true"
-							requiredMessage="cidade da cliente obrigatório"
-							validatorMessage="cidade da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="cidade da fornecedor obrigatório"
+							validatorMessage="cidade da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -200,10 +200,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Bairro:" for="bairro" />
 						<p:inputText id="bairro"
-							value="#{clienteControle.cliente.endereco.bairro}"
+							value="#{fornecedorControle.fornecedor.endereco.bairro}"
 							styleClass="form-normal" required="true"
-							requiredMessage="bairro da cliente obrigatório"
-							validatorMessage="bairro da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="bairro da fornecedor obrigatório"
+							validatorMessage="bairro da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -218,10 +218,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Logradouro:" for="logradouro" />
 						<p:inputText id="logradouro"
-							value="#{clienteControle.cliente.endereco.logradouro}"
+							value="#{fornecedorControle.fornecedor.endereco.logradouro}"
 							styleClass="form-normal" required="true"
-							requiredMessage="logradouro da cliente obrigatório"
-							validatorMessage="logradouro da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="logradouro da fornecedor obrigatório"
+							validatorMessage="logradouro da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -236,10 +236,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Numero:" for="numero" />
 						<p:inputText id="numero"
-							value="#{clienteControle.cliente.endereco.numero}"
+							value="#{fornecedorControle.fornecedor.endereco.numero}"
 							styleClass="form-normal" required="true"
-							requiredMessage="numero da cliente obrigatório"
-							validatorMessage="numero da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="numero da fornecedor obrigatório"
+							validatorMessage="numero da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -254,10 +254,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Complemento:" for="complemento" />
 						<p:inputText id="complemento"
-							value="#{clienteControle.cliente.endereco.complemento}"
+							value="#{fornecedorControle.fornecedor.endereco.complemento}"
 							styleClass="form-normal" required="true"
-							requiredMessage="complemento da cliente obrigatório"
-							validatorMessage="complemento da cliente deve ter no minimo 2 caracteres"
+							requiredMessage="complemento da fornecedor obrigatório"
+							validatorMessage="complemento da fornecedor deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -273,7 +273,7 @@
 
 			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
-					action="#{clienteControle.salvar}" process="@this @form"
+					action="#{fornecedorControle.salvar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />
 

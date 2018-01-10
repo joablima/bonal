@@ -42,14 +42,15 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Cpf:" for="documento" />
-						<p:inputText id="documento"
+						<p:inputMask id="documento"
 							value="#{funcionarioControle.funcionario.documento}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Cpf da funcionario obrigatório"
 							validatorMessage="Cpf da funcionario deve ter no minimo 2 caracteres"
-							maxlength="80">
+							maxlength="80"
+							mask="999-999-999-99">
 							<p:clientValidator event="blur" />
-						</p:inputText>
+						</p:inputMask>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">

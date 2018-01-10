@@ -38,7 +38,12 @@
 						action="#{cargoControle.limpar}" process="@form"
 						update="@form :tabelaCargos" />
 				</div>
-
+			</div>
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{cargoControle.status}">
+					<p:ajax update="@form :tabelaCargos" listener="#{cargoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente cargos ativos" />
 			</div>
 		</h:form>
 
