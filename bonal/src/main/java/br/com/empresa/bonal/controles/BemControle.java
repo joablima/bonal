@@ -160,7 +160,8 @@ public class BemControle implements Serializable {
 		if (tipoBem != null) {
 			stream = stream.filter(b -> (b.getTipo().equals(tipoBem)));
 		}
-		stream = stream.filter(b -> (b.getStatus().equals(status)));
+		if(status)
+			stream = stream.filter(b -> (b.getStatus().equals(status)));
 
 		bens = stream.collect(Collectors.toList());
 	}

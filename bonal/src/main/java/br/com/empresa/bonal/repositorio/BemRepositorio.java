@@ -69,7 +69,7 @@ public class BemRepositorio {
 	public List<Bem> listarTodos() {
 		EntityManager em = JPAUtil.getEntityManager();
 		try {
-			return em.createQuery("select b from Bem b where b.status = true", Bem.class).getResultList();
+			return em.createQuery("select b from Bem b", Bem.class).getResultList();
 		} catch (Exception e) {
 			return null;
 		} finally {

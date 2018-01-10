@@ -82,13 +82,14 @@
 					<p:commandButton icon="fa fa-fw fa-times" value="Desativar"
 						action="#{unidadeDeMedidaControle.remover(unidadeDeMedida)}"
 						update="@form" process="@this @form"
-						rendered="#{unidadeDeMedidaControle.status == true}">
+						rendered="#{unidadeDeMedida.status == true}">
 						<p:ajax listener="#{unidadeDeMedidaControle.listar}" />
 					</p:commandButton>
+					
 					<p:commandButton icon="fa fa-fw fa-refresh" value="Ativar"
 						action="#{unidadeDeMedidaControle.salvar(unidadeDeMedida)}"
 						update="@form" process="@this @form"
-						rendered="#{unidadeDeMedidaControle.status == false}">
+						rendered="#{unidadeDeMedida.status == false}">
 						<p:ajax listener="#{unidadeDeMedidaControle.listar}" />
 					</p:commandButton>
 				</p:column>
