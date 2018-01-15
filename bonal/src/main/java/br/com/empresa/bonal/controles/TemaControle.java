@@ -2,10 +2,10 @@ package br.com.empresa.bonal.controles;
 
 import java.io.Serializable;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
-@ManagedBean
+@Named
 @SessionScoped
 public class TemaControle implements Serializable {
 	private static final long serialVersionUID = 1L;

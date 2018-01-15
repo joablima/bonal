@@ -1,11 +1,18 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
+
 import org.apache.log4j.Logger;
 
-public class UtilControle {
+@Named
+@ViewScoped
+public class UtilControle implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	final static Logger logger = Logger.getLogger(UtilControle.class);
 

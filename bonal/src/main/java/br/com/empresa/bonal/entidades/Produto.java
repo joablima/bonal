@@ -17,7 +17,7 @@ import javax.persistence.Version;
 
 @Entity
 public class Produto {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,81 +38,66 @@ public class Produto {
 
 	@Version
 	private Integer version;
-	
+
 	public String getNome() {
 		return nome;
 	}
-
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-
 	public String getDescricao() {
 		return descricao;
 	}
-
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
-
 	public BigDecimal getQuantidade() {
 		return quantidade;
 	}
-
 
 	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
 	}
 
-
 	public UnidadeDeMedida getUnidadeDeMedida() {
 		return unidadeDeMedida;
 	}
-
 
 	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
 		this.unidadeDeMedida = unidadeDeMedida;
 	}
 
-
 	public Long getId() {
 		return id;
 	}
-
 
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
 
-
 	public String getCodigo() {
 		return codigo;
 	}
 
-
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-	
+
 	public Integer getVersion() {
 		return version;
 	}
-	
-	
 
 	public Boolean getStatus() {
 		return status;
 	}
 
-
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
-
 
 	@Override
 	public String toString() {
@@ -130,5 +115,4 @@ public class Produto {
 		return builder.toString();
 	}
 
-	
 }

@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
@@ -18,8 +19,9 @@ import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.repositorio.ClienteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class ClienteControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +30,7 @@ public class ClienteControle implements Serializable {
 
 	private Cliente cliente = new Cliente();
 
-	private EnumPessoa tipo;
+	// private EnumPessoa tipo;
 	private Long clienteId;
 
 	// Atributos para Consulta
@@ -37,16 +39,14 @@ public class ClienteControle implements Serializable {
 	// Listas para Consulta
 	private List<Cliente> clientes;
 	private List<Cliente> lista = new ArrayList<>();
-	
-	
+
 	private Boolean status = true;
-	// Repositorio
+
+	@Inject
 	private ClienteRepositorio clienteRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public ClienteControle() {
-		clienteRepositorio = new ClienteRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Cliente getCliente() {
@@ -104,8 +104,7 @@ public class ClienteControle implements Serializable {
 	public EnumPessoa[] getEnumPessoa() {
 		return EnumPessoa.values();
 	}
-	
-	
+
 	public Boolean getStatus() {
 		return status;
 	}
@@ -116,6 +115,7 @@ public class ClienteControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.clientes == null) {
 			lista = clienteRepositorio.listarTodos();
@@ -127,14 +127,15 @@ public class ClienteControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Cliente> stream = lista.stream();
 
-		if (!clienteNome.equals(null)) {
+		if (!clienteNome.equals(null))
 			stream = stream.filter(c -> (c.getNome().toLowerCase().contains(clienteNome.toLowerCase().trim()))
 					| (c.getDocumento().toLowerCase().contains(clienteNome.toLowerCase().trim()))
 					| (c.getEmail().toLowerCase().contains(clienteNome.toLowerCase().trim()))
 					| c.getIdentificacao().toLowerCase().contains(clienteNome.toLowerCase().trim()));
-		}
 
-		stream = stream.filter(c -> (c.getStatus().equals(status)));
+		if (status.equals(true))
+			stream = stream.filter(c -> (c.getStatus().equals(status)));
+
 		clientes = stream.collect(Collectors.toList());
 	}
 
@@ -163,6 +164,7 @@ public class ClienteControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 
@@ -174,44 +176,36 @@ public class ClienteControle implements Serializable {
 			clienteRepositorio.atualizar(cliente);
 			message += "Cliente Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		logger.info(message);
 		this.cliente = new Cliente();
 		return null;
 	}
 
+	@transacional
 	public void recuperarClientePorId() {
 		cliente = clienteRepositorio.buscarPorId(clienteId);
 	}
 
 	// Remove um Cliente do banco de dados
-	public void remover() {
-
-		this.cliente.setStatus(false);
+	@transacional
+	public String remover(Cliente cliente) {
+		cliente.setStatus(false);
 		clienteRepositorio.remover(cliente);
-		clientes = null;
+		this.clientes = null;
+		this.cliente = null;
 		listarTabela();
-		cliente = null;
+		return null;
 	}
 
-	public void remover(Cliente cliente) {
-		this.cliente = cliente;
-		remover();
-	}
 
 	// Editar um Cliente
-	public String editar() {
-		clienteId = this.cliente.getId();
-		return "cliente?clienteId=" + clienteId;
+	public String editar(Cliente cliente) {
+		return "cliente?clienteId=" + cliente.getId();
 	}
 
 	public String addCoeficientes() {
 		return "coeficientetecnico?clienteId=" + this.clienteId;
-	}
-
-	public String editar(Cliente cliente) {
-		this.cliente = cliente;
-		return editar();
 	}
 
 	public boolean ClienteIdExiste() {

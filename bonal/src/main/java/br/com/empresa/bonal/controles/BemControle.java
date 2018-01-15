@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
@@ -19,8 +20,9 @@ import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumBem;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class BemControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -40,23 +42,20 @@ public class BemControle implements Serializable {
 	// Listas para Consulta
 	private List<Bem> bens;
 	private List<Bem> lista = new ArrayList<>();
-	
+
 	private Boolean status = true;
-	
-	// Repositorio
+
+	@Inject
 	private BemRepositorio bemRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public BemControle() {
-		bemRepositorio = new BemRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Bem getBem() {
 		return bem;
 	}
 
-	// Adicionado para propriedade de contexto das tabelas do Primefaces
 	public void setBem(Bem bem) {
 		this.bem = bem;
 	}
@@ -122,7 +121,6 @@ public class BemControle implements Serializable {
 	public Integer getTotalBensConsulta() {
 		return bens.size();
 	}
-	
 
 	public Boolean getStatus() {
 		return status;
@@ -134,6 +132,7 @@ public class BemControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.bens == null) {
 			lista = bemRepositorio.listarTodos();
@@ -145,11 +144,12 @@ public class BemControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Bem> stream = lista.stream();
 
-		if (!bemNome.equals(null)) {
+		if (!bemNome.equals(null))
 			stream = stream.filter(b -> (b.getNome().toLowerCase().contains(bemNome.toLowerCase().trim()))
 					| (b.getCodigo().toLowerCase().contains(bemNome.toLowerCase().trim()))
-					| b.getDescricao().toLowerCase().contains(bemNome.toLowerCase().trim()));
-		}
+					| b.getDescricao().toLowerCase().contains(bemNome.toLowerCase().trim())
+					| b.getUnidadeDeMedida().getNome().toLowerCase().contains(bemNome.toLowerCase().trim())
+					| b.getCategoria().getNome().toLowerCase().contains(bemNome.toLowerCase().trim()));
 
 		if (categoriaId != null)
 			stream = stream.filter(b -> (b.getCategoria().getId().equals(categoriaId)));
@@ -157,10 +157,10 @@ public class BemControle implements Serializable {
 		if (unidadeDeMedidaId != null)
 			stream = stream.filter(b -> (b.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
 
-		if (tipoBem != null) {
+		if (tipoBem != null)
 			stream = stream.filter(b -> (b.getTipo().equals(tipoBem)));
-		}
-		if(status)
+
+		if (status.equals(true))
 			stream = stream.filter(b -> (b.getStatus().equals(status)));
 
 		bens = stream.collect(Collectors.toList());
@@ -192,15 +192,23 @@ public class BemControle implements Serializable {
 		salvar();
 	}
 
+	public void salvar(Bem bem) {
+		this.bem = bem;
+		this.categoriaId = bem.getCategoria().getId();
+		this.unidadeDeMedidaId = bem.getUnidadeDeMedida().getId();
+		salvar();
+	}
+
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 		this.bem.setStatus(true);
-		
+
 		if (bem.getId() == null) {
 			Bem existe = bemRepositorio.codigoExiste(bem);
 			if (existe != null) {
-				new FacesContextUtil().warn("Já existe um Bem registrado com esse código." + existe.resumo());
+				facesContext.warn("Já existe um Bem registrado com esse código." + existe.resumo());
 				return null;
 			}
 			bemRepositorio.adicionar(bem, categoriaId, unidadeDeMedidaId);
@@ -209,7 +217,7 @@ public class BemControle implements Serializable {
 			bemRepositorio.atualizar(bem, categoriaId, unidadeDeMedidaId);
 			message += "Bem Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		logger.info(message);
 		bem = new Bem();
 		return null;
@@ -220,29 +228,19 @@ public class BemControle implements Serializable {
 	}
 
 	// Remove um Bem do banco de dados
-	public void remover() {
-		this.bem.setStatus(false);
-		
+	@transacional
+	public String remover(Bem bem) {
+		bem.setStatus(false);
 		bemRepositorio.remover(bem);
-		bens = null;
+		this.bens = null;
+		this.bem = null;
 		listarTabela();
-		bem = null;
-	}
-
-	public void remover(Bem bem) {
-		this.bem = bem;
-		remover();
+		return null;
 	}
 
 	// Editar um Bem
-	public String editar() {
-		bemId = this.bem.getId();
-		return "bem?bemId=" + bemId;
-	}
-
 	public String editar(Bem bem) {
-		this.bem = bem;
-		return editar();
+		return "bem?bemId=" + bem.getId();
 	}
 
 	public boolean BemIdExiste() {

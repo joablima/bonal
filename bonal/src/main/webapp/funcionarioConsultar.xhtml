@@ -53,12 +53,15 @@
 						update="@form :tabelaFuncionarios" />
 				</div>
 			</div>
-			
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
 				<p:selectBooleanCheckbox value="#{funcionarioControle.status}">
-					<p:ajax update="@form :tabelaFuncionarios" listener="#{funcionarioControle.listar}" />
+					<p:ajax update="@form :tabelaFuncionarios"
+						listener="#{funcionarioControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente funcionarios ativos" />
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{funcionarioControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{funcionarioControle.status == false}" />
 			</div>
 		</h:form>
 
@@ -104,21 +107,21 @@
 				</p:column>
 				
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-pencil" value="Editar"
-						action="#{funcionarioControle.editar(funcionario)}" />
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+						outcome="#{funcionarioControle.editar(funcionario)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" value="Desativar"
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
 						action="#{funcionarioControle.remover(funcionario)}"
 						update="@form" process="@this @form"
-						rendered="#{funcionarioControle.status == true}">
+						rendered="#{funcionario.status == true}">
 						<p:ajax listener="#{funcionarioControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh" value="Ativar"
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
 						action="#{funcionarioControle.salvar(funcionario)}"
 						update="@form" process="@this @form"
-						rendered="#{funcionarioControle.status == false}">
+						rendered="#{funcionario.status == false}">
 						<p:ajax listener="#{funcionarioControle.listar}" />
 					</p:commandButton>
 				</p:column>
@@ -152,7 +155,7 @@
 						
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{funcionarioControle.remover(funcionarioControle.funcionario)}" />
-						<p:link styleClass="botao" value="Editar"
+						<p:button styleClass="botao" value="Editar"
 							outcome="#{funcionarioControle.editar(funcionarioControle.funcionario)}" />
 					</p:panelGrid>
 				</p:outputPanel>

@@ -10,8 +10,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
@@ -21,8 +22,9 @@ import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPermissao;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class CargoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +35,7 @@ public class CargoControle implements Serializable {
 	private EnumPermissao permissao;
 
 	private Long cargoId;
-	
+
 	private Boolean status = true;
 	// Atributos para Consulta
 	private String cargoNome = "";
@@ -42,13 +44,11 @@ public class CargoControle implements Serializable {
 	private List<Cargo> cargos;
 	private List<Cargo> lista = new ArrayList<>();
 
-	// Repositorio
+	@Inject
 	private CargoRepositorio cargoRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public CargoControle() {
-		cargoRepositorio = new CargoRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Cargo getCargo() {
@@ -116,6 +116,7 @@ public class CargoControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.cargos == null) {
 			lista = cargoRepositorio.listarTodos();
@@ -129,7 +130,9 @@ public class CargoControle implements Serializable {
 
 		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim())));
 
-		stream = stream.filter(c -> (c.getStatus().equals(status)));
+		if (status.equals(true))
+			stream = stream.filter(c -> (c.getStatus().equals(status)));
+
 		cargos = stream.collect(Collectors.toList());
 	}
 
@@ -156,13 +159,14 @@ public class CargoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 		this.cargo.setStatus(true);
 		if (cargo.getId() == null) {
 			Cargo existe = cargoRepositorio.cargoExiste(cargo);
 			if (existe != null) {
-				new FacesContextUtil().warn("Já existe esse cargo registrado.");
+				facesContext.warn("Já existe esse cargo registrado.");
 				return null;
 			}
 			cargoRepositorio.adicionar(cargo);
@@ -171,39 +175,31 @@ public class CargoControle implements Serializable {
 			cargoRepositorio.atualizar(cargo);
 			message += "Cargo Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		logger.info(message);
 		cargo = new Cargo();
 		return null;
 	}
 
+	@transacional
 	public void recuperarCargoPorId() {
 		cargo = cargoRepositorio.buscarPorId(cargoId);
 	}
 
 	// Remove um cargo do banco de dados
-	public void remover() {
-		this.cargo.setStatus(false);
+	@transacional
+	public String remover(Cargo cargo) {
+		cargo.setStatus(false);
 		cargoRepositorio.remover(cargo);
-		cargos = null;
+		this.cargos = null;
+		this.cargo = null;
 		listarTabela();
-		cargo = null;
-	}
-
-	public void remover(Cargo cargo) {
-		this.cargo = cargo;
-		remover();
+		return null;
 	}
 
 	// Editar um cargo
-	public String editar() {
-		cargoId = this.cargo.getId();
-		return "cargo?cargoId=" + cargoId;
-	}
-
 	public String editar(Cargo cargo) {
-		this.cargo = cargo;
-		return editar();
+		return "cargo?cargoId=" + cargo.getId();
 	}
 
 	public boolean cargoIdExiste() {
@@ -218,22 +214,22 @@ public class CargoControle implements Serializable {
 		options.put("draggable", false);
 		options.put("resizable", false);
 		options.put("contentWidth", 620);
-//		options.put("contentHeight", 500);
-//		options.put("includeViewParams", true);
+		// options.put("contentHeight", 500);
+		// options.put("includeViewParams", true);
 
 		RequestContext.getCurrentInstance().openDialog("cargoDialog", options, null);
 	}
 
 	public void cargoDialogReturn(SelectEvent event) {
 		Object objeto = event.getObject();
-		new FacesContextUtil().info("Cargo " + objeto + " cadastrado com sucesso");
+		facesContext.info("Cargo " + objeto + " cadastrado com sucesso");
 	}
 
 	public void salvarDialog() {
-        RequestContext.getCurrentInstance().closeDialog(salvar());
-    }
+		RequestContext.getCurrentInstance().closeDialog(salvar());
+	}
 
-    public void fecharDialog() {
-        RequestContext.getCurrentInstance().closeDialog(0);
-    }
+	public void fecharDialog() {
+		RequestContext.getCurrentInstance().closeDialog(0);
+	}
 }

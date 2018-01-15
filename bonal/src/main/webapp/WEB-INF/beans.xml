@@ -1,0 +1,5 @@
+<beans>
+	<interceptors>
+		<class>br.com.empresa.bonal.util.tx.GerenciadorDeTransacao</class>
+	</interceptors>
+</beans>

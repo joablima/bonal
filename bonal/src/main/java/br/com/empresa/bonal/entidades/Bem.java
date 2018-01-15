@@ -21,6 +21,7 @@ import br.com.empresa.bonal.util.enums.EnumBem;
 
 @Entity
 public class Bem {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

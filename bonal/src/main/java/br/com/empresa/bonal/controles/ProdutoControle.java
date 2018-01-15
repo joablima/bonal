@@ -9,9 +9,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
@@ -19,8 +20,9 @@ import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ProdutoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class ProdutoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,20 +36,18 @@ public class ProdutoControle implements Serializable {
 
 	// Atributos para Consulta
 	private String produtoNome = "";
-	
+
 	private Boolean status = true;
-	
+
 	// Listas para Consulta
 	private List<Produto> produtos;
 	private List<Produto> lista = new ArrayList<>();
 
-	// Repositorio
+	@Inject
 	private ProdutoRepositorio produtoRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public ProdutoControle() {
-		produtoRepositorio = new ProdutoRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Produto getProduto() {
@@ -99,7 +99,7 @@ public class ProdutoControle implements Serializable {
 	public Integer getTotalProdutosConsulta() {
 		return produtos.size();
 	}
-	
+
 	public Boolean getStatus() {
 		return status;
 	}
@@ -110,6 +110,7 @@ public class ProdutoControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.produtos == null) {
 			lista = produtoRepositorio.listarTodos();
@@ -121,17 +122,18 @@ public class ProdutoControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Produto> stream = lista.stream();
 
-		if (!produtoNome.equals(null)) {
+		if (!produtoNome.equals(null))
 			stream = stream.filter(p -> (p.getNome().toLowerCase().contains(produtoNome.toLowerCase().trim()))
 					| (p.getCodigo().toLowerCase().contains(produtoNome.toLowerCase().trim()))
-					| p.getDescricao().toLowerCase().contains(produtoNome.toLowerCase().trim()));
-		}
+					| p.getDescricao().toLowerCase().contains(produtoNome.toLowerCase().trim())
+					| p.getUnidadeDeMedida().getNome().toLowerCase().contains(produtoNome.toLowerCase().trim()));
 
 		if (unidadeDeMedidaId != null)
 			stream = stream.filter(p -> (p.getUnidadeDeMedida().getId().equals(unidadeDeMedidaId)));
-		
 
-		stream = stream.filter(p -> (p.getStatus().equals(status)));
+		if (status.equals(true))
+			stream = stream.filter(p -> (p.getStatus().equals(status)));
+
 		produtos = stream.collect(Collectors.toList());
 	}
 
@@ -161,13 +163,14 @@ public class ProdutoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	public void salvar() {
+	@transacional
+	public String salvar() {
 		String message = "";
 		this.produto.setStatus(true);
 		if (produto.getId() == null) {
 			Produto existe = produtoRepositorio.codigoExiste(produto);
 			if (existe != null) {
-				new FacesContextUtil().warn("Já existe um produto registrado com esse código.");
+				facesContext.warn("Já existe um produto registrado com esse código.");
 			}
 			produtoRepositorio.adicionar(produto, unidadeDeMedidaId);
 			message += "Produto Cadastrado com Sucesso.";
@@ -176,46 +179,40 @@ public class ProdutoControle implements Serializable {
 			message += "Produto Atualizado com Sucesso.";
 		}
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("coeficientetecnico.xhtml?produtoId=" + this.produto.getId());
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("coeficientetecnico.xhtml?produtoId=" + this.produto.getId());
+			return null;
 		} catch (IOException e) {
-			new FacesContextUtil().info(message);
+			facesContext.info(message);
 			logger.info(message);
-			 this.produto = new Produto();
+			this.produto = new Produto();
+			return null;
 		}
 	}
 
+	@transacional
 	public void recuperarProdutoPorId() {
 		this.produto = produtoRepositorio.buscarPorId(produtoId);
 	}
 
 	// Remove um Produto do banco de dados
-	public void remover() {
-
-		this.produto.setStatus(false);
+	@transacional
+	public String remover(Produto produto) {
+		produto.setStatus(false);
 		produtoRepositorio.remover(produto);
-		produtos = null;
+		this.produtos = null;
+		this.produto = null;
 		listarTabela();
-		produto = null;
-	}
-
-	public void remover(Produto produto) {
-		this.produto = produto;
-		remover();
+		return null;
 	}
 
 	// Editar um Produto
-	public String editar() {
-		produtoId = this.produto.getId();
-		return "produto?produtoId=" + produtoId;
+	public String editar(Produto produto) {
+		return "produto?produtoId=" + produto.getId();
 	}
 
 	public String addCoeficientes() {
 		return "coeficientetecnico?produtoId=" + this.produtoId;
-	}
-
-	public String editar(Produto produto) {
-		this.produto = produto;
-		return editar();
 	}
 
 	public boolean ProdutoIdExiste() {

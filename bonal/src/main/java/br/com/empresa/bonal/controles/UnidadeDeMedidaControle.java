@@ -1,6 +1,5 @@
 package br.com.empresa.bonal.controles;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,17 +8,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class UnidadeDeMedidaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,13 +38,11 @@ public class UnidadeDeMedidaControle implements Serializable {
 	private List<UnidadeDeMedida> unidadesDeMedida;
 	private List<UnidadeDeMedida> lista = new ArrayList<>();
 
-	// Repositorio
+	@Inject
 	private UnidadeDeMedidaRepositorio unidadeDeMedidaRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public UnidadeDeMedidaControle() {
-		unidadeDeMedidaRepositorio = new UnidadeDeMedidaRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public UnidadeDeMedida getUnidadeDeMedida() {
@@ -99,6 +97,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.unidadesDeMedida == null) {
 			lista = unidadeDeMedidaRepositorio.listarTodos();
@@ -112,7 +111,8 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 		stream = stream.filter(u -> (u.getNome().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim())));
 
-		stream = stream.filter(u -> (u.getStatus().equals(status)));
+		if (status.equals(true))
+			stream = stream.filter(u -> (u.getStatus().equals(status)));
 
 		unidadesDeMedida = stream.collect(Collectors.toList());
 	}
@@ -140,13 +140,14 @@ public class UnidadeDeMedidaControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 		this.unidadeDeMedida.setStatus(true);
 		if (unidadeDeMedida.getId() == null) {
 			UnidadeDeMedida existe = unidadeDeMedidaRepositorio.unidadeMedidaExiste(unidadeDeMedida);
 			if (existe != null) {
-				new FacesContextUtil().warn("Já existe essa unidade de medida registrada.");
+				facesContext.warn("Já existe essa unidade de medida registrada.");
 				return null;
 			}
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
@@ -156,42 +157,30 @@ public class UnidadeDeMedidaControle implements Serializable {
 			message += "Unidade de Medida Atualizada com Sucesso.";
 		}
 		logger.info(message);
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		unidadeDeMedida = new UnidadeDeMedida();
 		return null;
 	}
 
+	@transacional
 	public void recuperarUnidadeDeMedidaPorId() {
 		unidadeDeMedida = unidadeDeMedidaRepositorio.buscarPorId(unidadeDeMedidaId);
 	}
 
 	// Remove um cargo do banco de dados
-	public void remover() {
-		this.unidadeDeMedida.setStatus(false);
-		unidadeDeMedidaRepositorio.remover(unidadeDeMedida);
-		unidadesDeMedida = null;
+	@transacional
+	public String remover(UnidadeDeMedida unidade) {
+		unidade.setStatus(false);
+		unidadeDeMedidaRepositorio.remover(unidade);
+		this.unidadeDeMedida = null;
+		this.unidadesDeMedida = null;
 		listar();
-	}
-
-	public void remover(UnidadeDeMedida unidade) {
-		this.unidadeDeMedida = unidade;
-		remover();
+		return null;
 	}
 
 	// Editar um cargo
-	public void editar() {
-		unidadeDeMedidaId = this.unidadeDeMedida.getId();
-		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("unidadeDeMedida.xhtml?unidadeDeMedidaId=" + unidadeDeMedida.getId());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void editar(UnidadeDeMedida unidadeDeMedida) {
-		this.unidadeDeMedida = unidadeDeMedida;
-		editar();
+	public String editar(UnidadeDeMedida unidade) {
+		return "unidadeDeMedida?unidadeDeMedidaId=" + unidade.getId();
 	}
 
 	public String cancelar() {

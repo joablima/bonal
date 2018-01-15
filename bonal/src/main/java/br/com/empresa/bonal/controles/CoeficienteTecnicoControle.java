@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
@@ -19,8 +20,9 @@ import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.repositorio.CoeficienteTecnicoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumBem;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class CoeficienteTecnicoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +34,7 @@ public class CoeficienteTecnicoControle implements Serializable {
 	private Long coeficienteTecnicoId;
 	private Long produtoId;
 	private Long bemId;
-	
+
 	private Boolean status = true;
 
 	// Atributos para Consulta
@@ -44,13 +46,11 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 	private List<CoeficienteTecnico> coeficientesDoProduto;
 
-	// Repositorio
+	@Inject
 	private CoeficienteTecnicoRepositorio coeficienteTecnicoRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public CoeficienteTecnicoControle() {
-		coeficienteTecnicoRepositorio = new CoeficienteTecnicoRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public CoeficienteTecnico getCoeficienteTecnico() {
@@ -99,6 +99,7 @@ public class CoeficienteTecnicoControle implements Serializable {
 		return EnumBem.values();
 	}
 
+	@transacional
 	public List<CoeficienteTecnico> getCoeficientesDoProduto() {
 		this.coeficientesDoProduto = coeficienteTecnicoRepositorio.buscarCoeficienteDoProduto(this.produtoId);
 		return coeficientesDoProduto;
@@ -120,8 +121,6 @@ public class CoeficienteTecnicoControle implements Serializable {
 	public Integer getTotalCoeficienteTecnicosConsulta() {
 		return coeficienteTecnicos.size();
 	}
-	
-	
 
 	public Boolean getStatus() {
 		return status;
@@ -133,6 +132,7 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.produtoId != null)
 			getCoeficientesDoProduto();
@@ -153,8 +153,9 @@ public class CoeficienteTecnicoControle implements Serializable {
 		if (bemId != null)
 			stream = stream.filter(c -> (c.getBem().getId().equals(bemId)));
 
-		stream = stream.filter(c -> (c.getStatus().equals(status)));
-		
+		if (status.equals(true))
+			stream = stream.filter(c -> (c.getStatus().equals(status)));
+
 		coeficienteTecnicos = stream.collect(Collectors.toList());
 	}
 
@@ -185,41 +186,39 @@ public class CoeficienteTecnicoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 
 		this.coeficienteTecnico.setStatus(true);
 		if (!produtoContemCoeficiente()) {
 			coeficienteTecnicoRepositorio.adicionar(this.coeficienteTecnico, bemId, produtoId);
-			new FacesContextUtil().info("CoeficienteTecnico Cadastrado com Sucesso.");
+			facesContext.info("CoeficienteTecnico Cadastrado com Sucesso.");
 		} else {
-			new FacesContextUtil().warn("CoeficienteTecnico já encontra-se registrado no produto.");
+			facesContext.warn("CoeficienteTecnico já encontra-se registrado no produto.");
 		}
 		logger.info(message);
 		this.coeficienteTecnico = new CoeficienteTecnico();
 		return null;
 	}
 
-	public void recuperarCoeficienteTecnicoPorId() {
+	@transacional
+	public String recuperarCoeficienteTecnicoPorId() {
 		this.coeficienteTecnico = coeficienteTecnicoRepositorio.buscarPorId(coeficienteTecnicoId);
+		return null;
 	}
 
 	// Remove um CoeficienteTecnico do banco de dados
-	public String remover() {
-
-		this.coeficienteTecnico.setStatus(false);
-		coeficienteTecnicoRepositorio.remover(this.coeficienteTecnico);
-		coeficienteTecnicos = null;
+	@transacional
+	public String remover(CoeficienteTecnico coeficiente) {
+		coeficiente.setStatus(false);
+		coeficienteTecnicoRepositorio.remover(coeficiente);
+		this.coeficienteTecnicos = null;
+		this.coeficienteTecnico = null;
 		listarTabela();
-		coeficienteTecnico = new CoeficienteTecnico();
-		new FacesContextUtil().info("Coeficiente Técnico do removido com sucesso.");
+		facesContext.info("Coeficiente Técnico do removido com sucesso.");
 		logger.info("Coeficiente removido com sucesso");
-		return null; 
-	}
-
-	public void remover(CoeficienteTecnico coeficienteTecnico) {
-		this.coeficienteTecnico = coeficienteTecnico;
-		remover();
+		return null;
 	}
 
 	public boolean CoeficienteTecnicoIdExiste() {

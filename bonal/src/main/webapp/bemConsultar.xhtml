@@ -56,7 +56,10 @@
 				<p:selectBooleanCheckbox value="#{bemControle.status}">
 					<p:ajax update="@form :tabelaBens" listener="#{bemControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente bens ativos" />
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{bemControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{bemControle.status == false}" />
 			</div>
 		</h:form>
 
@@ -93,14 +96,22 @@
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
 						outcome="#{bemControle.editar(bem)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+					<p:commandButton styleClass="tab-btn btn-desativar" icon="fa fa-fw fa-times" value="Desativar"
 						action="#{bemControle.remover(bem)}" update="@form"
-						process="@this @form" />
+						process="@this @form" rendered="#{bem.status == true}">
+						<p:ajax listener="#{bemControle.listar}" />
+					</p:commandButton>
+
+					<p:commandButton styleClass="tab-btn btn-ativar" icon="fa fa-fw fa-refresh" value="Ativar"
+						action="#{bemControle.salvar(bem)}" update="@form"
+						process="@this @form" rendered="#{bem.status == false}">
+						<p:ajax listener="#{bemControle.listar}" />
+					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
@@ -129,7 +140,7 @@
 						<p:outputLabel value="#{bemControle.bem.descricao}" />
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{bemControle.remover(bemControle.bem)}" />
-						<p:link styleClass="botao" value="Editar"
+						<p:button styleClass="botao" value="Editar"
 							outcome="#{bemControle.editar(bemControle.bem)}" />
 					</p:panelGrid>
 				</p:outputPanel>

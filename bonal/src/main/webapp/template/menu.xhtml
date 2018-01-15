@@ -9,33 +9,46 @@
 	<h:form id="menuLateral">
 		<p:panelMenu style="width:360px">
 			<p:submenu label="Cadastros">
+				<p:menuitem value="Bens" outcome="bem" />
 				<p:menuitem value="Categoria" outcome="categoria"
 					icon="ui-icon-disk" />
 				<p:menuitem value="Produto" outcome="produto"
 					icon="ui-icon-arrowrefresh-1-w" />
+				<p:menuitem value="Operacao" outcome="operacao" />
 				<p:menuitem value="Unidade de Medida" outcome="unidadeDeMedida"
 					icon="ui-icon-disk" />
-			</p:submenu>
 
-			<p:submenu label="Consultas">
-				<p:submenu label="Categoria">
-					<p:menuitem value="Cadastro" outcome="categoria"
-						icon="ui-icon-signal" />
-					<p:menuitem value="Consulta" outcome="categoriaConsultar"
-						icon="ui-icon-signal" />
-				</p:submenu>
-
-				<p:menuitem value="Unidade de Medida" actionListener="#{unidadeDeMedidaControle.editar}"
-					icon="ui-icon-disk" />
+				<p:menuitem value="Cliente" outcome="cliente" />
+				<p:menuitem value="Fornecedor" outcome="fornecedor" />
+				<p:menuitem value="Funcionário" outcome="funcionario" />
+				<p:menuitem value="Cargo" outcome="cargo" />
 			</p:submenu>
 			
+			<p:submenu label="Consultas">
+				<p:menuitem value="Bens" outcome="bemConsultar" />
+				<p:menuitem value="Categoria" outcome="categoriaConsultar"
+					icon="ui-icon-signal" />
+				<p:menuitem value="Produtos" outcome="produtoConsultar" />
+				<p:menuitem value="Operacao" outcome="operacaoConsultar" />
+
+				<p:submenu label="Pessoas">
+					<p:menuitem value="Cliente" outcome="clienteConsultar" />
+					<p:menuitem value="Fornecedor" outcome="fornecedorConsultar" />
+					<p:menuitem value="Funcionário" outcome="funcionarioConsultar" />
+					<p:menuitem value="Cargo" outcome="cargoConsultar" />
+				</p:submenu>
+
+				<p:menuitem value="Unidade de Medida"
+					outcome="unidadeDeMedidaConsultar" icon="ui-icon-disk" />
+			</p:submenu>
+
 			<p:submenu label="Ajuda">
-				<p:menuitem value="Bem Vindo" outcome="index"
-					icon="ui-icon-disk" />
+				<p:menuitem value="Bem Vindo" outcome="index" icon="ui-icon-disk" />
 				<p:menuitem value="Como usar" outcome="index"
 					icon="ui-icon-arrowrefresh-1-w" />
 				<p:menuitem value="Sobre o software" outcome="index"
 					icon="ui-icon-disk" />
+				<p:menuitem value="mudar um pouco as coisa" outcome="design" />
 			</p:submenu>
 		</p:panelMenu>
 	</h:form>

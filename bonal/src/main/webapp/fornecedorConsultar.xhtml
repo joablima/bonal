@@ -22,7 +22,7 @@
 
 		<h:form id="formFornecedorConsulta">
 			<div class="filtros-consultar">
-				
+
 				<div class="ui-g-12 ui-md-6 ui-lg-4">
 					<p:outputLabel value="Nome ou Cpf do Fornecedor: "
 						for="fornecedorNome" />
@@ -47,8 +47,10 @@
 					<p:ajax update="@form :tabelaFornecedores"
 						listener="#{fornecedorControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente fornecedores ativos"/>
-				
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{fornecedorControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{fornecedorControle.status == false}" />
 			</div>
 		</h:form>
 
@@ -59,8 +61,7 @@
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{fornecedor.id}"
-				selection="#{fornecedorControle.fornecedor}"
-				selectionMode="single"
+				selection="#{fornecedorControle.fornecedor}" selectionMode="single"
 				emptyMessage="Nenhum Fornecedores Encontrado!" styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Fornecedores</f:facet>
@@ -80,31 +81,31 @@
 				<p:column headerText="Email" sortBy="#{fornecedor.email}">
 					<p:outputLabel value="#{fornecedor.email}" />
 				</p:column>
-				
+
 				<p:column headerText="Email" sortBy="#{fornecedor.email}">
 					<p:outputLabel value="#{fornecedor.email}" />
 				</p:column>
-				
+
 				<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}">
 					<p:outputLabel value="#{fornecedor.telefone}" />
 				</p:column>
-				
+
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-pencil" value="Editar"
-						action="#{fornecedorControle.editar(fornecedor)}" />
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+						outcome="#{fornecedorControle.editar(fornecedor)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" value="Desativar"
-						action="#{fornecedorControle.remover(fornecedor)}"
-						update="@form" process="@this @form"
-						rendered="#{fornecedorControle.status == true}">
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{fornecedorControle.remover(fornecedor)}" update="@form"
+						process="@this @form"
+						rendered="#{fornecedor.status == true}">
 						<p:ajax listener="#{fornecedorControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh" value="Ativar"
-						action="#{fornecedorControle.salvar(fornecedor)}"
-						update="@form" process="@this @form"
-						rendered="#{fornecedorControle.status == false}">
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{fornecedorControle.salvar(fornecedor)}" update="@form"
+						process="@this @form"
+						rendered="#{fornecedor.status == false}">
 						<p:ajax listener="#{fornecedorControle.listar}" />
 					</p:commandButton>
 				</p:column>
@@ -135,10 +136,10 @@
 						<p:outputLabel value="#{fornecedorControle.fornecedor.documento}" />
 						<p:outputLabel value="Nome:" />
 						<p:outputLabel value="#{fornecedorControle.fornecedor.nome}" />
-						
+
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{fornecedorControle.remover(fornecedor)}" />
-						<p:link styleClass="botao" value="Editar"
+						<p:button styleClass="botao" value="Editar"
 							outcome="#{fornecedorControle.editar(fornecedor)}" />
 					</p:panelGrid>
 				</p:outputPanel>

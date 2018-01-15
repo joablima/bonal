@@ -1,11 +1,24 @@
 package br.com.empresa.bonal.util;
 
+import java.io.Serializable;
+
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 
-public class FacesContextUtil {
+@SuppressWarnings("serial")
+public class FacesContextUtil implements Serializable {
 
-	FacesContext context = FacesContext.getCurrentInstance();
+	@Inject
+	FacesContext context;
+
+	@Produces
+	@RequestScoped
+	public FacesContext getFacesContext() {
+		return FacesContext.getCurrentInstance();
+	}
 
 	public void info(String message) {
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
@@ -21,22 +34,5 @@ public class FacesContextUtil {
 
 	public void fatal(String message) {
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
-	}
-
-	// ----------------------------------- Dois parametros
-	public void info(String str, String message) {
-		context.addMessage(str, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
-	}
-
-	public void error(String str, String message) {
-		context.addMessage(str, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
-	}
-
-	public void warn(String str, String message) {
-		context.addMessage(str, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
-	}
-
-	public void fatal(String str, String message) {
-		context.addMessage(str, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
 	}
 }

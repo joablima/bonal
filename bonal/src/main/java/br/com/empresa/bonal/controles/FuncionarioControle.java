@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
@@ -18,8 +19,9 @@ import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.repositorio.FuncionarioRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class FuncionarioControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +29,7 @@ public class FuncionarioControle implements Serializable {
 	final static Logger logger = Logger.getLogger(FuncionarioControle.class);
 
 	private Funcionario funcionario = new Funcionario();
-	
+
 	private Boolean status = true;
 
 	private Long funcionarioId;
@@ -40,13 +42,11 @@ public class FuncionarioControle implements Serializable {
 	private List<Funcionario> funcionarios;
 	private List<Funcionario> lista = new ArrayList<>();
 
-	// Repositorio
+	@Inject
 	private FuncionarioRepositorio funcionarioRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public FuncionarioControle() {
-		funcionarioRepositorio = new FuncionarioRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Funcionario getFuncionario() {
@@ -57,7 +57,7 @@ public class FuncionarioControle implements Serializable {
 	public void setFuncionario(Funcionario funcionario) {
 		this.funcionario = funcionario;
 	}
-	
+
 	public Endereco getEndereco() {
 		return funcionario.getEndereco();
 	}
@@ -107,9 +107,7 @@ public class FuncionarioControle implements Serializable {
 	public Integer getTotalFuncionariosConsulta() {
 		return funcionarios.size();
 	}
-	
-	
-	
+
 	public Boolean getStatus() {
 		return status;
 	}
@@ -120,6 +118,7 @@ public class FuncionarioControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.funcionarios == null) {
 			lista = funcionarioRepositorio.listarTodos();
@@ -131,14 +130,14 @@ public class FuncionarioControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Funcionario> stream = lista.stream();
 
-		if (!funcionarioNome.equals(null)) {
+		if (!funcionarioNome.equals(null))
 			stream = stream.filter(f -> (f.getNome().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
 					| (f.getDocumento().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
 					| (f.getEmail().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
 					| f.getIdentificacao().toLowerCase().contains(funcionarioNome.toLowerCase().trim()));
-		}
-		
-		stream = stream.filter(f -> (f.getStatus().equals(status)));
+
+		if (status.equals(true))
+			stream = stream.filter(f -> (f.getStatus().equals(status)));
 
 		if (cargoId != null)
 			stream = stream.filter(c -> (c.getCargo().getId().equals(cargoId)));
@@ -172,9 +171,10 @@ public class FuncionarioControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
-		
+
 		this.funcionario.setStatus(true);
 		this.funcionario.setTipo("PESSOA_FISICA");
 		if (funcionario.getId() == null) {
@@ -184,44 +184,35 @@ public class FuncionarioControle implements Serializable {
 			funcionarioRepositorio.atualizar(funcionario, cargoId);
 			message += "Funcionario Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		logger.info(message);
 		this.funcionario = new Funcionario();
 		return null;
 	}
 
+	@transacional
 	public void recuperarFuncionarioPorId() {
 		funcionario = funcionarioRepositorio.buscarPorId(funcionarioId);
 	}
 
 	// Remove um Funcionario do banco de dados
-	public void remover() {
-
-		this.funcionario.setStatus(false);
+	@transacional
+	public String remover(Funcionario funcionario) {
+		funcionario.setStatus(false);
 		funcionarioRepositorio.remover(funcionario);
-		funcionarios = null;
+		this.funcionarios = null;
+		this.funcionario = null;
 		listarTabela();
-		funcionario = null;
-	}
-
-	public void remover(Funcionario funcionario) {
-		this.funcionario = funcionario;
-		remover();
+		return null;
 	}
 
 	// Editar um Funcionario
-	public String editar() {
-		funcionarioId = this.funcionario.getId();
-		return "funcionario?funcionarioId=" + funcionarioId;
+	public String editar(Funcionario funcionario) {
+		return "funcionario?funcionarioId=" + funcionario.getId();
 	}
 
 	public String addCoeficientes() {
 		return "coeficientetecnico?funcionarioId=" + this.funcionarioId;
-	}
-
-	public String editar(Funcionario funcionario) {
-		this.funcionario = funcionario;
-		return editar();
 	}
 
 	public boolean FuncionarioIdExiste() {

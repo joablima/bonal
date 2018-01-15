@@ -22,10 +22,9 @@
 
 		<h:form id="formClienteConsulta">
 			<div class="filtros-consultar">
-				
+
 				<div class="ui-g-12 ui-md-6 ui-lg-4">
-					<p:outputLabel value="Nome ou Cpf do Cliente: "
-						for="clienteNome" />
+					<p:outputLabel value="Nome ou Cpf do Cliente: " for="clienteNome" />
 					<p:inputText value="#{clienteControle.clienteNome}"
 						id="clienteNome" styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{clienteControle.listar}"
@@ -42,12 +41,15 @@
 						update="@form :tabelaClientes" />
 				</div>
 			</div>
-			
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
 				<p:selectBooleanCheckbox value="#{clienteControle.status}">
-					<p:ajax update="@form :tabelaClientes" listener="#{clienteControle.listar}" />
+					<p:ajax update="@form :tabelaClientes"
+						listener="#{clienteControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente clientes ativos" />
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{clienteControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{clienteControle.status == false}" />
 			</div>
 		</h:form>
 
@@ -57,10 +59,9 @@
 				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
-				rowKey="#{cliente.id}"
-				selection="#{clienteControle.cliente}"
-				selectionMode="single"
-				emptyMessage="Nenhum Clientes Encontrado!" styleClass="ui-g-12">
+				rowKey="#{cliente.id}" selection="#{clienteControle.cliente}"
+				selectionMode="single" emptyMessage="Nenhum Clientes Encontrado!"
+				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Clientes</f:facet>
 
@@ -76,34 +77,35 @@
 					<p:outputLabel value="#{cliente.identificacao}" />
 				</p:column>
 
-				<p:column headerText="Email" sortBy="#{cliente.email}">
-					<p:outputLabel value="#{cliente.email}" />
-				</p:column>
-				
-				<p:column headerText="Email" sortBy="#{cliente.email}">
-					<p:outputLabel value="#{cliente.email}" />
-				</p:column>
-				
 				<p:column headerText="Telefone" sortBy="#{cliente.telefone}">
 					<p:outputLabel value="#{cliente.telefone}" />
 				</p:column>
-				
+
+				<p:column headerText="Email" sortBy="#{cliente.email}">
+					<p:outputLabel value="#{cliente.email}" />
+				</p:column>
+
+				<p:column headerText="Endereço" sortBy="#{cliente.endereco}">
+					<p:outputLabel
+						value="#{cliente.logradouro}, nº #{cliente.numero}, #{cliente.bairro}. #{cliente.cidade} - #{cliente.uf}. Cep: #{cliente.cep}" />
+				</p:column>
+
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-pencil" value="Editar"
-						action="#{clienteControle.editar(cliente)}" />
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar" outcome="#{clienteControle.editar(cliente)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" value="Desativar"
-						action="#{clienteControle.remover(cliente)}"
-						update="@form" process="@this @form"
-						rendered="#{clienteControle.status == true}">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{clienteControle.remover(cliente)}" update="@form"
+						process="@this @form" rendered="#{cliente.status == true}">
 						<p:ajax listener="#{clienteControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh" value="Ativar"
-						action="#{clienteControle.salvar(cliente)}"
-						update="@form" process="@this @form"
-						rendered="#{clienteControle.status == false}">
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{clienteControle.salvar(cliente)}" update="@form"
+						process="@this @form" rendered="#{cliente.status == false}">
 						<p:ajax listener="#{clienteControle.listar}" />
 					</p:commandButton>
 				</p:column>
@@ -114,15 +116,13 @@
 						value=" #{clienteControle.totalClientes} de #{clienteControle.totalClientesConsulta}" />
 				</f:facet>
 
-				<p:ajax event="rowDblselect"
-					oncomplete="PF('clienteDialog').show()" update="@form"
-					global="false" />
+				<p:ajax event="rowDblselect" oncomplete="PF('clienteDialog').show()"
+					update="@form" global="false" />
 			</p:dataTable>
 
 
-			<p:dialog header="Edição de Clientes"
-				widgetVar="clienteDialog" modal="true" showEffect="fade"
-				hideEffect="fade" resizable="false">
+			<p:dialog header="Edição de Clientes" widgetVar="clienteDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
 				<p:outputPanel id="clienteEditar" style="text-align:center;">
 					<p:panelGrid columns="2"
 						rendered="#{not empty clienteControle.clientes}"
@@ -134,10 +134,10 @@
 						<p:outputLabel value="#{clienteControle.cliente.documento}" />
 						<p:outputLabel value="Nome:" />
 						<p:outputLabel value="#{clienteControle.cliente.nome}" />
-						
+
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{clienteControle.remover(clienteControle.cliente)}" />
-						<p:link styleClass="botao" value="Editar"
+						<p:button styleClass="botao" value="Editar"
 							outcome="#{clienteControle.editar(clienteControle.cliente)}" />
 					</p:panelGrid>
 				</p:outputPanel>

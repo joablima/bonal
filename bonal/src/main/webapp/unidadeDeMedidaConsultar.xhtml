@@ -45,8 +45,10 @@
 					<p:ajax update="@form :tabelaUnidadesDeMedida"
 						listener="#{unidadeDeMedidaControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente itens ativos"/>
-				
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{unidadeDeMedidaControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{unidadeDeMedidaControle.status == false}" />
 			</div>
 		</h:form>
 
@@ -64,7 +66,7 @@
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Unidades de Medida</f:facet>
-				
+
 				<p:column headerText="Sigla" sortBy="#{unidadeDeMedida.sigla}">
 					<h:outputText value="#{unidadeDeMedida.sigla}" />
 				</p:column>
@@ -74,19 +76,19 @@
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-pencil" value="Editar"
-						action="#{unidadeDeMedidaControle.editar(unidadeDeMedida)}" />
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+						outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedida)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" value="Desativar"
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
 						action="#{unidadeDeMedidaControle.remover(unidadeDeMedida)}"
 						update="@form" process="@this @form"
 						rendered="#{unidadeDeMedida.status == true}">
 						<p:ajax listener="#{unidadeDeMedidaControle.listar}" />
 					</p:commandButton>
-					
-					<p:commandButton icon="fa fa-fw fa-refresh" value="Ativar"
+
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
 						action="#{unidadeDeMedidaControle.salvar(unidadeDeMedida)}"
 						update="@form" process="@this @form"
 						rendered="#{unidadeDeMedida.status == false}">
@@ -125,8 +127,8 @@
 							value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}" />
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{unidadeDeMedidaControle.remover(unidadeDeMedidaControle.unidadeDeMedida)}" />
-						<p:commandButton styleClass="botao" value="Editar"
-							action="#{unidadeDeMedidaControle.editar(unidadeDeMedidaControle.unidadeDeMedida)}" />
+						<p:button styleClass="botao" value="Editar"
+							outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedidaControle.unidadeDeMedida)}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

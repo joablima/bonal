@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
@@ -17,8 +18,9 @@ import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumCategoria;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class CategoriaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,21 +33,19 @@ public class CategoriaControle implements Serializable {
 
 	// Atributos para Consulta
 	private String categoriaNome = "";
-	
-	private Boolean status = true; 
+
+	private Boolean status = true;
 	// Listas para Consulta
 	private List<Categoria> categorias;
 	private List<Categoria> categoriasDeBem;
 	private List<Categoria> categoriasDeServico;
 	private List<Categoria> lista = new ArrayList<>();
 
-	// Repositorio
+	@Inject
 	private CategoriaRepositorio categoriaRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public CategoriaControle() {
-		categoriaRepositorio = new CategoriaRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Categoria getCategoria() {
@@ -121,6 +121,7 @@ public class CategoriaControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.categorias == null) {
 			lista = categoriaRepositorio.listarTodos();
@@ -136,7 +137,9 @@ public class CategoriaControle implements Serializable {
 				| (c.getCodigo().toLowerCase().contains(categoriaNome.toLowerCase().trim()))
 				| c.getDescricao().toLowerCase().contains(categoriaNome.toLowerCase().trim()));
 
-		stream = stream.filter(c -> (c.getStatus().equals(status)));
+		if (status.equals(true))
+			stream = stream.filter(c -> (c.getStatus().equals(status)));
+
 		categorias = stream.collect(Collectors.toList());
 	}
 
@@ -163,6 +166,7 @@ public class CategoriaControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 		this.categoria.setStatus(true);
@@ -170,7 +174,7 @@ public class CategoriaControle implements Serializable {
 		if (categoria.getId() == null) {
 			Categoria existe = categoriaRepositorio.codigoExiste(categoria);
 			if (existe != null) {
-				new FacesContextUtil().warn("Já existe uma Categoria registrada com esse código." + existe.resumo());
+				facesContext.warn("Já existe uma Categoria registrada com esse código." + existe.resumo());
 				return null;
 			}
 			categoriaRepositorio.adicionar(categoria);
@@ -179,39 +183,31 @@ public class CategoriaControle implements Serializable {
 			categoriaRepositorio.atualizar(categoria);
 			message += "Categoria Atualizada com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		logger.info(message);
 		categoria = new Categoria();
 		return null;
 	}
 
+	@transacional
 	public void recuperarCategoriaPorId() {
 		categoria = categoriaRepositorio.buscarPorId(categoriaId);
 	}
 
 	// Remove um Categoria do banco de dados
-	public void remover() {
+	@transacional
+	public String remover(Categoria categoria) {
 		categoria.setStatus(false);
 		categoriaRepositorio.atualizar(categoria);
-		categorias = null;
+		this.categorias = null;
+		this.categoria = null;
 		listarTabela();
-		categoria = null;
-	}
-
-	public void remover(Categoria c) {
-		this.categoria = c;
-		remover();
+		return null;
 	}
 
 	// Editar um Categoria
-	public String editar() {
-		categoriaId = this.categoria.getId();
-		return "categoria?categoriaId=" + categoriaId;
-	}
-
 	public String editar(Categoria categoria) {
-		this.categoria = categoria;
-		return editar();
+		return "categoria?categoriaId=" + categoria.getId();
 	}
 
 	public boolean CategoriaIdExiste() {

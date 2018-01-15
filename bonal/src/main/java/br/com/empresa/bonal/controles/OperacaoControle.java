@@ -8,16 +8,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.repositorio.OperacaoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class OperacaoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,16 +36,14 @@ public class OperacaoControle implements Serializable {
 	// Listas para Consulta
 	private List<Operacao> operacoes;
 	private List<Operacao> lista = new ArrayList<>();
-	
+
 	private Boolean status = true;
-	
-	// Repositorio
+
+	@Inject
 	private OperacaoRepositorio operacaoRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public OperacaoControle() {
-		operacaoRepositorio = new OperacaoRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Operacao getOperacao() {
@@ -87,8 +87,7 @@ public class OperacaoControle implements Serializable {
 	public Integer getTotalOperacoesConsulta() {
 		return operacoes.size();
 	}
-	
-	
+
 	public Boolean getStatus() {
 		return status;
 	}
@@ -99,6 +98,7 @@ public class OperacaoControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.operacoes == null) {
 			lista = operacaoRepositorio.listarTodos();
@@ -111,9 +111,12 @@ public class OperacaoControle implements Serializable {
 		Stream<Operacao> stream = lista.stream();
 
 		stream = stream.filter(o -> (o.getNome().toLowerCase().contains(operacaoNome.toLowerCase().trim()))
-				| o.getCodigo().toLowerCase().contains(operacaoNome.toLowerCase().trim()));;
+				| o.getCodigo().toLowerCase().contains(operacaoNome.toLowerCase().trim())
+				| o.getDescricao().toLowerCase().contains(operacaoNome.toLowerCase().trim()));
 
-		stream = stream.filter(o -> (o.getStatus().equals(status)));
+		if (status.equals(true))
+			stream = stream.filter(o -> (o.getStatus().equals(status)));
+		
 		operacoes = stream.collect(Collectors.toList());
 	}
 
@@ -140,6 +143,7 @@ public class OperacaoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 		this.operacao.setStatus(true);
@@ -151,44 +155,36 @@ public class OperacaoControle implements Serializable {
 			message += "Operacao Atualizada com Sucesso.";
 		}
 		logger.info(message);
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		operacao = new Operacao();
 		return null;
 	}
 
+	@transacional
 	public void recuperarOperacaoPorId() {
 		operacao = operacaoRepositorio.buscarPorId(operacaoId);
 	}
 
 	// Remove um cargo do banco de dados
-	public void remover() {
-
-		this.operacao.setStatus(false);
+	@transacional
+	public String remover(Operacao operacao) {
+		operacao.setStatus(false);
 		operacaoRepositorio.remover(operacao);
-		operacoes = null;
+		this.operacoes = null;
+		this.operacao = null;
 		listar();
-	}
-
-	public void remover(Operacao unidade) {
-		this.operacao = unidade;
-		remover();
+		return null;
 	}
 
 	// Editar um cargo
-	public String editar() {
-		operacaoId = this.operacao.getId();
-		return "operacao?operacaoId=" + operacaoId;
+	public String editar(Operacao operacao) {
+		return "operacao?operacaoId=" + operacao.getId();
 	}
 
-	public String editar(Operacao operacao) {
-		this.operacao = operacao;
-		return editar();
-	}
-	
-	
-	public String cancelar(){
+	public String cancelar() {
 		return "index";
 	}
+
 	public boolean operacaoIdExiste() {
 		if (this.operacaoId == null)
 			return false;

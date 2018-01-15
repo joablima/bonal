@@ -8,18 +8,20 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 
-import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Endereco;
+import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.repositorio.FornecedorRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
+import br.com.empresa.bonal.util.tx.transacional;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class FornecedorControle implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +30,7 @@ public class FornecedorControle implements Serializable {
 
 	private Fornecedor fornecedor = new Fornecedor();
 
-	private EnumPessoa tipo;
+	// private EnumPessoa tipo;
 	private Long fornecedorId;
 
 	// Atributos para Consulta
@@ -37,17 +39,14 @@ public class FornecedorControle implements Serializable {
 	// Listas para Consulta
 	private List<Fornecedor> fornecedores;
 	private List<Fornecedor> lista = new ArrayList<>();
-	
 
 	private Boolean status = true;
-	
-	// Repositorio
+
+	@Inject
 	private FornecedorRepositorio fornecedorRepositorio;
 
-	// Construtor chamando a classe repositorio
-	public FornecedorControle() {
-		fornecedorRepositorio = new FornecedorRepositorio();
-	}
+	@Inject
+	private FacesContextUtil facesContext;
 
 	// Getters and Setters
 	public Fornecedor getFornecedor() {
@@ -105,9 +104,7 @@ public class FornecedorControle implements Serializable {
 	public EnumPessoa[] getEnumPessoa() {
 		return EnumPessoa.values();
 	}
-	
-	
-	
+
 	public Boolean getStatus() {
 		return status;
 	}
@@ -118,6 +115,7 @@ public class FornecedorControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
+	@transacional
 	public void listarTabela() {
 		if (this.fornecedores == null) {
 			lista = fornecedorRepositorio.listarTodos();
@@ -129,15 +127,15 @@ public class FornecedorControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Fornecedor> stream = lista.stream();
 
-		if (!fornecedorNome.equals(null)) {
+		if (!fornecedorNome.equals(null))
 			stream = stream.filter(f -> (f.getNome().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
 					| (f.getDocumento().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
 					| (f.getEmail().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
 					| f.getIdentificacao().toLowerCase().contains(fornecedorNome.toLowerCase().trim()));
-		}
 
-		stream = stream.filter(f -> (f.getStatus().equals(status)));
-		
+		if (status.equals(true))
+			stream = stream.filter(f -> (f.getStatus().equals(status)));
+
 		fornecedores = stream.collect(Collectors.toList());
 	}
 
@@ -166,6 +164,7 @@ public class FornecedorControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
+	@transacional
 	public String salvar() {
 		String message = "";
 
@@ -177,44 +176,35 @@ public class FornecedorControle implements Serializable {
 			fornecedorRepositorio.atualizar(fornecedor);
 			message += "Fornecedor Atualizado com Sucesso.";
 		}
-		new FacesContextUtil().info(message);
+		facesContext.info(message);
 		logger.info(message);
 		this.fornecedor = new Fornecedor();
 		return null;
 	}
 
+	@transacional
 	public void recuperarFornecedorPorId() {
-		fornecedor = fornecedorRepositorio.buscarPorId(fornecedorId);
+		this.fornecedor = fornecedorRepositorio.buscarPorId(fornecedorId);
 	}
 
 	// Remove um Fornecedor do banco de dados
-	public void remover() {
-
-		this.fornecedor.setStatus(false);
+	@transacional
+	public String remover(Fornecedor fornecedor) {
+		fornecedor.setStatus(false);
 		fornecedorRepositorio.remover(fornecedor);
-		fornecedores = null;
+		this.fornecedores = null;
+		this.fornecedor = null;
 		listarTabela();
-		fornecedor = null;
-	}
-
-	public void remover(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
-		remover();
+		return null;
 	}
 
 	// Editar um Fornecedor
-	public String editar() {
-		fornecedorId = this.fornecedor.getId();
-		return "fornecedor?fornecedorId=" + fornecedorId;
+	public String editar(Fornecedor fornecedor) {
+		return "fornecedor?fornecedorId=" + fornecedor.getId();
 	}
 
 	public String addCoeficientes() {
 		return "coeficientetecnico?fornecedorId=" + this.fornecedorId;
-	}
-
-	public String editar(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
-		return editar();
 	}
 
 	public boolean fornecedorIdExiste() {

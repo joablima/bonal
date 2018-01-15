@@ -42,12 +42,15 @@
 						update="@form :tabelaProdutos" />
 				</div>
 			</div>
-			
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
 				<p:selectBooleanCheckbox value="#{produtoControle.status}">
-					<p:ajax update="@form :tabelaProdutos" listener="#{produtoControle.listar}" />
+					<p:ajax update="@form :tabelaProdutos"
+						listener="#{produtoControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente produtos ativos" />
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{produtoControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{produtoControle.status == false}" />
 			</div>
 		</h:form>
 
@@ -85,14 +88,22 @@
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:link styleClass="ui-icon  ui-icon-pencil" value="Editar"
-						outcome="#{produtoControle.editar(produto)}" />
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="editar" outcome="#{produtoControle.editar(produto)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandLink styleClass="ui-icon  ui-icon-trash" value="Excluir"
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
 						action="#{produtoControle.remover(produto)}" update="@form"
-						process="@this @form" />
+						process="@this @form" rendered="#{produto.status == true}">
+						<p:ajax listener="#{produtoControle.listar}" />
+					</p:commandButton>
+
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{produtoControle.salvar(produto)}" update="@form"
+						process="@this @form"
+						rendered="#{produto.status == false}">
+						<p:ajax listener="#{produtoControle.listar}" />
+					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
@@ -121,7 +132,7 @@
 						<p:outputLabel value="#{produtoControle.produto.descricao}" />
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{produtoControle.remover(produtoControle.produto)}" />
-						<p:link styleClass="botao" value="Editar"
+						<p:button styleClass="botao" value="Editar" 
 							outcome="#{produtoControle.editar(produtoControle.produto)}" />
 					</p:panelGrid>
 				</p:outputPanel>
