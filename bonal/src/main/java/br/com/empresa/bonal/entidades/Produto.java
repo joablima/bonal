@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
@@ -14,18 +15,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("serial")
 @Entity
-public class Produto {
+public class Produto implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotNull(message = "Código do Produto é obrigatório")
 	private String codigo;
+
+	@NotNull(message = "Nome do Produto é obrigatório")
 	private String nome;
+
 	private String descricao;
+
 	private BigDecimal quantidade;
+
 	private Boolean status;
 
 	@Temporal(TemporalType.DATE)

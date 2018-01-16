@@ -172,7 +172,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 	public String remover(UnidadeDeMedida unidade) {
 		unidade.setStatus(false);
 		unidadeDeMedidaRepositorio.remover(unidade);
-		this.unidadeDeMedida = null;
 		this.unidadesDeMedida = null;
 		listar();
 		return null;

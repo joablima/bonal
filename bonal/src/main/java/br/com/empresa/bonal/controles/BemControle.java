@@ -233,7 +233,6 @@ public class BemControle implements Serializable {
 		bem.setStatus(false);
 		bemRepositorio.remover(bem);
 		this.bens = null;
-		this.bem = null;
 		listarTabela();
 		return null;
 	}

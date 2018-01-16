@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.CascadeType;
@@ -14,14 +15,18 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+@SuppressWarnings("serial")
 @Entity
-public class Servico {
+public class Servico implements Serializable{
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String codigo;
+	
 	private String nome;
+	
 	private String descricao;
 	
 	private Boolean status;

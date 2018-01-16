@@ -47,8 +47,7 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Cpf da funcionario obrigatório"
 							validatorMessage="Cpf da funcionario deve ter no minimo 2 caracteres"
-							maxlength="80"
-							mask="999-999-999-99">
+							maxlength="80" mask="999-999-999-99">
 							<p:clientValidator event="blur" />
 						</p:inputMask>
 					</div>
@@ -99,39 +98,23 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<p:outputLabel value="Cargo:" for="cargoId" />
-						<p:selectOneMenu value="#{funcionarioControle.cargoId}"
-							id="cargoId" styleClass="form-normal">
-							<c:choose>
-								<c:when
-									test="#{funcionarioControle.funcionario.cargo.id == null}">
-									<f:selectItem itemValue="" itemLabel="Escolha um Cargo" />
-								</c:when>
-								<c:when
-									test="#{funcionarioControle.funcionario.cargo.id != null}">
-									<f:selectItem
-										itemValue="#{funcionarioControle.funcionario.cargo.id}"
-										itemLabel="#{funcionarioControle.funcionario.cargo.nome}" />
-								</c:when>
-							</c:choose>
-							<f:selectItems value="#{cargoControle.cargos}" var="cargo"
-								itemLabel="#{cargo.nome}" itemValue="#{cargo.id}" />
-							<p:clientValidator event="blur" />
-						</p:selectOneMenu>
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Keyboard" id="cargo"
+								value="#{funcionarioControle.funcionario.cargo.nome}" styleClass="form-normal"
+								required="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="cargo"
+								actionListener="#{cargoControle.dialogConsultaShow}">
+								<p:ajax event="dialogReturn" process="@this" update="cargo"
+									listener="#{funcionarioControle.cargoSelecionado}" />
+							</p:commandButton>
+						</div>
 					</div>
-					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
-						<i class="fa fa-coffee" />
-						<p:commandLink value="Cadastrar Nova Cargo" process="@this"
-							update="cargoId"
-							actionListener="#{cargoControle.cargoDialogShow}">
-							<p:ajax event="dialogReturn" update="formFuncionario"
-								listener="#{cargoControle.cargoDialogReturn}" />
-							</p:commandLink>
-					</div>
-					<div class="ui-g-6 ui-md-6 ui-lg-3 form-messages">
-						<p:message for="cargoId" id="cargoMessage" />
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="cargo" id="cargoMessage" />
 					</div>
 				</div>
+				
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
@@ -294,8 +277,6 @@
 						<p:message for="complemento" id="complementoMessage" />
 					</div>
 				</div>
-
-
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">

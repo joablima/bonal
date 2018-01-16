@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -12,22 +13,25 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("serial")
 @Entity
-public class UnidadeDeMedida {
+public class UnidadeDeMedida implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
+	@NotNull(message = "Nome da Unidade de Medida é obrigatória")
 	private String nome;
 
+	@NotNull(message = "Sigla da Unidade de Medida é obrigatória")
 	private String sigla;
+
 	private Boolean status;
 
 	@Version
 	private Integer version;
-	
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
@@ -59,8 +63,6 @@ public class UnidadeDeMedida {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-	
-	
 
 	public Boolean getStatus() {
 		return status;

@@ -13,6 +13,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Endereco;
@@ -47,6 +49,9 @@ public class FuncionarioControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+	
+	@Inject
+	RequestContext requestContext;
 
 	// Getters and Setters
 	public Funcionario getFuncionario() {
@@ -201,7 +206,6 @@ public class FuncionarioControle implements Serializable {
 		funcionario.setStatus(false);
 		funcionarioRepositorio.remover(funcionario);
 		this.funcionarios = null;
-		this.funcionario = null;
 		listarTabela();
 		return null;
 	}
@@ -229,5 +233,11 @@ public class FuncionarioControle implements Serializable {
 		} catch (Exception e) {
 			// ignore
 		}
+	}
+
+	public void cargoSelecionado(SelectEvent event) {
+		Cargo cargo = (Cargo) event.getObject();
+		this.funcionario.setCargo(cargo);
+		requestContext.update("formFuncionario:cargo");
 	}
 }

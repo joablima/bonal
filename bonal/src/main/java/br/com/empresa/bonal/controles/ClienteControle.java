@@ -193,7 +193,6 @@ public class ClienteControle implements Serializable {
 		cliente.setStatus(false);
 		clienteRepositorio.remover(cliente);
 		this.clientes = null;
-		this.cliente = null;
 		listarTabela();
 		return null;
 	}

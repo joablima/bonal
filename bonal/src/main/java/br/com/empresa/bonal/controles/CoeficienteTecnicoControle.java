@@ -214,7 +214,6 @@ public class CoeficienteTecnicoControle implements Serializable {
 		coeficiente.setStatus(false);
 		coeficienteTecnicoRepositorio.remover(coeficiente);
 		this.coeficienteTecnicos = null;
-		this.coeficienteTecnico = null;
 		listarTabela();
 		facesContext.info("Coeficiente Técnico do removido com sucesso.");
 		logger.info("Coeficiente removido com sucesso");

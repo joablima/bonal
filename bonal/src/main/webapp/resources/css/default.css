@@ -144,6 +144,10 @@ h3.ui-widget.ui-panelmenu-header.ui-state-default.ui-state-active.ui-corner-top
 	border-radius: 0;
 }
 
+.ui-inputgroup input {
+	width: calc(100% - 2.5rem) !important;
+}
+
 /* --------------------- Elementos dos Formularios --------------------- */
 #content fieldset {
 	margin: 1em 0 1em 0;
@@ -175,7 +179,7 @@ h3.ui-widget.ui-panelmenu-header.ui-state-default.ui-state-active.ui-corner-top
 	{
 	border-right: 0;
 	border-left: 0;
-	border-top:0;
+	border-top: 0;
 }
 /* --------------------- Elementos do #header --------------------- */
 #header {

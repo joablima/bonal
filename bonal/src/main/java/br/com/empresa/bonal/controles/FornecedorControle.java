@@ -193,7 +193,6 @@ public class FornecedorControle implements Serializable {
 		fornecedor.setStatus(false);
 		fornecedorRepositorio.remover(fornecedor);
 		this.fornecedores = null;
-		this.fornecedor = null;
 		listarTabela();
 		return null;
 	}

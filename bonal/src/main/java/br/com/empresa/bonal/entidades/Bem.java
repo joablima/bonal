@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
@@ -16,19 +17,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import br.com.empresa.bonal.util.enums.EnumBem;
 
+@SuppressWarnings("serial")
 @Entity
-public class Bem {
-	
+public class Bem implements Serializable {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotNull(message = "Código do Bem é obrigatório")
 	@Column(name = "codigo", unique = true, nullable = false)
 	private String codigo;
 
+	@NotNull(message = "Nome do Bem é obrigatório")
 	private String nome;
 
 	private String descricao;
@@ -161,11 +166,8 @@ public class Bem {
 	public String resumo() {
 		StringBuilder builder = new StringBuilder();
 		String status = getStatus() ? "ativo" : "inativo";
-		builder.append(" " + getCodigo())
-		.append(" - " + getUnidadeDeMedida().getNome() +" "+ getNome())
-		.append(" - " + getPrecoMedio()+" R$")
-		.append(" - " + getDescricao())
-		.append(" - " + status);
+		builder.append(" " + getCodigo()).append(" - " + getUnidadeDeMedida().getNome() + " " + getNome())
+				.append(" - " + getPrecoMedio() + " R$").append(" - " + getDescricao()).append(" - " + status);
 		return builder.toString();
 	}
 

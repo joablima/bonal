@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
@@ -13,23 +14,27 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import br.com.empresa.bonal.util.enums.EnumPermissao;
 
+@SuppressWarnings("serial")
 @Entity
-public class Cargo {
+public class Cargo implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
+	@NotNull(message  = "Nome do Cargo obrigatório")
 	private String nome;
 	
 	private Boolean status;
 
 	// define um salario para o cargo
+	@NotNull(message  = "Salário do Cargo obrigatório")
+	@NotEmpty(message  = "Salário do Cargo obrigatório")
 	@Column(precision = 10, scale = 2, nullable = true)
 	private BigDecimal salario;
 

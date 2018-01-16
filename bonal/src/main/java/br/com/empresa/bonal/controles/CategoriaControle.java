@@ -200,7 +200,7 @@ public class CategoriaControle implements Serializable {
 		categoria.setStatus(false);
 		categoriaRepositorio.atualizar(categoria);
 		this.categorias = null;
-		this.categoria = null;
+		this.categoria = new Categoria();
 		listarTabela();
 		return null;
 	}

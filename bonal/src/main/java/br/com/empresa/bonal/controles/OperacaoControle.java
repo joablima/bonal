@@ -171,7 +171,6 @@ public class OperacaoControle implements Serializable {
 		operacao.setStatus(false);
 		operacaoRepositorio.remover(operacao);
 		this.operacoes = null;
-		this.operacao = null;
 		listar();
 		return null;
 	}

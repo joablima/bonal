@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -20,8 +21,9 @@ import javax.validation.constraints.NotNull;
 
 import br.com.empresa.bonal.util.enums.EnumCategoria;
 
+@SuppressWarnings("serial")
 @Entity
-public class Categoria {
+public class Categoria implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

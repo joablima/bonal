@@ -201,7 +201,6 @@ public class ProdutoControle implements Serializable {
 		produto.setStatus(false);
 		produtoRepositorio.remover(produto);
 		this.produtos = null;
-		this.produto = null;
 		listarTabela();
 		return null;
 	}

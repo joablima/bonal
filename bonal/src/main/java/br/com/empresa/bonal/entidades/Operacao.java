@@ -1,5 +1,6 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -12,28 +13,26 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("serial")
 @Entity
-public class Operacao {
+public class Operacao implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
+	@NotNull(message = "Nome da Operação é obrigatório")
 	private String nome;
-	
 
+	@NotNull(message = "Código da Operação é obrigatório")
 	private String codigo;
-	
+
 	private String descricao;
-	
+
 	private Boolean status;
-	
 
 	@Version
 	private Integer version;
-	
-	
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
@@ -51,8 +50,6 @@ public class Operacao {
 		this.nome = nome;
 	}
 
-	
-
 	public Integer getVersion() {
 		return version;
 	}
@@ -60,9 +57,7 @@ public class Operacao {
 	public Calendar getDataCadastro() {
 		return dataCadastro;
 	}
-	
-	
-	
+
 	public String getCodigo() {
 		return codigo;
 	}
@@ -70,8 +65,6 @@ public class Operacao {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-	
-	
 
 	public String getDescricao() {
 		return descricao;
@@ -80,8 +73,6 @@ public class Operacao {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
-	
 
 	public Boolean getStatus() {
 		return status;

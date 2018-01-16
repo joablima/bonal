@@ -16,7 +16,6 @@ import javax.inject.Named;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
@@ -49,6 +48,9 @@ public class CargoControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+
+	@Inject
+	private RequestContext requestContext;
 
 	// Getters and Setters
 	public Cargo getCargo() {
@@ -161,7 +163,7 @@ public class CargoControle implements Serializable {
 	// M�todos que utilizam m�todos do reposit�rio
 	@transacional
 	public String salvar() {
-		String message = "";
+		String messages = "";
 		this.cargo.setStatus(true);
 		if (cargo.getId() == null) {
 			Cargo existe = cargoRepositorio.cargoExiste(cargo);
@@ -170,13 +172,14 @@ public class CargoControle implements Serializable {
 				return null;
 			}
 			cargoRepositorio.adicionar(cargo);
-			message += "Cargo Cadastrado com Sucesso.";
+			messages += "Cargo Cadastrado com Sucesso.";
 		} else {
 			cargoRepositorio.atualizar(cargo);
-			message += "Cargo Atualizado com Sucesso.";
+			messages += "Cargo Atualizado com Sucesso.";
 		}
-		facesContext.info(message);
-		logger.info(message);
+		requestContext.scrollTo("messages");
+		facesContext.info(messages);
+		logger.info(messages);
 		cargo = new Cargo();
 		return null;
 	}
@@ -192,7 +195,6 @@ public class CargoControle implements Serializable {
 		cargo.setStatus(false);
 		cargoRepositorio.remover(cargo);
 		this.cargos = null;
-		this.cargo = null;
 		listarTabela();
 		return null;
 	}
@@ -208,28 +210,40 @@ public class CargoControle implements Serializable {
 		return true;
 	}
 
-	public void cargoDialogShow() {
+	public void dialogShow() {
 		Map<String, Object> options = new HashMap<String, Object>();
 		options.put("modal", true);
-		options.put("draggable", false);
+		options.put("draggable", true);
 		options.put("resizable", false);
-		options.put("contentWidth", 620);
-		// options.put("contentHeight", 500);
+		options.put("contentWidth", 720);
+
+		requestContext.openDialog("cargoDialog", options, null);
+	}
+
+	public void dialogConsultaShow() {
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("modal", true);
+		options.put("draggable", true);
+		options.put("resizable", false);
+		// options.put("width", 720);
+		// options.put("height", 600);
+		options.put("contentWidth", 720);
+		// options.put("contentHeight", "100%");
 		// options.put("includeViewParams", true);
+		// options.put("headerElement", "customheader");
 
-		RequestContext.getCurrentInstance().openDialog("cargoDialog", options, null);
+		requestContext.openDialog("cargoConsultaDialog", options, null);
 	}
 
-	public void cargoDialogReturn(SelectEvent event) {
-		Object objeto = event.getObject();
-		facesContext.info("Cargo " + objeto + " cadastrado com sucesso");
-	}
-
-	public void salvarDialog() {
-		RequestContext.getCurrentInstance().closeDialog(salvar());
+	public void selecionarCargo(Cargo cargo) {
+		requestContext.closeDialog(cargo);
 	}
 
 	public void fecharDialog() {
-		RequestContext.getCurrentInstance().closeDialog(0);
+		requestContext.closeDialog(null);
 	}
+	
+	
+	
+	
 }

@@ -1,9 +1,12 @@
 package br.com.empresa.bonal.entidades;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 
+@SuppressWarnings("serial")
 @Embeddable
-public class Endereco {
+public class Endereco implements Serializable{
 
 	private String logradouro;
 	private Integer numero;
