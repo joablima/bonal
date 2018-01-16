@@ -14,7 +14,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
@@ -26,8 +27,6 @@ import br.com.empresa.bonal.util.tx.transacional;
 @ViewScoped
 public class ProdutoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	final static Logger logger = Logger.getLogger(ProdutoControle.class);
 
 	private Produto produto = new Produto();
 
@@ -48,6 +47,12 @@ public class ProdutoControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+
+	@Inject
+	private RequestContext requestContext;
+
+	@Inject
+	private Logger logger;
 
 	// Getters and Setters
 	public Produto getProduto() {

@@ -8,17 +8,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
+@SuppressWarnings("serial")
 public class UnidadeDeMedidaRepositorio implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	static Logger logger = Logger.getLogger(UnidadeDeMedidaRepositorio.class);
 
 	@Inject
 	EntityManager em;
+	
+	@Inject
+	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(UnidadeDeMedida unidadeDeMedida) {

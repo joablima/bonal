@@ -14,7 +14,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Cargo;
@@ -27,8 +27,6 @@ import br.com.empresa.bonal.util.tx.transacional;
 @ViewScoped
 public class CargoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	final static Logger logger = Logger.getLogger(CargoControle.class);
 
 	private Cargo cargo = new Cargo();
 	private EnumPermissao permissao;
@@ -51,6 +49,9 @@ public class CargoControle implements Serializable {
 
 	@Inject
 	private RequestContext requestContext;
+
+	@Inject
+	private Logger logger;
 
 	// Getters and Setters
 	public Cargo getCargo() {
@@ -242,8 +243,5 @@ public class CargoControle implements Serializable {
 	public void fecharDialog() {
 		requestContext.closeDialog(null);
 	}
-	
-	
-	
-	
+
 }

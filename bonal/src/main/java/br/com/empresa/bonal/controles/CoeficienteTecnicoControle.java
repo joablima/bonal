@@ -12,7 +12,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Bem;
 import br.com.empresa.bonal.entidades.CoeficienteTecnico;
@@ -26,8 +27,6 @@ import br.com.empresa.bonal.util.tx.transacional;
 @ViewScoped
 public class CoeficienteTecnicoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	final static Logger logger = Logger.getLogger(CoeficienteTecnicoControle.class);
 
 	private CoeficienteTecnico coeficienteTecnico = new CoeficienteTecnico();
 
@@ -51,6 +50,12 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+
+	@Inject
+	private RequestContext requestContext;
+
+	@Inject
+	private Logger logger;
 
 	// Getters and Setters
 	public CoeficienteTecnico getCoeficienteTecnico() {

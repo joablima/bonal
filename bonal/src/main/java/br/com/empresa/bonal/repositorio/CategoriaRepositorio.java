@@ -7,17 +7,18 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.Categoria;
 
 public class CategoriaRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	final static Logger logger = Logger.getLogger(CategoriaRepositorio.class);
-
 	@Inject
 	EntityManager em;
+	
+	@Inject
+	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(Categoria categoria) {

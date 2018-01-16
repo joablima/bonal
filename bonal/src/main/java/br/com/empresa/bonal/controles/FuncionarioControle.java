@@ -12,7 +12,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -27,8 +27,6 @@ import br.com.empresa.bonal.util.tx.transacional;
 @ViewScoped
 public class FuncionarioControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	final static Logger logger = Logger.getLogger(FuncionarioControle.class);
 
 	private Funcionario funcionario = new Funcionario();
 
@@ -49,9 +47,12 @@ public class FuncionarioControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
-	
+
 	@Inject
-	RequestContext requestContext;
+	private RequestContext requestContext;
+
+	@Inject
+	private Logger logger;
 
 	// Getters and Setters
 	public Funcionario getFuncionario() {

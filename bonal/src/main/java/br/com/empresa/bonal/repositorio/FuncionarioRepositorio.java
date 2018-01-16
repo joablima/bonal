@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Funcionario;
@@ -16,10 +16,11 @@ import br.com.empresa.bonal.entidades.Funcionario;
 public class FuncionarioRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	final static Logger logger = Logger.getLogger(FuncionarioRepositorio.class);
-
 	@Inject
 	EntityManager em;
+	
+	@Inject
+	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(Funcionario funcionario, Long cargoId) {

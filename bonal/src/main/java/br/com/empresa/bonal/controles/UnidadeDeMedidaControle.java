@@ -12,7 +12,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
@@ -23,8 +24,6 @@ import br.com.empresa.bonal.util.tx.transacional;
 @ViewScoped
 public class UnidadeDeMedidaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	static Logger logger = Logger.getLogger(UnidadeDeMedidaControle.class);
 
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
@@ -43,6 +42,12 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+
+	@Inject
+	private RequestContext requestContext;
+
+	@Inject
+	private Logger logger;
 
 	// Getters and Setters
 	public UnidadeDeMedida getUnidadeDeMedida() {

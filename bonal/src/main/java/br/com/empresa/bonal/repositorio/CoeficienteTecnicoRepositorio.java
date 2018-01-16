@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.Bem;
 import br.com.empresa.bonal.entidades.CoeficienteTecnico;
@@ -18,10 +18,11 @@ import br.com.empresa.bonal.entidades.Produto;
 public class CoeficienteTecnicoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	final static Logger logger = Logger.getLogger(CoeficienteTecnicoRepositorio.class);
-
 	@Inject
 	EntityManager em;
+	
+	@Inject
+	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(CoeficienteTecnico coeficiente, Long bemId, Long produtoId) {

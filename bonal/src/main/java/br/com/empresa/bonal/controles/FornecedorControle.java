@@ -12,7 +12,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Fornecedor;
@@ -25,8 +26,6 @@ import br.com.empresa.bonal.util.tx.transacional;
 @ViewScoped
 public class FornecedorControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	final static Logger logger = Logger.getLogger(FornecedorControle.class);
 
 	private Fornecedor fornecedor = new Fornecedor();
 
@@ -47,6 +46,12 @@ public class FornecedorControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+
+	@Inject
+	private RequestContext requestContext;
+
+	@Inject
+	private Logger logger;
 
 	// Getters and Setters
 	public Fornecedor getFornecedor() {

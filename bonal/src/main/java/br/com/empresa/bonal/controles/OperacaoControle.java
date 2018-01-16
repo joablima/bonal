@@ -12,7 +12,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.repositorio.OperacaoRepositorio;
@@ -23,8 +24,6 @@ import br.com.empresa.bonal.util.tx.transacional;
 @ViewScoped
 public class OperacaoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	static Logger logger = Logger.getLogger(OperacaoControle.class);
 
 	private Operacao operacao = new Operacao();
 
@@ -44,6 +43,12 @@ public class OperacaoControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+
+	@Inject
+	private RequestContext requestContext;
+
+	@Inject
+	private Logger logger;
 
 	// Getters and Setters
 	public Operacao getOperacao() {
@@ -116,7 +121,7 @@ public class OperacaoControle implements Serializable {
 
 		if (status.equals(true))
 			stream = stream.filter(o -> (o.getStatus().equals(status)));
-		
+
 		operacoes = stream.collect(Collectors.toList());
 	}
 

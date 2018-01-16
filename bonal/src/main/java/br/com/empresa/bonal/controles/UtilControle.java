@@ -7,15 +7,11 @@ import java.util.Date;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
-
 @Named
 @ViewScoped
 public class UtilControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	final static Logger logger = Logger.getLogger(UtilControle.class);
-
+	
 	private Date hoje = Calendar.getInstance().getTime();
 
 	public Date getHoje() {
