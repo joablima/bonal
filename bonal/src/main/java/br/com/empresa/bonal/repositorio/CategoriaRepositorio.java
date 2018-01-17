@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.empresa.bonal.entidades.Categoria;
 
 public class CategoriaRepositorio implements Serializable {
@@ -16,13 +14,9 @@ public class CategoriaRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(Categoria categoria) {
-		logger.info("Categoria sendo adicionada, irá ser persistida nesse momento");
 		em.persist(categoria);
 	}
 
@@ -38,8 +32,7 @@ public class CategoriaRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public Categoria buscarPorId(Long id) {
-		Categoria categoria = em.find(Categoria.class, id);
-		return categoria;
+		return em.find(Categoria.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -61,26 +54,22 @@ public class CategoriaRepositorio implements Serializable {
 
 		TypedQuery<Categoria> query = em.createQuery(jpql, Categoria.class);
 
-		if (nome != null) {
-			query.setParameter("pnome", '%' + nome + '%');
-			query.setParameter("pcodigo", '%' + nome + '%');
-			query.setParameter("pdescricao", '%' + nome + '%');
-		}
+		if (nome != null)
+			query.setParameter("pnome", '%' + nome + '%')
+			.setParameter("pcodigo", '%' + nome + '%')
+			.setParameter("pdescricao", '%' + nome + '%');
 
-		logger.info(jpql);
-		List<Categoria> list = query.getResultList();
-		return list;
+		return query.getResultList();
 	}
 
 	// método que verifica se elemento existe
 	public Categoria codigoExiste(Categoria categoria) {
-		TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.codigo = :pcodigo",
-				Categoria.class);
-		query.setParameter("pcodigo", categoria.getCodigo());
+		TypedQuery<Categoria> query = em
+				.createQuery("select c from Categoria c where c.codigo = :pcodigo", Categoria.class)
+				.setParameter("pcodigo", categoria.getCodigo());
 
 		try {
-			Categoria novaCategoria = query.getSingleResult();
-			return novaCategoria;
+			return query.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}

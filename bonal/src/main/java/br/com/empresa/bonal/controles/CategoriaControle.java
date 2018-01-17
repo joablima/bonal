@@ -13,13 +13,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
-import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumCategoria;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -45,9 +44,6 @@ public class CategoriaControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
-
-	@Inject
-	private RequestContext requestContext;
 
 	@Inject
 	private Logger logger;
@@ -126,7 +122,7 @@ public class CategoriaControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
+	@Transacional
 	public void listarTabela() {
 		if (this.categorias == null) {
 			lista = categoriaRepositorio.listarTodos();
@@ -171,7 +167,7 @@ public class CategoriaControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Transacional
 	public String salvar() {
 		String message = "";
 		this.categoria.setStatus(true);
@@ -194,13 +190,13 @@ public class CategoriaControle implements Serializable {
 		return null;
 	}
 
-	@transacional
+	@Transacional
 	public void recuperarCategoriaPorId() {
 		categoria = categoriaRepositorio.buscarPorId(categoriaId);
 	}
 
 	// Remove um Categoria do banco de dados
-	@transacional
+	@Transacional
 	public String remover(Categoria categoria) {
 		categoria.setStatus(false);
 		categoriaRepositorio.atualizar(categoria);

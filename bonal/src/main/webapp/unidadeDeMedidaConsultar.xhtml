@@ -65,6 +65,24 @@
 				emptyMessage="Nenhuma unidade de Medida Encontrado!"
 				styleClass="ui-g-12">
 
+				<f:facet name="{Exporters}">
+				<div style="float:right">
+					<h:commandButton id="xls" ajax="false">
+						<p:graphicImage library="img/icon" alt="Exportar para xls"
+							name="xls.png" width="30" height="30" />
+						<p:dataExporter type="xlsx" target="unidadeDeMedida"
+							fileName="UnidadesDeMedida" />
+					</h:commandButton>
+
+					<h:commandButton id="pdf" ajax="false">
+						<p:graphicImage library="img/icon" alt="Exportar para pdf"
+							name="pdf.png" width="30" height="30" />
+						<p:dataExporter type="pdf" target="unidadeDeMedida"
+							fileName="UnidadesDeMedida" />
+					</h:commandButton>
+					</div>
+				</f:facet>
+
 				<f:facet name="header">Lista de Unidades de Medida</f:facet>
 
 				<p:column headerText="Sigla" sortBy="#{unidadeDeMedida.sigla}">
@@ -76,19 +94,22 @@
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar"
 						outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedida)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
 						action="#{unidadeDeMedidaControle.remover(unidadeDeMedida)}"
 						update="@form" process="@this @form"
 						rendered="#{unidadeDeMedida.status == true}">
 						<p:ajax listener="#{unidadeDeMedidaControle.listar}" />
 					</p:commandButton>
 
-					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
 						action="#{unidadeDeMedidaControle.salvar(unidadeDeMedida)}"
 						update="@form" process="@this @form"
 						rendered="#{unidadeDeMedida.status == false}">
@@ -126,9 +147,9 @@
 						<h:outputText
 							value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}" />
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{unidadeDeMedidaControle.remover(unidadeDeMedidaControle.unidadeDeMedida)}" />
+							action="#{unidadeDeMedidaControle.remover(unidadeDeMedida)}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedidaControle.unidadeDeMedida)}" />
+							outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedida)}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

@@ -5,10 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
-
-import org.apache.logging.log4j.Logger;
 
 import br.com.empresa.bonal.entidades.Operacao;
 
@@ -17,9 +14,6 @@ public class OperacaoRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(Operacao operacao) {
@@ -38,8 +32,7 @@ public class OperacaoRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public Operacao buscarPorId(Long id) {
-		Operacao medida = em.find(Operacao.class, id);
-		return medida;
+		return em.find(Operacao.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -51,22 +44,18 @@ public class OperacaoRepositorio implements Serializable {
 		}
 	}
 
-	// m�todo que lista com crit�rios todos os registros
+	// m�todo que lista com critérios todos os registros
 	public List<Operacao> listarPorCriterios(String nome) {
 		String jpql = "select o from Operacao o where o.nome like :pnome or o.codigo like :pcodigo or o.descricao like :pdescricao";
 
-		TypedQuery<Operacao> query = em.createQuery(jpql, Operacao.class);
-
-		query.setParameter("pnome", '%' + nome + '%');
-		query.setParameter("pcodigo", '%' + nome + '%');
-		query.setParameter("pdescricao", '%' + nome + '%');
-
-		logger.info(jpql);
-		List<Operacao> list = query.getResultList();
-		return list;
+		 return em.createQuery(jpql, Operacao.class)
+			.setParameter("pnome", '%' + nome + '%')
+			.setParameter("pcodigo", '%' + nome + '%')
+			.setParameter("pdescricao", '%' + nome + '%')
+			.getResultList();
 	}
 
-	// m�todo que lista todos os registros com pagina��o
+	// método que lista todos os registros com paginação
 	public List<Operacao> listarTodosPaginada(int firstResult, int maxResults) {
 		CriteriaQuery<Operacao> query = em.getCriteriaBuilder().createQuery(Operacao.class);
 		query.select(query.from(Operacao.class));

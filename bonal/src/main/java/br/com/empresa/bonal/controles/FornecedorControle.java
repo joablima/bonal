@@ -13,14 +13,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
-import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.repositorio.FornecedorRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -46,9 +45,6 @@ public class FornecedorControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
-
-	@Inject
-	private RequestContext requestContext;
 
 	@Inject
 	private Logger logger;
@@ -120,7 +116,7 @@ public class FornecedorControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
+	@Transacional
 	public void listarTabela() {
 		if (this.fornecedores == null) {
 			lista = fornecedorRepositorio.listarTodos();
@@ -169,7 +165,7 @@ public class FornecedorControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Transacional
 	public String salvar() {
 		String message = "";
 
@@ -187,13 +183,13 @@ public class FornecedorControle implements Serializable {
 		return null;
 	}
 
-	@transacional
+	@Transacional
 	public void recuperarFornecedorPorId() {
 		this.fornecedor = fornecedorRepositorio.buscarPorId(fornecedorId);
 	}
 
 	// Remove um Fornecedor do banco de dados
-	@transacional
+	@Transacional
 	public String remover(Fornecedor fornecedor) {
 		fornecedor.setStatus(false);
 		fornecedorRepositorio.remover(fornecedor);

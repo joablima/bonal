@@ -19,9 +19,10 @@ import org.primefaces.event.SelectEvent;
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Funcionario;
+import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.repositorio.FuncionarioRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -44,6 +45,9 @@ public class FuncionarioControle implements Serializable {
 
 	@Inject
 	private FuncionarioRepositorio funcionarioRepositorio;
+
+	@Inject
+	private CargoRepositorio cargoRepositorio;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -124,7 +128,7 @@ public class FuncionarioControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
+	@Transacional
 	public void listarTabela() {
 		if (this.funcionarios == null) {
 			lista = funcionarioRepositorio.listarTodos();
@@ -177,17 +181,21 @@ public class FuncionarioControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Transacional
 	public String salvar() {
 		String message = "";
 
 		this.funcionario.setStatus(true);
 		this.funcionario.setTipo("PESSOA_FISICA");
+
+		Cargo cargo = cargoRepositorio.buscarPorId(cargoId);
+		this.funcionario.setCargo(cargo);
+
 		if (funcionario.getId() == null) {
-			funcionarioRepositorio.adicionar(funcionario, cargoId);
+			funcionarioRepositorio.adicionar(funcionario);
 			message += "Funcionario Cadastrado com Sucesso.";
 		} else {
-			funcionarioRepositorio.atualizar(funcionario, cargoId);
+			funcionarioRepositorio.atualizar(funcionario);
 			message += "Funcionario Atualizado com Sucesso.";
 		}
 		facesContext.info(message);
@@ -196,13 +204,13 @@ public class FuncionarioControle implements Serializable {
 		return null;
 	}
 
-	@transacional
+	@Transacional
 	public void recuperarFuncionarioPorId() {
 		funcionario = funcionarioRepositorio.buscarPorId(funcionarioId);
 	}
 
 	// Remove um Funcionario do banco de dados
-	@transacional
+	@Transacional
 	public String remover(Funcionario funcionario) {
 		funcionario.setStatus(false);
 		funcionarioRepositorio.remover(funcionario);

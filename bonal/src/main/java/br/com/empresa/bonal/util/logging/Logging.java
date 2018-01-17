@@ -1,4 +1,4 @@
-package br.com.empresa.bonal.util.tx;
+package br.com.empresa.bonal.util.logging;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +10,6 @@ import javax.interceptor.InterceptorBinding;
 @InterceptorBinding
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface transacional {
+public @interface Logging {
 
 }

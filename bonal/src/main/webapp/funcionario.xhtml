@@ -101,10 +101,10 @@
 						<div class="ui-inputgroup">
 							<p:inputText placeholder="Keyboard" id="cargo"
 								value="#{funcionarioControle.funcionario.cargo.nome}" styleClass="form-normal"
-								required="true" />
+								required="true" readonly="true"/>
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
 								process="@this" update="cargo"
-								actionListener="#{cargoControle.dialogConsultaShow}">
+								actionListener="#{dialogControle.cargoConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this" update="cargo"
 									listener="#{funcionarioControle.cargoSelecionado}" />
 							</p:commandButton>

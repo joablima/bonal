@@ -13,13 +13,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
-import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.repositorio.SubCategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -45,9 +44,6 @@ public class SubCategoriaControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
-
-	@Inject
-	private RequestContext requestContext;
 
 	@Inject
 	private Logger logger;
@@ -116,7 +112,7 @@ public class SubCategoriaControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
+	@Transacional
 	public void listarTabela() {
 		if (this.subCategorias == null) {
 			lista = subCategoriaRepositorio.listarTodos();
@@ -161,7 +157,7 @@ public class SubCategoriaControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Transacional
 	public String salvar() {
 		String message = "";
 		this.subCategoria.setStatus(true);
@@ -192,13 +188,13 @@ public class SubCategoriaControle implements Serializable {
 		return null;
 	}
 
-	@transacional
+	@Transacional
 	public void recuperarSubCategoriaPorId() {
 		subCategoria = subCategoriaRepositorio.buscarPorId(subCategoriaId);
 	}
 
 	// Remove um Categoria do banco de dados
-	@transacional
+	@Transacional
 	public String remover(SubCategoria subCategoria) {
 		subCategoria.setStatus(false);
 		subCategoriaRepositorio.atualizar(subCategoria);

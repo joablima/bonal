@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.empresa.bonal.entidades.Cargo;
 
 public class CargoRepositorio implements Serializable {
@@ -16,9 +14,6 @@ public class CargoRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(Cargo cargo) {
@@ -37,8 +32,7 @@ public class CargoRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public Cargo buscarPorId(Long id) {
-		Cargo cargo = em.find(Cargo.class, id);
-		return cargo;
+		return em.find(Cargo.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -53,24 +47,15 @@ public class CargoRepositorio implements Serializable {
 	// m�todo que lista com crit�rios todos os registros
 	public List<Cargo> listarPorCriterios(String nome) {
 		String jpql = "select c from Cargo c where c.nome like :pnome";
-
-		TypedQuery<Cargo> query = em.createQuery(jpql, Cargo.class);
-
-		query.setParameter("pnome", '%' + nome + '%');
-
-		logger.info(jpql);
-		List<Cargo> list = query.getResultList();
-		return list;
+		return em.createQuery(jpql, Cargo.class).setParameter("pnome", '%' + nome + '%').getResultList();
 	}
 
 	// método que verifica se elemento existe
 	public Cargo cargoExiste(Cargo cargo) {
 		TypedQuery<Cargo> query = em.createQuery("select c from Cargo c where c.nome = :nome", Cargo.class)
 				.setParameter("nome", cargo.getNome());
-
 		try {
-			Cargo novocargo = query.getSingleResult();
-			return novocargo;
+			return query.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}

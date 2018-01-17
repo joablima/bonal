@@ -15,13 +15,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
-import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ProdutoRepositorio;
+import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -46,10 +46,10 @@ public class ProdutoControle implements Serializable {
 	private ProdutoRepositorio produtoRepositorio;
 
 	@Inject
-	private FacesContextUtil facesContext;
+	private UnidadeDeMedidaRepositorio unidadeMedidaRepositorio;
 
 	@Inject
-	private RequestContext requestContext;
+	private FacesContextUtil facesContext;
 
 	@Inject
 	private Logger logger;
@@ -115,7 +115,7 @@ public class ProdutoControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
+	@Transacional
 	public void listarTabela() {
 		if (this.produtos == null) {
 			lista = produtoRepositorio.listarTodos();
@@ -168,19 +168,23 @@ public class ProdutoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Transacional
 	public String salvar() {
 		String message = "";
 		this.produto.setStatus(true);
+
+		UnidadeDeMedida unidade = unidadeMedidaRepositorio.buscarPorId(unidadeDeMedidaId);
+		produto.setUnidadeDeMedida(unidade);
+
 		if (produto.getId() == null) {
 			Produto existe = produtoRepositorio.codigoExiste(produto);
 			if (existe != null) {
 				facesContext.warn("Já existe um produto registrado com esse código.");
 			}
-			produtoRepositorio.adicionar(produto, unidadeDeMedidaId);
+			produtoRepositorio.adicionar(produto);
 			message += "Produto Cadastrado com Sucesso.";
 		} else {
-			produtoRepositorio.atualizar(produto, unidadeDeMedidaId);
+			produtoRepositorio.atualizar(produto);
 			message += "Produto Atualizado com Sucesso.";
 		}
 		try {
@@ -195,13 +199,13 @@ public class ProdutoControle implements Serializable {
 		}
 	}
 
-	@transacional
+	@Transacional
 	public void recuperarProdutoPorId() {
 		this.produto = produtoRepositorio.buscarPorId(produtoId);
 	}
 
 	// Remove um Produto do banco de dados
-	@transacional
+	@Transacional
 	public String remover(Produto produto) {
 		produto.setStatus(false);
 		produtoRepositorio.remover(produto);

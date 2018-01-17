@@ -88,10 +88,10 @@
 					<p:commandButton id="salvar" value="Salvar"
 						action="#{cargoControle.salvar}" process="@this @form"
 						update="@none" icon="fa fa-fw fa-save" validateClient="true">
-						<f:ajax event="click" listener="#{cargoControle.fecharDialog}" />
+						<f:ajax listener="#{dialogControle.fecharDialog}"/>
 					</p:commandButton>
 
-					<p:commandButton action="#{cargoControle.fecharDialog}"
+					<p:commandButton action="#{dialogControle.fecharDialog}"
 						value="Fechar" icon="fa fa-fw fa-eraser" update="@none"
 						process="@this" />
 				</div>

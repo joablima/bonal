@@ -8,9 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.logging.log4j.Logger;
-
-import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Funcionario;
 
 public class FuncionarioRepositorio implements Serializable {
@@ -18,22 +15,14 @@ public class FuncionarioRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
-	public void adicionar(Funcionario funcionario, Long cargoId) {
-		Cargo cargo = em.find(Cargo.class, cargoId);
-		funcionario.setCargo(cargo);
-
+	public void adicionar(Funcionario funcionario) {
 		em.persist(funcionario);
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Funcionario funcionario, Long cargoId) {
-		Cargo cargo = em.find(Cargo.class, cargoId);
-		funcionario.setCargo(cargo);
+	public void atualizar(Funcionario funcionario) {
 		em.merge(funcionario);
 	}
 
@@ -44,8 +33,7 @@ public class FuncionarioRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public Funcionario buscarPorId(Long id) {
-		Funcionario funcionario = em.find(Funcionario.class, id);
-		return funcionario;
+		return em.find(Funcionario.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -70,16 +58,14 @@ public class FuncionarioRepositorio implements Serializable {
 		TypedQuery<Funcionario> query = em.createQuery(jpql, Funcionario.class);
 
 		if (nome != null) {
-			query.setParameter("pnome", '%' + nome + '%');
-			query.setParameter("pdocumento", '%' + nome + '%');
-			query.setParameter("pidentificacao", '%' + nome + '%');
-			query.setParameter("pemail", '%' + nome + '%');
+			query.setParameter("pnome", '%' + nome + '%')
+			.setParameter("pdocumento", '%' + nome + '%')
+			.setParameter("pidentificacao", '%' + nome + '%')
+			.setParameter("pemail", '%' + nome + '%');
 		}
 		if (cargoId != null)
 			query.setParameter("pcargo", cargoId);
 
-		logger.info(jpql);
-		List<Funcionario> list = query.getResultList();
-		return list;
+		return query.getResultList();
 	}
 }

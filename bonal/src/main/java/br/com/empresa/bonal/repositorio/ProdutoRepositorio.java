@@ -7,35 +7,21 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.empresa.bonal.entidades.Produto;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
 @SuppressWarnings("serial")
 public class ProdutoRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
-	public void adicionar(Produto produto, Long unidadeDeMedidaId) {
-		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
-
-		produto.setUnidadeDeMedida(unidadeDeMedida);
-
+	public void adicionar(Produto produto) {
 		em.persist(produto);
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Produto produto, Long unidadeDeMedidaId) {
-		UnidadeDeMedida unidadeDeMedida = em.find(UnidadeDeMedida.class, unidadeDeMedidaId);
-
-		produto.setUnidadeDeMedida(unidadeDeMedida);
-
+	public void atualizar(Produto produto) {
 		em.merge(produto);
 	}
 
@@ -46,8 +32,7 @@ public class ProdutoRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public Produto buscarPorId(Long id) {
-		Produto bem = em.find(Produto.class, id);
-		return bem;
+		return em.find(Produto.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -74,18 +59,15 @@ public class ProdutoRepositorio implements Serializable {
 		TypedQuery<Produto> query = em.createQuery(jpql, Produto.class);
 
 		if (nome != null) {
-			query.setParameter("pnome", '%' + nome + '%');
-			query.setParameter("pcodigo", '%' + nome + '%');
-			query.setParameter("pdescricao", '%' + nome + '%');
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
+					.setParameter("pdescricao", '%' + nome + '%');
 		}
 		if (categoriaId != null)
 			query.setParameter("pcategoria", categoriaId);
 		if (unidadeDeMedidaId != null)
 			query.setParameter("punidade", unidadeDeMedidaId);
 
-		logger.info(jpql);
-		List<Produto> list = query.getResultList();
-		return list;
+		return query.getResultList();
 	}
 
 	// método que verifica se elemento existe
@@ -94,8 +76,7 @@ public class ProdutoRepositorio implements Serializable {
 				.setParameter("codigo", produto.getCodigo());
 
 		try {
-			Produto novoProduto = query.getSingleResult();
-			return novoProduto;
+			return query.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}

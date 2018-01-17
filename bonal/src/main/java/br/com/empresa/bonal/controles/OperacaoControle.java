@@ -13,12 +13,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
-import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.repositorio.OperacaoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -43,9 +42,6 @@ public class OperacaoControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
-
-	@Inject
-	private RequestContext requestContext;
 
 	@Inject
 	private Logger logger;
@@ -103,7 +99,7 @@ public class OperacaoControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
+	@Transacional
 	public void listarTabela() {
 		if (this.operacoes == null) {
 			lista = operacaoRepositorio.listarTodos();
@@ -148,7 +144,7 @@ public class OperacaoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Transacional
 	public String salvar() {
 		String message = "";
 		this.operacao.setStatus(true);
@@ -165,13 +161,13 @@ public class OperacaoControle implements Serializable {
 		return null;
 	}
 
-	@transacional
+	@Transacional
 	public void recuperarOperacaoPorId() {
 		operacao = operacaoRepositorio.buscarPorId(operacaoId);
 	}
 
 	// Remove um cargo do banco de dados
-	@transacional
+	@Transacional
 	public String remover(Operacao operacao) {
 		operacao.setStatus(false);
 		operacaoRepositorio.remover(operacao);

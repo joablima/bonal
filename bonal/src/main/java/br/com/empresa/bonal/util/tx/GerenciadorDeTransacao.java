@@ -9,7 +9,7 @@ import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 
 @SuppressWarnings("serial")
-@transacional
+@Transacional
 @Interceptor
 public class GerenciadorDeTransacao implements Serializable {
 

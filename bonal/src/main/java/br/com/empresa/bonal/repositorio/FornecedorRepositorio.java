@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.empresa.bonal.entidades.Fornecedor;
 
 public class FornecedorRepositorio implements Serializable {
@@ -17,9 +15,6 @@ public class FornecedorRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(Fornecedor fornecedor) {
@@ -32,14 +27,13 @@ public class FornecedorRepositorio implements Serializable {
 	}
 
 	// m�todo que remove um registro
-	public void remover(Fornecedor cliente) {
-		em.merge(cliente);
+	public void remover(Fornecedor fornecedor) {
+		em.merge(fornecedor);
 	}
 
 	// m�todo que recupera um objeto pelo id
 	public Fornecedor buscarPorId(Long id) {
-		Fornecedor funcionario = em.find(Fornecedor.class, id);
-		return funcionario;
+		return em.find(Fornecedor.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -60,15 +54,12 @@ public class FornecedorRepositorio implements Serializable {
 
 		TypedQuery<Fornecedor> query = em.createQuery(jpql, Fornecedor.class);
 
-		if (nome != null) {
-			query.setParameter("pnome", '%' + nome + '%');
-			query.setParameter("pdocumento", '%' + nome + '%');
-			query.setParameter("pidentificacao", '%' + nome + '%');
-			query.setParameter("pemail", '%' + nome + '%');
-		}
+		if (nome != null)
+			query.setParameter("pnome", '%' + nome + '%')
+			.setParameter("pdocumento", '%' + nome + '%')
+			.setParameter("pidentificacao", '%' + nome + '%')
+			.setParameter("pemail", '%' + nome + '%');
 
-		logger.info(jpql);
-		List<Fornecedor> list = query.getResultList();
-		return list;
+		return query.getResultList();
 	}
 }

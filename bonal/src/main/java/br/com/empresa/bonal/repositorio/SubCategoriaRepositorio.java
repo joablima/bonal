@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.SubCategoria;
 
@@ -17,20 +15,15 @@ public class SubCategoriaRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(SubCategoria subCategoria) {
-		logger.info("SubCategoria sendo adicionada, irá ser persistida nesse momento");
-		
 		em.persist(subCategoria);
 	}
 
 	// m�todo que atualiza um registro
 	public void atualizar(SubCategoria subCategoria) {
-		
+
 		em.merge(subCategoria);
 	}
 
@@ -41,8 +34,7 @@ public class SubCategoriaRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public SubCategoria buscarPorId(Long id) {
-		SubCategoria subCategoria = em.find(SubCategoria.class, id);
-		return subCategoria;
+		return em.find(SubCategoria.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -64,41 +56,33 @@ public class SubCategoriaRepositorio implements Serializable {
 
 		TypedQuery<SubCategoria> query = em.createQuery(jpql, SubCategoria.class);
 
-		if (nome != null) {
-			query.setParameter("pnome", '%' + nome + '%');
-			query.setParameter("pcodigo", '%' + nome + '%');
-			query.setParameter("pdescricao", '%' + nome + '%');
-		}
+		if (nome != null)
+			query.setParameter("pnome", '%' + nome + '%')
+				.setParameter("pcodigo", '%' + nome + '%')
+				.setParameter("pdescricao", '%' + nome + '%');
 
-		logger.info(jpql);
-		List<SubCategoria> list = query.getResultList();
-		return list;
+		return query.getResultList();
 	}
 
 	// método que verifica se elemento existe
 	public SubCategoria codigoExiste(SubCategoria subCategoria) {
 		TypedQuery<SubCategoria> query = em.createQuery("select s from SubCategoria s where s.codigo = :pcodigo",
-				SubCategoria.class);
-		query.setParameter("pcodigo", subCategoria.getCodigo());
+				SubCategoria.class).setParameter("pcodigo", subCategoria.getCodigo());
 
 		try {
-			SubCategoria novaSubCategoria = query.getSingleResult();
-			return novaSubCategoria;
+			return query.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}
 	}
-	
 
 	// método que verifica se elemento existe
 	public Categoria getCategoriaPorCodigo(String codigo) {
 		TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.codigo = :pcodigo",
-				Categoria.class);
-		query.setParameter("pcodigo", codigo);
+				Categoria.class).setParameter("pcodigo", codigo);
 
 		try {
-			Categoria categoria = query.getSingleResult();
-			return categoria;
+			return query.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}

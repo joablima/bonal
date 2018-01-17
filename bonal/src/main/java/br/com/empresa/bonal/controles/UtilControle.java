@@ -11,15 +11,16 @@ import javax.inject.Named;
 @ViewScoped
 public class UtilControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	private Date hoje = Calendar.getInstance().getTime();
+
+	private Calendar calendar = Calendar.getInstance();
+
+	private Date hoje = calendar.getTime();
 
 	public Date getHoje() {
 		return hoje;
 	}
 
 	public Date getMaxDate(Integer dias) {
-		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(hoje);
 		calendar.add(Calendar.DATE, dias);
 		Date maxDate = calendar.getTime();
@@ -27,7 +28,6 @@ public class UtilControle implements Serializable {
 	}
 
 	public Date getMinDate(Integer dias) {
-		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(hoje);
 		calendar.add(Calendar.DATE, -dias);
 		Date minDate = calendar.getTime();
@@ -35,10 +35,10 @@ public class UtilControle implements Serializable {
 	}
 
 	public Date getMaxDateByMinDate(Date minDate, Integer dias) {
-		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(minDate);
 		calendar.add(Calendar.DATE, dias);
 		Date maxDate = calendar.getTime();
 		return maxDate;
 	}
+
 }

@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
 @SuppressWarnings("serial")
@@ -17,9 +15,6 @@ public class UnidadeDeMedidaRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(UnidadeDeMedida unidadeDeMedida) {
@@ -38,8 +33,7 @@ public class UnidadeDeMedidaRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public UnidadeDeMedida buscarPorId(Long id) {
-		UnidadeDeMedida medida = em.find(UnidadeDeMedida.class, id);
-		return medida;
+		return em.find(UnidadeDeMedida.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -55,14 +49,10 @@ public class UnidadeDeMedidaRepositorio implements Serializable {
 	public List<UnidadeDeMedida> listarPorCriterios(String nome) {
 		String jpql = "select u from UnidadeDeMedida u where u.nome like :pnome or u.sigla like :psigla";
 
-		TypedQuery<UnidadeDeMedida> query = em.createQuery(jpql, UnidadeDeMedida.class);
-
-		query.setParameter("pnome", '%' + nome + '%');
-		query.setParameter("psigla", '%' + nome + '%');
-
-		logger.info(jpql);
-		List<UnidadeDeMedida> list = query.getResultList();
-		return list;
+		return em.createQuery(jpql, UnidadeDeMedida.class)
+				.setParameter("pnome", '%' + nome + '%')
+				.setParameter("psigla", '%' + nome + '%')
+				.getResultList();
 	}
 
 	// m�todo que lista todos os registros com pagina��o
@@ -81,8 +71,7 @@ public class UnidadeDeMedidaRepositorio implements Serializable {
 				.setParameter("sigla", unidade.getSigla());
 
 		try {
-			UnidadeDeMedida novaUnidade = query.getSingleResult();
-			return novaUnidade;
+			return query.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}

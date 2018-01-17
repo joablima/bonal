@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.empresa.bonal.entidades.Cliente;
 
 public class ClienteRepositorio implements Serializable {
@@ -17,9 +15,6 @@ public class ClienteRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
-	@Inject
-	private Logger logger;
 
 	// m�todo que persiste um registro
 	public void adicionar(Cliente cliente) {
@@ -38,8 +33,7 @@ public class ClienteRepositorio implements Serializable {
 
 	// m�todo que recupera um objeto pelo id
 	public Cliente buscarPorId(Long id) {
-		Cliente funcionario = em.find(Cliente.class, id);
-		return funcionario;
+		return em.find(Cliente.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -61,15 +55,12 @@ public class ClienteRepositorio implements Serializable {
 
 		TypedQuery<Cliente> query = em.createQuery(jpql, Cliente.class);
 
-		if (nome != null) {
-			query.setParameter("pnome", '%' + nome + '%');
-			query.setParameter("pdocumento", '%' + nome + '%');
-			query.setParameter("pidentificacao", '%' + nome + '%');
-			query.setParameter("pemail", '%' + nome + '%');
-		}
+		if (nome != null)
+			query.setParameter("pnome", '%' + nome + '%')
+			.setParameter("pdocumento", '%' + nome + '%')
+			.setParameter("pidentificacao", '%' + nome + '%')
+			.setParameter("pemail", '%' + nome + '%');
 
-		logger.info(jpql);
-		List<Cliente> list = query.getResultList();
-		return list;
+		return query.getResultList();
 	}
 }

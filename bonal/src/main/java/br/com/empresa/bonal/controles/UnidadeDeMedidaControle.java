@@ -12,13 +12,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.logging.log4j.Logger;
-import org.primefaces.context.RequestContext;
-
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.logging.Logging;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -42,12 +40,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
-
-	@Inject
-	private RequestContext requestContext;
-
-	@Inject
-	private Logger logger;
 
 	// Getters and Setters
 	public UnidadeDeMedida getUnidadeDeMedida() {
@@ -102,7 +94,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
 	public void listarTabela() {
 		if (this.unidadesDeMedida == null) {
 			lista = unidadeDeMedidaRepositorio.listarTodos();
@@ -145,7 +136,8 @@ public class UnidadeDeMedidaControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Logging
+	@Transacional
 	public String salvar() {
 		String message = "";
 		this.unidadeDeMedida.setStatus(true);
@@ -161,19 +153,18 @@ public class UnidadeDeMedidaControle implements Serializable {
 			unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
 			message += "Unidade de Medida Atualizada com Sucesso.";
 		}
-		logger.info(message);
 		facesContext.info(message);
 		unidadeDeMedida = new UnidadeDeMedida();
 		return null;
 	}
 
-	@transacional
 	public void recuperarUnidadeDeMedidaPorId() {
 		unidadeDeMedida = unidadeDeMedidaRepositorio.buscarPorId(unidadeDeMedidaId);
 	}
 
 	// Remove um cargo do banco de dados
-	@transacional
+	@Logging
+	@Transacional
 	public String remover(UnidadeDeMedida unidade) {
 		unidade.setStatus(false);
 		unidadeDeMedidaRepositorio.remover(unidade);
@@ -183,6 +174,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 	}
 
 	// Editar um cargo
+	@Logging
 	public String editar(UnidadeDeMedida unidade) {
 		return "unidadeDeMedida?unidadeDeMedidaId=" + unidade.getId();
 	}
@@ -191,6 +183,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 		return "index";
 	}
 
+	@Logging
 	public boolean cargoIdExiste() {
 		if (this.unidadeDeMedidaId == null)
 			return false;

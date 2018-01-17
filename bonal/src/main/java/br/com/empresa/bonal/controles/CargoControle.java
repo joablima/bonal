@@ -3,9 +3,7 @@ package br.com.empresa.bonal.controles;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +19,7 @@ import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPermissao;
-import br.com.empresa.bonal.util.tx.transacional;
+import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
 @ViewScoped
@@ -29,11 +27,13 @@ public class CargoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Cargo cargo = new Cargo();
+
 	private EnumPermissao permissao;
 
 	private Long cargoId;
 
 	private Boolean status = true;
+
 	// Atributos para Consulta
 	private String cargoNome = "";
 
@@ -119,7 +119,7 @@ public class CargoControle implements Serializable {
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
-	@transacional
+	@Transacional
 	public void listarTabela() {
 		if (this.cargos == null) {
 			lista = cargoRepositorio.listarTodos();
@@ -162,7 +162,7 @@ public class CargoControle implements Serializable {
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
-	@transacional
+	@Transacional
 	public String salvar() {
 		String messages = "";
 		this.cargo.setStatus(true);
@@ -185,13 +185,13 @@ public class CargoControle implements Serializable {
 		return null;
 	}
 
-	@transacional
+	@Transacional
 	public void recuperarCargoPorId() {
 		cargo = cargoRepositorio.buscarPorId(cargoId);
 	}
 
 	// Remove um cargo do banco de dados
-	@transacional
+	@Transacional
 	public String remover(Cargo cargo) {
 		cargo.setStatus(false);
 		cargoRepositorio.remover(cargo);
@@ -211,37 +211,8 @@ public class CargoControle implements Serializable {
 		return true;
 	}
 
-	public void dialogShow() {
-		Map<String, Object> options = new HashMap<String, Object>();
-		options.put("modal", true);
-		options.put("draggable", true);
-		options.put("resizable", false);
-		options.put("contentWidth", 720);
-
-		requestContext.openDialog("cargoDialog", options, null);
-	}
-
-	public void dialogConsultaShow() {
-		Map<String, Object> options = new HashMap<String, Object>();
-		options.put("modal", true);
-		options.put("draggable", true);
-		options.put("resizable", false);
-		// options.put("width", 720);
-		// options.put("height", 600);
-		options.put("contentWidth", 720);
-		// options.put("contentHeight", "100%");
-		// options.put("includeViewParams", true);
-		// options.put("headerElement", "customheader");
-
-		requestContext.openDialog("cargoConsultaDialog", options, null);
-	}
-
+	// Método usado para carregar objeto para o dialog
 	public void selecionarCargo(Cargo cargo) {
 		requestContext.closeDialog(cargo);
 	}
-
-	public void fecharDialog() {
-		requestContext.closeDialog(null);
-	}
-
 }
