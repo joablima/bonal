@@ -25,7 +25,7 @@ public class CoeficienteTecnico implements Serializable{
 	
 	@OneToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name="bem")
-	private Bem bem;
+	private BemDeConsumo bemDeConsumo;
 	
 	private BigDecimal quantidade;
 	
@@ -39,13 +39,7 @@ public class CoeficienteTecnico implements Serializable{
 		this.produto = produto;
 	}
 
-	public Bem getBem() {
-		return bem;
-	}
-
-	public void setBem(Bem bem) {
-		this.bem = bem;
-	}
+	
 
 	public BigDecimal getQuantidade() {
 		return quantidade;
@@ -66,6 +60,16 @@ public class CoeficienteTecnico implements Serializable{
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
+	
+	
+
+	public BemDeConsumo getBemDeConsumo() {
+		return bemDeConsumo;
+	}
+
+	public void setBemDeConsumo(BemDeConsumo bemDeConsumo) {
+		this.bemDeConsumo = bemDeConsumo;
+	}
 
 	@Override
 	public String toString() {
@@ -73,7 +77,7 @@ public class CoeficienteTecnico implements Serializable{
 		builder.append(getClass().getSimpleName() + " {");
 		builder.append("\n\tid= " + getId());
 		builder.append("\n\tproduto= " + getProduto().getNome());
-		builder.append("\n\tbem= " + getBem().getNome());
+		builder.append("\n\tbem= " + getBemDeConsumo().getNome());
 		builder.append("\n\tquantidade= " + getQuantidade());
 		builder.append("\n }");
 		return builder.toString();

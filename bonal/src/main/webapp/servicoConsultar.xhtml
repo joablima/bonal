@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Sub Categorias</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Nova Sub Categoria" outcome="servico" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formServicoConsulta">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Codigo da Servico: "
+						for="servicoNome" />
+					<p:inputText value="#{servicoControle.servicoNome}"
+						id="servicoNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{servicoControle.listar}"
+							process="@form" update="@form :tabelaServicos" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					<p:commandButton id="buscarServico" value="Filtrar"
+						action="#{servicoControle.listar}" process="@form"
+						update="@form :tabelaServicos" icon="fa fa-fw fa-filter" />
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{servicoControle.limpar}" process="@form"
+						update="@form :tabelaServicos" />
+				</div>
+			</div>
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{servicoControle.status}">
+					<p:ajax update="@form :tabelaServicos"
+						listener="#{servicoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itens ativados" />
+				
+			</div>
+		</h:form>
+
+		<h:form id="tabelaServicos">
+			<p:dataTable id="servico" var="servico"
+				value="#{servicoControle.servicos}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{servico.id}" selection="#{servicoControle.servico}"
+				selectionMode="single" emptyMessage="Nenhuma Servico Encontrado!"
+				styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de Servicos</f:facet>
+
+				<p:column headerText="Codigo" sortBy="#{servico.codigo}">
+					<h:outputText value="#{servico.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{servico.nome}">
+					<h:outputText value="#{servico.nome}" />
+				</p:column>
+
+				<p:column headerText="Descricao" sortBy="#{servico.descricao}">
+					<h:outputText value="#{servico.descricao}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+						outcome="#{servicoControle.editar}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{servicoControle.remover}"
+						update="@form" process="@this @form"
+						rendered="#{servico.status == true}">
+						<p:ajax listener="#{servicoControle.listar}" />
+					</p:commandButton>
+
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{servicoControle.salvar}"
+						update="@form" process="@this @form"
+						rendered="#{servico.status == false}">
+						<p:ajax listener="#{servicoControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{servicoControle.totalServicos} de #{servicoControle.totalServicosConsulta}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('servicoDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
+
+			<p:dialog header="Edição de Servico" widgetVar="servicoDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel id="servicoEditar" style="text-align:center;">
+					<p:panelGrid columns="2"
+						rendered="#{not empty servicoControle.servicos}"
+						columnClasses="label,value">
+						<f:facet name="header">Titulo</f:facet>
+						<p:outputLabel value="Codigo" />
+						<p:outputLabel value="#{servicoControle.servico.codigo}" />
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{servicoControle.servico.nome}" />
+						<p:outputLabel value="#{servicoControle.servico.descricao}" />
+						<p:commandButton styleClass="botao" value="Excluir"
+							action="#{servicoControle.remover}" />
+						<p:button styleClass="botao" value="Editar"
+							outcome="#{servicoControle.editar}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

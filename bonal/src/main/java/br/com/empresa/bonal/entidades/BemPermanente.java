@@ -5,26 +5,21 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 
 @SuppressWarnings("serial")
+@Entity
 @DiscriminatorValue("bem_permanente")
-public class BemPermanente extends Bem implements Serializable{
+public class BemPermanente extends ItemDeProducao implements Serializable{
 	
 	private String marca;
 	private String modelo;
 		
-	private Boolean status;
 
-	@Version
-	private Integer version;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_cadastro")
-	private Calendar dataCadastro = Calendar.getInstance();
 
 	public String getMarca() {
 		return marca;
@@ -38,19 +33,5 @@ public class BemPermanente extends Bem implements Serializable{
 	public void setModelo(String modelo) {
 		this.modelo = modelo;
 	}
-	public Boolean getStatus() {
-		return status;
-	}
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-	public Integer getVersion() {
-		return version;
-	}
-	public Calendar getDataCadastro() {
-		return dataCadastro;
-	}
-	
-	
 	
 }

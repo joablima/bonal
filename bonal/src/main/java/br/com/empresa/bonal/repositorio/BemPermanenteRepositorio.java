@@ -8,66 +8,68 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.empresa.bonal.entidades.SubCategoria;
-import br.com.empresa.bonal.entidades.Servico;
+import br.com.empresa.bonal.entidades.BemPermanente;
 
-public class ServicoRepositorio implements Serializable {
+public class BemPermanenteRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	EntityManager em;
 
 	// m�todo que persiste um registro
-	public void adicionar(Servico servico) {
-		em.persist(servico);
+	public void adicionar(BemPermanente bemPermanente) {
+		em.persist(bemPermanente);
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Servico servico) {
+	public void atualizar(BemPermanente bemPermanente) {
 
-		em.merge(servico);
+		em.merge(bemPermanente);
 	}
 
 	// m�todo que remove um registro
-	public void remover(Servico servico) {
-		em.merge(servico);
+	public void remover(BemPermanente bemPermanente) {
+		em.merge(bemPermanente);
 	}
 
 	// m�todo que recupera um objeto pelo id
-	public Servico buscarPorId(Long id) {
-		return em.find(Servico.class, id);
+	public BemPermanente buscarPorId(Long id) {
+		return em.find(BemPermanente.class, id);
 	}
 
 	// m�todo que lista todos os registros
-	public List<Servico> listarTodos() {
+	public List<BemPermanente> listarTodos() {
 		try {
-			return em.createQuery("select s from Servico s", Servico.class).getResultList();
+			return em.createQuery("select s from BemPermanente s", BemPermanente.class).getResultList();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
-	public List<Servico> listarPorCriterios(String nome) {
-		String jpql = "select s from Servico s where ";
+	public List<BemPermanente> listarPorCriterios(String nome) {
+		String jpql = "select s from BemPermanente s where ";
 
 		if (nome != null)
-			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao);";
+			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao or s.marca like :pmarca or s.modelo like :pmodelo);";
 		jpql += "1 = 1";
 
-		TypedQuery<Servico> query = em.createQuery(jpql, Servico.class);
+		TypedQuery<BemPermanente> query = em.createQuery(jpql, BemPermanente.class);
 
 		if (nome != null)
 			query.setParameter("pnome", '%' + nome + '%')
 				.setParameter("pcodigo", '%' + nome + '%')
-				.setParameter("pdescricao", '%' + nome + '%');
+				.setParameter("pdescricao", '%' + nome + '%')
+				.setParameter("pmarca", '%' + nome + '%')
+				.setParameter("pmodelo", '%' + nome + '%');
 
 		return query.getResultList();
 	}
 
 	// método que verifica se elemento existe
-	public Servico codigoExiste(Servico servico) {
-		TypedQuery<Servico> query = em.createQuery("select s from Servico s where s.codigo = :pcodigo",
-				Servico.class).setParameter("pcodigo", servico.getCodigo());
+	public BemPermanente codigoExiste(BemPermanente bemPermanente) {
+		TypedQuery<BemPermanente> query = em.createQuery("select s from BemPermanente s where s.codigo = :pcodigo",
+				BemPermanente.class).setParameter("pcodigo", bemPermanente.getCodigo());
 
 		try {
 			return query.getSingleResult();

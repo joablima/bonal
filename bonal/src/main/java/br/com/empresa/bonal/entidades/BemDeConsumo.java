@@ -7,6 +7,7 @@ import java.util.Calendar;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -15,8 +16,9 @@ import javax.persistence.Version;
 
 
 @SuppressWarnings("serial")
+@Entity
 @DiscriminatorValue("bem_consumo")
-public class BemConsumo extends Bem implements Serializable{
+public class BemDeConsumo extends ItemDeProducao implements Serializable{
 	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -25,18 +27,6 @@ public class BemConsumo extends Bem implements Serializable{
 	
 	private BigDecimal quantidade;
 	
-	
-	
-	private Boolean status;
-
-
-	@Version
-	private Integer version;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_cadastro")
-	private Calendar dataCadastro = Calendar.getInstance();
-
 	public UnidadeDeMedida getUnidadeDeMedida() {
 		return unidadeDeMedida;
 	}
@@ -53,23 +43,4 @@ public class BemConsumo extends Bem implements Serializable{
 		this.quantidade = quantidade;
 	}
 
-	public Boolean getStatus() {
-		return status;
-	}
-
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public Calendar getDataCadastro() {
-		return dataCadastro;
-	}
-
-	
-	
-	
 }

@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,86 +18,14 @@ import javax.persistence.Version;
 
 @SuppressWarnings("serial")
 @Entity
-public class Servico implements Serializable{
+@DiscriminatorValue("servico")
+public class Servico extends ItemDeProducao implements Serializable{
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private String codigo;
 	
-	private String nome;
-	
-	private String descricao;
-	
-	private Boolean status;
-	
-	@Version	
-	private Integer version;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_cadastro")
-	private Calendar dataCadastro = Calendar.getInstance();
-
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "categoria")
-	private Categoria categoria;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "unidadeDeMedida")
-	private UnidadeDeMedida unidadeDeMedida;
-
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public UnidadeDeMedida getUnidadeDeMedida() {
-		return unidadeDeMedida;
-	}
-
-	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
-		this.unidadeDeMedida = unidadeDeMedida;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public Calendar getDataCadastro() {
-		return dataCadastro;
-	}
+	@JoinColumn(name = "unidade_de_medida")
+	private UnidadeDeMedida unidadeDeMedida;	
+	
 	
 	
 	
@@ -109,13 +38,23 @@ public class Servico implements Serializable{
 	// this.codigo = builder.toString();
 	// }
 
-	public Boolean getStatus() {
-		return status;
+	
+	public UnidadeDeMedida getUnidadeDeMedida() {
+		return unidadeDeMedida;
 	}
 
-	public void setStatus(Boolean status) {
-		this.status = status;
+
+
+
+	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
+		this.unidadeDeMedida = unidadeDeMedida;
 	}
+
+	
+	public String resumo(){
+		return "";
+	}
+
 
 	@Override
 	public String toString() {
@@ -125,7 +64,7 @@ public class Servico implements Serializable{
 		builder.append("\n\tnome= " + getNome());
 		builder.append("\n\tcodigo= " + getCodigo());
 		builder.append("\n\tdescricao= " + getDescricao());
-		builder.append("\n\tcategoria= " + getCategoria().getNome());
+		builder.append("\n\tcategoria= " + getSubCategoria().getNome());
 		builder.append("\n\tunidadeDeMedida= " + getUnidadeDeMedida().getNome());
 		builder.append("\n\tdataCadastro=" + getDataCadastro().getTime());
 		builder.append("\n\tversion=" + getVersion());
