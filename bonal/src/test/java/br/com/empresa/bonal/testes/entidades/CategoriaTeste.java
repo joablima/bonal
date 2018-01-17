@@ -2,10 +2,17 @@ package br.com.empresa.bonal.testes.entidades;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
+import br.com.empresa.bonal.util.tx.transacional;
 
 public class CategoriaTeste {
-
+	
 	public static void main(String[] args) {
+		teste();
+	}
+	
+	
+	@transacional
+	public static String teste(){
 
 		CategoriaRepositorio cr = new CategoriaRepositorio();
 
@@ -32,6 +39,8 @@ public class CategoriaTeste {
 		aux = cr.buscarPorId(aux.getId());
 		System.out.println("Categoria editada");
 		System.out.println(aux.toString());
+		
+		return "";
 	}
 
 }

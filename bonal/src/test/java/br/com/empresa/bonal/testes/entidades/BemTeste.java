@@ -1,4 +1,4 @@
-package br.com.empresa.bonal.testes.entidades;
+/*package br.com.empresa.bonal.testes.entidades;
 
 import java.math.BigDecimal;
 
@@ -42,3 +42,4 @@ public class BemTeste {
 	}
 
 }
+*/

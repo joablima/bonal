@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Sub Categorias</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Nova Sub Categoria" outcome="subCategoria" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formSubCategoriaConsulta">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Codigo da SubCategoria: "
+						for="subCategoriaNome" />
+					<p:inputText value="#{subCategoriaControle.subCategoriaNome}"
+						id="subCategoriaNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{subCategoriaControle.listar}"
+							process="@form" update="@form :tabelaSubCategorias" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					<p:commandButton id="buscarSubCategoria" value="Filtrar"
+						action="#{subCategoriaControle.listar}" process="@form"
+						update="@form :tabelaSubCategorias" icon="fa fa-fw fa-filter" />
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{subCategoriaControle.limpar}" process="@form"
+						update="@form :tabelaSubCategorias" />
+				</div>
+			</div>
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{subCategoriaControle.status}">
+					<p:ajax update="@form :tabelaSubCategorias"
+						listener="#{subCategoriaControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itens ativados" />
+				
+			</div>
+		</h:form>
+
+		<h:form id="tabelaSubCategorias">
+			<p:dataTable id="subCategoria" var="subCategoria"
+				value="#{subCategoriaControle.subCategorias}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{subCategoria.id}" selection="#{subCategoriaControle.subCategoria}"
+				selectionMode="single" emptyMessage="Nenhuma SubCategoria Encontrado!"
+				styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de SubCategorias</f:facet>
+
+				<p:column headerText="Codigo" sortBy="#{subCategoria.codigo}">
+					<h:outputText value="#{subCategoria.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{subCategoria.nome}">
+					<h:outputText value="#{subCategoria.nome}" />
+				</p:column>
+
+				<p:column headerText="Descricao" sortBy="#{subCategoria.descricao}">
+					<h:outputText value="#{subCategoria.descricao}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+						outcome="#{subCategoriaControle.editar(subCategoria)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{subCategoriaControle.remover(subCategoria)}"
+						update="@form" process="@this @form"
+						rendered="#{subCategoria.status == true}">
+						<p:ajax listener="#{subCategoriaControle.listar}" />
+					</p:commandButton>
+
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{subCategoriaControle.salvar(subCategoria)}"
+						update="@form" process="@this @form"
+						rendered="#{subCategoria.status == false}">
+						<p:ajax listener="#{subCategoriaControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{subCategoriaControle.totalSubCategorias} de #{subCategoriaControle.totalSubCategoriasConsulta}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('subCategoriaDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
+
+			<p:dialog header="Edição de SubCategoria" widgetVar="subCategoriaDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel id="subCategoriaEditar" style="text-align:center;">
+					<p:panelGrid columns="2"
+						rendered="#{not empty subCategoriaControle.subCategorias}"
+						columnClasses="label,value">
+						<f:facet name="header">Titulo</f:facet>
+						<p:outputLabel value="Codigo" />
+						<p:outputLabel value="#{subCategoriaControle.subCategoria.codigo}" />
+						<p:outputLabel value="Nome:" />
+						<p:outputLabel value="#{subCategoriaControle.subCategoria.nome}" />
+						<p:outputLabel value="#{subCategoriaControle.subCategoria.descricao}" />
+						<p:commandButton styleClass="botao" value="Excluir"
+							action="#{subCategoriaControle.remover(subCategoriaControle.subCategoria)}" />
+						<p:button styleClass="botao" value="Editar"
+							outcome="#{subCategoriaControle.editar(subCategoriaControle.subCategoria)}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
