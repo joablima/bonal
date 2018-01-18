@@ -207,8 +207,8 @@ public class CategoriaControle implements Serializable {
 	}
 
 	// Editar um Categoria
-	public String editar(Categoria categoria) {
-		return "categoria?categoriaId=" + categoria.getId();
+	public String editar() {
+		return "categoria?categoriaId=" + this.categoria.getId();
 	}
 
 	public boolean CategoriaIdExiste() {

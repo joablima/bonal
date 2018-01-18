@@ -23,7 +23,8 @@ public class UnidadeDeMedida implements Serializable {
 
 	@NotNull(message = "Nome da Unidade de Medida é obrigatória")
 	private String nome;
-
+	
+	@Column(unique=true)
 	@NotNull(message = "Sigla da Unidade de Medida é obrigatória")
 	private String sigla;
 

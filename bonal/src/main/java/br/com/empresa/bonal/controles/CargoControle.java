@@ -156,10 +156,7 @@ public class CargoControle implements Serializable {
 		this.cargoNome = "";
 	}
 
-	public void salvar(Cargo c) {
-		this.cargo = c;
-		salvar();
-	}
+	
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -201,8 +198,8 @@ public class CargoControle implements Serializable {
 	}
 
 	// Editar um cargo
-	public String editar(Cargo cargo) {
-		return "cargo?cargoId=" + cargo.getId();
+	public String editar() {
+		return "cargo?cargoId=" + this.cargo.getId();
 	}
 
 	public boolean cargoIdExiste() {

@@ -130,10 +130,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedidaNome = "";
 	}
 
-	public void salvar(UnidadeDeMedida d) {
-		this.unidadeDeMedida = d;
-		salvar();
-	}
+	
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Logging
@@ -175,8 +172,8 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// Editar um cargo
 	@Logging
-	public String editar(UnidadeDeMedida unidade) {
-		return "unidadeDeMedida?unidadeDeMedidaId=" + unidade.getId();
+	public String editar() {
+		return "unidadeDeMedida?unidadeDeMedidaId=" + this.unidadeDeMedida.getId();
 	}
 
 	public String cancelar() {

@@ -155,10 +155,6 @@ public class BemPermanenteControle implements Serializable {
 		this.bemPermanenteNome = "";
 	}
 
-	public void salvar(BemPermanente c) {
-		this.bemPermanente = c;
-	}
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {

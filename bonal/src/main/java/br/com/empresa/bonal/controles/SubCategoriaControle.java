@@ -152,10 +152,7 @@ public class SubCategoriaControle implements Serializable {
 		this.subCategoriaNome = "";
 	}
 
-	public void salvar(SubCategoria c) {
-		this.subCategoria = c;
-	}
-
+	
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
@@ -205,8 +202,8 @@ public class SubCategoriaControle implements Serializable {
 	}
 
 	// Editar um Categoria
-	public String editar(SubCategoria subCategoria) {
-		return "subCategoria?subCategoriaId=" + subCategoria.getId();
+	public String editar() {
+		return "subCategoria?subCategoriaId=" + this.subCategoria.getId();
 	}
 
 	public boolean subCategoriaIdExiste() {

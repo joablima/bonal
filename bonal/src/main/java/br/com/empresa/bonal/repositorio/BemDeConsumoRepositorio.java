@@ -93,10 +93,10 @@ public class BemDeConsumoRepositorio implements Serializable {
 	
 
 	// método que verifica se elemento existe
-	public UnidadeDeMedida getUnidadeDeMedidaPorCodigo(String codigo) {
+	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
 		TypedQuery<UnidadeDeMedida> query = em
-				.createQuery("select c from UnidadeDeMedida c where c.codigo = :pcodigo", UnidadeDeMedida.class)
-				.setParameter("pcodigo", codigo);
+				.createQuery("select c from UnidadeDeMedida c where c.sigla = :psigla", UnidadeDeMedida.class)
+				.setParameter("psigla", sigla);
 
 		try {
 			return query.getSingleResult();

@@ -30,7 +30,7 @@ public class BemDeConsumoControle implements Serializable {
 	private BemDeConsumo bemDeConsumo = new BemDeConsumo();
 	
 	private String subCategoriaCodigo;
-	private String unidadeDeMedidaCodigo;
+	private String unidadeDeMedidaSigla;
 
 	private Long bemDeConsumoId;
 
@@ -114,12 +114,12 @@ public class BemDeConsumoControle implements Serializable {
 	}
 	
 	
-	public String getUnidadeDeMedidaCodigo() {
-		return unidadeDeMedidaCodigo;
+	public String getUnidadeDeMedidaSigla() {
+		return unidadeDeMedidaSigla;
 	}
 
-	public void setUnidadeDeMedidaCodigo(String unidadeDeMedidaCodigo) {
-		this.unidadeDeMedidaCodigo = unidadeDeMedidaCodigo;
+	public void setUnidadeDeMedidaSigla(String unidadeDeMedidaSigla) {
+		this.unidadeDeMedidaSigla = unidadeDeMedidaSigla;
 	}
 
 	// ----------------- METODOS ----------------------
@@ -164,9 +164,7 @@ public class BemDeConsumoControle implements Serializable {
 		this.bemDeConsumoNome = "";
 	}
 
-	public void salvar(BemDeConsumo c) {
-		this.bemDeConsumo = c;
-	}
+	
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -184,7 +182,7 @@ public class BemDeConsumoControle implements Serializable {
 			return null;
 		}
 		
-		UnidadeDeMedida u = bemDeConsumoRepositorio.getUnidadeDeMedidaPorCodigo(subCategoriaCodigo);
+		UnidadeDeMedida u = bemDeConsumoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
 		if(u == null){
 			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
 			return null;

@@ -158,12 +158,6 @@ public class ClienteControle implements Serializable {
 
 	}
 
-	public void salvar(Cliente cliente) {
-		this.cliente = cliente;
-		this.clienteId = cliente.getId();
-		salvar();
-	}
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
@@ -199,8 +193,8 @@ public class ClienteControle implements Serializable {
 	}
 
 	// Editar um Cliente
-	public String editar(Cliente cliente) {
-		return "cliente?clienteId=" + cliente.getId();
+	public String editar() {
+		return "cliente?clienteId=" + this.cliente.getId();
 	}
 
 	public String addCoeficientes() {

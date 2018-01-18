@@ -138,10 +138,7 @@ public class OperacaoControle implements Serializable {
 		this.operacaoNome = "";
 	}
 
-	public void salvar(Operacao o) {
-		this.operacao = o;
-		salvar();
-	}
+	
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -177,8 +174,8 @@ public class OperacaoControle implements Serializable {
 	}
 
 	// Editar um cargo
-	public String editar(Operacao operacao) {
-		return "operacao?operacaoId=" + operacao.getId();
+	public String editar() {
+		return "operacao?operacaoId=" + this.operacao.getId();
 	}
 
 	public String cancelar() {

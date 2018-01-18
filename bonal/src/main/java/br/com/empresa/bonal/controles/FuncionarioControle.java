@@ -173,12 +173,6 @@ public class FuncionarioControle implements Serializable {
 		this.cargoId = null;
 	}
 
-	public void salvar(Funcionario funcionario, Cargo unidade) {
-		this.funcionario = funcionario;
-		this.funcionarioId = funcionario.getId();
-		this.cargoId = unidade.getId();
-		salvar();
-	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -220,8 +214,8 @@ public class FuncionarioControle implements Serializable {
 	}
 
 	// Editar um Funcionario
-	public String editar(Funcionario funcionario) {
-		return "funcionario?funcionarioId=" + funcionario.getId();
+	public String editar() {
+		return "funcionario?funcionarioId=" + this.funcionario.getId();
 	}
 
 	public String addCoeficientes() {

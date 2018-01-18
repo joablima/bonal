@@ -158,11 +158,6 @@ public class FornecedorControle implements Serializable {
 
 	}
 
-	public void salvar(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
-		this.fornecedorId = fornecedor.getId();
-		salvar();
-	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -199,8 +194,8 @@ public class FornecedorControle implements Serializable {
 	}
 
 	// Editar um Fornecedor
-	public String editar(Fornecedor fornecedor) {
-		return "fornecedor?fornecedorId=" + fornecedor.getId();
+	public String editar() {
+		return "fornecedor?fornecedorId=" + this.fornecedor.getId();
 	}
 
 	public String addCoeficientes() {

@@ -164,9 +164,7 @@ public class ServicoControle implements Serializable {
 		this.servicoNome = "";
 	}
 
-	public void salvar(Servico c) {
-		this.servico = c;
-	}
+	
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
