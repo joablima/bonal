@@ -14,8 +14,10 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 
-import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.Servico;
+import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ServicoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.tx.Transacional;
@@ -28,6 +30,7 @@ public class ServicoControle implements Serializable {
 	private Servico servico = new Servico();
 	
 	private String subCategoriaCodigo;
+	private String unidadeDeMedidaCodigo;
 
 	private Long servicoId;
 
@@ -109,6 +112,15 @@ public class ServicoControle implements Serializable {
 	public void setSubCategoriaCodigo(String subCategoriaCodigo) {
 		this.subCategoriaCodigo = subCategoriaCodigo;
 	}
+	
+	
+	public String getUnidadeDeMedidaCodigo() {
+		return unidadeDeMedidaCodigo;
+	}
+
+	public void setUnidadeDeMedidaCodigo(String unidadeDeMedidaCodigo) {
+		this.unidadeDeMedidaCodigo = unidadeDeMedidaCodigo;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -171,12 +183,19 @@ public class ServicoControle implements Serializable {
 			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de bens. Não é possível inserir servicos nela.");
 			return null;
 		}
+		
+		UnidadeDeMedida u = servicoRepositorio.getUnidadeDeMedidaPorCodigo(subCategoriaCodigo);
+		if(u == null){
+			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
+			return null;
+		}
+		
 		servico.setSubCategoria(c);
 
 		if (servico.getId() == null) {
-			Servico existe = servicoRepositorio.codigoExiste(servico);
+			ItemDeProducao existe = servicoRepositorio.getItemDeProducaoPorCodigo(servico.getCodigo());
 			if (existe != null) {
-				facesContext.warn("Já existe um servico registrado com esse código." + existe.resumo());
+				facesContext.warn("Codigo duplicado");
 				return null;
 			}
 			

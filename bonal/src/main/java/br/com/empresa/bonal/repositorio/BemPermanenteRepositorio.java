@@ -7,8 +7,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.BemPermanente;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.SubCategoria;
 
 public class BemPermanenteRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -68,7 +69,7 @@ public class BemPermanenteRepositorio implements Serializable {
 
 	// método que verifica se elemento existe
 	public BemPermanente codigoExiste(BemPermanente bemPermanente) {
-		TypedQuery<BemPermanente> query = em.createQuery("select s from BemPermanente s where s.codigo = :pcodigo",
+		TypedQuery<BemPermanente> query = em.createQuery("select s from ItemDeProducao s where s.codigo = :pcodigo",
 				BemPermanente.class).setParameter("pcodigo", bemPermanente.getCodigo());
 
 		try {
@@ -89,4 +90,17 @@ public class BemPermanenteRepositorio implements Serializable {
 			return null;
 		}
 	}
+	
+	// método que verifica se elemento existe
+		public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
+			TypedQuery<ItemDeProducao> query = em
+					.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
+					.setParameter("pcodigo", codigo);
+
+			try {
+				return query.getSingleResult();
+			} catch (Exception e) {
+				return null;
+			}
+		}
 }

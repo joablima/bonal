@@ -11,9 +11,9 @@
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
-			<h1>Consultar Sub Categorias</h1>
+			<h1>Consultar Servicos</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Nova Sub Categoria" outcome="servico" />
+					value="Cadastrar Novo Servico" outcome="servico" />
 			</span>
 		</div>
 
@@ -76,7 +76,7 @@
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
-						outcome="#{servicoControle.editar}" />
+						outcome="#{servicoControle.editar()}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
@@ -121,7 +121,7 @@
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{servicoControle.remover}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{servicoControle.editar}" />
+							outcome="#{servicoControle.editar()}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

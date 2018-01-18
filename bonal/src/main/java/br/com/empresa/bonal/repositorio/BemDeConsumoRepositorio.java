@@ -8,7 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.entidades.BemDeConsumo;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 
 public class BemDeConsumoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -88,4 +90,32 @@ public class BemDeConsumoRepositorio implements Serializable {
 			return null;
 		}
 	}
+	
+
+	// método que verifica se elemento existe
+	public UnidadeDeMedida getUnidadeDeMedidaPorCodigo(String codigo) {
+		TypedQuery<UnidadeDeMedida> query = em
+				.createQuery("select c from UnidadeDeMedida c where c.codigo = :pcodigo", UnidadeDeMedida.class)
+				.setParameter("pcodigo", codigo);
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// método que verifica se elemento existe
+	public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
+		TypedQuery<ItemDeProducao> query = em
+				.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
+				.setParameter("pcodigo", codigo);
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

@@ -11,9 +11,9 @@
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
-			<h1>Consultar Servicos</h1>
+			<h1>Consultar BensPermanentes</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Novo Servico" outcome="servico" />
+					value="Cadastrar Novo Servico" outcome="bemPermanente" />
 			</span>
 		</div>
 
@@ -23,105 +23,105 @@
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
 					<p:outputLabel value="Nome ou Codigo da Servico: "
-						for="servicoNome" />
-					<p:inputText value="#{servicoControle.servicoNome}"
-						id="servicoNome" styleClass="form-normal">
-						<p:ajax event="keyup" listener="#{servicoControle.listar}"
-							process="@form" update="@form :tabelaServicos" />
+						for="bemPermanenteNome" />
+					<p:inputText value="#{bemPermanenteControle.bemPermanenteNome}"
+						id="bemPermanenteNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{bemPermanenteControle.listar}"
+							process="@form" update="@form :tabelaBensPermanentes" />
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
 					<p:commandButton id="buscarServico" value="Filtrar"
-						action="#{servicoControle.listar}" process="@form"
-						update="@form :tabelaServicos" icon="fa fa-fw fa-filter" />
+						action="#{bemPermanenteControle.listar}" process="@form"
+						update="@form :tabelaBensPermanentes" icon="fa fa-fw fa-filter" />
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{servicoControle.limpar}" process="@form"
-						update="@form :tabelaServicos" />
+						action="#{bemPermanenteControle.limpar}" process="@form"
+						update="@form :tabelaBensPermanentes" />
 				</div>
 			</div>
 
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
-				<p:selectBooleanCheckbox value="#{servicoControle.status}">
-					<p:ajax update="@form :tabelaServicos"
-						listener="#{servicoControle.listar}" />
+				<p:selectBooleanCheckbox value="#{bemPermanenteControle.status}">
+					<p:ajax update="@form :tabelaBensPermanentes"
+						listener="#{bemPermanenteControle.listar}" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="Visualizar somente itens ativados" />
 				
 			</div>
 		</h:form>
 
-		<h:form id="tabelaServicos">
-			<p:dataTable id="servico" var="servico"
-				value="#{servicoControle.servicos}" resizableColumns="true"
+		<h:form id="tabelaBensPermanentes">
+			<p:dataTable id="bemPermanente" var="bemPermanente"
+				value="#{bemPermanenteControle.bensPermanentes}" resizableColumns="true"
 				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
-				rowKey="#{servico.id}" selection="#{servicoControle.servico}"
+				rowKey="#{bemPermanente.id}" selection="#{bemPermanenteControle.bemPermanente}"
 				selectionMode="single" emptyMessage="Nenhuma Servico Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Servicos</f:facet>
+				<f:facet name="header">Lista de BensPermanentes</f:facet>
 
-				<p:column headerText="Codigo" sortBy="#{servico.codigo}">
-					<h:outputText value="#{servico.codigo}" />
+				<p:column headerText="Codigo" sortBy="#{bemPermanente.codigo}">
+					<h:outputText value="#{bemPermanente.codigo}" />
 				</p:column>
 
-				<p:column headerText="Nome" sortBy="#{servico.nome}">
-					<h:outputText value="#{servico.nome}" />
+				<p:column headerText="Nome" sortBy="#{bemPermanente.nome}">
+					<h:outputText value="#{bemPermanente.nome}" />
 				</p:column>
 
-				<p:column headerText="Descricao" sortBy="#{servico.descricao}">
-					<h:outputText value="#{servico.descricao}" />
+				<p:column headerText="Descricao" sortBy="#{bemPermanente.descricao}">
+					<h:outputText value="#{bemPermanente.descricao}" />
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
-						outcome="#{servicoControle.editar()}" />
+						outcome="#{bemPermanenteControle.editar()}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{servicoControle.remover}"
+						action="#{bemPermanenteControle.remover}"
 						update="@form" process="@this @form"
-						rendered="#{servico.status == true}">
-						<p:ajax listener="#{servicoControle.listar}" />
+						rendered="#{bemPermanente.status == true}">
+						<p:ajax listener="#{bemPermanenteControle.listar}" />
 					</p:commandButton>
 
 					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{servicoControle.salvar}"
+						action="#{bemPermanenteControle.salvar}"
 						update="@form" process="@this @form"
-						rendered="#{servico.status == false}">
-						<p:ajax listener="#{servicoControle.listar}" />
+						rendered="#{bemPermanente.status == false}">
+						<p:ajax listener="#{bemPermanenteControle.listar}" />
 					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
 					<h:outputText
-						value=" #{servicoControle.totalServicos} de #{servicoControle.totalServicosConsulta}" />
+						value=" #{bemPermanenteControle.totalBensPermanentes} de #{bemPermanenteControle.totalBensPermanentesConsulta}" />
 				</f:facet>
 
 				<p:ajax event="rowDblselect"
-					oncomplete="PF('servicoDialog').show()" update="@form"
+					oncomplete="PF('bemPermanenteDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
 
-			<p:dialog header="Edição de Servico" widgetVar="servicoDialog"
+			<p:dialog header="Edição de Servico" widgetVar="bemPermanenteDialog"
 				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="servicoEditar" style="text-align:center;">
+				<p:outputPanel id="bemPermanenteEditar" style="text-align:center;">
 					<p:panelGrid columns="2"
-						rendered="#{not empty servicoControle.servicos}"
+						rendered="#{not empty bemPermanenteControle.bensPermanentes}"
 						columnClasses="label,value">
 						<f:facet name="header">Titulo</f:facet>
 						<p:outputLabel value="Codigo" />
-						<p:outputLabel value="#{servicoControle.servico.codigo}" />
+						<p:outputLabel value="#{bemPermanenteControle.bemPermanente.codigo}" />
 						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{servicoControle.servico.nome}" />
-						<p:outputLabel value="#{servicoControle.servico.descricao}" />
+						<p:outputLabel value="#{bemPermanenteControle.bemPermanente.nome}" />
+						<p:outputLabel value="#{bemPermanenteControle.bemPermanente.descricao}" />
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{servicoControle.remover}" />
+							action="#{bemPermanenteControle.remover}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{servicoControle.editar()}" />
+							outcome="#{bemPermanenteControle.editar()}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

@@ -7,8 +7,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.Servico;
+import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
 public class ServicoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -57,17 +59,17 @@ public class ServicoRepositorio implements Serializable {
 		TypedQuery<Servico> query = em.createQuery(jpql, Servico.class);
 
 		if (nome != null)
-			query.setParameter("pnome", '%' + nome + '%')
-				.setParameter("pcodigo", '%' + nome + '%')
-				.setParameter("pdescricao", '%' + nome + '%');
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
+					.setParameter("pdescricao", '%' + nome + '%');
 
 		return query.getResultList();
 	}
 
 	// método que verifica se elemento existe
 	public Servico codigoExiste(Servico servico) {
-		TypedQuery<Servico> query = em.createQuery("select s from Servico s where s.codigo = :pcodigo",
-				Servico.class).setParameter("pcodigo", servico.getCodigo());
+		TypedQuery<Servico> query = em
+				.createQuery("select s from ItemDeProducao s where s.codigo = :pcodigo", Servico.class)
+				.setParameter("pcodigo", servico.getCodigo());
 
 		try {
 			return query.getSingleResult();
@@ -78,8 +80,9 @@ public class ServicoRepositorio implements Serializable {
 
 	// método que verifica se elemento existe
 	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
-		TypedQuery<SubCategoria> query = em.createQuery("select c from SubCategoria c where c.codigo = :pcodigo",
-				SubCategoria.class).setParameter("pcodigo", codigo);
+		TypedQuery<SubCategoria> query = em
+				.createQuery("select c from SubCategoria c where c.codigo = :pcodigo", SubCategoria.class)
+				.setParameter("pcodigo", codigo);
 
 		try {
 			return query.getSingleResult();
@@ -87,4 +90,31 @@ public class ServicoRepositorio implements Serializable {
 			return null;
 		}
 	}
+
+	// método que verifica se elemento existe
+	public UnidadeDeMedida getUnidadeDeMedidaPorCodigo(String codigo) {
+		TypedQuery<UnidadeDeMedida> query = em
+				.createQuery("select c from UnidadeDeMedida c where c.codigo = :pcodigo", UnidadeDeMedida.class)
+				.setParameter("pcodigo", codigo);
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// método que verifica se elemento existe
+	public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
+		TypedQuery<ItemDeProducao> query = em
+				.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
+				.setParameter("pcodigo", codigo);
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

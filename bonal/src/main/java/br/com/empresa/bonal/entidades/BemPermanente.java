@@ -34,4 +34,8 @@ public class BemPermanente extends ItemDeProducao implements Serializable{
 		this.modelo = modelo;
 	}
 	
+	public String resumo(){
+		return "";
+	}
+	
 }

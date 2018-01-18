@@ -9,27 +9,27 @@
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="bemPermanenteId"
-			value="#{bemPermanenteControle.bemPermanenteId}" />
+		<f:viewParam name="bemDeConsumoId"
+			value="#{bemDeConsumoControle.bemDeConsumoId}" />
 		<f:viewParam name="subCategoriaCodigo"
-			value="#{bemPermanenteControle.subCategoriaCodigo}" />
+			value="#{bemDeConsumoControle.subCategoriaCodigo}" />
 		<f:viewAction
-			action="#{bemPermanenteControle.recuperarBemPermanentePorId}"
-			if="#{param.bemPermanenteId != null}" />
+			action="#{bemDeConsumoControle.recuperarBemDeConsumoPorId}"
+			if="#{param.bemDeConsumoId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
 				<h:outputText
-					rendered="#{bemPermanenteControle.bemPermanenteId == null}"
-					value="Cadastro de BemPermanente" />
+					rendered="#{bemDeConsumoControle.bemDeConsumoId == null}"
+					value="Cadastro de BemDeConsumo" />
 				<h:outputText
-					rendered="#{bemPermanenteControle.bemPermanenteId != null}"
-					value="Edição de BemPermanente" />
+					rendered="#{bemDeConsumoControle.bemDeConsumoId != null}"
+					value="Edição de BemDeConsumo" />
 			</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar BemPermanente" outcome="bemPermanenteConsultar" />
+					value="Consultar BemDeConsumo" outcome="bemDeConsumoConsultar" />
 			</span>
 		</div>
 
@@ -37,18 +37,18 @@
 			<p:effect type="pulsate" event="load" delay="500" />
 		</p:messages>
 
-		<h:form id="formBemPermanente">
-			<p:focus context="formBemPermanente" />
-			<p:fieldset legend="Dados do BemPermanente">
+		<h:form id="formBemDeConsumo">
+			<p:focus context="formBemDeConsumo" />
+			<p:fieldset legend="Dados do BemDeConsumo">
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
 						<p:inputText id="codigo"
-							value="#{bemPermanenteControle.bemPermanente.codigo}"
+							value="#{bemDeConsumoControle.bemDeConsumo.codigo}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Código do bemPermanente obrigatório"
-							validatorMessage="Código do bemPermanente deve ter no minimo 2 caracteres"
+							requiredMessage="Código do bemDeConsumo obrigatório"
+							validatorMessage="Código do bemDeConsumo deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -65,10 +65,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Nome:" for="nome" />
 						<p:inputText id="nome"
-							value="#{bemPermanenteControle.bemPermanente.nome}"
+							value="#{bemDeConsumoControle.bemDeConsumo.nome}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Nome do bemPermanente obrigatório"
-							validatorMessage="Nome do bemPermanente deve ter no minimo 2 caracteres"
+							requiredMessage="Nome do bemDeConsumo obrigatório"
+							validatorMessage="Nome do bemDeConsumo deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -85,10 +85,10 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Descrição:" for="descricao" />
 						<p:inputText id="descricao"
-							value="#{bemPermanenteControle.bemPermanente.descricao}"
+							value="#{bemDeConsumoControle.bemDeConsumo.descricao}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Descrição do bemPermanente obrigatório"
-							validatorMessage="Descrição do bemPermanente deve ter no minimo 2 caracteres"
+							requiredMessage="Descrição do bemDeConsumo obrigatório"
+							validatorMessage="Descrição do bemDeConsumo deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -98,50 +98,12 @@
 						<p:message for="descricao" id="descricaoMessage" />
 					</div>
 				</div>
-				
-				
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Marca" for="marca" />
-						<p:inputText id="marca"
-							value="#{bemPermanenteControle.bemPermanente.marca}"
-							styleClass="form-normal" required="true"
-							requiredMessage="marca do bemPermanente obrigatório"
-							validatorMessage="marca do bemPermanente deve ter no minimo 2 caracteres"
-							maxlength="80">
-							<p:clientValidator event="blur" />
-						</p:inputText>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="marca" id="marcaMessage" />
-					</div>
-				</div>
-				
-				
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Modelo:" for="modelo" />
-						<p:inputText id="modelo"
-							value="#{bemPermanenteControle.bemPermanente.modelo}"
-							styleClass="form-normal" required="true"
-							requiredMessage="modelo do bemPermanente obrigatório"
-							validatorMessage="modelo do bemPermanente deve ter no minimo 2 caracteres"
-							maxlength="80">
-							<p:clientValidator event="blur" />
-						</p:inputText>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="modelo" id="modeloMessage" />
-					</div>
-				</div>
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Sub categoria:" for="subCategoriaCodigo" />
 						<p:inputText id="subCategoriaCodigo"
-							value="#{bemPermanenteControle.subCategoriaCodigo}"
+							value="#{bemDeConsumoControle.subCategoriaCodigo}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Codigo da sub categoria obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
@@ -153,14 +115,28 @@
 					</div>
 				</div>
 				
-				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Unidade de Medida" for="unidadeDeMedidaCodigo" />
+						<p:inputText id="unidadeDeMedidaCodigo"
+							value="#{bemDeConsumoControle.unidadeDeMedidaCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da unidade de medida obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedidaCodigo" id="unidadeDeMedidaMessage" />
+					</div>
+				</div>
 
 
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
-					action="#{bemPermanenteControle.salvar}" process="@this @form"
+					action="#{bemDeConsumoControle.salvar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"

@@ -114,6 +114,22 @@
 						<p:message for="subCategoriaCodigo" id="subCategoriaCodigoMessage" />
 					</div>
 				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Unidade de Medida" for="unidadeDeMedidaCodigo" />
+						<p:inputText id="unidadeDeMedidaCodigo"
+							value="#{servicoControle.unidadeDeMedidaCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da unidade de medida obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedidaCodigo" id="unidadeDeMedidaMessage" />
+					</div>
+				</div>
 
 
 			</p:fieldset>
