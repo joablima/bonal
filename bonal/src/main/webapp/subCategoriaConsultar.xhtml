@@ -73,22 +73,31 @@
 				<p:column headerText="Descricao" sortBy="#{subCategoria.descricao}">
 					<h:outputText value="#{subCategoria.descricao}" />
 				</p:column>
+				
+				<p:column headerText="Categoria" sortBy="#{subCategoria.categoria.nome}">
+					<h:outputText value="#{subCategoria.categoria.nome}" />
+				</p:column>
+				
+				<p:column headerText="Tipo" sortBy="#{subCategoria.categoria.tipo}">
+					<h:outputText value="#{subCategoria.categoria.tipo}" />
+				</p:column>
+				
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
-						outcome="#{subCategoriaControle.editar(subCategoria)}" />
+						outcome="#{subCategoriaControle.editar()}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{subCategoriaControle.remover(subCategoria)}"
+						action="#{subCategoriaControle.remover}"
 						update="@form" process="@this @form"
 						rendered="#{subCategoria.status == true}">
 						<p:ajax listener="#{subCategoriaControle.listar}" />
 					</p:commandButton>
 
 					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{subCategoriaControle.salvar(subCategoria)}"
+						action="#{subCategoriaControle.salvar}"
 						update="@form" process="@this @form"
 						rendered="#{subCategoria.status == false}">
 						<p:ajax listener="#{subCategoriaControle.listar}" />
@@ -119,9 +128,9 @@
 						<p:outputLabel value="#{subCategoriaControle.subCategoria.nome}" />
 						<p:outputLabel value="#{subCategoriaControle.subCategoria.descricao}" />
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{subCategoriaControle.remover(subCategoriaControle.subCategoria)}" />
+							action="#{subCategoriaControle.remover}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{subCategoriaControle.editar(subCategoriaControle.subCategoria)}" />
+							outcome="#{subCategoriaControle.editar()}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

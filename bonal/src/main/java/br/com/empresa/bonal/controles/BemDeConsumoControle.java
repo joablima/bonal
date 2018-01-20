@@ -177,8 +177,8 @@ public class BemDeConsumoControle implements Serializable {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
 			return null;
 		}
-		if(c.getCategoria().getTipo().toString().toLowerCase().equals("servico")){
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de servicos. Não é possível inserir bensDeConsumo nela.");
+		if(!c.getCategoria().getTipo().toString().toLowerCase().equals("bem")){
+			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "+c.getCategoria().getTipo().toString().toLowerCase()+". Não é possível inserir bens de consumo nela.");
 			return null;
 		}
 		

@@ -78,19 +78,19 @@
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
-						outcome="#{categoriaControle.editar(categoria)}" />
+						outcome="#{categoriaControle.editar()}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{categoriaControle.remover(categoria)}"
+						action="#{categoriaControle.remover}"
 						update="@form" process="@this @form"
 						rendered="#{categoria.status == true}">
 						<p:ajax listener="#{categoriaControle.listar}" />
 					</p:commandButton>
 
 					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{categoriaControle.salvar(categoria)}"
+						action="#{categoriaControle.salvar}"
 						update="@form" process="@this @form"
 						rendered="#{categoria.status == false}">
 						<p:ajax listener="#{categoriaControle.listar}" />
@@ -121,9 +121,9 @@
 						<p:outputLabel value="#{categoriaControle.categoria.nome}" />
 						<p:outputLabel value="#{categoriaControle.categoria.descricao}" />
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{categoriaControle.remover(categoriaControle.categoria)}" />
+							action="#{categoriaControle.remover}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{categoriaControle.editar(categoriaControle.categoria)}" />
+							outcome="#{categoriaControle.editar()}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

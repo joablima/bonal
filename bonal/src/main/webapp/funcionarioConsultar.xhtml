@@ -108,7 +108,7 @@
 				
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
-						outcome="#{funcionarioControle.editar(funcionario)}" />
+						outcome="#{funcionarioControle.editar()}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
@@ -156,7 +156,7 @@
 						<p:commandButton styleClass="botao" value="Excluir"
 							action="#{funcionarioControle.remover(funcionarioControle.funcionario)}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{funcionarioControle.editar(funcionarioControle.funcionario)}" />
+							outcome="#{funcionarioControle.editar()}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

@@ -1,7 +1,5 @@
 package br.com.empresa.bonal.testes.entidades;
 
-import java.math.BigDecimal;
-
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 
@@ -14,7 +12,6 @@ public class CargoTeste {
 
 		Cargo c = new Cargo();
 		c.setNome("Programador de marte");
-		c.setSalario(new BigDecimal("28.000"));
 
 		cr.adicionar(c);
 
@@ -27,7 +24,6 @@ public class CargoTeste {
 		System.out.println(aux.toString());
 		
 		System.out.println("Salário irá ser editado para 56.000 pelo ótimo trabalho");
-		aux.setSalario(new BigDecimal("56.000"));
 		cr.atualizar(aux);
 		
 		aux = cr.buscarPorId(aux.getId());

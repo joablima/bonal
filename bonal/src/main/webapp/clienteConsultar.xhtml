@@ -92,13 +92,13 @@
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Editar" outcome="#{clienteControle.editar(cliente)}" />
+						value="Editar" outcome="#{clienteControle.editar()}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{clienteControle.remover(cliente)}" update="@form"
+						action="#{clienteControle.remover()}" update="@form"
 						process="@this @form" rendered="#{cliente.status == true}">
 						<p:ajax listener="#{clienteControle.listar}" />
 					</p:commandButton>
@@ -136,9 +136,9 @@
 						<p:outputLabel value="#{clienteControle.cliente.nome}" />
 
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{clienteControle.remover(clienteControle.cliente)}" />
+							action="#{clienteControle.remover()}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{clienteControle.editar(clienteControle.cliente)}" />
+							outcome="#{clienteControle.editar()}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

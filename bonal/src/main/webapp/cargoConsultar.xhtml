@@ -8,30 +8,30 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
-
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
 			<h1>Consultar Cargos</h1>
-			<span> <i class="fa fa-coffee" style="margin-right: 5px;" />
-				<p:link value="Cadastrar Novo Cargo" outcome="cargo" /></span>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Novo Cargo" outcome="cargo" />
+			</span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
-		<h:form id="formCargoConsulta">
+		<h:form id="formServicoConsulta">
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
-					<p:outputLabel value="Nome do Cargo: " for="cargoNome" />
-					<p:inputText value="#{cargoControle.cargoNome}" id="cargoNome"
-						styleClass="form-normal">
+					<p:outputLabel value="Nome ou Codigo da Servico: "
+						for="cargoNome" />
+					<p:inputText value="#{cargoControle.cargoNome}"
+						id="cargoNome" styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{cargoControle.listar}"
 							process="@form" update="@form :tabelaCargos" />
 					</p:inputText>
 				</div>
-
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarCargo" value="Filtrar"
+					<p:commandButton id="buscarServico" value="Filtrar"
 						action="#{cargoControle.listar}" process="@form"
 						update="@form :tabelaCargos" icon="fa fa-fw fa-filter" />
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
@@ -39,86 +39,89 @@
 						update="@form :tabelaCargos" />
 				</div>
 			</div>
+
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
 				<p:selectBooleanCheckbox value="#{cargoControle.status}">
 					<p:ajax update="@form :tabelaCargos"
 						listener="#{cargoControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente itens ativados"
-					rendered="#{cargoControle.status == true}" />
-				<h:outputText value="Visualizar todos os itens"
-					rendered="#{cargoControle.status == false}" />
+				<h:outputText value="Visualizar somente itens ativados" />
+				
 			</div>
 		</h:form>
 
 		<h:form id="tabelaCargos">
-			<p:dataTable id="cargo" var="cargo" value="#{cargoControle.cargos}"
-				resizableColumns="true" reflow="true" rows="10" paginator="true"
+			<p:dataTable id="cargo" var="cargo"
+				value="#{cargoControle.cargos}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{cargo.id}" selection="#{cargoControle.cargo}"
-				selectionMode="single" emptyMessage="Nenhum Cargo Encontrado!"
+				selectionMode="single" emptyMessage="Nenhuma Servico Encontrado!"
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Cargos</f:facet>
 
+				<p:column headerText="Codigo" sortBy="#{cargo.codigo}">
+					<h:outputText value="#{cargo.codigo}" />
+				</p:column>
+
 				<p:column headerText="Nome" sortBy="#{cargo.nome}">
-					<p:outputLabel value="#{cargo.nome}" />
+					<h:outputText value="#{cargo.nome}" />
 				</p:column>
 
-				<p:column headerText="Salário" sortBy="#{cargo.salario}">
-					<p:outputLabel value="#{cargo.salario}" />
-				</p:column>
-
-				<p:column headerText="Permissão" sortBy="#{cargo.permissao}">
-					<p:outputLabel value="#{cargo.permissao}" />
+				<p:column headerText="Descricao" sortBy="#{cargo.descricao}">
+					<h:outputText value="#{cargo.descricao}" />
 				</p:column>
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
-						outcome="#{cargoControle.editar(cargo)}" />
+						outcome="#{cargoControle.editar()}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{cargoControle.remover(cargo)}" update="@form"
-						process="@this @form" rendered="#{cargo.status == true}">
+						action="#{cargoControle.remover}"
+						update="@form" process="@this @form"
+						rendered="#{cargo.status == true}">
 						<p:ajax listener="#{cargoControle.listar}" />
 					</p:commandButton>
 
 					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{cargoControle.salvar(cargo)}" update="@form"
-						process="@this @form" rendered="#{cargo.status == false}">
+						action="#{cargoControle.salvar}"
+						update="@form" process="@this @form"
+						rendered="#{cargo.status == false}">
 						<p:ajax listener="#{cargoControle.listar}" />
 					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<p:outputLabel
+					<h:outputText
 						value=" #{cargoControle.totalCargos} de #{cargoControle.totalCargosConsulta}" />
 				</f:facet>
 
-				<p:ajax event="rowDblselect" oncomplete="PF('cargoDialog').show()"
-					update="@form" global="false" />
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('cargoDialog').show()" update="@form"
+					global="false" />
 			</p:dataTable>
 
-			<p:dialog header="Edição de Cargo" widgetVar="cargoDialog"
+			<p:dialog header="Edição de Servico" widgetVar="cargoDialog"
 				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
 				<p:outputPanel id="cargoEditar" style="text-align:center;">
 					<p:panelGrid columns="2"
 						rendered="#{not empty cargoControle.cargos}"
 						columnClasses="label,value">
 						<f:facet name="header">Titulo</f:facet>
+						<p:outputLabel value="Codigo" />
+						<p:outputLabel value="#{cargoControle.cargo.codigo}" />
 						<p:outputLabel value="Nome:" />
 						<p:outputLabel value="#{cargoControle.cargo.nome}" />
-						<p:outputLabel value="Salário:" />
-						<p:outputLabel value="#{cargoControle.cargo.salario}" />
-						<p:outputLabel value="#{cargoControle.cargo.permissao}" />
+						<p:outputLabel value="#{cargoControle.cargo.descricao}" />
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{cargoControle.remover(cargoControle.cargo)}" />
+							action="#{cargoControle.remover}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="#{cargoControle.editar(cargoControle.cargo)}" />
+							outcome="#{cargoControle.editar()}" />
 					</p:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

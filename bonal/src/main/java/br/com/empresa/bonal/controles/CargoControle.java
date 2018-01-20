@@ -16,6 +16,8 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Cargo;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPermissao;
@@ -28,15 +30,14 @@ public class CargoControle implements Serializable {
 
 	private Cargo cargo = new Cargo();
 
-	private EnumPermissao permissao;
+	private String subCategoriaCodigo;
 
 	private Long cargoId;
-
-	private Boolean status = true;
 
 	// Atributos para Consulta
 	private String cargoNome = "";
 
+	private Boolean status = true;
 	// Listas para Consulta
 	private List<Cargo> cargos;
 	private List<Cargo> lista = new ArrayList<>();
@@ -46,7 +47,7 @@ public class CargoControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
-
+	
 	@Inject
 	private RequestContext requestContext;
 
@@ -59,8 +60,8 @@ public class CargoControle implements Serializable {
 	}
 
 	// Adicionado para propriedade de contexto das tabelas do Primefaces
-	public void setCargo(Cargo cargo) {
-		this.cargo = cargo;
+	public void setCargo(Cargo c) {
+		this.cargo = c;
 	}
 
 	public Long getCargoId() {
@@ -77,27 +78,6 @@ public class CargoControle implements Serializable {
 
 	public void setCargoNome(String cargoNome) {
 		this.cargoNome = cargoNome;
-	}
-
-	public EnumPermissao getPermissao() {
-		return permissao;
-	}
-
-	public void setPermissao(EnumPermissao permissao) {
-		this.permissao = permissao;
-	}
-
-	public Boolean getStatus() {
-		return status;
-	}
-
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-
-	// ----- Carrega os Enums em Arrays -----
-	public EnumPermissao[] getEnumPermissao() {
-		return EnumPermissao.values();
 	}
 
 	public List<Cargo> getCargos() {
@@ -117,6 +97,27 @@ public class CargoControle implements Serializable {
 		return cargos.size();
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+	public String getSubCategoriaCodigo() {
+		return subCategoriaCodigo;
+	}
+
+	public void setSubCategoriaCodigo(String subCategoriaCodigo) {
+		this.subCategoriaCodigo = subCategoriaCodigo;
+	}
+
+	// ----- Carrega os Enums em Arrays -----
+	public EnumPermissao[] getEnumPermissao() {
+		return EnumPermissao.values();
+	}
+
 	// ----------------- METODOS ----------------------
 	@PostConstruct
 	@Transacional
@@ -131,7 +132,10 @@ public class CargoControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Cargo> stream = lista.stream();
 
-		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim())));
+		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(cargoNome.toLowerCase().trim()))
+				| (c.getCodigo().toLowerCase().contains(cargoNome.toLowerCase().trim()))
+				| (c.getSubCategoria().getNome().toLowerCase().contains(cargoNome.toLowerCase().trim()))
+				| c.getDescricao().toLowerCase().contains(cargoNome.toLowerCase().trim()));
 
 		if (status.equals(true))
 			stream = stream.filter(c -> (c.getStatus().equals(status)));
@@ -156,28 +160,39 @@ public class CargoControle implements Serializable {
 		this.cargoNome = "";
 	}
 
-	
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
-		String messages = "";
+		String message = "";
 		this.cargo.setStatus(true);
+
+		SubCategoria c = cargoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
+		if (c == null) {
+			facesContext.warn("SubCategoria inexistente, insira um codigo de sub categoria válido");
+			return null;
+		}
+		if (!c.getCategoria().getTipo().toString().toLowerCase().equals("mao_de_obra")) {
+			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
+					+ c.getCategoria().getTipo().toString().toLowerCase() + ". Não é possível inserir cargos nela.");
+			return null;
+		}
+		cargo.setSubCategoria(c);
+
 		if (cargo.getId() == null) {
-			Cargo existe = cargoRepositorio.cargoExiste(cargo);
+			ItemDeProducao existe = cargoRepositorio.getItemDeProducaoPorCodigo(cargo.getCodigo());
 			if (existe != null) {
-				facesContext.warn("Já existe esse cargo registrado.");
+				facesContext.warn("Codigo duplicado");
 				return null;
 			}
+
 			cargoRepositorio.adicionar(cargo);
-			messages += "Cargo Cadastrado com Sucesso.";
+			message += "Cargo cadastrado com sucesso.";
 		} else {
 			cargoRepositorio.atualizar(cargo);
-			messages += "Cargo Atualizado com Sucesso.";
+			message += "Cargo atualizado com sucesso.";
 		}
-		requestContext.scrollTo("messages");
-		facesContext.info(messages);
-		logger.info(messages);
+		facesContext.info(message);
+		logger.info(message);
 		cargo = new Cargo();
 		return null;
 	}
@@ -187,17 +202,18 @@ public class CargoControle implements Serializable {
 		cargo = cargoRepositorio.buscarPorId(cargoId);
 	}
 
-	// Remove um cargo do banco de dados
+	// Remove um SubCategoria do banco de dados
 	@Transacional
-	public String remover(Cargo cargo) {
+	public String remover() {
 		cargo.setStatus(false);
-		cargoRepositorio.remover(cargo);
+		cargoRepositorio.atualizar(cargo);
 		this.cargos = null;
+		this.cargo = new Cargo();
 		listarTabela();
 		return null;
 	}
 
-	// Editar um cargo
+	// Editar um SubCategoria
 	public String editar() {
 		return "cargo?cargoId=" + this.cargo.getId();
 	}
@@ -212,4 +228,5 @@ public class CargoControle implements Serializable {
 	public void selecionarCargo(Cargo cargo) {
 		requestContext.closeDialog(cargo);
 	}
+
 }
