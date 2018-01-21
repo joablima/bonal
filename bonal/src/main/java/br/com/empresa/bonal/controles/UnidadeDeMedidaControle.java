@@ -1,5 +1,7 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +13,13 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
@@ -40,6 +49,9 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	@Inject
 	private FacesContextUtil facesContext;
+
+	@Inject
+	private RequestContext requestContext;
 
 	// Getters and Setters
 	public UnidadeDeMedida getUnidadeDeMedida() {
@@ -130,8 +142,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedidaNome = "";
 	}
 
-	
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Logging
 	@Transacional
@@ -185,6 +195,35 @@ public class UnidadeDeMedidaControle implements Serializable {
 		if (this.unidadeDeMedidaId == null)
 			return false;
 		return true;
+	}
+
+	public void importXlsx(FileUploadEvent upload) {
+		try (FileInputStream file = (FileInputStream) upload.getFile().getInputstream()) {
+
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			Sheet sheet = workbook.getSheetAt(0);
+
+			for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+				Row row = sheet.getRow(i);
+
+				Cell cellSiglas = row.getCell(0); // sigla
+				Cell cellNomes = row.getCell(1); // nome
+
+				String sigla = cellSiglas.getStringCellValue();
+				String nome = cellNomes.getStringCellValue();
+				this.unidadeDeMedida = new UnidadeDeMedida();
+				this.unidadeDeMedida.setSigla(sigla);
+				this.unidadeDeMedida.setNome(nome);
+				this.unidadeDeMedida.setStatus(true);
+				salvar();
+			}
+			workbook.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			requestContext.scrollTo("messages");
+			facesContext.info("Erro na exportação do arquivo!");
+		}
 	}
 
 }
