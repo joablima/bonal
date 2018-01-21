@@ -62,7 +62,15 @@
 				selectionMode="single" emptyMessage="Nenhuma Categoria Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Categorias</f:facet>
+				<f:facet name="header">Lista de Categorias
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(categoriaControle.categorias)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{categoria.codigo}">
 					<h:outputText value="#{categoria.codigo}" />

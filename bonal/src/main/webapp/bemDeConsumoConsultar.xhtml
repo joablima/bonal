@@ -60,7 +60,16 @@
 				selectionMode="single" emptyMessage="Nenhuma BemDeConsumo Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de BensDeConsumo</f:facet>
+				<f:facet name="header">Lista de BensDeConsumo
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(bemDeConsumoControle.bensDeConsumo)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+					
+				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{bemDeConsumo.codigo}">
 					<h:outputText value="#{bemDeConsumo.codigo}" />

@@ -262,8 +262,6 @@ public class CargoControle implements Serializable {
 
 				this.cargo.setStatus(true);
 				this.cargo.setPermissao(EnumPermissao.COMUM.toString());
-				this.cargo.setSubCategoria(null);
-
 				salvar();
 			}
 			workbook.close();

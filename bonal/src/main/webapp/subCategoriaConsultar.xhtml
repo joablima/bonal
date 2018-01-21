@@ -60,7 +60,15 @@
 				selectionMode="single" emptyMessage="Nenhuma SubCategoria Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de SubCategorias</f:facet>
+				<f:facet name="header">Lista de SubCategorias
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(subCategoriaControle.subCategorias)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{subCategoria.codigo}">
 					<h:outputText value="#{subCategoria.codigo}" />

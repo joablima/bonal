@@ -60,7 +60,16 @@
 				selectionMode="single" emptyMessage="Nenhuma Servico Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de BensPermanentes</f:facet>
+				<f:facet name="header">Lista de BensPermanentes
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(bemPermanenteControle.bensPermanentes)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+					
+				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{bemPermanente.codigo}">
 					<h:outputText value="#{bemPermanente.codigo}" />

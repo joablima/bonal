@@ -64,7 +64,16 @@
 				selection="#{fornecedorControle.fornecedor}" selectionMode="single"
 				emptyMessage="Nenhum Fornecedores Encontrado!" styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Fornecedores</f:facet>
+				<f:facet name="header">Lista de Fornecedores
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(fornecedorControle.fornecedores)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+				
+				</f:facet>
 
 				<p:column headerText="Nome" sortBy="#{fornecedor.nome}">
 					<p:outputLabel value="#{fornecedor.nome}" />

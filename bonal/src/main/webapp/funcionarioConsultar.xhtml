@@ -76,7 +76,15 @@
 				selectionMode="single"
 				emptyMessage="Nenhum Funcionarios Encontrado!" styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Funcionarios</f:facet>
+				<f:facet name="header">Lista de Funcionarios
+				
+					<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(funcionarioControle.funcionarios)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+				</f:facet>
 
 				<p:column headerText="Nome" sortBy="#{funcionario.nome}">
 					<p:outputLabel value="#{funcionario.nome}" />

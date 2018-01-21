@@ -62,7 +62,15 @@
 				selectionMode="single" emptyMessage="Nenhuma operacao Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Operações</f:facet>
+				<f:facet name="header">Lista de Operações
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(operacaoControle.operacoes)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{operacao.codigo}">
 					<p:outputLabel value="#{operacao.codigo}" />

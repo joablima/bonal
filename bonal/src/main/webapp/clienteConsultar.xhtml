@@ -63,7 +63,16 @@
 				selectionMode="single" emptyMessage="Nenhum Clientes Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Clientes</f:facet>
+				<f:facet name="header">Lista de Clientes
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(clienteControle.clientes)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+				
+				</f:facet>
 
 				<p:column headerText="Nome" sortBy="#{cliente.nome}">
 					<p:outputLabel value="#{cliente.nome}" />

@@ -60,7 +60,15 @@
 				selectionMode="single" emptyMessage="Nenhuma Servico Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Servicos</f:facet>
+				<f:facet name="header">Lista de Servicos
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(servicoControle.servicos)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{servico.codigo}">
 					<h:outputText value="#{servico.codigo}" />
