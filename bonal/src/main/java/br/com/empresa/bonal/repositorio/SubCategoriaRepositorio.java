@@ -79,7 +79,7 @@ public class SubCategoriaRepositorio implements Serializable {
 	// método que verifica se elemento existe
 	public Categoria getCategoriaPorCodigo(String codigo) {
 		TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.codigo = :pcodigo",
-				Categoria.class).setParameter("pcodigo", codigo);
+				Categoria.class).setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();

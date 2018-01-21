@@ -50,7 +50,7 @@ public class SubCategoria implements Serializable {
 	}
 
 	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+		this.codigo = codigo.toUpperCase();
 	}
 
 	public String getNome() {

@@ -55,7 +55,7 @@ public abstract class ItemDeProducao implements Serializable{
 		return codigo;
 	}
 	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+		this.codigo = codigo.toUpperCase();
 	}
 	public String getNome() {
 		return nome;

@@ -54,7 +54,7 @@ public class UnidadeDeMedida implements Serializable {
 	}
 
 	public void setSigla(String sigla) {
-		this.sigla = sigla;
+		this.sigla = sigla.toUpperCase();
 	}
 
 	public Integer getVersion() {

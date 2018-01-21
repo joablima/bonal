@@ -67,22 +67,12 @@ public class BemPermanenteRepositorio implements Serializable {
 		return query.getResultList();
 	}
 
-	// método que verifica se elemento existe
-	public BemPermanente codigoExiste(BemPermanente bemPermanente) {
-		TypedQuery<BemPermanente> query = em.createQuery("select s from ItemDeProducao s where s.codigo = :pcodigo",
-				BemPermanente.class).setParameter("pcodigo", bemPermanente.getCodigo());
 
-		try {
-			return query.getSingleResult();
-		} catch (Exception e) {
-			return null;
-		}
-	}
 
 	// método que verifica se elemento existe
 	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
 		TypedQuery<SubCategoria> query = em.createQuery("select c from SubCategoria c where c.codigo = :pcodigo",
-				SubCategoria.class).setParameter("pcodigo", codigo);
+				SubCategoria.class).setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();
@@ -95,7 +85,7 @@ public class BemPermanenteRepositorio implements Serializable {
 		public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
 			TypedQuery<ItemDeProducao> query = em
 					.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
-					.setParameter("pcodigo", codigo);
+					.setParameter("pcodigo", codigo.toUpperCase());
 
 			try {
 				return query.getSingleResult();

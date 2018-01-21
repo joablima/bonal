@@ -68,7 +68,7 @@ public class CargoRepositorio implements Serializable {
 	public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
 		TypedQuery<ItemDeProducao> query = em
 				.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
-				.setParameter("pcodigo", codigo);
+				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();
@@ -81,7 +81,7 @@ public class CargoRepositorio implements Serializable {
 	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
 		TypedQuery<SubCategoria> query = em
 				.createQuery("select c from SubCategoria c where c.codigo = :pcodigo", SubCategoria.class)
-				.setParameter("pcodigo", codigo);
+				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();

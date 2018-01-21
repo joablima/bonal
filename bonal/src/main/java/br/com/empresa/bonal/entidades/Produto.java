@@ -93,7 +93,7 @@ public class Produto implements Serializable {
 	}
 
 	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+		this.codigo = codigo.toUpperCase();
 	}
 
 	public Integer getVersion() {

@@ -63,7 +63,7 @@ public class Operacao implements Serializable {
 	}
 
 	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+		this.codigo = codigo.toUpperCase();
 	}
 
 	public String getDescricao() {

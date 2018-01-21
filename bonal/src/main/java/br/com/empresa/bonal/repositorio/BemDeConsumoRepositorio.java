@@ -68,21 +68,9 @@ public class BemDeConsumoRepositorio implements Serializable {
 	}
 
 	// método que verifica se elemento existe
-	public BemDeConsumo codigoExiste(BemDeConsumo bemDeConsumo) {
-		TypedQuery<BemDeConsumo> query = em.createQuery("select s from BemDeConsumo s where s.codigo = :pcodigo",
-				BemDeConsumo.class).setParameter("pcodigo", bemDeConsumo.getCodigo());
-
-		try {
-			return query.getSingleResult();
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	// método que verifica se elemento existe
 	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
 		TypedQuery<SubCategoria> query = em.createQuery("select c from SubCategoria c where c.codigo = :pcodigo",
-				SubCategoria.class).setParameter("pcodigo", codigo);
+				SubCategoria.class).setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();
@@ -96,7 +84,7 @@ public class BemDeConsumoRepositorio implements Serializable {
 	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
 		TypedQuery<UnidadeDeMedida> query = em
 				.createQuery("select c from UnidadeDeMedida c where c.sigla = :psigla", UnidadeDeMedida.class)
-				.setParameter("psigla", sigla);
+				.setParameter("psigla", sigla.toUpperCase());
 
 		try {
 			return query.getSingleResult();
@@ -109,7 +97,7 @@ public class BemDeConsumoRepositorio implements Serializable {
 	public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
 		TypedQuery<ItemDeProducao> query = em
 				.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
-				.setParameter("pcodigo", codigo);
+				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();
