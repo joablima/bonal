@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,7 +109,12 @@ public class PoiControle implements Serializable {
 		}
 
 		// gravando em disco
-		File file = new File("C:/log/" + simpleName + ".xlsx");
+		boolean exists = Files.exists(Paths.get("C:/bonal/"));
+		if (!exists) {
+			Files.createDirectories(Paths.get("C:/bonal/"));
+		}
+		
+		File file = new File("C:/bonal/" + simpleName + ".xlsx");
 		FileOutputStream out = new FileOutputStream(file);
 		wb.write(out);
 		out.close();
