@@ -14,11 +14,13 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 
+import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.repositorio.FornecedorRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -192,11 +194,12 @@ public class FornecedorControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-
-	// Editar um Fornecedor
-	public String editar() {
-		return "fornecedor?fornecedorId=" + this.fornecedor.getId();
+	
+	@Logging
+	public String editar(Fornecedor fornecedor) {
+		return "fornecedor?fornecedorId=" + fornecedor.getId();
 	}
+
 
 	public String addCoeficientes() {
 		return "coeficientetecnico?fornecedorId=" + this.fornecedorId;

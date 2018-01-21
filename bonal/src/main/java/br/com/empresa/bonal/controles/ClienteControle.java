@@ -14,11 +14,13 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 
+import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.repositorio.ClienteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -191,12 +193,12 @@ public class ClienteControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-
-	// Editar um Cliente
-	public String editar() {
-		return "cliente?clienteId=" + this.cliente.getId();
+	
+	@Logging
+	public String editar(Cliente cliente) {
+		return "cliente?clienteId=" + cliente.getId();
 	}
-
+	
 	public String addCoeficientes() {
 		return "coeficientetecnico?clienteId=" + this.clienteId;
 	}

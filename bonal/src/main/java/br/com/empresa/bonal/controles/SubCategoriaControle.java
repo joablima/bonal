@@ -202,8 +202,8 @@ public class SubCategoriaControle implements Serializable {
 	}
 
 	// Editar um Categoria
-	public String editar() {
-		return "subCategoria?subCategoriaId=" + this.subCategoria.getId();
+	public String editar(SubCategoria subCategoria) {
+		return "subCategoria?subCategoriaId=" + subCategoria.getId();
 	}
 
 	public boolean subCategoriaIdExiste() {

@@ -180,10 +180,12 @@ public class UnidadeDeMedidaControle implements Serializable {
 		return null;
 	}
 
+	
+
 	// Editar um cargo
 	@Logging
-	public String editar() {
-		return "unidadeDeMedida?unidadeDeMedidaId=" + this.unidadeDeMedida.getId();
+	public String editar(UnidadeDeMedida unidadeDeMedida) {
+		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedida.getId();
 	}
 
 	public String cancelar() {

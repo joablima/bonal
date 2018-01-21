@@ -14,10 +14,12 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 
+import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumCategoria;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -205,12 +207,12 @@ public class CategoriaControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-
-	// Editar um Categoria
-	public String editar() {
-		return "categoria?categoriaId=" + this.categoria.getId();
+	
+	@Logging
+	public String editar(Categoria categoria) {
+		return "categoria?categoriaId=" + categoria.getId();
 	}
-
+	
 	public boolean CategoriaIdExiste() {
 		if (this.categoriaId == null)
 			return false;

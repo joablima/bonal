@@ -18,10 +18,12 @@ import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Endereco;
+import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.repositorio.FuncionarioRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -212,10 +214,10 @@ public class FuncionarioControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-
-	// Editar um Funcionario
-	public String editar() {
-		return "funcionario?funcionarioId=" + this.funcionario.getId();
+	
+	@Logging
+	public String editar(Funcionario funcionario) {
+		return "funcionario?funcionarioId=" + funcionario.getId();
 	}
 
 	public String addCoeficientes() {

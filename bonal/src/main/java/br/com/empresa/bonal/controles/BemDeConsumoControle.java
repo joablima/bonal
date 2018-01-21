@@ -20,6 +20,7 @@ import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemDeConsumoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -28,7 +29,7 @@ public class BemDeConsumoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private BemDeConsumo bemDeConsumo = new BemDeConsumo();
-	
+
 	private String subCategoriaCodigo;
 	private String unidadeDeMedidaSigla;
 
@@ -77,12 +78,9 @@ public class BemDeConsumoControle implements Serializable {
 		this.bemDeConsumoNome = bemDeConsumoNome;
 	}
 
-	
-
 	public List<BemDeConsumo> getBensDeConsumo() {
 		return bensDeConsumo;
 	}
-
 
 	public List<BemDeConsumo> getLista() {
 		return Collections.unmodifiableList(lista);
@@ -112,8 +110,7 @@ public class BemDeConsumoControle implements Serializable {
 	public void setSubCategoriaCodigo(String subCategoriaCodigo) {
 		this.subCategoriaCodigo = subCategoriaCodigo;
 	}
-	
-	
+
 	public String getUnidadeDeMedidaSigla() {
 		return unidadeDeMedidaSigla;
 	}
@@ -164,30 +161,30 @@ public class BemDeConsumoControle implements Serializable {
 		this.bemDeConsumoNome = "";
 	}
 
-	
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
 		String message = "";
 		this.bemDeConsumo.setStatus(true);
-		
+
 		SubCategoria c = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
-		if(c == null){
+		if (c == null) {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
 			return null;
 		}
-		if(!c.getCategoria().getTipo().toString().toLowerCase().equals("bem")){
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "+c.getCategoria().getTipo().toString().toLowerCase()+". Não é possível inserir bens de consumo nela.");
+		if (!c.getCategoria().getTipo().toString().toLowerCase().equals("bem")) {
+			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
+					+ c.getCategoria().getTipo().toString().toLowerCase()
+					+ ". Não é possível inserir bens de consumo nela.");
 			return null;
 		}
-		
+
 		UnidadeDeMedida u = bemDeConsumoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
-		if(u == null){
+		if (u == null) {
 			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
 			return null;
 		}
-		
+
 		bemDeConsumo.setSubCategoria(c);
 
 		if (bemDeConsumo.getId() == null) {
@@ -196,7 +193,7 @@ public class BemDeConsumoControle implements Serializable {
 				facesContext.warn("Codigo duplicado");
 				return null;
 			}
-			
+
 			bemDeConsumoRepositorio.adicionar(bemDeConsumo);
 			message += "BemDeConsumo Cadastrada com Sucesso.";
 		} else {
@@ -225,9 +222,11 @@ public class BemDeConsumoControle implements Serializable {
 		return null;
 	}
 
+	
+
 	// Editar um SubCategoria
-	public String editar() {
-		return "bemDeConsumo?bemDeConsumoId=" + this.bemDeConsumo.getId();
+	public String editar(BemDeConsumo bemDeConsumo) {
+		return "bemDeConsumo?bemDeConsumoId=" + bemDeConsumo.getId();
 	}
 
 	public boolean bemDeConsumoIdExiste() {

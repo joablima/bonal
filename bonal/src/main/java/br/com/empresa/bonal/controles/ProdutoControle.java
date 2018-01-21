@@ -16,11 +16,13 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 
+import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ProdutoRepositorio;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -214,6 +216,7 @@ public class ProdutoControle implements Serializable {
 		return null;
 	}
 
+	
 	// Editar um Produto
 	public String editar(Produto produto) {
 		return "produto?produtoId=" + produto.getId();

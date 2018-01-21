@@ -14,9 +14,11 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 
+import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.repositorio.OperacaoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -173,10 +175,11 @@ public class OperacaoControle implements Serializable {
 		return null;
 	}
 
-	// Editar um cargo
-	public String editar() {
-		return "operacao?operacaoId=" + this.operacao.getId();
+	@Logging
+	public String editar(Operacao operacao) {
+		return "operacao?operacaoId=" + operacao.getId();
 	}
+
 
 	public String cancelar() {
 		return "index";

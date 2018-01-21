@@ -14,11 +14,13 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 
+import br.com.empresa.bonal.entidades.BemDeConsumo;
 import br.com.empresa.bonal.entidades.BemPermanente;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.repositorio.BemPermanenteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -206,10 +208,10 @@ public class BemPermanenteControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-
-	// Editar um SubCategoria
-	public String editar() {
-		return "bemPermanente?bemPermanenteId=" + this.bemPermanente.getId();
+	
+	@Logging
+	public String editar(BemPermanente bemPermanente) {
+		return "bemPermanente?bemPermanenteId=" + bemPermanente.getId();
 	}
 
 	public boolean bemPermanenteIdExiste() {

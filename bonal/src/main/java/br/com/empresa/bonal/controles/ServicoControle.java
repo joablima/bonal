@@ -225,9 +225,10 @@ public class ServicoControle implements Serializable {
 		return null;
 	}
 
+	
 	// Editar um SubCategoria
-	public String editar() {
-		return "servico?servicoId=" + this.servico.getId();
+	public String editar(Servico servico) {
+		return "servico?servicoId=" + servico.getId();
 	}
 
 	public boolean servicoIdExiste() {
