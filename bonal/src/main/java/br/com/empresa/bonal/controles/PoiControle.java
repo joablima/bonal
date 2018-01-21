@@ -99,7 +99,7 @@ public class PoiControle implements Serializable {
 						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						address = dateFormat.format(date);
 					} else {
-						address = field.get(objeto).toString();
+						address = (field.get(objeto) == null) ? "" : field.get(objeto).toString();
 					}
 				}
 				cell.setCellValue(address);
@@ -107,7 +107,7 @@ public class PoiControle implements Serializable {
 		}
 
 		// gravando em disco
-		File file = new File("C:/log/" + simpleName + "-" + Instant.now() + ".xlsx");
+		File file = new File("C:/log/" + simpleName + ".xlsx");
 		FileOutputStream out = new FileOutputStream(file);
 		wb.write(out);
 		out.close();
