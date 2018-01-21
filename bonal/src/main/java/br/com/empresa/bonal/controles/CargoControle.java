@@ -1,5 +1,7 @@
 package br.com.empresa.bonal.controles;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,11 +15,17 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPermissao;
@@ -227,6 +235,44 @@ public class CargoControle implements Serializable {
 	// Método usado para carregar objeto para o dialog
 	public void selecionarCargo(Cargo cargo) {
 		requestContext.closeDialog(cargo);
+	}
+	
+	public void importXlsx(FileUploadEvent upload) {
+		try (FileInputStream file = (FileInputStream) upload.getFile().getInputstream()) {
+
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			Sheet sheet = workbook.getSheetAt(0);
+
+			for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+				Row row = sheet.getRow(i);
+
+				Cell cellCodigos = row.getCell(0); // codigo
+				Cell cellNomes = row.getCell(1); // nome
+				Cell cellDescricoes = row.getCell(2); // descricao
+
+				String codigo = cellCodigos.getStringCellValue();
+				String nome = cellNomes.getStringCellValue();
+				String descricao = cellDescricoes.getStringCellValue();
+
+				this.cargo = new Cargo();
+				
+				this.cargo.setCodigo(codigo);
+				this.cargo.setNome(nome);
+				this.cargo.setDescricao(descricao);
+
+				this.cargo.setStatus(true);
+				this.cargo.setPermissao(EnumPermissao.COMUM.toString());
+				this.cargo.setSubCategoria(null);
+
+				salvar();
+			}
+			workbook.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			requestContext.scrollTo("messages");
+			facesContext.info("Erro na exportação do arquivo!");
+		}
 	}
 
 }

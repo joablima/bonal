@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -106,7 +107,7 @@ public class PoiControle implements Serializable {
 		}
 
 		// gravando em disco
-		File file = new File("C:/log/" + simpleName + ".xlsx");
+		File file = new File("C:/log/" + simpleName + "-" + Instant.now() + ".xlsx");
 		FileOutputStream out = new FileOutputStream(file);
 		wb.write(out);
 		out.close();

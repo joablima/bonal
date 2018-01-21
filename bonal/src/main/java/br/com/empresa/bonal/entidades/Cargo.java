@@ -12,16 +12,13 @@ public class Cargo extends ItemDeProducao implements Serializable{
 	
 	private String permissao;
 	
-	
 	public String getPermissao() {
 		return permissao;
 	}
 
-
 	public void setPermissao(String permissao) {
 		this.permissao = permissao;
 	}
-
 
 	@Override
 	public String toString() {
