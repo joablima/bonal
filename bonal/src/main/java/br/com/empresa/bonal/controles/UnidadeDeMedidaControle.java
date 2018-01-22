@@ -21,6 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 
+import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -180,8 +181,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 		return null;
 	}
 
-	
-
 	// Editar um cargo
 	@Logging
 	public String editar(UnidadeDeMedida unidadeDeMedida) {
@@ -226,6 +225,11 @@ public class UnidadeDeMedidaControle implements Serializable {
 			requestContext.scrollTo("messages");
 			facesContext.info("Erro na exportação do arquivo!");
 		}
+	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
+		requestContext.closeDialog(unidadeDeMedida);
 	}
 
 }
