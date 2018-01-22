@@ -261,7 +261,7 @@ h3.ui-widget.ui-panelmenu-header.ui-state-default.ui-state-active.ui-corner-top
 }
 
 .ui-dialog {
-	left: calc(50% - ( 500px/ 2)) !important;
+	left: calc(50% - ( 720px/ 2)) !important;
 	top: calc(50vh - 250px) !important;
 }
 

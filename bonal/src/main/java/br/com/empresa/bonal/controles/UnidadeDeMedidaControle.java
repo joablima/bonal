@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,7 +20,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 
-import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -106,7 +104,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 	}
 
 	// ----------------- METODOS ----------------------
-	@PostConstruct
+	// @PostConstruct
 	public void listarTabela() {
 		if (this.unidadesDeMedida == null) {
 			lista = unidadeDeMedidaRepositorio.listarTodos();
@@ -134,13 +132,10 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// Limpar tabela da consulta
 	public String limpar() {
-		limparFiltros();
+		this.unidadeDeMedidaNome = "";
+		this.status = true;
 		this.unidadesDeMedida = new ArrayList<>(this.lista);
 		return null;
-	}
-
-	public void limparFiltros() {
-		this.unidadeDeMedidaNome = "";
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
@@ -181,10 +176,10 @@ public class UnidadeDeMedidaControle implements Serializable {
 		return null;
 	}
 
-	// Editar um cargo
-	@Logging
-	public String editar(UnidadeDeMedida unidadeDeMedida) {
-		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedida.getId();
+	// essa classe eh bom deixar de ser usada... use button ou link e ponha isso
+	// outcome="unidadeDeMedida?unidadeDeMedidaId=#{unidadeDeMedidaControle.unidadeDeMedida.id}"
+	public String editar() {
+		return "unidadeDeMedida?unidadeDeMedidaId=" + this.unidadeDeMedida.getId();
 	}
 
 	public String cancelar() {
@@ -225,11 +220,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 			requestContext.scrollTo("messages");
 			facesContext.info("Erro na exportação do arquivo!");
 		}
-	}
-
-	// Método usado para carregar objeto para o dialog
-	public void selecionarUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
-		requestContext.closeDialog(unidadeDeMedida);
 	}
 
 }

@@ -1,21 +1,21 @@
 package br.com.empresa.bonal.util.logging;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 @SuppressWarnings("serial")
 @Interceptor
 @Logging
 public class GerenciadorDeLog implements Serializable {
-
-	@Inject
-	Logger logger;
 
 	@AroundInvoke
 	public Object executaLogging(InvocationContext context) throws Exception {
@@ -25,36 +25,31 @@ public class GerenciadorDeLog implements Serializable {
 		int length = parameters.length;
 
 		String[] p = new String[length];
-		if (length >= 1) {
+		if (length >= 1)
 			for (int i = 0; i < parameters.length; i++) {
-				if (!parameters[i].equals(null)) {
-					String tipo = parameters[i].getClass().getSimpleName();
-					p[i] = tipo;
-				}
+				p[i] = (!parameters[i].equals(null)) ? parameters[i].getClass().getSimpleName() : "null";
 			}
-			logger.info("Inicio -> " + classe + ":" + metodo + " - com " + length + " parametros: " + p);
-			for (int i = 0; i < p.length; i++) {
-				if (parameters[i].equals(null)) {
-					logger.warn("Inicio -> " + classe + ":" + metodo + " - O " + i + "º parametro do método " + metodo
-							+ " é null");
-				}
-			}
-		}
-		logger.info("Inicio -> " + classe + ":" + metodo + " - sem parametros");
 
-		Long tempoInicial = System.currentTimeMillis();
-		Long tempoFinal;
+		String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss,SSS"));
+		String parametros = StringUtils.join(p, ", ");
+		System.out.println("[INFO ] " + now + " [INICIALIZADA] " + classe + " - " + metodo + "(" + parametros + ")");
+
+		Instant inicio = Instant.now();
+		long total;
 		try {
 			Object object = context.proceed();
 
-			tempoFinal = System.currentTimeMillis();
-			logger.info("Finalizado regularmente -> " + classe + ":" + metodo + " - tempo de execução: "
-					+ (tempoFinal - tempoInicial) + " milesegundos");
+			now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss,SSS"));
+			total = Duration.between(inicio, Instant.now()).toMillis();
+
+			System.out.println("[INFO ] " + now + " [FINALIZADA  ] " + classe + " - " + metodo + "(" + parametros
+					+ ") - tempo de execução: " + total + " milesegundos");
 			return object;
 		} catch (Exception e) {
-			tempoFinal = System.currentTimeMillis();
-			logger.warn("Finalizado com Exception -> " + classe + ":" + metodo + " - tempo de execução: "
-					+ (tempoFinal - tempoInicial) + " milesegundos");
+			now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss,SSS"));
+			total = Duration.between(inicio, Instant.now()).toMillis();
+			System.err.println("[ERROR] " + now + " [FINALIZADA  ] " + classe + " - " + metodo + "(" + parametros
+					+ ") - tempo de execução: " + total + " milesegundos");
 			return null;
 		}
 	}

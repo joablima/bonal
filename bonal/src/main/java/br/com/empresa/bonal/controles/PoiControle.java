@@ -109,12 +109,10 @@ public class PoiControle implements Serializable {
 		}
 
 		// gravando em disco
-		boolean exists = Files.exists(Paths.get("C:/bonal/"));
-		if (!exists) {
-			Files.createDirectories(Paths.get("C:/bonal/"));
-		}
-		
-		File file = new File("C:/bonal/" + simpleName + ".xlsx");
+		String diretorio = "C:/bonal/";
+		criarDiretorio(diretorio);
+
+		File file = new File(diretorio + "" + simpleName + ".xlsx");
 		FileOutputStream out = new FileOutputStream(file);
 		wb.write(out);
 		out.close();
@@ -128,6 +126,13 @@ public class PoiControle implements Serializable {
 		String fileName = file.getName();
 		InputStream in = new FileInputStream(file);
 		return new DefaultStreamedContent(in, contentType, fileName);
+	}
+
+	public void criarDiretorio(String diretorio) throws IOException {
+		Path path = Paths.get(diretorio);
+		if (!Files.exists(path)) {
+			Files.createDirectories(path);
+		}
 	}
 
 }

@@ -39,6 +39,7 @@ public class DialogControle implements Serializable{
 		options.put("draggable", true);
 		options.put("resizable", false);
 		options.put("contentWidth", 720);
+		options.put("contentHeight", 500);
 		return options;
 	}
 

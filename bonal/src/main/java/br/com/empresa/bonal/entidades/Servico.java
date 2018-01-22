@@ -11,42 +11,19 @@ import javax.persistence.ManyToOne;
 @SuppressWarnings("serial")
 @Entity
 @DiscriminatorValue("servico")
-public class Servico extends ItemDeProducao implements Serializable{
-	
-	
+public class Servico extends ItemDeProducao implements Serializable {
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "unidade_de_medida")
-	private UnidadeDeMedida unidadeDeMedida;	
-	
-	
-	
-	
-	// @PrePersist
-	// @PreUpdate
-	// public void gerarCodigo() {
-	// StringBuilder builder = new StringBuilder();
-	// builder.append(this.tipoBem);
-	// builder.append(codigo);
-	// this.codigo = builder.toString();
-	// }
+	private UnidadeDeMedida unidadeDeMedida;
 
-	
 	public UnidadeDeMedida getUnidadeDeMedida() {
 		return unidadeDeMedida;
 	}
 
-
-
-
 	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
 		this.unidadeDeMedida = unidadeDeMedida;
 	}
-
-	
-	public String resumo(){
-		return "";
-	}
-
 
 	@Override
 	public String toString() {
@@ -63,5 +40,4 @@ public class Servico extends ItemDeProducao implements Serializable{
 		builder.append("\n }");
 		return builder.toString();
 	}
-
 }
