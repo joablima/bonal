@@ -112,26 +112,6 @@
 					update="@form" global="false" />
 			</p:dataTable>
 
-			<p:dialog header="Edição de Servico" widgetVar="cargoDialog"
-				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="cargoEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty cargoControle.cargos}"
-						columnClasses="label,value">
-						<f:facet name="header">Titulo</f:facet>
-						<p:outputLabel value="Codigo" />
-						<p:outputLabel value="#{cargoControle.cargo.codigo}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{cargoControle.cargo.nome}" />
-						<p:outputLabel value="#{cargoControle.cargo.descricao}" />
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{cargoControle.remover}" />
-						<p:button styleClass="botao" value="Editar"
-							outcome="#{cargoControle.editar()}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
-
 		</h:form>
 		
 		<h:form id="importXls">

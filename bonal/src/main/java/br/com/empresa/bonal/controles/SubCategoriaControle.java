@@ -13,6 +13,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.SubCategoria;
@@ -28,6 +30,7 @@ public class SubCategoriaControle implements Serializable {
 	private SubCategoria subCategoria = new SubCategoria();
 	
 	private String categoriaCodigo;
+	private Categoria categoria;
 
 	private Long subCategoriaId;
 
@@ -38,6 +41,10 @@ public class SubCategoriaControle implements Serializable {
 	// Listas para Consulta
 	private List<SubCategoria> subCategorias;
 	private List<SubCategoria> lista = new ArrayList<>();
+	
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private SubCategoriaRepositorio subCategoriaRepositorio;
@@ -108,6 +115,14 @@ public class SubCategoriaControle implements Serializable {
 
 	public void setCategoriaCodigo(String categoriaCodigo) {
 		this.categoriaCodigo = categoriaCodigo;
+	}
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	// ----------------- METODOS ----------------------
@@ -211,5 +226,18 @@ public class SubCategoriaControle implements Serializable {
 			return false;
 		return true;
 	}
+	
+
+	public void categoriaSelecionada(SelectEvent event) {
+		categoria = (Categoria) event.getObject();
+		categoriaCodigo = categoria.getCodigo();
+		this.subCategoria.setCategoria(categoria);
+		requestContext.update("formSubCategoria:categoria");
+	}
+	
+	public void getCategoriaPorCodigo(){
+		this.categoria =  subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
+	}
+	
 
 }

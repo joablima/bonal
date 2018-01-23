@@ -114,24 +114,6 @@
 					global="false" />
 			</p:dataTable>
 
-			<p:dialog header="Edição de operacao" widgetVar="operacaoDialog"
-				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="operacaoEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty operacaoControle.operacoes}"
-						columnClasses="label,value">
-						<f:facet name="header">Titulo</f:facet>
-						<p:outputLabel value="Codigo" />
-						<p:outputLabel value="#{operacaoControle.operacao.codigo}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{operacaoControle.operacao.nome}" />
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{operacaoControle.remover(operacaoControle.operacao)}" />
-						<p:button styleClass="botao" value="Editar"
-							outcome="#{operacaoControle.editar(operacaoControle.operacao)}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
 
 		</h:form>
 

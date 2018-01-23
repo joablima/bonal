@@ -130,27 +130,6 @@
 			</p:dataTable>
 
 
-			<p:dialog header="Edição de Clientes" widgetVar="clienteDialog"
-				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="clienteEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty clienteControle.clientes}"
-						columnClasses="label,value">
-						<f:facet name="header">
-						Titulo
-						</f:facet>
-						<p:outputLabel value="Cpf" />
-						<p:outputLabel value="#{clienteControle.cliente.documento}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{clienteControle.cliente.nome}" />
-
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{clienteControle.remover()}" />
-						<p:button styleClass="botao" value="Editar"
-							outcome="#{clienteControle.editar()}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
 
 		</h:form>
 

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/dialog.xhtml">
+	<ui:define name="frame">
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formCategoriaConsultaDialog">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-12 ui-lg-6">
+					<p:outputLabel value="Nome do Categoria: " for="categoriaNome" />
+					<p:inputText value="#{categoriaControle.categoriaNome}" id="categoriaNome"
+						styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{categoriaControle.listar}"
+							process="@form" update="@form :tabelaCategorias" />
+					</p:inputText>
+				</div>
+
+				<div class="ui-g-12 ui-md-12 ui-lg-6">
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{categoriaControle.limpar}" process="@form"
+						update="formCategoriaConsultaDialog" styleClass="white-button" />
+
+
+					<p:commandButton icon="fa fa-search" styleClass="white-button"
+						process="@this" update="formCategoriaConsultaDialog"
+						actionListener="#{dialogControle.categoriaCadastroDialogShow}" />
+				</div>
+
+			</div>
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{categoriaControle.status}">
+					<p:ajax update="@form :tabelaCategorias"
+						listener="#{categoriaControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{categoriaControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{categoriaControle.status == false}" />
+			</div>
+		</h:form>
+
+		<h:form id="tabelaCategorias">
+			<p:dataTable id="categoria" var="categoria" value="#{categoriaControle.categorias}"
+				rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rowKey="#{categoria.id}"
+				selection="#{categoriaControle.categoria}" selectionMode="single"
+				emptyMessage="Nenhum Categoria Encontrado!" styleClass="ui-g-12">
+
+				<p:column headerText="Codigo" sortBy="#{categoria.codigo}">
+					<h:outputText value="#{categoria.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{categoria.nome}">
+					<p:outputLabel value="#{categoria.nome}" />
+				</p:column>
+
+
+				<p:column headerText="Descrição" sortBy="#{categoria.descricao}">
+					<p:outputLabel value="#{categoria.descricao}" />
+				</p:column>
+
+				<p:column headerText="Importar">
+					<p:commandButton icon="fa fa-fw fa-check"
+						styleClass="tab-btn btn-ativar green-button"
+						action="#{categoriaControle.selecionarCategoria(categoria)}" update="@form"
+						process="@this @form" rendered="#{categoria.status == true}">
+						<p:ajax listener="#{categoriaControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<p:outputLabel
+						value=" #{categoriaControle.totalCategorias} de #{categoriaControle.totalCategoriasConsulta}" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

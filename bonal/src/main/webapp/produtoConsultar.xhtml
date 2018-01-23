@@ -125,27 +125,6 @@
 					update="@form" global="false" />
 			</p:dataTable>
 
-			<p:dialog header="Edição de Produtos" widgetVar="produtoDialog"
-				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="produtoEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty produtoControle.produtos}"
-						columnClasses="label,value">
-						<f:facet name="header">
-						Titulo
-						</f:facet>
-						<p:outputLabel value="Codigo" />
-						<p:outputLabel value="#{produtoControle.produto.codigo}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{produtoControle.produto.nome}" />
-						<p:outputLabel value="#{produtoControle.produto.descricao}" />
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{produtoControle.remover(produtoControle.produto)}" />
-						<p:button styleClass="botao" value="Editar" 
-							outcome="#{produtoControle.editar(produtoControle.produto)}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
 
 
 			<pe:blockUI target="produto" content="blockUIContent"

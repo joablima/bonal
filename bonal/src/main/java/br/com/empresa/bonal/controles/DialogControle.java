@@ -28,6 +28,16 @@ public class DialogControle implements Serializable{
 		requestContext.openDialog("/dialogs/cargoConsultaDialog", options, null);
 	}
 	
+	public void categoriaCadastroDialogShow() {
+		Map<String, Object> options = optionsDialog();
+		requestContext.openDialog("/dialogs/categoriaCadastroDialog", options, null);
+	}
+
+	public void categoriaConsultaDialogShow() {
+		Map<String, Object> options = optionsDialog();
+		requestContext.openDialog("/dialogs/categoriaConsultaDialog", options, null);
+	}
+	
 	public void unidadeDeMedidaConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/unidadeDeMedidaConsultaDialog", options, null);

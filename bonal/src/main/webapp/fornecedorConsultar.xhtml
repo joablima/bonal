@@ -131,28 +131,6 @@
 			</p:dataTable>
 
 
-			<p:dialog header="Edição de Fornecedores"
-				widgetVar="fornecedorDialog" modal="true" showEffect="fade"
-				hideEffect="fade" resizable="false">
-				<p:outputPanel id="fornecedorEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty fornecedorControle.fornecedores}"
-						columnClasses="label,value">
-						<f:facet name="header">
-						Titulo
-						</f:facet>
-						<p:outputLabel value="Cpf" />
-						<p:outputLabel value="#{fornecedorControle.fornecedor.documento}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{fornecedorControle.fornecedor.nome}" />
-
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{fornecedorControle.remover(fornecedor)}" />
-						<p:button styleClass="botao" value="Editar"
-							outcome="#{fornecedorControle.editar(fornecedor)}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
 
 		</h:form>
 

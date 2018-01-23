@@ -178,8 +178,8 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// essa classe eh bom deixar de ser usada... use button ou link e ponha isso
 	// outcome="unidadeDeMedida?unidadeDeMedidaId=#{unidadeDeMedidaControle.unidadeDeMedida.id}"
-	public String editar() {
-		return "unidadeDeMedida?unidadeDeMedidaId=" + this.unidadeDeMedida.getId();
+	public String editar(UnidadeDeMedida unidadeDeMedida) {
+		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedida.getId();
 	}
 
 	public String cancelar() {

@@ -114,27 +114,6 @@
 					oncomplete="PF('bemDeConsumoDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
-
-			<p:dialog header="Edição de BemDeConsumo" widgetVar="bemDeConsumoDialog"
-				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="bemDeConsumoEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty bemDeConsumoControle.bensDeConsumo}"
-						columnClasses="label,value">
-						<f:facet name="header">Titulo</f:facet>
-						<p:outputLabel value="Codigo" />
-						<p:outputLabel value="#{bemDeConsumoControle.bemDeConsumo.codigo}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{bemDeConsumoControle.bemDeConsumo.nome}" />
-						<p:outputLabel value="#{bemDeConsumoControle.bemDeConsumo.descricao}" />
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{bemDeConsumoControle.remover}" />
-						<p:button styleClass="botao" value="Editar"
-							outcome="#{bemDeConsumoControle.editar()}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
-
 		</h:form>
 
 	</ui:define>

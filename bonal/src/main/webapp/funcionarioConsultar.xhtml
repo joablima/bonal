@@ -146,28 +146,6 @@
 			</p:dataTable>
 
 
-			<p:dialog header="Edição de Funcionarios"
-				widgetVar="funcionarioDialog" modal="true" showEffect="fade"
-				hideEffect="fade" resizable="false">
-				<p:outputPanel id="funcionarioEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty funcionarioControle.funcionarios}"
-						columnClasses="label,value">
-						<f:facet name="header">
-						Titulo
-						</f:facet>
-						<p:outputLabel value="Cpf" />
-						<p:outputLabel value="#{funcionarioControle.funcionario.documento}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{funcionarioControle.funcionario.nome}" />
-						
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{funcionarioControle.remover(funcionarioControle.funcionario)}" />
-						<p:button styleClass="botao" value="Editar"
-							outcome="#{funcionarioControle.editar()}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
 
 		</h:form>
 

@@ -115,25 +115,7 @@
 					global="false" />
 			</p:dataTable>
 
-			<p:dialog header="Edição de Servico" widgetVar="bemPermanenteDialog"
-				modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				<p:outputPanel id="bemPermanenteEditar" style="text-align:center;">
-					<p:panelGrid columns="2"
-						rendered="#{not empty bemPermanenteControle.bensPermanentes}"
-						columnClasses="label,value">
-						<f:facet name="header">Titulo</f:facet>
-						<p:outputLabel value="Codigo" />
-						<p:outputLabel value="#{bemPermanenteControle.bemPermanente.codigo}" />
-						<p:outputLabel value="Nome:" />
-						<p:outputLabel value="#{bemPermanenteControle.bemPermanente.nome}" />
-						<p:outputLabel value="#{bemPermanenteControle.bemPermanente.descricao}" />
-						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{bemPermanenteControle.remover}" />
-						<p:button styleClass="botao" value="Editar"
-							outcome="#{bemPermanenteControle.editar()}" />
-					</p:panelGrid>
-				</p:outputPanel>
-			</p:dialog>
+
 
 		</h:form>
 

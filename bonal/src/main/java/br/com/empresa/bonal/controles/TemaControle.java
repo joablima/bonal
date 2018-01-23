@@ -10,7 +10,7 @@ import javax.inject.Named;
 public class TemaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String tema = "aristo";
+	private String tema = "afterdark";
 
 	public String getTema() {
 		return tema;

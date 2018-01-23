@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Categoria;
@@ -43,6 +44,9 @@ public class CategoriaControle implements Serializable {
 
 	@Inject
 	private CategoriaRepositorio categoriaRepositorio;
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -207,16 +211,21 @@ public class CategoriaControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-	
+
 	@Logging
 	public String editar(Categoria categoria) {
 		return "categoria?categoriaId=" + categoria.getId();
 	}
-	
+
 	public boolean CategoriaIdExiste() {
 		if (this.categoriaId == null)
 			return false;
 		return true;
+	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarCategoria(Categoria categoria) {
+		requestContext.closeDialog(categoria);
 	}
 
 }

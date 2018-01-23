@@ -93,7 +93,7 @@
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
 						value="Editar"
-						outcome="unidadeDeMedida?unidadeDeMedidaId=#{unidadeDeMedida.id}" />
+						outcome="#{unidadeDeMedidaControle.editar(unidadeDeMedida)}" />
 				</p:column>
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
@@ -127,7 +127,7 @@
 
 
 
-			<p:dialog header="Edição de unidade De Medida"
+<!-- 			<p:dialog header="Edição de unidade De Medida"
 				widgetVar="unidadeDeMedidaDialog" modal="true" showEffect="fade"
 				hideEffect="fade" resizable="false">
 				<p:outputPanel id="unidadeDeMedidaEditar" style="text-align:center;">
@@ -144,12 +144,12 @@
 						<h:outputText
 							value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}" />
 						<p:commandButton styleClass="botao" value="Excluir"
-							action="#{unidadeDeMedidaControle.remover(unidadeDeMedidaControle.unidadeDeMedida)}" />
+							action="#{unidadeDeMedidaControle.remover(unidadeDeMedida)}" />
 						<p:button styleClass="botao" value="Editar"
-							outcome="unidadeDeMedida?unidadeDeMedidaId=#{unidadeDeMedidaControle.unidadeDeMedida.id}" />
+							outcome="unidadeDeMedidaControle.editar(unidadeDeMedida)" />
 					</p:panelGrid>
 				</p:outputPanel>
-			</p:dialog>
+			</p:dialog> -->
 
 		</h:form>
 

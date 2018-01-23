@@ -107,6 +107,8 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Codigo da Categoria obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="categoria"
+									listener="#{subCategoriaControle.getCategoriaPorCodigo}" />
 						</p:inputText>
 					</div>
 
@@ -114,6 +116,26 @@
 						<p:message for="categoriaCodigo" id="categoriaCodigoMessage" />
 					</div>
 				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Categoria" id="categoria"
+								value="#{subCategoriaControle.categoria.nome}" styleClass="form-normal"
+								required="true" readonly="true"/>
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="categoria"
+								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this" update="categoria categoriaCodigo"
+									listener="#{subCategoriaControle.categoriaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="categoria" id="categoriaMessage" />
+					</div>
+				</div>
+				
 
 
 			</p:fieldset>
