@@ -1,7 +1,5 @@
 package br.com.empresa.bonal.controles;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,22 +7,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
-import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -33,16 +29,21 @@ public class UnidadeDeMedidaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
+	
 
 	private Long unidadeDeMedidaId;
-	private Boolean status = true;
 
 	// Atributos para Consulta
 	private String unidadeDeMedidaNome = "";
 
+	private Boolean status = true;
 	// Listas para Consulta
 	private List<UnidadeDeMedida> unidadesDeMedida;
 	private List<UnidadeDeMedida> lista = new ArrayList<>();
+	
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private UnidadeDeMedidaRepositorio unidadeDeMedidaRepositorio;
@@ -51,7 +52,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 	private FacesContextUtil facesContext;
 
 	@Inject
-	private RequestContext requestContext;
+	private Logger logger;
 
 	// Getters and Setters
 	public UnidadeDeMedida getUnidadeDeMedida() {
@@ -59,20 +60,12 @@ public class UnidadeDeMedidaControle implements Serializable {
 	}
 
 	// Adicionado para propriedade de contexto das tabelas do Primefaces
-	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
-		this.unidadeDeMedida = unidadeDeMedida;
+	public void setUnidadeDeMedida(UnidadeDeMedida c) {
+		this.unidadeDeMedida = c;
 	}
 
 	public Long getUnidadeDeMedidaId() {
 		return unidadeDeMedidaId;
-	}
-
-	public Boolean getStatus() {
-		return status;
-	}
-
-	public void setStatus(Boolean status) {
-		this.status = status;
 	}
 
 	public void setUnidadeDeMedidaId(Long unidadeDeMedidaId) {
@@ -87,9 +80,12 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedidaNome = unidadeDeMedidaNome;
 	}
 
+	
+
 	public List<UnidadeDeMedida> getUnidadesDeMedida() {
 		return unidadesDeMedida;
 	}
+
 
 	public List<UnidadeDeMedida> getLista() {
 		return Collections.unmodifiableList(lista);
@@ -104,8 +100,16 @@ public class UnidadeDeMedidaControle implements Serializable {
 		return unidadesDeMedida.size();
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 	// ----------------- METODOS ----------------------
-	// @PostConstruct
+	@PostConstruct
+	@Transacional
 	public void listarTabela() {
 		if (this.unidadesDeMedida == null) {
 			lista = unidadeDeMedidaRepositorio.listarTodos();
@@ -117,15 +121,16 @@ public class UnidadeDeMedidaControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<UnidadeDeMedida> stream = lista.stream();
 
-		stream = stream.filter(u -> (u.getNome().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim())));
+		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim()))
+				| (c.getSigla().toLowerCase().contains(unidadeDeMedidaNome.toLowerCase().trim())));
 
 		if (status.equals(true))
-			stream = stream.filter(u -> (u.getStatus().equals(status)));
+			stream = stream.filter(c -> (c.getStatus().equals(status)));
 
 		unidadesDeMedida = stream.collect(Collectors.toList());
 	}
 
-	// M�todo chamado ao carregar tabela
+	// M�todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
 		listarTabela();
 		return null;
@@ -133,95 +138,68 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// Limpar tabela da consulta
 	public String limpar() {
-		this.unidadeDeMedidaNome = "";
-		this.status = true;
+		limparFiltros();
 		this.unidadesDeMedida = new ArrayList<>(this.lista);
 		return null;
 	}
 
+	public void limparFiltros() {
+		this.unidadeDeMedidaNome = "";
+	}
+
+	
 	// M�todos que utilizam m�todos do reposit�rio
-	@Logging
 	@Transacional
 	public String salvar() {
 		String message = "";
 		this.unidadeDeMedida.setStatus(true);
+
 		if (unidadeDeMedida.getId() == null) {
 			UnidadeDeMedida existe = unidadeDeMedidaRepositorio.unidadeMedidaExiste(unidadeDeMedida);
 			if (existe != null) {
-				facesContext.warn("Já existe essa unidade de medida registrada.");
+				facesContext.warn("Já existe uma unidade de medida registrada com essa sigla.");
 				return null;
 			}
+			
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
 			message += "Unidade de Medida Cadastrada com Sucesso.";
 		} else {
 			unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
-			message += "Unidade de Medida Atualizada com Sucesso.";
+			message += "Unidade de medida Atualizada com Sucesso.";
 		}
 		facesContext.info(message);
+		logger.info(message);
 		unidadeDeMedida = new UnidadeDeMedida();
 		return null;
 	}
 
+	@Transacional
 	public void recuperarUnidadeDeMedidaPorId() {
 		unidadeDeMedida = unidadeDeMedidaRepositorio.buscarPorId(unidadeDeMedidaId);
 	}
 
-	// Remove um cargo do banco de dados
-	@Logging
+	// Remove um Categoria do banco de dados
 	@Transacional
-	public String remover(UnidadeDeMedida unidade) {
-		unidade.setStatus(false);
-		unidadeDeMedidaRepositorio.remover(unidade);
+	public String remover(UnidadeDeMedida unidadeDeMedida) {
+		unidadeDeMedida.setStatus(false);
+		unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
 		this.unidadesDeMedida = null;
-		listar();
+		this.unidadeDeMedida = new UnidadeDeMedida();
+		listarTabela();
 		return null;
 	}
 
-	// essa classe eh bom deixar de ser usada... use button ou link e ponha isso
-	// outcome="unidadeDeMedida?unidadeDeMedidaId=#{unidadeDeMedidaControle.unidadeDeMedida.id}"
+	// Editar um Categoria
 	public String editar(UnidadeDeMedida unidadeDeMedida) {
 		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedida.getId();
 	}
 
-	public String cancelar() {
-		return "index";
-	}
-
-	@Logging
-	public boolean cargoIdExiste() {
+	public boolean unidadeDeMedidaIdExiste() {
 		if (this.unidadeDeMedidaId == null)
 			return false;
 		return true;
 	}
-
-	public void importXlsx(FileUploadEvent upload) {
-		try (FileInputStream file = (FileInputStream) upload.getFile().getInputstream()) {
-
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-			Sheet sheet = workbook.getSheetAt(0);
-
-			for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-				Row row = sheet.getRow(i);
-
-				Cell cellSiglas = row.getCell(0); // sigla
-				Cell cellNomes = row.getCell(1); // nome
-
-				String sigla = cellSiglas.getStringCellValue();
-				String nome = cellNomes.getStringCellValue();
-				this.unidadeDeMedida = new UnidadeDeMedida();
-				this.unidadeDeMedida.setSigla(sigla);
-				this.unidadeDeMedida.setNome(nome);
-				this.unidadeDeMedida.setStatus(true);
-				salvar();
-			}
-			workbook.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			requestContext.scrollTo("messages");
-			facesContext.info("Erro na exportação do arquivo!");
-		}
-	}
+	
 
 	// Método usado para carregar objeto para o dialog
 	public void selecionarUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {

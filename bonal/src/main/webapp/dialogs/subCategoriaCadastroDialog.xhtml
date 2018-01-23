@@ -9,66 +9,108 @@
 <ui:composition template="/template/dialog.xhtml">
 	<ui:define name="frame">
 
-		<h:form id="formCargo">
-			<p:fieldset legend="Dados do Cargo">
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-12">
-						<p:outputLabel value="Nome:" for="nome" />
-						<p:inputText id="nome" value="#{cargoControle.cargo.nome}"
+		<h:form id="formSubCategoria">
+			<p:fieldset legend="Dados do SubCategoria">
+<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Código:" for="codigo" />
+						<p:inputText id="codigo"
+							value="#{subCategoriaControle.subCategoria.codigo}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Nome da cargo obrigatório"
-							validatorMessage="Nome da cargo deve ter no minimo 2 caracteres"
+							requiredMessage="Código da sub Categoria obrigatório"
+							validatorMessage="Código da sub Categoria deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
 
-					<div class="ui-g-12 ui-md-12 ui-lg-12 form-messages">
-						<p:message for="nome" id="nomeMessage" />
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="codigo" id="codigoMessage" />
 					</div>
 				</div>
 
+
+
 				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-12">
-						<p:outputLabel value="Salário:" for="salario" />
-						<p:inputText id="salario" value="#{cargoControle.cargo.salario}"
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome"
+							value="#{subCategoriaControle.subCategoria.nome}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Salário da cargo obrigatório"
-							validatorMessage="Salário deve ser preenchido corretamente"
-							maxlength="12">
+							requiredMessage="Nome da sub Categoria obrigatório"
+							validatorMessage="Nome da sub Categoria deve ter no minimo 2 caracteres"
+							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
 
-					<div class="ui-g-12 ui-md-12 ui-lg-12 form-messages">
-						<p:message for="salario" id="salarioMessage" />
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="nome" id="nomeMessage" />
+					</div>
+				</div>
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Descrição:" for="descricao" />
+						<p:inputText id="descricao"
+							value="#{subCategoriaControle.subCategoria.descricao}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Descrição da sub Categoria obrigatório"
+							validatorMessage="Descrição da sub Categoria deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="descricao" id="descricaoMessage" />
 					</div>
 				</div>
 
 				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-12">
-
-						<p:outputLabel value="Permissão no sistema:" for="permissao" />
-						<p:selectOneMenu label="Permissão" styleClass="form-normal"
-							value="#{cargoControle.cargo.permissao}" id="permissao"
-							required="true" requiredMessage="Selecione uma permissao">
-							<f:selectItems value="#{cargoControle.enumPermissao}"
-								var="permissao" itemValue="#{permissao}"
-								itemLabel="#{permissao.label}" />
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Categoria:" for="categoriaCodigo" />
+						<p:inputText id="categoriaCodigo"
+							value="#{subCategoriaControle.categoriaCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da Categoria obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
-						</p:selectOneMenu>
-
+							<p:ajax event="keyup" process="@this" update="categoria"
+									listener="#{subCategoriaControle.getCategoriaPorCodigo}" />
+						</p:inputText>
 					</div>
-					<div class="ui-g-12 ui-md-12 ui-lg-12 form-messages">
-						<p:message for="permissao" id="permissaoMessage" />
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="categoriaCodigo" id="categoriaCodigoMessage" />
 					</div>
 				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Categoria" id="categoria"
+								value="#{subCategoriaControle.categoria.nome}" styleClass="form-normal"
+								required="true" readonly="true"/>
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="categoria"
+								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this" update="categoria categoriaCodigo"
+									listener="#{subCategoriaControle.categoriaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="categoria" id="categoriaMessage" />
+					</div>
+				</div>
+				
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
-					action="#{cargoControle.salvar}" process="@this @form"
+					action="#{subCategoriaControle.salvar}" process="@this @form"
 					update="@none" icon="fa fa-fw fa-save" validateClient="true">
 					<f:ajax listener="#{dialogControle.fecharDialog}" />
 				</p:commandButton>

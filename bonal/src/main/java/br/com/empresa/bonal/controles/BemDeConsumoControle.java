@@ -192,14 +192,14 @@ public class BemDeConsumoControle implements Serializable {
 		String message = "";
 		this.bemDeConsumo.setStatus(true);
 
-		SubCategoria c = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
-		if (c == null) {
+		SubCategoria s = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
+		if (s == null) {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
 			return null;
 		}
-		if (!c.getCategoria().getTipo().toString().toLowerCase().equals("bem")) {
+		if (!s.getCategoria().getTipo().toString().toLowerCase().equals("bem")) {
 			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
-					+ c.getCategoria().getTipo().toString().toLowerCase()
+					+ s.getCategoria().getTipo().toString().toLowerCase()
 					+ ". Não é possível inserir bens de consumo nela.");
 			return null;
 		}
@@ -210,7 +210,8 @@ public class BemDeConsumoControle implements Serializable {
 			return null;
 		}
 
-		bemDeConsumo.setSubCategoria(c);
+		bemDeConsumo.setSubCategoria(s);
+		bemDeConsumo.setUnidadeDeMedida(u);
 
 		if (bemDeConsumo.getId() == null) {
 			ItemDeProducao existe = bemDeConsumoRepositorio.getItemDeProducaoPorCodigo(bemDeConsumo.getCodigo());

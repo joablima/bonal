@@ -68,7 +68,7 @@ public class UnidadeDeMedidaRepositorio implements Serializable {
 	public UnidadeDeMedida unidadeMedidaExiste(UnidadeDeMedida unidade) {
 		TypedQuery<UnidadeDeMedida> query = em
 				.createQuery("select u from UnidadeDeMedida u where u.sigla = :sigla", UnidadeDeMedida.class)
-				.setParameter("sigla", unidade.getSigla());
+				.setParameter("sigla", unidade.getSigla().toUpperCase());
 
 		try {
 			return query.getSingleResult();

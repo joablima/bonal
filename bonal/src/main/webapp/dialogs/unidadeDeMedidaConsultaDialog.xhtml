@@ -26,7 +26,8 @@
 				<div class="ui-g-12 ui-md-12 ui-lg-6">
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
 						action="#{unidadeDeMedidaControle.limpar}" process="@form"
-						update="formUnidadeDeMedidaConsultaDialog" styleClass="white-button" />
+						update="formUnidadeDeMedidaConsultaDialog"
+						styleClass="white-button" />
 
 
 					<p:commandButton icon="fa fa-search" styleClass="white-button"
@@ -56,13 +57,13 @@
 				rowsPerPageTemplate="5,10,15" rowKey="#{unidadeDeMedida.id}"
 				selection="#{unidadeDeMedidaControle.unidadeDeMedida}"
 				selectionMode="single"
-				emptyMessage="Nenhum UnidadeDeMedida Encontrado!" styleClass="ui-g-12">
-
+				emptyMessage="Nenhum UnidadeDeMedida Encontrado!"
+				styleClass="ui-g-12">
 
 				<p:column headerText="Sigla" sortBy="#{unidadeDeMedida.sigla}">
 					<p:outputLabel value="#{unidadeDeMedida.sigla}" />
 				</p:column>
-				
+
 				<p:column headerText="Nome" sortBy="#{unidadeDeMedida.nome}">
 					<p:outputLabel value="#{unidadeDeMedida.nome}" />
 				</p:column>
