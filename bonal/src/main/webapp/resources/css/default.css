@@ -169,6 +169,8 @@ h3.ui-widget.ui-panelmenu-header.ui-state-default.ui-state-active.ui-corner-top
 	border-top: 0;
 	border-left: 0;
 	border-bottom: 0;
+	min-width: 250px !important;
+	transition: all 500s ease-in-out;
 }
 
 #menuLateral .ui-widget-content {
@@ -280,4 +282,9 @@ h3.ui-widget.ui-panelmenu-header.ui-state-default.ui-state-active.ui-corner-top
 
 .btn-editar {
 	
+}
+
+/*---------------------------------------------------------------------*/
+.cursor-help {
+	cursor: help !important;
 }

@@ -5,12 +5,15 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <header class="ui-g" id="logo">
-		<p:link outcome="index?faces-redirect=true" id="img-logo">
-			<h:graphicImage library="img" alt="PDS BONAL" name="logo.png"
-				width="60" height="60" />
-		</p:link>
-		<p:link outcome="index?faces-redirect=true" title="PDS BONAL">
-			<H1 class="ui-widget-header">PDS BONAL</H1>
-		</p:link>
+
+<!-- 	<p:link outcome="index?faces-redirect=true" id="img-logo" > -->
+		<h:graphicImage library="img" alt="PDS BONAL" name="logo.png"
+			width="60" height="60" >
+			<f:ajax event="click" listener="#{temaControle.ocultarExibir}" render="menu"/>
+			</h:graphicImage>
+<!-- 	</p:link> -->
+	<p:link outcome="index?faces-redirect=true" title="PDS BONAL">
+		<H1 class="ui-widget-header">PDS BONAL</H1>
+	</p:link>
 </header>
 </html>

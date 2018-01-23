@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import br.com.empresa.bonal.util.logging.Logging;
+
 @Named
 @SessionScoped
 public class TemaControle implements Serializable {
@@ -26,5 +28,15 @@ public class TemaControle implements Serializable {
 				"excite-bike", "flick", "glass-x", "home", "hot-sneaks", "humanity", "le-frog", "midnight", "mint-choc",
 				"overcast", "pepper-grinder", "redmond", "rocket", "sam", "smoothness", "south-street", "start",
 				"sunny", "swanky-purse", "trontastic", "ui-darkness", "ui-lightness", "vader" };
+	}
+
+	private String display = "";
+	
+	public String getDisplay() {
+		return display;
+	}
+
+	public void ocultarExibir() {
+		this.display = (display.equals("")) ? "display:none;" : "";
 	}
 }

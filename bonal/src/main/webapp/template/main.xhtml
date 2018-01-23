@@ -26,9 +26,10 @@
 	</div>
 
 	<div id="container">
-		<div id="menu" class="ui-widget-content">
-			<ui:include src="menu.xhtml" />
-		</div>
+
+		<h:panelGroup id="menu" styleClass="ui-widget-content" style="#{temaControle.display}">
+				<ui:include src="menu.xhtml" />
+		</h:panelGroup>
 
 		<div id="content">
 			<ui:insert name="content" />

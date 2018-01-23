@@ -7,7 +7,7 @@
 
 <nav>
 	<h:form id="menuLateral">
-		<p:panelMenu style="width:360px">
+		<p:panelMenu>
 			<p:submenu label="Cadastros">
 				<p:menuitem value="Categoria" outcome="categoria"
 					icon="ui-icon-disk" />
@@ -22,7 +22,7 @@
 				<p:menuitem value="Funcionário" outcome="funcionario" />
 				<p:menuitem value="Cargo" outcome="cargo" />
 			</p:submenu>
-			
+
 			<p:submenu label="Consultas">
 				<p:menuitem value="Categoria" outcome="categoriaConsultar"
 					icon="ui-icon-signal" />
@@ -41,12 +41,12 @@
 			</p:submenu>
 
 			<p:submenu label="Ajuda">
-				<p:menuitem value="Bem Vindo" outcome="index" icon="ui-icon-disk" />
-				<p:menuitem value="Como usar" outcome="index"
+				<p:menuitem value="Bem Vindo" styleClass="cursor-help" outcome="index" icon="ui-icon-disk" />
+				<p:menuitem value="Como usar" styleClass="cursor-help" outcome="index"
 					icon="ui-icon-arrowrefresh-1-w" />
-				<p:menuitem value="Sobre o software" outcome="index"
+				<p:menuitem value="Sobre o software" styleClass="cursor-help" outcome="index"
 					icon="ui-icon-disk" />
-				<p:menuitem value="mudar um pouco as coisa" outcome="design" />
+				<p:menuitem value="mudar um pouco as coisa" styleClass="cursor-help" outcome="design" />
 			</p:submenu>
 		</p:panelMenu>
 	</h:form>
