@@ -13,7 +13,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
+import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.repositorio.OperacaoRepositorio;
@@ -41,6 +43,9 @@ public class OperacaoControle implements Serializable {
 
 	@Inject
 	private OperacaoRepositorio operacaoRepositorio;
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -191,4 +196,9 @@ public class OperacaoControle implements Serializable {
 		return true;
 	}
 
+	// Método usado para carregar objeto para o dialog
+	public void selecionarOperacao(Operacao operacao) {
+		requestContext.closeDialog(operacao);
+	}
+	
 }

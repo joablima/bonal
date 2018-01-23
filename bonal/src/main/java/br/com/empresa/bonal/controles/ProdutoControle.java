@@ -15,9 +15,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.entidades.Produto;
+import br.com.empresa.bonal.entidades.Servico;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ProdutoRepositorio;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
@@ -50,6 +52,9 @@ public class ProdutoControle implements Serializable {
 	@Inject
 	private UnidadeDeMedidaRepositorio unidadeMedidaRepositorio;
 
+	@Inject
+	private RequestContext requestContext;
+	
 	@Inject
 	private FacesContextUtil facesContext;
 
@@ -241,4 +246,10 @@ public class ProdutoControle implements Serializable {
 			// ignore
 		}
 	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarProduto(Produto produto) {
+		requestContext.closeDialog(produto);
+	}
+	
 }

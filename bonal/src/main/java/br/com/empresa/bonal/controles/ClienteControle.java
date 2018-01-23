@@ -13,10 +13,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
+import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Endereco;
+import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.repositorio.ClienteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
@@ -44,6 +47,9 @@ public class ClienteControle implements Serializable {
 
 	@Inject
 	private ClienteRepositorio clienteRepositorio;
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -193,12 +199,12 @@ public class ClienteControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-	
+
 	@Logging
 	public String editar(Cliente cliente) {
 		return "cliente?clienteId=" + cliente.getId();
 	}
-	
+
 	public String addCoeficientes() {
 		return "coeficientetecnico?clienteId=" + this.clienteId;
 	}
@@ -217,5 +223,10 @@ public class ClienteControle implements Serializable {
 		} catch (Exception e) {
 			// ignore
 		}
+	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarCliente(Cliente cliente) {
+		requestContext.closeDialog(cliente);
 	}
 }

@@ -13,9 +13,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.BemDeConsumo;
+import br.com.empresa.bonal.entidades.Categoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemDeConsumoRepositorio;
@@ -31,7 +35,9 @@ public class BemDeConsumoControle implements Serializable {
 	private BemDeConsumo bemDeConsumo = new BemDeConsumo();
 
 	private String subCategoriaCodigo;
+	private SubCategoria subCategoria;
 	private String unidadeDeMedidaSigla;
+	private UnidadeDeMedida unidadeDeMedida;
 
 	private Long bemDeConsumoId;
 
@@ -45,6 +51,9 @@ public class BemDeConsumoControle implements Serializable {
 
 	@Inject
 	private BemDeConsumoRepositorio bemDeConsumoRepositorio;
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -117,6 +126,22 @@ public class BemDeConsumoControle implements Serializable {
 
 	public void setUnidadeDeMedidaSigla(String unidadeDeMedidaSigla) {
 		this.unidadeDeMedidaSigla = unidadeDeMedidaSigla;
+	}
+
+	public SubCategoria getSubCategoria() {
+		return subCategoria;
+	}
+
+	public void setSubCategoria(SubCategoria subCategoria) {
+		this.subCategoria = subCategoria;
+	}
+
+	public UnidadeDeMedida getUnidadeDeMedida() {
+		return unidadeDeMedida;
+	}
+
+	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
+		this.unidadeDeMedida = unidadeDeMedida;
 	}
 
 	// ----------------- METODOS ----------------------
@@ -222,8 +247,6 @@ public class BemDeConsumoControle implements Serializable {
 		return null;
 	}
 
-	
-
 	// Editar um SubCategoria
 	public String editar(BemDeConsumo bemDeConsumo) {
 		return "bemDeConsumo?bemDeConsumoId=" + bemDeConsumo.getId();
@@ -233,6 +256,33 @@ public class BemDeConsumoControle implements Serializable {
 		if (this.bemDeConsumoId == null)
 			return false;
 		return true;
+	}
+
+	public void subCategoriaSelecionada(SelectEvent event) {
+		subCategoria = (SubCategoria) event.getObject();
+		subCategoriaCodigo = subCategoria.getCodigo();
+		bemDeConsumo.setSubCategoria(subCategoria);
+		requestContext.update("formBemDeConsumo:subCategoria");
+	}
+
+	public void getSubCategoriaPorCodigo() {
+		subCategoria = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
+	}
+
+	public void unidadeDeMedidaSelecionada(SelectEvent event) {
+		unidadeDeMedida = (UnidadeDeMedida) event.getObject();
+		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
+		bemDeConsumo.setUnidadeDeMedida(unidadeDeMedida);
+		requestContext.update("formBemDeConsumo:unidadeDeMedida");
+	}
+
+	public void getUnidadeDeMedidaPorSigla() {
+		unidadeDeMedida = bemDeConsumoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
+	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarBemDeConsumo(BemDeConsumo bemDeConsumo) {
+		requestContext.closeDialog(bemDeConsumo);
 	}
 
 }

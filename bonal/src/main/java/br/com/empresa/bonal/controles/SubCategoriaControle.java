@@ -18,6 +18,7 @@ import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.SubCategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.tx.Transacional;
@@ -238,6 +239,10 @@ public class SubCategoriaControle implements Serializable {
 	public void getCategoriaPorCodigo(){
 		this.categoria =  subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
 	}
-	
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarSubCategoria(SubCategoria subCategoria) {
+		requestContext.closeDialog(subCategoria);
+	}
 
 }

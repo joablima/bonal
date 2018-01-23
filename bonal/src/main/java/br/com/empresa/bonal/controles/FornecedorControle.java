@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Endereco;
@@ -44,6 +45,9 @@ public class FornecedorControle implements Serializable {
 
 	@Inject
 	private FornecedorRepositorio fornecedorRepositorio;
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -160,7 +164,6 @@ public class FornecedorControle implements Serializable {
 
 	}
 
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
@@ -194,12 +197,11 @@ public class FornecedorControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-	
+
 	@Logging
 	public String editar(Fornecedor fornecedor) {
 		return "fornecedor?fornecedorId=" + fornecedor.getId();
 	}
-
 
 	public String addCoeficientes() {
 		return "coeficientetecnico?fornecedorId=" + this.fornecedorId;
@@ -219,5 +221,10 @@ public class FornecedorControle implements Serializable {
 		} catch (Exception e) {
 			// ignore
 		}
+	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarFornecedor(Fornecedor fornecedor) {
+		requestContext.closeDialog(fornecedor);
 	}
 }

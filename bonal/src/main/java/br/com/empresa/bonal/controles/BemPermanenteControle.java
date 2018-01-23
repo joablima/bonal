@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.BemDeConsumo;
 import br.com.empresa.bonal.entidades.BemPermanente;
@@ -29,7 +30,7 @@ public class BemPermanenteControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private BemPermanente bemPermanente = new BemPermanente();
-	
+
 	private String subCategoriaCodigo;
 
 	private Long bemPermanenteId;
@@ -44,6 +45,9 @@ public class BemPermanenteControle implements Serializable {
 
 	@Inject
 	private BemPermanenteRepositorio bemPermanenteRepositorio;
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -77,12 +81,9 @@ public class BemPermanenteControle implements Serializable {
 		this.bemPermanenteNome = bemPermanenteNome;
 	}
 
-	
-
 	public List<BemPermanente> getBensPermanentes() {
 		return bensPermanentes;
 	}
-
 
 	public List<BemPermanente> getLista() {
 		return Collections.unmodifiableList(lista);
@@ -162,14 +163,16 @@ public class BemPermanenteControle implements Serializable {
 	public String salvar() {
 		String message = "";
 		this.bemPermanente.setStatus(true);
-		
+
 		SubCategoria c = bemPermanenteRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
-		if(c == null){
+		if (c == null) {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de sub categoria válido");
 			return null;
 		}
-		if(!c.getCategoria().getTipo().toString().toLowerCase().equals("bem")){
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "+c.getCategoria().getTipo().toString().toLowerCase()+". Não é possível inserir bens permanentes nela.");
+		if (!c.getCategoria().getTipo().toString().toLowerCase().equals("bem")) {
+			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
+					+ c.getCategoria().getTipo().toString().toLowerCase()
+					+ ". Não é possível inserir bens permanentes nela.");
 			return null;
 		}
 		bemPermanente.setSubCategoria(c);
@@ -180,7 +183,7 @@ public class BemPermanenteControle implements Serializable {
 				facesContext.warn("Codigo duplicado");
 				return null;
 			}
-			
+
 			bemPermanenteRepositorio.adicionar(bemPermanente);
 			message += "Bem permanente Cadastrada com Sucesso.";
 		} else {
@@ -208,7 +211,7 @@ public class BemPermanenteControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-	
+
 	@Logging
 	public String editar(BemPermanente bemPermanente) {
 		return "bemPermanente?bemPermanenteId=" + bemPermanente.getId();
@@ -218,6 +221,11 @@ public class BemPermanenteControle implements Serializable {
 		if (this.bemPermanenteId == null)
 			return false;
 		return true;
+	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarBemPermanente(BemPermanente bemPermanente) {
+		requestContext.closeDialog(bemPermanente);
 	}
 
 }

@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.Servico;
@@ -44,6 +45,9 @@ public class ServicoControle implements Serializable {
 
 	@Inject
 	private ServicoRepositorio servicoRepositorio;
+
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -236,5 +240,11 @@ public class ServicoControle implements Serializable {
 			return false;
 		return true;
 	}
+	
 
+	// Método usado para carregar objeto para o dialog
+	public void selecionarServico(Servico servico) {
+		requestContext.closeDialog(servico);
+	}
+	
 }

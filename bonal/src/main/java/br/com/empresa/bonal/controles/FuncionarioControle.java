@@ -20,6 +20,7 @@ import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Funcionario;
+import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.repositorio.FuncionarioRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -175,7 +176,6 @@ public class FuncionarioControle implements Serializable {
 		this.cargoId = null;
 	}
 
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
@@ -214,7 +214,7 @@ public class FuncionarioControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-	
+
 	@Logging
 	public String editar(Funcionario funcionario) {
 		return "funcionario?funcionarioId=" + funcionario.getId();
@@ -245,4 +245,10 @@ public class FuncionarioControle implements Serializable {
 		this.funcionario.setCargo(cargo);
 		requestContext.update("formFuncionario:cargo");
 	}
+
+	// Método usado para carregar objeto para o dialog
+	public void selecionarFuncionario(Funcionario funcionario) {
+		requestContext.closeDialog(funcionario);
+	}
+
 }

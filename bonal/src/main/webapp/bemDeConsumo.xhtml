@@ -107,11 +107,32 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Codigo da sub categoria obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="subCategoria"
+									listener="#{bemDeConsumoControle.getSubCategoriaPorCodigo}" />
 						</p:inputText>
 					</div>
-
+					
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="subCategoriaCodigo" id="subCategoriaCodigoMessage" />
+					</div>
+				</div>
+						
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Sub Categoria" id="subCategoria"
+								value="#{bemDeConsumoControle.subCategoria.nome}" styleClass="form-normal"
+								required="true" readonly="true"/>
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="subCategoria"
+								actionListener="#{dialogControle.subCategoriaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this" update="subCategoria subCategoriaCodigo"
+									listener="#{bemDeConsumoControle.subCategoriaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="subCategoria" id="subCategoriaMessage" />
 					</div>
 				</div>
 				
@@ -123,6 +144,8 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Codigo da unidade de medida obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="unidadeDeMedida"
+									listener="#{bemDeConsumoControle.getUnidadeDeMedidaPorSigla}" />
 						</p:inputText>
 					</div>
 
@@ -130,6 +153,27 @@
 						<p:message for="unidadeDeMedidaSigla" id="unidadeDeMedidaSiglaMessage" />
 					</div>
 				</div>
+				
+					
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Unidade de medida" id="unidadeDeMedida"
+								value="#{bemDeConsumoControle.unidadeDeMedida.nome}" styleClass="form-normal"
+								required="true" readonly="true"/>
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="unidadeDeMedida"
+								actionListener="#{dialogControle.unidadeDeMedidaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this" update="unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{bemDeConsumoControle.unidadeDeMedidaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedida" id="unidadeDeMedidaMessage" />
+					</div>
+				</div>
+				
 
 
 			</p:fieldset>
