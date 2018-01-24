@@ -14,6 +14,7 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.BemDeConsumo;
 import br.com.empresa.bonal.entidades.BemPermanente;
@@ -32,6 +33,7 @@ public class BemPermanenteControle implements Serializable {
 	private BemPermanente bemPermanente = new BemPermanente();
 
 	private String subCategoriaCodigo;
+	private SubCategoria subCategoria;
 
 	private Long bemPermanenteId;
 
@@ -114,6 +116,15 @@ public class BemPermanenteControle implements Serializable {
 		this.subCategoriaCodigo = subCategoriaCodigo;
 	}
 
+	public SubCategoria getSubCategoria() {
+		return subCategoria;
+	}
+
+	public void setSubCategoria(SubCategoria subCategoria) {
+		this.subCategoria = subCategoria;
+	}
+
+
 	// ----------------- METODOS ----------------------
 	@PostConstruct
 	@Transacional
@@ -193,12 +204,16 @@ public class BemPermanenteControle implements Serializable {
 		facesContext.info(message);
 		logger.info(message);
 		bemPermanente = new BemPermanente();
+		subCategoria = new SubCategoria();
+		subCategoriaCodigo = null;
 		return null;
 	}
 
 	@Transacional
 	public void recuperarBemPermanentePorId() {
 		bemPermanente = bemPermanenteRepositorio.buscarPorId(bemPermanenteId);
+		subCategoria = bemPermanente.getSubCategoria();
+		subCategoriaCodigo = subCategoria.getCodigo();
 	}
 
 	// Remove um SubCategoria do banco de dados
@@ -222,6 +237,18 @@ public class BemPermanenteControle implements Serializable {
 			return false;
 		return true;
 	}
+	
+	public void subCategoriaSelecionada(SelectEvent event) {
+		subCategoria = (SubCategoria) event.getObject();
+		subCategoriaCodigo = subCategoria.getCodigo();
+		bemPermanente.setSubCategoria(subCategoria);
+		requestContext.update("formBemPermanente:subCategoria");
+	}
+
+	public void getSubCategoriaPorCodigo() {
+		subCategoria = bemPermanenteRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
+	}
+
 
 	// Método usado para carregar objeto para o dialog
 	public void selecionarBemPermanente(BemPermanente bemPermanente) {

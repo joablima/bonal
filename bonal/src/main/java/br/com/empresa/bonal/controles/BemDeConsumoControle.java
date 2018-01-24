@@ -229,12 +229,20 @@ public class BemDeConsumoControle implements Serializable {
 		facesContext.info(message);
 		logger.info(message);
 		bemDeConsumo = new BemDeConsumo();
+		unidadeDeMedida = new UnidadeDeMedida();
+		subCategoria = new SubCategoria();
+		subCategoriaCodigo = null;
+		unidadeDeMedidaSigla = null;
 		return null;
 	}
 
 	@Transacional
 	public void recuperarBemDeConsumoPorId() {
 		bemDeConsumo = bemDeConsumoRepositorio.buscarPorId(bemDeConsumoId);
+		subCategoria = bemDeConsumo.getSubCategoria();
+		subCategoriaCodigo = subCategoria.getCodigo();
+		unidadeDeMedida = bemDeConsumo.getUnidadeDeMedida();
+		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
 	}
 
 	// Remove um SubCategoria do banco de dados
