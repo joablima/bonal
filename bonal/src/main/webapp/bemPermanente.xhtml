@@ -44,14 +44,14 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
-						<p:inputText id="codigo"
+						<p:inputMask id="codigo"
 							value="#{bemPermanenteControle.bemPermanente.codigo}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Código do bemPermanente obrigatório"
 							validatorMessage="Código do bemPermanente deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
-						</p:inputText>
+						</p:inputMask>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
@@ -145,7 +145,7 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Codigo da sub categoria obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
-							<p:ajax event="keyup" process="@this" update="subCategoria"
+							<p:ajax event="keydown" process="@this" update="subCategoria"
 									listener="#{bemPermanenteControle.getSubCategoriaPorCodigo}" />
 						</p:inputText>
 					</div>

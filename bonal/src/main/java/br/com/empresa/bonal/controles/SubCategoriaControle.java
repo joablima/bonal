@@ -150,6 +150,14 @@ public class SubCategoriaControle implements Serializable {
 
 		subCategorias = stream.collect(Collectors.toList());
 	}
+	
+	public void listarPorCategoria(Categoria c) {
+		if (this.subCategorias == null) {
+			lista = subCategoriaRepositorio.listarPorCategoria(c);
+			subCategorias = new ArrayList<>(lista);
+		}
+		filtrarTabela();
+	}
 
 	// M�todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {

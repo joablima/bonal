@@ -46,6 +46,15 @@ public class SubCategoriaRepositorio implements Serializable {
 		}
 	}
 
+	// m�todo que lista todos os registros
+	public List<SubCategoria> listarPorCategoria(Categoria c) {
+		try {
+			return em.createQuery("select s from SubCategoria s where categoria = "+c.getId()+";", SubCategoria.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	// m�todo que lista com crit�rios todos os registros
 	public List<SubCategoria> listarPorCriterios(String nome) {
 		String jpql = "select s from SubCategoria s where ";
@@ -57,17 +66,17 @@ public class SubCategoriaRepositorio implements Serializable {
 		TypedQuery<SubCategoria> query = em.createQuery(jpql, SubCategoria.class);
 
 		if (nome != null)
-			query.setParameter("pnome", '%' + nome + '%')
-				.setParameter("pcodigo", '%' + nome + '%')
-				.setParameter("pdescricao", '%' + nome + '%');
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
+					.setParameter("pdescricao", '%' + nome + '%');
 
 		return query.getResultList();
 	}
 
 	// método que verifica se elemento existe
 	public SubCategoria codigoExiste(SubCategoria subCategoria) {
-		TypedQuery<SubCategoria> query = em.createQuery("select s from SubCategoria s where s.codigo = :pcodigo",
-				SubCategoria.class).setParameter("pcodigo", subCategoria.getCodigo());
+		TypedQuery<SubCategoria> query = em
+				.createQuery("select s from SubCategoria s where s.codigo = :pcodigo", SubCategoria.class)
+				.setParameter("pcodigo", subCategoria.getCodigo());
 
 		try {
 			return query.getSingleResult();
@@ -78,8 +87,9 @@ public class SubCategoriaRepositorio implements Serializable {
 
 	// método que verifica se elemento existe
 	public Categoria getCategoriaPorCodigo(String codigo) {
-		TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.codigo = :pcodigo",
-				Categoria.class).setParameter("pcodigo", codigo.toUpperCase());
+		TypedQuery<Categoria> query = em
+				.createQuery("select c from Categoria c where c.codigo = :pcodigo", Categoria.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();

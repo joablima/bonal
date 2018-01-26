@@ -7,10 +7,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import br.com.empresa.bonal.entidades.BemDeConsumo;
+import br.com.empresa.bonal.entidades.Categoria;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
-import br.com.empresa.bonal.entidades.BemDeConsumo;
-import br.com.empresa.bonal.entidades.ItemDeProducao;
 
 public class BemDeConsumoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -66,6 +67,18 @@ public class BemDeConsumoRepositorio implements Serializable {
 
 		return query.getResultList();
 	}
+	
+	// método que verifica se elemento existe
+		public Categoria getCategoriaPorCodigo(String codigo) {
+			TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.codigo = :pcodigo",
+					Categoria.class).setParameter("pcodigo", codigo.toUpperCase());
+
+			try {
+				return query.getSingleResult();
+			} catch (Exception e) {
+				return null;
+			}
+		}
 
 	// método que verifica se elemento existe
 	public SubCategoria getSubCategoriaPorCodigo(String codigo) {

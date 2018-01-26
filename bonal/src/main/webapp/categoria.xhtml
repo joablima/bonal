@@ -39,14 +39,15 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
-						<p:inputText id="codigo"
+						<p:inputMask id="codigo"
 							value="#{categoriaControle.categoria.codigo}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Código da categoria obrigatório"
 							validatorMessage="Código da categoria deve ter no minimo 2 caracteres"
-							maxlength="80">
+							maxlength="80"
+							mask="9-99">
 							<p:clientValidator event="blur" />
-						</p:inputText>
+						</p:inputMask>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
