@@ -207,12 +207,14 @@ public class BemDeConsumoControle implements Serializable {
 	public String salvar() {
 		String message = "";
 		this.bemDeConsumo.setStatus(true);
-
+		
 		if (subCategoria == null) {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
+			System.out.println("Entrou no if (subCategoria == null)");
 			return null;
 		}
-		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("bem")) {
+		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("bem_consumo")) {
+			System.out.println("Entrou no outro if");
 			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
 					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
 					+ ". Não é possível inserir bens de consumo nela.");
@@ -225,6 +227,7 @@ public class BemDeConsumoControle implements Serializable {
 		}
 
 		bemDeConsumo.setUnidadeDeMedida(unidadeDeMedida);
+		bemDeConsumo.setSubCategoria(subCategoria);
 
 		if (bemDeConsumo.getId() == null) {
 			ItemDeProducao existe = bemDeConsumoRepositorio.getItemDeProducaoPorCodigo(bemDeConsumo.getCodigo());
@@ -236,6 +239,7 @@ public class BemDeConsumoControle implements Serializable {
 			bemDeConsumoRepositorio.adicionar(bemDeConsumo);
 			message += "BemDeConsumo Cadastrada com Sucesso.";
 		} else {
+			System.out.println("Entrou noelse");
 			bemDeConsumoRepositorio.atualizar(bemDeConsumo);
 			message += "BemDeConsumo Atualizada com Sucesso.";
 		}
@@ -290,6 +294,8 @@ public class BemDeConsumoControle implements Serializable {
 
 	public void subCategoriaSelecionada(SelectEvent event) {
 		subCategoria = (SubCategoria) event.getObject();
+		categoria = subCategoria.getCategoria();
+		categoriaCodigo = categoria.getCodigo();
 		subCategoriaCodigo = subCategoria.getCodigo();
 		bemDeConsumo.setSubCategoria(subCategoria);
 		bemDeConsumo.setCodigo(subCategoriaCodigo);
@@ -320,29 +326,21 @@ public class BemDeConsumoControle implements Serializable {
 		recuperarBemDeConsumoPorId();
 		subCategoria = bemDeConsumo.getSubCategoria();
 		subCategoriaCodigo = subCategoria.getCodigo();
+		categoria = subCategoria.getCategoria();
+		categoriaCodigo = categoria.getCodigo();
 		unidadeDeMedida = bemDeConsumo.getUnidadeDeMedida();
 		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
-		constroiEstrutura();
 
 	}
 
 	public void constroiEstrutura() {
 
 		String aux = bemDeConsumo.getCodigo();
-		if (aux.length() >= 4) {
-			categoriaCodigo = aux.substring(0, 4);
-			getCategoriaPorCodigo();
-			if (aux.length() >= 7) {
-				subCategoriaCodigo = aux.substring(0, 7);
-				getSubCategoriaPorCodigo();
-			} else {
-				subCategoriaCodigo = aux;
-				getSubCategoriaPorCodigo();
-			}
-		} else {
-			categoriaCodigo = aux;
-			getCategoriaPorCodigo();
-		}
+
+		categoriaCodigo = aux.substring(0, 4);
+		getCategoriaPorCodigo();
+		subCategoriaCodigo = aux.substring(0, 7);
+		getSubCategoriaPorCodigo();
 
 	}
 

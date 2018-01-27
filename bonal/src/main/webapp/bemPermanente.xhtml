@@ -49,7 +49,8 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Código do bemPermanente obrigatório"
 							validatorMessage="Código do bemPermanente deve ter no minimo 2 caracteres"
-							maxlength="80">
+							maxlength="80"
+							mask="9-99-99-99">
 							<p:clientValidator event="blur" />
 						</p:inputMask>
 					</div>
@@ -145,7 +146,7 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Codigo da sub categoria obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
-							<p:ajax event="keydown" process="@this" update="subCategoria"
+							<p:ajax event="keyup" process="@this" update="subCategoria"
 									listener="#{bemPermanenteControle.getSubCategoriaPorCodigo}" />
 						</p:inputText>
 					</div>

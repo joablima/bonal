@@ -11,7 +11,7 @@
 	<f:metadata>
 		<f:viewParam name="bemDeConsumoId"
 			value="#{bemDeConsumoControle.bemDeConsumoId}" />
-		<f:viewAction action="#{bemDeConsumoControle.inicializa}"
+		<f:viewAction action="#{bemDeConsumoControle.inicializa}" update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
 			if="#{param.bemDeConsumoId != null}" />
 	</f:metadata>
 
@@ -41,7 +41,7 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
-						<p:inputText id="codigo"
+						<p:inputMask id="codigo"
 							value="#{bemDeConsumoControle.bemDeConsumo.codigo}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Código do bemDeConsumo obrigatório"
@@ -49,15 +49,16 @@
 							maxlength="80" mask="9-99-99-99">
 							<p:clientValidator event="blur" />
 							<p:ajax event="keyup" process="@this"
-								update="categoria subCategoria categoriaCodigo"
+								update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
 								listener="#{bemDeConsumoControle.constroiEstrutura}" />
-						</p:inputText>
+						</p:inputMask>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="codigo" id="codigoMessage" />
 					</div>
 				</div>
+				
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Categoria:" for="categoria" />
@@ -72,14 +73,14 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
-							<p:inputText placeholder="Categoria" id="categoria"
+							<p:inputText placeholder="Nome" id="categoria"
 								value="#{bemDeConsumoControle.categoria.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
 								process="@this" update="categoria"
 								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
-									update="categoria codigo categoriaCodigo"
+									update="categoria codigo categoriaCodigo subCategoriaCodigo"
 									listener="#{bemDeConsumoControle.categoriaSelecionada}" />
 							</p:commandButton>
 						</div>
@@ -88,21 +89,30 @@
 						<p:message for="categoria" id="categoriaMessage" />
 					</div>
 				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Sub Categoria:" for="subCategoria" />
+						<p:inputText placeholder="Código"  id="subCategoriaCodigo"
+							value="#{bemDeConsumoControle.subCategoria.codigo}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
 
 
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<p:outputLabel value="Sub Categoria:" for="subCategoria" />
 						<div class="ui-inputgroup">
-							<p:inputText placeholder="Sub Categoria" id="subCategoria"
+							<p:inputText placeholder="Nome" id="subCategoria"
 								value="#{bemDeConsumoControle.subCategoria.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
 								process="@this" update="subCategoria"
 								actionListener="#{dialogControle.subCategoriaConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
-									update="subCategoria codigo"
+									update="subCategoria categoria categoriaCodigo subCategoriaCodigo"
 									listener="#{bemDeConsumoControle.subCategoriaSelecionada}" />
 							</p:commandButton>
 						</div>

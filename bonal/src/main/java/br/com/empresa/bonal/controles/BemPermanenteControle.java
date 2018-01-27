@@ -180,7 +180,7 @@ public class BemPermanenteControle implements Serializable {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de sub categoria válido");
 			return null;
 		}
-		if (!c.getCategoria().getTipo().toString().toLowerCase().equals("bem")) {
+		if (!c.getCategoria().getTipo().toString().toLowerCase().equals("bem_permanente")) {
 			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
 					+ c.getCategoria().getTipo().toString().toLowerCase()
 					+ ". Não é possível inserir bens permanentes nela.");

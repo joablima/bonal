@@ -2,7 +2,7 @@ package br.com.empresa.bonal.util.enums;
 
 public enum EnumCategoria {
 
-	BEM("Bem"), SERVICO("Serviço"), MAO_DE_OBRA("Mao de obra");
+	BEM_CONSUMO("Bem de consumo"), BEM_PERMANENTE("Bem permanente"), SERVICO("Serviço"), MAO_DE_OBRA("Mao de obra");
 
 	private String label;
 

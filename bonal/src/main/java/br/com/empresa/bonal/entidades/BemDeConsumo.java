@@ -37,5 +37,11 @@ public class BemDeConsumo extends ItemDeProducao implements Serializable{
 	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
 	}
-
+	
+	@Override
+	public String toString(){
+		return "Nome: "+getNome()+
+				"subcategoria: "+getSubCategoria().getNome()+
+				"unidade de medida: "+getUnidadeDeMedida().getNome();
+	}
 }

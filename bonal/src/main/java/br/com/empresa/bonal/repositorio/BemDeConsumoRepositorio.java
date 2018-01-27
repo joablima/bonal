@@ -21,6 +21,9 @@ public class BemDeConsumoRepositorio implements Serializable {
 
 	// m�todo que persiste um registro
 	public void adicionar(BemDeConsumo bemDeConsumo) {
+		
+		System.out.println(bemDeConsumo.toString());
+		
 		em.persist(bemDeConsumo);
 	}
 
