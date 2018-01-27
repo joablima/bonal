@@ -12,17 +12,16 @@ import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
+import br.com.empresa.bonal.util.logging.Logging;
 
 public class BemDeConsumoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	EntityManager em;
-
+	
 	// m�todo que persiste um registro
 	public void adicionar(BemDeConsumo bemDeConsumo) {
-		
-		System.out.println(bemDeConsumo.toString());
 		
 		em.persist(bemDeConsumo);
 	}

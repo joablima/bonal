@@ -210,11 +210,9 @@ public class BemDeConsumoControle implements Serializable {
 		
 		if (subCategoria == null) {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
-			System.out.println("Entrou no if (subCategoria == null)");
 			return null;
 		}
 		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("bem_consumo")) {
-			System.out.println("Entrou no outro if");
 			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
 					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
 					+ ". Não é possível inserir bens de consumo nela.");
@@ -226,8 +224,6 @@ public class BemDeConsumoControle implements Serializable {
 			return null;
 		}
 
-		bemDeConsumo.setUnidadeDeMedida(unidadeDeMedida);
-		bemDeConsumo.setSubCategoria(subCategoria);
 
 		if (bemDeConsumo.getId() == null) {
 			ItemDeProducao existe = bemDeConsumoRepositorio.getItemDeProducaoPorCodigo(bemDeConsumo.getCodigo());
