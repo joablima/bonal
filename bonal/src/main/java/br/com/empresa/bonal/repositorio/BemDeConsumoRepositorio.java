@@ -19,10 +19,10 @@ public class BemDeConsumoRepositorio implements Serializable {
 
 	@Inject
 	EntityManager em;
-	
+
 	// m�todo que persiste um registro
 	public void adicionar(BemDeConsumo bemDeConsumo) {
-		
+
 		em.persist(bemDeConsumo);
 	}
 
@@ -62,30 +62,17 @@ public class BemDeConsumoRepositorio implements Serializable {
 		TypedQuery<BemDeConsumo> query = em.createQuery(jpql, BemDeConsumo.class);
 
 		if (nome != null)
-			query.setParameter("pnome", '%' + nome + '%')
-				.setParameter("pcodigo", '%' + nome + '%')
-				.setParameter("pdescricao", '%' + nome + '%')
-				.setParameter("pquantidade", '%' + nome + '%');
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
+					.setParameter("pdescricao", '%' + nome + '%').setParameter("pquantidade", '%' + nome + '%');
 
 		return query.getResultList();
 	}
-	
-	// método que verifica se elemento existe
-		public Categoria getCategoriaPorCodigo(String codigo) {
-			TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.codigo = :pcodigo",
-					Categoria.class).setParameter("pcodigo", codigo.toUpperCase());
-
-			try {
-				return query.getSingleResult();
-			} catch (Exception e) {
-				return null;
-			}
-		}
 
 	// método que verifica se elemento existe
-	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
-		TypedQuery<SubCategoria> query = em.createQuery("select c from SubCategoria c where c.codigo = :pcodigo",
-				SubCategoria.class).setParameter("pcodigo", codigo.toUpperCase());
+	public Categoria getCategoriaPorCodigo(String codigo) {
+		TypedQuery<Categoria> query = em
+				.createQuery("select c from Categoria c where c.codigo = :pcodigo", Categoria.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();
@@ -93,7 +80,19 @@ public class BemDeConsumoRepositorio implements Serializable {
 			return null;
 		}
 	}
-	
+
+	// método que verifica se elemento existe
+	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
+		TypedQuery<SubCategoria> query = em
+				.createQuery("select c from SubCategoria c where c.codigo = :pcodigo", SubCategoria.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	// método que verifica se elemento existe
 	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {

@@ -79,25 +79,30 @@
 					<h:outputText value="#{bemDeConsumo.nome}" />
 				</p:column>
 
-				<p:column headerText="Descricao" sortBy="#{bemDeConsumo.descricao}">
-					<h:outputText value="#{bemDeConsumo.descricao}" />
+				<p:column headerText="Categoria" sortBy="#{bemDeConsumo.subCategoria.categoria.nome}">
+					<h:outputText value="#{bemDeConsumo.subCategoria.categoria.nome}" />
+				</p:column>
+				
+				<p:column headerText="Sub Categoria" sortBy="#{bemDeConsumo.subCategoria.nome}">
+					<h:outputText value="#{bemDeConsumo.subCategoria.nome}" />
 				</p:column>
 
-				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar"
 						outcome="#{bemDeConsumoControle.editar(bemDeConsumo)}" />
 				</p:column>
-
-				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{bemDeConsumoControle.remover}"
+				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{bemDeConsumoControle.remover(bemDeConsumo)}"
 						update="@form" process="@this @form"
 						rendered="#{bemDeConsumo.status == true}">
 						<p:ajax listener="#{bemDeConsumoControle.listar}" />
 					</p:commandButton>
-
-					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{bemDeConsumoControle.salvar}"
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{bemDeConsumoControle.salvar(bemDeConsumo)}"
 						update="@form" process="@this @form"
 						rendered="#{bemDeConsumo.status == false}">
 						<p:ajax listener="#{bemDeConsumoControle.listar}" />

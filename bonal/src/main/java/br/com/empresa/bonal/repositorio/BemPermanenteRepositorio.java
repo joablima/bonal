@@ -8,8 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.empresa.bonal.entidades.BemPermanente;
+import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
+import br.com.empresa.bonal.util.logging.Logging;
 
 public class BemPermanenteRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +22,7 @@ public class BemPermanenteRepositorio implements Serializable {
 
 	// m�todo que persiste um registro
 	public void adicionar(BemPermanente bemPermanente) {
+
 		em.persist(bemPermanente);
 	}
 
@@ -52,27 +56,23 @@ public class BemPermanenteRepositorio implements Serializable {
 		String jpql = "select s from BemPermanente s where ";
 
 		if (nome != null)
-			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao or s.marca like :pmarca or s.modelo like :pmodelo);";
+			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao or s.quantidade like :pquantidade );";
 		jpql += "1 = 1";
 
 		TypedQuery<BemPermanente> query = em.createQuery(jpql, BemPermanente.class);
 
 		if (nome != null)
-			query.setParameter("pnome", '%' + nome + '%')
-				.setParameter("pcodigo", '%' + nome + '%')
-				.setParameter("pdescricao", '%' + nome + '%')
-				.setParameter("pmarca", '%' + nome + '%')
-				.setParameter("pmodelo", '%' + nome + '%');
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
+					.setParameter("pdescricao", '%' + nome + '%').setParameter("pquantidade", '%' + nome + '%');
 
 		return query.getResultList();
 	}
 
-
-
 	// método que verifica se elemento existe
-	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
-		TypedQuery<SubCategoria> query = em.createQuery("select c from SubCategoria c where c.codigo = :pcodigo",
-				SubCategoria.class).setParameter("pcodigo", codigo.toUpperCase());
+	public Categoria getCategoriaPorCodigo(String codigo) {
+		TypedQuery<Categoria> query = em
+				.createQuery("select c from Categoria c where c.codigo = :pcodigo", Categoria.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
 			return query.getSingleResult();
@@ -80,17 +80,31 @@ public class BemPermanenteRepositorio implements Serializable {
 			return null;
 		}
 	}
-	
-	// método que verifica se elemento existe
-		public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
-			TypedQuery<ItemDeProducao> query = em
-					.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
-					.setParameter("pcodigo", codigo.toUpperCase());
 
-			try {
-				return query.getSingleResult();
-			} catch (Exception e) {
-				return null;
-			}
+	// método que verifica se elemento existe
+	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
+		TypedQuery<SubCategoria> query = em
+				.createQuery("select c from SubCategoria c where c.codigo = :pcodigo", SubCategoria.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
 		}
+	}
+
+	// método que verifica se elemento existe
+	public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
+		TypedQuery<ItemDeProducao> query = em
+				.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

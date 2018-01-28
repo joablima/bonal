@@ -13,16 +13,16 @@
 		<div class="ui-g-12 titulo">
 			<h1>Consultar BensPermanentes</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Novo Servico" outcome="bemPermanente" />
+					value="Cadastrar Novo BemPermanente" outcome="bemPermanente" />
 			</span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
-		<h:form id="formServicoConsulta">
+		<h:form id="formBemPermanenteConsulta">
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
-					<p:outputLabel value="Nome ou Codigo da Servico: "
+					<p:outputLabel value="Nome ou Codigo da BemPermanente: "
 						for="bemPermanenteNome" />
 					<p:inputText value="#{bemPermanenteControle.bemPermanenteNome}"
 						id="bemPermanenteNome" styleClass="form-normal">
@@ -31,7 +31,7 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarServico" value="Filtrar"
+					<p:commandButton id="buscarBemPermanente" value="Filtrar"
 						action="#{bemPermanenteControle.listar}" process="@form"
 						update="@form :tabelaBensPermanentes" icon="fa fa-fw fa-filter" />
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
@@ -57,7 +57,7 @@
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{bemPermanente.id}" selection="#{bemPermanenteControle.bemPermanente}"
-				selectionMode="single" emptyMessage="Nenhuma Servico Encontrado!"
+				selectionMode="single" emptyMessage="Nenhuma BemPermanente Encontrado!"
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de BensPermanentes
@@ -79,25 +79,30 @@
 					<h:outputText value="#{bemPermanente.nome}" />
 				</p:column>
 
-				<p:column headerText="Descricao" sortBy="#{bemPermanente.descricao}">
-					<h:outputText value="#{bemPermanente.descricao}" />
+				<p:column headerText="Categoria" sortBy="#{bemPermanente.subCategoria.categoria.nome}">
+					<h:outputText value="#{bemPermanente.subCategoria.categoria.nome}" />
+				</p:column>
+				
+				<p:column headerText="Sub Categoria" sortBy="#{bemPermanente.subCategoria.nome}">
+					<h:outputText value="#{bemPermanente.subCategoria.nome}" />
 				</p:column>
 
-				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar"
 						outcome="#{bemPermanenteControle.editar(bemPermanente)}" />
 				</p:column>
-
-				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{bemPermanenteControle.remover}"
+				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{bemPermanenteControle.remover(bemPermanente)}"
 						update="@form" process="@this @form"
 						rendered="#{bemPermanente.status == true}">
 						<p:ajax listener="#{bemPermanenteControle.listar}" />
 					</p:commandButton>
-
-					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{bemPermanenteControle.salvar}"
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{bemPermanenteControle.salvar(bemPermanente)}"
 						update="@form" process="@this @form"
 						rendered="#{bemPermanente.status == false}">
 						<p:ajax listener="#{bemPermanenteControle.listar}" />
@@ -114,9 +119,6 @@
 					oncomplete="PF('bemPermanenteDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
-
-
-
 		</h:form>
 
 	</ui:define>

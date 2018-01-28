@@ -25,7 +25,7 @@
 						for="subCategoriaNome" />
 					<p:inputText value="#{subCategoriaControle.subCategoriaNome}"
 						id="subCategoriaNome" styleClass="form-normal">
-						<p:ajax event="keyup" listener="#{subCategoriaControle.listarPorCategoria}"
+						<p:ajax event="keyup" listener="#{subCategoriaControle.listar}"
 							process="@form" update="@form :tabelaSubCategorias" />
 					</p:inputText>
 				</div>

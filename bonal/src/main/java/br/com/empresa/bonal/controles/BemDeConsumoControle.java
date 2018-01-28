@@ -32,12 +32,12 @@ public class BemDeConsumoControle implements Serializable {
 
 	private BemDeConsumo bemDeConsumo = new BemDeConsumo();
 
-	private String categoriaCodigo;
-	private Categoria categoria;
-	private String subCategoriaCodigo;
-	private SubCategoria subCategoria;
-	private String unidadeDeMedidaSigla;
-	private UnidadeDeMedida unidadeDeMedida;
+	private String categoriaCodigo = "";
+	private Categoria categoria = new Categoria();
+	private String subCategoriaCodigo = "";
+	private SubCategoria subCategoria = new SubCategoria();
+	private String unidadeDeMedidaSigla = "";
+	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
 	private Long bemDeConsumoId;
 
@@ -201,6 +201,15 @@ public class BemDeConsumoControle implements Serializable {
 	public void limparFiltros() {
 		this.bemDeConsumoNome = "";
 	}
+	@Transacional
+	public String salvar(BemDeConsumo bemDeConsumo){
+		bemDeConsumo.setStatus(true);
+		bemDeConsumoRepositorio.atualizar(bemDeConsumo);
+		this.bensDeConsumo = null;
+		this.bemDeConsumo = new BemDeConsumo();
+		listarTabela();
+		return null;
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -208,6 +217,9 @@ public class BemDeConsumoControle implements Serializable {
 		String message = "";
 		this.bemDeConsumo.setStatus(true);
 		
+		subCategoria = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(bemDeConsumo.getSubCategoria().getCodigo());
+		unidadeDeMedida = bemDeConsumoRepositorio.getUnidadeDeMedidaPorSigla(bemDeConsumo.getUnidadeDeMedida().getSigla());
+
 		if (subCategoria == null) {
 			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
 			return null;
@@ -223,19 +235,20 @@ public class BemDeConsumoControle implements Serializable {
 			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
 			return null;
 		}
-
+		
+		bemDeConsumo.setSubCategoria(subCategoria);
+		bemDeConsumo.setUnidadeDeMedida(unidadeDeMedida);
+		
+		ItemDeProducao existe = bemDeConsumoRepositorio.getItemDeProducaoPorCodigo(bemDeConsumo.getCodigo());
+		if (existe != null) {
+			facesContext.warn("Codigo duplicado");
+			return null;
+		}
 
 		if (bemDeConsumo.getId() == null) {
-			ItemDeProducao existe = bemDeConsumoRepositorio.getItemDeProducaoPorCodigo(bemDeConsumo.getCodigo());
-			if (existe != null) {
-				facesContext.warn("Codigo duplicado");
-				return null;
-			}
-
 			bemDeConsumoRepositorio.adicionar(bemDeConsumo);
 			message += "BemDeConsumo Cadastrada com Sucesso.";
 		} else {
-			System.out.println("Entrou noelse");
 			bemDeConsumoRepositorio.atualizar(bemDeConsumo);
 			message += "BemDeConsumo Atualizada com Sucesso.";
 		}
@@ -243,9 +256,11 @@ public class BemDeConsumoControle implements Serializable {
 		logger.info(message);
 		bemDeConsumo = new BemDeConsumo();
 		unidadeDeMedida = new UnidadeDeMedida();
+		unidadeDeMedidaSigla = null;
 		subCategoria = new SubCategoria();
 		subCategoriaCodigo = null;
-		unidadeDeMedidaSigla = null;
+		categoria = new Categoria();
+		categoriaCodigo = null;
 		return null;
 	}
 
@@ -256,7 +271,7 @@ public class BemDeConsumoControle implements Serializable {
 
 	// Remove um SubCategoria do banco de dados
 	@Transacional
-	public String remover() {
+	public String remover(BemDeConsumo bemDeConsumo) {
 		bemDeConsumo.setStatus(false);
 		bemDeConsumoRepositorio.atualizar(bemDeConsumo);
 		this.bensDeConsumo = null;
@@ -279,13 +294,25 @@ public class BemDeConsumoControle implements Serializable {
 	public void categoriaSelecionada(SelectEvent event) {
 		categoria = (Categoria) event.getObject();
 		categoriaCodigo = categoria.getCodigo();
-		bemDeConsumo.setCodigo(categoriaCodigo + "-__-__");
+		bemDeConsumo.setCodigo(categoriaCodigo + "-00-00");
 		requestContext.update("formBemDeConsumo:categoria");
 	}
 
+	@Transacional
 	public void getCategoriaPorCodigo() {
 		categoria = bemDeConsumoRepositorio.getCategoriaPorCodigo(categoriaCodigo);
+	}
 
+	@Transacional
+	public void getUnidadeDeMedidaPorSigla() {
+		unidadeDeMedida = bemDeConsumoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
+		bemDeConsumo.setUnidadeDeMedida(unidadeDeMedida);
+	}
+
+	@Transacional
+	public void getSubCategoriaPorCodigo() {
+		subCategoria = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
+		bemDeConsumo.setSubCategoria(subCategoria);
 	}
 
 	public void subCategoriaSelecionada(SelectEvent event) {
@@ -293,13 +320,9 @@ public class BemDeConsumoControle implements Serializable {
 		categoria = subCategoria.getCategoria();
 		categoriaCodigo = categoria.getCodigo();
 		subCategoriaCodigo = subCategoria.getCodigo();
+		bemDeConsumo.setCodigo(subCategoriaCodigo+"-00");
 		bemDeConsumo.setSubCategoria(subCategoria);
-		bemDeConsumo.setCodigo(subCategoriaCodigo);
 		requestContext.update("formBemDeConsumo:subCategoria");
-	}
-
-	public void getSubCategoriaPorCodigo() {
-		subCategoria = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
 	}
 
 	public void unidadeDeMedidaSelecionada(SelectEvent event) {
@@ -309,10 +332,6 @@ public class BemDeConsumoControle implements Serializable {
 		requestContext.update("formBemDeConsumo:unidadeDeMedida");
 	}
 
-	public void getUnidadeDeMedidaPorSigla() {
-		unidadeDeMedida = bemDeConsumoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
-	}
-
 	// Método usado para carregar objeto para o dialog
 	public void selecionarBemDeConsumo(BemDeConsumo bemDeConsumo) {
 		requestContext.closeDialog(bemDeConsumo);
@@ -320,12 +339,12 @@ public class BemDeConsumoControle implements Serializable {
 
 	public void inicializa() {
 		recuperarBemDeConsumoPorId();
-		subCategoria = bemDeConsumo.getSubCategoria();
-		subCategoriaCodigo = subCategoria.getCodigo();
-		categoria = subCategoria.getCategoria();
-		categoriaCodigo = categoria.getCodigo();
-		unidadeDeMedida = bemDeConsumo.getUnidadeDeMedida();
-		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
+		subCategoriaCodigo = bemDeConsumo.getSubCategoria().getCodigo();
+		getSubCategoriaPorCodigo();
+		categoriaCodigo = subCategoria.getCategoria().getCodigo();
+		getCategoriaPorCodigo();
+		unidadeDeMedidaSigla = bemDeConsumo.getUnidadeDeMedida().getSigla();
+		getUnidadeDeMedidaPorSigla();
 
 	}
 
