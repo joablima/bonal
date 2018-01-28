@@ -1,5 +1,7 @@
-package br.com.empresa.bonal.controles;
+/*package br.com.empresa.bonal.depreciadas;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,16 +15,20 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
+import org.primefaces.event.FileUploadEvent;
 
 import br.com.empresa.bonal.entidades.Cargo;
-import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPermissao;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -32,10 +38,7 @@ public class CargoControle implements Serializable {
 
 	private Cargo cargo = new Cargo();
 
-	private String categoriaCodigo = "";
-	private Categoria categoria = new Categoria();
-	private String subCategoriaCodigo = "";
-	private SubCategoria subCategoria = new SubCategoria();
+	private String subCategoriaCodigo;
 
 	private Long cargoId;
 
@@ -51,10 +54,10 @@ public class CargoControle implements Serializable {
 	private CargoRepositorio cargoRepositorio;
 
 	@Inject
-	private RequestContext requestContext;
-
-	@Inject
 	private FacesContextUtil facesContext;
+	
+	@Inject
+	private RequestContext requestContext;
 
 	@Inject
 	private Logger logger;
@@ -118,30 +121,6 @@ public class CargoControle implements Serializable {
 		this.subCategoriaCodigo = subCategoriaCodigo;
 	}
 
-	public String getCategoriaCodigo() {
-		return categoriaCodigo;
-	}
-
-	public void setCategoriaCodigo(String categoriaCodigo) {
-		this.categoriaCodigo = categoriaCodigo;
-	}
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public SubCategoria getSubCategoria() {
-		return subCategoria;
-	}
-
-	public void setSubCategoria(SubCategoria subCategoria) {
-		this.subCategoria = subCategoria;
-	}
-
 	// ----- Carrega os Enums em Arrays -----
 	public EnumPermissao[] getEnumPermissao() {
 		return EnumPermissao.values();
@@ -189,57 +168,40 @@ public class CargoControle implements Serializable {
 		this.cargoNome = "";
 	}
 
-	@Transacional
-	public String salvar(Cargo cargo) {
-		cargo.setStatus(true);
-		cargoRepositorio.atualizar(cargo);
-		this.cargos = null;
-		this.cargo = new Cargo();
-		listarTabela();
-		return null;
-	}
-
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
 		String message = "";
 		this.cargo.setStatus(true);
 
-		subCategoria = cargoRepositorio.getSubCategoriaPorCodigo(cargo.getSubCategoria().getCodigo());
-
-		if (subCategoria == null) {
-			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
+		SubCategoria c = cargoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
+		if (c == null) {
+			facesContext.warn("SubCategoria inexistente, insira um codigo de sub categoria válido");
 			return null;
 		}
-		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("mao_de_obra")) {
+		if (!c.getCategoria().getTipo().toString().toLowerCase().equals("mao_de_obra")) {
 			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
-					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
-					+ ". Não é possível inserir cargos nela.");
+					+ c.getCategoria().getTipo().toString().toLowerCase() + ". Não é possível inserir cargos nela.");
 			return null;
 		}
-
-		cargo.setSubCategoria(subCategoria);
-
-		ItemDeProducao existe = cargoRepositorio.getItemDeProducaoPorCodigo(cargo.getCodigo());
-		if (existe != null && (existe.getId() != cargo.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
-		}
+		cargo.setSubCategoria(c);
 
 		if (cargo.getId() == null) {
+			ItemDeProducao existe = cargoRepositorio.getItemDeProducaoPorCodigo(cargo.getCodigo());
+			if (existe != null) {
+				facesContext.warn("Codigo duplicado");
+				return null;
+			}
+
 			cargoRepositorio.adicionar(cargo);
-			message += "Cargo Cadastrada com Sucesso.";
+			message += "Cargo cadastrado com sucesso.";
 		} else {
 			cargoRepositorio.atualizar(cargo);
-			message += "Cargo Atualizada com Sucesso.";
+			message += "Cargo atualizado com sucesso.";
 		}
 		facesContext.info(message);
 		logger.info(message);
 		cargo = new Cargo();
-		subCategoria = new SubCategoria();
-		subCategoriaCodigo = null;
-		categoria = new Categoria();
-		categoriaCodigo = null;
 		return null;
 	}
 
@@ -250,7 +212,7 @@ public class CargoControle implements Serializable {
 
 	// Remove um SubCategoria do banco de dados
 	@Transacional
-	public String remover(Cargo cargo) {
+	public String remover() {
 		cargo.setStatus(false);
 		cargoRepositorio.atualizar(cargo);
 		this.cargos = null;
@@ -258,11 +220,12 @@ public class CargoControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-
-	// Editar um SubCategoria
+	
+	@Logging
 	public String editar(Cargo cargo) {
 		return "cargo?cargoId=" + cargo.getId();
 	}
+	
 
 	public boolean cargoIdExiste() {
 		if (this.cargoId == null)
@@ -270,56 +233,46 @@ public class CargoControle implements Serializable {
 		return true;
 	}
 
-	public void categoriaSelecionada(SelectEvent event) {
-		categoria = (Categoria) event.getObject();
-		categoriaCodigo = categoria.getCodigo();
-		cargo.setCodigo(categoriaCodigo + "-00-00");
-		requestContext.update("formCargo:categoria");
-	}
-
-	@Transacional
-	public void getCategoriaPorCodigo() {
-		categoria = cargoRepositorio.getCategoriaPorCodigo(categoriaCodigo);
-	}
-
-	@Transacional
-	public void getSubCategoriaPorCodigo() {
-		subCategoria = cargoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
-		cargo.setSubCategoria(subCategoria);
-	}
-
-	public void subCategoriaSelecionada(SelectEvent event) {
-		subCategoria = (SubCategoria) event.getObject();
-		categoria = subCategoria.getCategoria();
-		categoriaCodigo = categoria.getCodigo();
-		subCategoriaCodigo = subCategoria.getCodigo();
-		cargo.setCodigo(subCategoriaCodigo + "-00");
-		cargo.setSubCategoria(subCategoria);
-		requestContext.update("formCargo:subCategoria");
-	}
-
 	// Método usado para carregar objeto para o dialog
 	public void selecionarCargo(Cargo cargo) {
 		requestContext.closeDialog(cargo);
 	}
+	
+	public void importXlsx(FileUploadEvent upload) {
+		try (FileInputStream file = (FileInputStream) upload.getFile().getInputstream()) {
 
-	public void inicializa() {
-		recuperarCargoPorId();
-		subCategoriaCodigo = cargo.getSubCategoria().getCodigo();
-		getSubCategoriaPorCodigo();
-		categoriaCodigo = subCategoria.getCategoria().getCodigo();
-		getCategoriaPorCodigo();
-	}
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			Sheet sheet = workbook.getSheetAt(0);
 
-	public void constroiEstrutura() {
+			for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+				Row row = sheet.getRow(i);
 
-		String aux = cargo.getCodigo();
+				Cell cellCodigos = row.getCell(0); // codigo
+				Cell cellNomes = row.getCell(1); // nome
+				Cell cellDescricoes = row.getCell(2); // descricao
 
-		categoriaCodigo = aux.substring(0, 4);
-		getCategoriaPorCodigo();
-		subCategoriaCodigo = aux.substring(0, 7);
-		getSubCategoriaPorCodigo();
+				String codigo = cellCodigos.getStringCellValue();
+				String nome = cellNomes.getStringCellValue();
+				String descricao = cellDescricoes.getStringCellValue();
 
+				this.cargo = new Cargo();
+				
+				this.cargo.setCodigo(codigo);
+				this.cargo.setNome(nome);
+				this.cargo.setDescricao(descricao);
+
+				this.cargo.setStatus(true);
+				this.cargo.setPermissao(EnumPermissao.COMUM.toString());
+				salvar();
+			}
+			workbook.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			requestContext.scrollTo("messages");
+			facesContext.info("Erro na exportação do arquivo!");
+		}
 	}
 
 }
+*/

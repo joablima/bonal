@@ -1,4 +1,4 @@
-package br.com.empresa.bonal.controles;
+/*package br.com.empresa.bonal.depreciadas;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,9 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.Categoria;
-import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.SubCategoriaRepositorio;
@@ -31,9 +29,9 @@ public class SubCategoriaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private SubCategoria subCategoria = new SubCategoria();
-
-	private String categoriaCodigo = "";
-	private Categoria categoria = new Categoria();
+	
+	private String categoriaCodigo;
+	private Categoria categoria;
 
 	private Long subCategoriaId;
 
@@ -44,12 +42,13 @@ public class SubCategoriaControle implements Serializable {
 	// Listas para Consulta
 	private List<SubCategoria> subCategorias;
 	private List<SubCategoria> lista = new ArrayList<>();
-
-	@Inject
-	private SubCategoriaRepositorio subCategoriaRepositorio;
+	
 
 	@Inject
 	private RequestContext requestContext;
+
+	@Inject
+	private SubCategoriaRepositorio subCategoriaRepositorio;
 
 	@Inject
 	private FacesContextUtil facesContext;
@@ -57,7 +56,16 @@ public class SubCategoriaControle implements Serializable {
 	@Inject
 	private Logger logger;
 
-	//getter e setters
+	// Getters and Setters
+	public SubCategoria getSubCategoria() {
+		return subCategoria;
+	}
+
+	// Adicionado para propriedade de contexto das tabelas do Primefaces
+	public void setSubCategoria(SubCategoria c) {
+		this.subCategoria = c;
+	}
+
 	public Long getSubCategoriaId() {
 		return subCategoriaId;
 	}
@@ -74,9 +82,12 @@ public class SubCategoriaControle implements Serializable {
 		this.subCategoriaNome = subCategoriaNome;
 	}
 
+	
+
 	public List<SubCategoria> getSubCategorias() {
 		return subCategorias;
 	}
+
 
 	public List<SubCategoria> getLista() {
 		return Collections.unmodifiableList(lista);
@@ -106,21 +117,13 @@ public class SubCategoriaControle implements Serializable {
 	public void setCategoriaCodigo(String categoriaCodigo) {
 		this.categoriaCodigo = categoriaCodigo;
 	}
-
+	
 	public Categoria getCategoria() {
 		return categoria;
 	}
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
-	}
-
-	public SubCategoria getSubCategoria() {
-		return subCategoria;
-	}
-
-	public void setSubCategoria(SubCategoria subCategoria) {
-		this.subCategoria = subCategoria;
 	}
 
 	// ----------------- METODOS ----------------------
@@ -147,6 +150,14 @@ public class SubCategoriaControle implements Serializable {
 
 		subCategorias = stream.collect(Collectors.toList());
 	}
+	
+	public void listarPorCategoria(Categoria c) {
+		if (this.subCategorias == null) {
+			lista = subCategoriaRepositorio.listarPorCategoria(c);
+			subCategorias = new ArrayList<>(lista);
+		}
+		filtrarTabela();
+	}
 
 	// M�todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
@@ -164,52 +175,37 @@ public class SubCategoriaControle implements Serializable {
 	public void limparFiltros() {
 		this.subCategoriaNome = "";
 	}
-	
-	@Transacional
-	public String salvar(SubCategoria subCategoria){
-		subCategoria.setStatus(true);
-		subCategoriaRepositorio.atualizar(subCategoria);
-		this.subCategorias = null;
-		this.subCategoria = new SubCategoria();
-		listarTabela();
-		return null;
-	}
 
+	
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
 		String message = "";
 		this.subCategoria.setStatus(true);
 		
-		categoria = subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
-
-		if (categoria == null) {
-			facesContext.warn("categoria inexistente, insira um codigo de categoria válido");
+		Categoria c = subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
+		if(c == null){
+			facesContext.warn("Categoria inexistente, insira um codigo de categoria válido");
 			return null;
 		}
-	
-		
-		subCategoria.setCategoria(categoria);
-		
-		
-		SubCategoria existe = subCategoriaRepositorio.getSubCategoriaPorCodigo(subCategoria.getCodigo());
-		if (existe != null && (existe.getId()!=subCategoria.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
-		}
+		subCategoria.setCategoria(c);
 
 		if (subCategoria.getId() == null) {
+			SubCategoria existe = subCategoriaRepositorio.codigoExiste(subCategoria);
+			if (existe != null) {
+				facesContext.warn("Já existe uma sub categoria registrada com esse código." + existe.resumo());
+				return null;
+			}
+			
 			subCategoriaRepositorio.adicionar(subCategoria);
-			message += "SubCategoria Cadastrada com Sucesso.";
+			message += "Sub categoria Cadastrada com Sucesso.";
 		} else {
 			subCategoriaRepositorio.atualizar(subCategoria);
-			message += "SubCategoria Atualizada com Sucesso.";
+			message += "Sub categoria Atualizada com Sucesso.";
 		}
 		facesContext.info(message);
 		logger.info(message);
 		subCategoria = new SubCategoria();
-		categoria = new Categoria();
-		categoriaCodigo = null;
 		return null;
 	}
 
@@ -218,7 +214,7 @@ public class SubCategoriaControle implements Serializable {
 		subCategoria = subCategoriaRepositorio.buscarPorId(subCategoriaId);
 	}
 
-	// Remove um SubCategoria do banco de dados
+	// Remove um Categoria do banco de dados
 	@Transacional
 	public String remover(SubCategoria subCategoria) {
 		subCategoria.setStatus(false);
@@ -229,7 +225,7 @@ public class SubCategoriaControle implements Serializable {
 		return null;
 	}
 
-	// Editar um SubCategoria
+	// Editar um Categoria
 	public String editar(SubCategoria subCategoria) {
 		return "subCategoria?subCategoriaId=" + subCategoria.getId();
 	}
@@ -239,38 +235,23 @@ public class SubCategoriaControle implements Serializable {
 			return false;
 		return true;
 	}
+	
 
 	public void categoriaSelecionada(SelectEvent event) {
 		categoria = (Categoria) event.getObject();
 		categoriaCodigo = categoria.getCodigo();
-		subCategoria.setCodigo(categoriaCodigo + "-00-00");
+		this.subCategoria.setCategoria(categoria);
 		requestContext.update("formSubCategoria:categoria");
 	}
-
-	@Transacional
-	public void getCategoriaPorCodigo() {
-		categoria = subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
+	
+	public void getCategoriaPorCodigo(){
+		this.categoria =  subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
 	}
 
-	
 	// Método usado para carregar objeto para o dialog
 	public void selecionarSubCategoria(SubCategoria subCategoria) {
 		requestContext.closeDialog(subCategoria);
 	}
 
-	public void inicializa() {
-		recuperarSubCategoriaPorId();
-		categoriaCodigo = subCategoria.getCategoria().getCodigo();
-		getCategoriaPorCodigo();
-	}
-
-	public void constroiEstrutura() {
-
-		String aux = subCategoria.getCodigo();
-
-		categoriaCodigo = aux.substring(0, 4);
-		getCategoriaPorCodigo();
-
-	}
-
 }
+*/

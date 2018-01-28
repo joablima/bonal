@@ -1,4 +1,4 @@
-package br.com.empresa.bonal.controles;
+/*package br.com.empresa.bonal.depreciadas;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,11 +14,9 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
-import br.com.empresa.bonal.entidades.Servico;
-import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.Servico;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ServicoRepositorio;
@@ -31,13 +29,9 @@ public class ServicoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Servico servico = new Servico();
-
-	private String categoriaCodigo = "";
-	private Categoria categoria = new Categoria();
-	private String subCategoriaCodigo = "";
-	private SubCategoria subCategoria = new SubCategoria();
-	private String unidadeDeMedidaSigla = "";
-	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
+	
+	private String subCategoriaCodigo;
+	private String unidadeDeMedidaCodigo;
 
 	private Long servicoId;
 
@@ -87,9 +81,12 @@ public class ServicoControle implements Serializable {
 		this.servicoNome = servicoNome;
 	}
 
+	
+
 	public List<Servico> getServicos() {
 		return servicos;
 	}
+
 
 	public List<Servico> getLista() {
 		return Collections.unmodifiableList(lista);
@@ -119,45 +116,14 @@ public class ServicoControle implements Serializable {
 	public void setSubCategoriaCodigo(String subCategoriaCodigo) {
 		this.subCategoriaCodigo = subCategoriaCodigo;
 	}
-
-	public String getCategoriaCodigo() {
-		return categoriaCodigo;
+	
+	
+	public String getUnidadeDeMedidaCodigo() {
+		return unidadeDeMedidaCodigo;
 	}
 
-	public void setCategoriaCodigo(String categoriaCodigo) {
-		this.categoriaCodigo = categoriaCodigo;
-	}
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public String getUnidadeDeMedidaSigla() {
-		return unidadeDeMedidaSigla;
-	}
-
-	public void setUnidadeDeMedidaSigla(String unidadeDeMedidaSigla) {
-		this.unidadeDeMedidaSigla = unidadeDeMedidaSigla;
-	}
-
-	public SubCategoria getSubCategoria() {
-		return subCategoria;
-	}
-
-	public void setSubCategoria(SubCategoria subCategoria) {
-		this.subCategoria = subCategoria;
-	}
-
-	public UnidadeDeMedida getUnidadeDeMedida() {
-		return unidadeDeMedida;
-	}
-
-	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
-		this.unidadeDeMedida = unidadeDeMedida;
+	public void setUnidadeDeMedidaCodigo(String unidadeDeMedidaCodigo) {
+		this.unidadeDeMedidaCodigo = unidadeDeMedidaCodigo;
 	}
 
 	// ----------------- METODOS ----------------------
@@ -201,15 +167,8 @@ public class ServicoControle implements Serializable {
 	public void limparFiltros() {
 		this.servicoNome = "";
 	}
-	@Transacional
-	public String salvar(Servico servico){
-		servico.setStatus(true);
-		servicoRepositorio.atualizar(servico);
-		this.servicos = null;
-		this.servico = new Servico();
-		listarTabela();
-		return null;
-	}
+
+	
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -217,35 +176,31 @@ public class ServicoControle implements Serializable {
 		String message = "";
 		this.servico.setStatus(true);
 		
-		subCategoria = servicoRepositorio.getSubCategoriaPorCodigo(servico.getSubCategoria().getCodigo());
-		unidadeDeMedida = servicoRepositorio.getUnidadeDeMedidaPorSigla(servico.getUnidadeDeMedida().getSigla());
-
-		if (subCategoria == null) {
+		SubCategoria c = servicoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
+		if(c == null){
 			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
 			return null;
 		}
-		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("servico")) {
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
-					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
-					+ ". Não é possível inserir servico nela.");
+		if(!c.getCategoria().getTipo().toString().toLowerCase().equals("servico")){
+			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "+c.getCategoria().getTipo().toString().toLowerCase()+". Não é possível inserir servicos nela.");
 			return null;
 		}
-
-		if (unidadeDeMedida == null) {
+		
+		UnidadeDeMedida u = servicoRepositorio.getUnidadeDeMedidaPorCodigo(subCategoriaCodigo);
+		if(u == null){
 			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
 			return null;
 		}
 		
-		servico.setSubCategoria(subCategoria);
-		servico.setUnidadeDeMedida(unidadeDeMedida);
-		
-		ItemDeProducao existe = servicoRepositorio.getItemDeProducaoPorCodigo(servico.getCodigo());
-		if (existe != null && (existe.getId()!=servico.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
-		}
+		servico.setSubCategoria(c);
 
 		if (servico.getId() == null) {
+			ItemDeProducao existe = servicoRepositorio.getItemDeProducaoPorCodigo(servico.getCodigo());
+			if (existe != null) {
+				facesContext.warn("Codigo duplicado");
+				return null;
+			}
+			
 			servicoRepositorio.adicionar(servico);
 			message += "Servico Cadastrada com Sucesso.";
 		} else {
@@ -255,12 +210,6 @@ public class ServicoControle implements Serializable {
 		facesContext.info(message);
 		logger.info(message);
 		servico = new Servico();
-		unidadeDeMedida = new UnidadeDeMedida();
-		unidadeDeMedidaSigla = null;
-		subCategoria = new SubCategoria();
-		subCategoriaCodigo = null;
-		categoria = new Categoria();
-		categoriaCodigo = null;
 		return null;
 	}
 
@@ -271,7 +220,7 @@ public class ServicoControle implements Serializable {
 
 	// Remove um SubCategoria do banco de dados
 	@Transacional
-	public String remover(Servico servico) {
+	public String remover() {
 		servico.setStatus(false);
 		servicoRepositorio.atualizar(servico);
 		this.servicos = null;
@@ -280,6 +229,7 @@ public class ServicoControle implements Serializable {
 		return null;
 	}
 
+	
 	// Editar um SubCategoria
 	public String editar(Servico servico) {
 		return "servico?servicoId=" + servico.getId();
@@ -290,73 +240,12 @@ public class ServicoControle implements Serializable {
 			return false;
 		return true;
 	}
-
-	public void categoriaSelecionada(SelectEvent event) {
-		categoria = (Categoria) event.getObject();
-		categoriaCodigo = categoria.getCodigo();
-		servico.setCodigo(categoriaCodigo + "-00-00");
-		requestContext.update("formServico:categoria");
-	}
-
-	@Transacional
-	public void getCategoriaPorCodigo() {
-		categoria = servicoRepositorio.getCategoriaPorCodigo(categoriaCodigo);
-	}
-
-	@Transacional
-	public void getUnidadeDeMedidaPorSigla() {
-		unidadeDeMedida = servicoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
-		servico.setUnidadeDeMedida(unidadeDeMedida);
-	}
-
-	@Transacional
-	public void getSubCategoriaPorCodigo() {
-		subCategoria = servicoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
-		servico.setSubCategoria(subCategoria);
-	}
-
-	public void subCategoriaSelecionada(SelectEvent event) {
-		subCategoria = (SubCategoria) event.getObject();
-		categoria = subCategoria.getCategoria();
-		categoriaCodigo = categoria.getCodigo();
-		subCategoriaCodigo = subCategoria.getCodigo();
-		servico.setCodigo(subCategoriaCodigo+"-00");
-		servico.setSubCategoria(subCategoria);
-		requestContext.update("formServico:subCategoria");
-	}
-
-	public void unidadeDeMedidaSelecionada(SelectEvent event) {
-		unidadeDeMedida = (UnidadeDeMedida) event.getObject();
-		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
-		servico.setUnidadeDeMedida(unidadeDeMedida);
-		requestContext.update("formServico:unidadeDeMedida");
-	}
+	
 
 	// Método usado para carregar objeto para o dialog
 	public void selecionarServico(Servico servico) {
 		requestContext.closeDialog(servico);
 	}
-
-	public void inicializa() {
-		recuperarServicoPorId();
-		subCategoriaCodigo = servico.getSubCategoria().getCodigo();
-		getSubCategoriaPorCodigo();
-		categoriaCodigo = subCategoria.getCategoria().getCodigo();
-		getCategoriaPorCodigo();
-		unidadeDeMedidaSigla = servico.getUnidadeDeMedida().getSigla();
-		getUnidadeDeMedidaPorSigla();
-
-	}
-
-	public void constroiEstrutura() {
-
-		String aux = servico.getCodigo();
-
-		categoriaCodigo = aux.substring(0, 4);
-		getCategoriaPorCodigo();
-		subCategoriaCodigo = aux.substring(0, 7);
-		getSubCategoriaPorCodigo();
-
-	}
-
+	
 }
+*/

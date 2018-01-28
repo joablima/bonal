@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -11,8 +11,10 @@
 	<f:metadata>
 		<f:viewParam name="subCategoriaId"
 			value="#{subCategoriaControle.subCategoriaId}" />
-		<f:viewAction action="#{subCategoriaControle.inicializa}"
-			update="categoria categoriaCodigo"
+		<f:viewParam name="categoriaCodigo"
+			value="#{subCategoriaControle.categoriaCodigo}" />
+		<f:viewAction
+			action="#{subCategoriaControle.recuperarSubCategoriaPorId}"
 			if="#{param.subCategoriaId != null}" />
 	</f:metadata>
 
@@ -21,13 +23,13 @@
 			<h1>
 				<h:outputText
 					rendered="#{subCategoriaControle.subCategoriaId == null}"
-					value="Cadastro de SubCategoria" />
+					value="Cadastro de Sub Categoria" />
 				<h:outputText
 					rendered="#{subCategoriaControle.subCategoriaId != null}"
-					value="Edição de SubCategoria" />
+					value="Edição de Sub Categoria" />
 			</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar SubCategoria" outcome="subCategoriaConsultar" />
+					value="Consultar Sub Categoria" outcome="subCategoriaConsultar" />
 			</span>
 		</div>
 
@@ -37,7 +39,7 @@
 
 		<h:form id="formSubCategoria">
 			<p:focus context="formSubCategoria" />
-			<p:fieldset legend="Dados do SubCategoria">
+			<p:fieldset legend="Dados do Sub Categoria">
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
@@ -45,13 +47,11 @@
 						<p:inputMask id="codigo"
 							value="#{subCategoriaControle.subCategoria.codigo}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Código do subCategoria obrigatório"
-							validatorMessage="Código do subCategoria deve ter no minimo 2 caracteres"
-							maxlength="80" mask="9-99-99">
+							requiredMessage="Código da sub Categoria obrigatório"
+							validatorMessage="Código da sub Categoria deve ter no minimo 2 caracteres"
+							maxlength="80"
+							mask="9-99-99">
 							<p:clientValidator event="blur" />
-							<p:ajax event="keyup" process="@this"
-								update="categoria categoriaCodigo"
-								listener="#{subCategoriaControle.constroiEstrutura}" />
 						</p:inputMask>
 					</div>
 
@@ -60,36 +60,7 @@
 					</div>
 				</div>
 
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Categoria:" for="categoria" />
-						<p:inputText placeholder="Código" id="categoriaCodigo"
-							value="#{subCategoriaControle.categoria.codigo}"
-							styleClass="form-normal" required="true" readonly="true">
-						</p:inputText>
-					</div>
-				</div>
 
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<div class="ui-inputgroup">
-							<p:inputText placeholder="Nome" id="categoria"
-								value="#{subCategoriaControle.categoria.nome}"
-								styleClass="form-normal" required="true" readonly="true" />
-							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="categoria"
-								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
-								<p:ajax event="dialogReturn" process="@this"
-									update="categoria codigo categoriaCodigo"
-									listener="#{subCategoriaControle.categoriaSelecionada}" />
-							</p:commandButton>
-						</div>
-					</div>
-					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="categoria" id="categoriaMessage" />
-					</div>
-				</div>
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
@@ -97,8 +68,8 @@
 						<p:inputText id="nome"
 							value="#{subCategoriaControle.subCategoria.nome}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Nome do subCategoria obrigatório"
-							validatorMessage="Nome do subCategoria deve ter no minimo 2 caracteres"
+							requiredMessage="Nome da sub Categoria obrigatório"
+							validatorMessage="Nome da sub Categoria deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -117,8 +88,8 @@
 						<p:inputText id="descricao"
 							value="#{subCategoriaControle.subCategoria.descricao}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Descrição do subCategoria obrigatório"
-							validatorMessage="Descrição do subCategoria deve ter no minimo 2 caracteres"
+							requiredMessage="Descrição da sub Categoria obrigatório"
+							validatorMessage="Descrição da sub Categoria deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -128,6 +99,45 @@
 						<p:message for="descricao" id="descricaoMessage" />
 					</div>
 				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Categoria:" for="categoriaCodigo" />
+						<p:inputText id="categoriaCodigo"
+							value="#{subCategoriaControle.categoriaCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da Categoria obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="categoria"
+									listener="#{subCategoriaControle.getCategoriaPorCodigo}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="categoriaCodigo" id="categoriaCodigoMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Categoria" id="categoria"
+								value="#{subCategoriaControle.categoria.nome}" styleClass="form-normal"
+								required="true" readonly="true"/>
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="categoria"
+								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this" update="categoria categoriaCodigo"
+									listener="#{subCategoriaControle.categoriaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="categoria" id="categoriaMessage" />
+					</div>
+				</div>
+				
+
 
 			</p:fieldset>
 
@@ -144,3 +154,4 @@
 	</ui:define>
 </ui:composition>
 </html>
+ -->

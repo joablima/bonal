@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -19,19 +19,18 @@
 
 		<p:messages id="messages" globalOnly="true" />
 
-		<h:form id="formCargoConsulta">
+		<h:form id="formServicoConsulta">
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
-					<p:outputLabel value="Nome ou Codigo da Cargo: "
-						for="cargoNome" />
-					<p:inputText value="#{cargoControle.cargoNome}"
-						id="cargoNome" styleClass="form-normal">
+					<p:outputLabel value="Nome ou Codigo da Servico: " for="cargoNome" />
+					<p:inputText value="#{cargoControle.cargoNome}" id="cargoNome"
+						styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{cargoControle.listar}"
 							process="@form" update="@form :tabelaCargos" />
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarCargo" value="Filtrar"
+					<p:commandButton id="buscarServico" value="Filtrar"
 						action="#{cargoControle.listar}" process="@form"
 						update="@form :tabelaCargos" icon="fa fa-fw fa-filter" />
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
@@ -46,18 +45,17 @@
 						listener="#{cargoControle.listar}" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="Visualizar somente itens ativados" />
-				
+
 			</div>
 		</h:form>
 
 		<h:form id="tabelaCargos">
-			<p:dataTable id="cargo" var="cargo"
-				value="#{cargoControle.cargos}" resizableColumns="true"
-				reflow="true" rows="10" paginator="true"
+			<p:dataTable id="cargo" var="cargo" value="#{cargoControle.cargos}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{cargo.id}" selection="#{cargoControle.cargo}"
-				selectionMode="single" emptyMessage="Nenhuma Cargo Encontrado!"
+				selectionMode="single" emptyMessage="Nenhuma Servico Encontrado!"
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Cargos
@@ -68,7 +66,7 @@
 								value="#{poiControle.downloadXlsx(cargoControle.cargos)}" />
 						</p:commandButton> <p:messages id="messages" showDetail="true" />
 					</span>
-					
+
 				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{cargo.codigo}">
@@ -79,32 +77,27 @@
 					<h:outputText value="#{cargo.nome}" />
 				</p:column>
 
-				<p:column headerText="Categoria" sortBy="#{cargo.subCategoria.categoria.nome}">
-					<h:outputText value="#{cargo.subCategoria.categoria.nome}" />
-				</p:column>
-				
-				<p:column headerText="Sub Categoria" sortBy="#{cargo.subCategoria.nome}">
-					<h:outputText value="#{cargo.subCategoria.nome}" />
+				<p:column headerText="Descricao" sortBy="#{cargo.descricao}">
+					<h:outputText value="#{cargo.descricao}" />
 				</p:column>
 
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Editar"
-						outcome="#{cargoControle.editar(cargo)}" />
+						value="Editar" outcome="#{cargoControle.editar(cargo)}" />
 				</p:column>
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{cargoControle.remover(cargo)}"
-						update="@form" process="@this @form"
-						rendered="#{cargo.status == true}">
+						action="#{cargoControle.remover}" update="@form"
+						process="@this @form" rendered="#{cargo.status == true}">
 						<p:ajax listener="#{cargoControle.listar}" />
 					</p:commandButton>
+
 					<p:commandButton icon="fa fa-fw fa-refresh"
 						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{cargoControle.salvar(cargo)}"
-						update="@form" process="@this @form"
-						rendered="#{cargo.status == false}">
+						action="#{cargoControle.salvar}" update="@form"
+						process="@this @form" rendered="#{cargo.status == false}">
 						<p:ajax listener="#{cargoControle.listar}" />
 					</p:commandButton>
 				</p:column>
@@ -115,12 +108,30 @@
 						value=" #{cargoControle.totalCargos} de #{cargoControle.totalCargosConsulta}" />
 				</f:facet>
 
-				<p:ajax event="rowDblselect"
-					oncomplete="PF('cargoDialog').show()" update="@form"
-					global="false" />
+				<p:ajax event="rowDblselect" oncomplete="PF('cargoDialog').show()"
+					update="@form" global="false" />
 			</p:dataTable>
+
+		</h:form>
+		
+		<h:form id="importXls">
+			<p:fileUpload
+				fileUploadListener="#{cargoControle.importXlsx}"
+				mode="advanced" multiple="false" update="messageImportarXls"
+				sizeLimit="26214500" fileLimit="1" label="Escolher"
+				uploadLabel="Enviar" cancelLabel="Cancelar"
+				allowTypes="/(\.|\/)(xls|xlsx|odt)$/"
+				invalidFileMessage="São permitidas somente imagens (xls, xlsx e odt)"
+				invalidSizeMessage="O tamanho máximo permitido é de 25MB."
+				fileLimitMessage="Só é possível escolher 1 arquivos por vez."
+				onstart="console.log('Iniciando envio de arquivo')"
+				onerror="console.log('Erro na requisição de envio')"
+				oncomplete="console.log('Envio concluído')" />
+
+			<p:messages id="messageImportarXls" showDetail="true" />
 		</h:form>
 
 	</ui:define>
 </ui:composition>
 </html>
+ -->

@@ -7,8 +7,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.Servico;
+import br.com.empresa.bonal.entidades.Categoria;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
@@ -20,6 +21,7 @@ public class ServicoRepositorio implements Serializable {
 
 	// m�todo que persiste um registro
 	public void adicionar(Servico servico) {
+
 		em.persist(servico);
 	}
 
@@ -53,18 +55,30 @@ public class ServicoRepositorio implements Serializable {
 		String jpql = "select s from Servico s where ";
 
 		if (nome != null)
-			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao);";
+			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao or s.quantidade like :pquantidade );";
 		jpql += "1 = 1";
 
 		TypedQuery<Servico> query = em.createQuery(jpql, Servico.class);
 
 		if (nome != null)
 			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
-					.setParameter("pdescricao", '%' + nome + '%');
+					.setParameter("pdescricao", '%' + nome + '%').setParameter("pquantidade", '%' + nome + '%');
 
 		return query.getResultList();
 	}
 
+	// método que verifica se elemento existe
+	public Categoria getCategoriaPorCodigo(String codigo) {
+		TypedQuery<Categoria> query = em
+				.createQuery("select c from Categoria c where c.codigo = :pcodigo", Categoria.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	// método que verifica se elemento existe
 	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
@@ -80,10 +94,10 @@ public class ServicoRepositorio implements Serializable {
 	}
 
 	// método que verifica se elemento existe
-	public UnidadeDeMedida getUnidadeDeMedidaPorCodigo(String codigo) {
+	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
 		TypedQuery<UnidadeDeMedida> query = em
-				.createQuery("select c from UnidadeDeMedida c where c.codigo = :pcodigo", UnidadeDeMedida.class)
-				.setParameter("pcodigo", codigo.toUpperCase());
+				.createQuery("select c from UnidadeDeMedida c where c.sigla = :psigla", UnidadeDeMedida.class)
+				.setParameter("psigla", sigla.toUpperCase());
 
 		try {
 			return query.getSingleResult();

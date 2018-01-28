@@ -1,4 +1,4 @@
-package br.com.empresa.bonal.repositorio;
+/*package br.com.empresa.bonal.depreciadas;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,59 +7,56 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.empresa.bonal.entidades.Cargo;
-import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.Servico;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
-import br.com.empresa.bonal.util.logging.Logging;
 
-public class CargoRepositorio implements Serializable {
+public class ServicoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	EntityManager em;
 
 	// m�todo que persiste um registro
-	public void adicionar(Cargo cargo) {
-
-		em.persist(cargo);
+	public void adicionar(Servico servico) {
+		em.persist(servico);
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Cargo cargo) {
+	public void atualizar(Servico servico) {
 
-		em.merge(cargo);
+		em.merge(servico);
 	}
 
 	// m�todo que remove um registro
-	public void remover(Cargo cargo) {
-		em.merge(cargo);
+	public void remover(Servico servico) {
+		em.merge(servico);
 	}
 
 	// m�todo que recupera um objeto pelo id
-	public Cargo buscarPorId(Long id) {
-		return em.find(Cargo.class, id);
+	public Servico buscarPorId(Long id) {
+		return em.find(Servico.class, id);
 	}
 
 	// m�todo que lista todos os registros
-	public List<Cargo> listarTodos() {
+	public List<Servico> listarTodos() {
 		try {
-			return em.createQuery("select s from Cargo s", Cargo.class).getResultList();
+			return em.createQuery("select s from Servico s", Servico.class).getResultList();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
-	public List<Cargo> listarPorCriterios(String nome) {
-		String jpql = "select s from Cargo s where ";
+	public List<Servico> listarPorCriterios(String nome) {
+		String jpql = "select s from Servico s where ";
 
 		if (nome != null)
 			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao);";
 		jpql += "1 = 1";
 
-		TypedQuery<Cargo> query = em.createQuery(jpql, Cargo.class);
+		TypedQuery<Servico> query = em.createQuery(jpql, Servico.class);
 
 		if (nome != null)
 			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
@@ -68,10 +65,11 @@ public class CargoRepositorio implements Serializable {
 		return query.getResultList();
 	}
 
+
 	// método que verifica se elemento existe
-	public Categoria getCategoriaPorCodigo(String codigo) {
-		TypedQuery<Categoria> query = em
-				.createQuery("select c from Categoria c where c.codigo = :pcodigo", Categoria.class)
+	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
+		TypedQuery<SubCategoria> query = em
+				.createQuery("select c from SubCategoria c where c.codigo = :pcodigo", SubCategoria.class)
 				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
@@ -82,9 +80,9 @@ public class CargoRepositorio implements Serializable {
 	}
 
 	// método que verifica se elemento existe
-	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
-		TypedQuery<SubCategoria> query = em
-				.createQuery("select c from SubCategoria c where c.codigo = :pcodigo", SubCategoria.class)
+	public UnidadeDeMedida getUnidadeDeMedidaPorCodigo(String codigo) {
+		TypedQuery<UnidadeDeMedida> query = em
+				.createQuery("select c from UnidadeDeMedida c where c.codigo = :pcodigo", UnidadeDeMedida.class)
 				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
@@ -108,3 +106,4 @@ public class CargoRepositorio implements Serializable {
 	}
 
 }
+*/

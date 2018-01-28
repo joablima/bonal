@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -11,8 +11,10 @@
 	<f:metadata>
 		<f:viewParam name="cargoId"
 			value="#{cargoControle.cargoId}" />
-		<f:viewAction action="#{cargoControle.inicializa}"
-			update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
+		<f:viewParam name="subCategoriaCodigo"
+			value="#{cargoControle.subCategoriaCodigo}" />
+		<f:viewAction
+			action="#{cargoControle.recuperarCargoPorId}"
 			if="#{param.cargoId != null}" />
 	</f:metadata>
 
@@ -42,87 +44,20 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
-						<p:inputMask id="codigo"
+						<p:inputText id="codigo"
 							value="#{cargoControle.cargo.codigo}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Código do cargo obrigatório"
 							validatorMessage="Código do cargo deve ter no minimo 2 caracteres"
-							maxlength="80" mask="9-99-99-99">
+							maxlength="80">
 							<p:clientValidator event="blur" />
-							<p:ajax event="keyup" process="@this"
-								update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
-								listener="#{cargoControle.constroiEstrutura}" />
-						</p:inputMask>
+						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="codigo" id="codigoMessage" />
 					</div>
 				</div>
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Categoria:" for="categoria" />
-						<p:inputText placeholder="Código" id="categoriaCodigo"
-							value="#{cargoControle.categoria.codigo}"
-							styleClass="form-normal" required="true" readonly="true">
-						</p:inputText>
-					</div>
-				</div>
-
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<div class="ui-inputgroup">
-							<p:inputText placeholder="Nome" id="categoria"
-								value="#{cargoControle.categoria.nome}"
-								styleClass="form-normal" required="true" readonly="true" />
-							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="categoria"
-								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
-								<p:ajax event="dialogReturn" process="@this"
-									update="categoria codigo categoriaCodigo"
-									listener="#{cargoControle.categoriaSelecionada}" />
-							</p:commandButton>
-						</div>
-					</div>
-					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="categoria" id="categoriaMessage" />
-					</div>
-				</div>
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Sub Categoria:" for="subCategoria" />
-						<p:inputText placeholder="Código" id="subCategoriaCodigo"
-							value="#{cargoControle.subCategoria.codigo}"
-							styleClass="form-normal" required="true" readonly="true">
-						</p:inputText>
-					</div>
-				</div>
-
-
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-12 ui-lg-6">
-						<div class="ui-inputgroup">
-							<p:inputText placeholder="Nome" id="subCategoria"
-								value="#{cargoControle.subCategoria.nome}"
-								styleClass="form-normal" required="true" readonly="true" />
-							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="subCategoria"
-								actionListener="#{dialogControle.subCategoriaConsultaDialogShow}">
-								<p:ajax event="dialogReturn" process="@this"
-									update="subCategoria categoria categoriaCodigo subCategoriaCodigo codigo"
-									listener="#{cargoControle.subCategoriaSelecionada}" />
-							</p:commandButton>
-						</div>
-					</div>
-					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="subCategoria" id="subCategoriaMessage" />
-					</div>
-				</div>
-
 
 
 
@@ -164,6 +99,8 @@
 					</div>
 				</div>
 				
+				
+				
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<p:outputLabel value="Permissao:" for="permissao" />
@@ -180,8 +117,25 @@
 						<p:message for="permissao" id="permissaoMessage" />
 					</div>
 				</div>
-
 				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Sub categoria:" for="subCategoriaCodigo" />
+						<p:inputText id="subCategoriaCodigo"
+							value="#{cargoControle.subCategoriaCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da sub categoria obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="subCategoriaCodigo" id="subCategoriaCodigoMessage" />
+					</div>
+				</div>
+				
+				
+
 
 			</p:fieldset>
 
@@ -198,3 +152,4 @@
 	</ui:define>
 </ui:composition>
 </html>
+ -->

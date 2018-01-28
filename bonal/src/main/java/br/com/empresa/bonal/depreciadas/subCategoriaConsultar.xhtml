@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -11,9 +11,9 @@
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
-			<h1>Consultar SubCategorias</h1>
+			<h1>Consultar Sub Categorias</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Novo SubCategoria" outcome="subCategoria" />
+					value="Cadastrar Nova Sub Categoria" outcome="subCategoria" />
 			</span>
 		</div>
 
@@ -68,7 +68,6 @@
 								value="#{poiControle.downloadXlsx(subCategoriaControle.subCategorias)}" />
 						</p:commandButton> <p:messages id="messages" showDetail="true" />
 					</span>
-					
 				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{subCategoria.codigo}">
@@ -79,26 +78,34 @@
 					<h:outputText value="#{subCategoria.nome}" />
 				</p:column>
 
+				<p:column headerText="Descricao" sortBy="#{subCategoria.descricao}">
+					<h:outputText value="#{subCategoria.descricao}" />
+				</p:column>
+				
 				<p:column headerText="Categoria" sortBy="#{subCategoria.categoria.nome}">
 					<h:outputText value="#{subCategoria.categoria.nome}" />
 				</p:column>
 				
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Editar"
+				<p:column headerText="Tipo" sortBy="#{subCategoria.categoria.tipo}">
+					<h:outputText value="#{subCategoria.categoria.tipo}" />
+				</p:column>
+				
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
 						outcome="#{subCategoriaControle.editar(subCategoria)}" />
 				</p:column>
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times"
-						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{subCategoriaControle.remover(subCategoria)}"
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{subCategoriaControle.remover}"
 						update="@form" process="@this @form"
 						rendered="#{subCategoria.status == true}">
 						<p:ajax listener="#{subCategoriaControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh"
-						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{subCategoriaControle.salvar(subCategoria)}"
+
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{subCategoriaControle.salvar}"
 						update="@form" process="@this @form"
 						rendered="#{subCategoria.status == false}">
 						<p:ajax listener="#{subCategoriaControle.listar}" />
@@ -115,8 +122,10 @@
 					oncomplete="PF('subCategoriaDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
+
 		</h:form>
 
 	</ui:define>
 </ui:composition>
 </html>
+ -->

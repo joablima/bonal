@@ -68,7 +68,6 @@
 								value="#{poiControle.downloadXlsx(servicoControle.servicos)}" />
 						</p:commandButton> <p:messages id="messages" showDetail="true" />
 					</span>
-					
 				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{servico.codigo}">
@@ -79,30 +78,25 @@
 					<h:outputText value="#{servico.nome}" />
 				</p:column>
 
-				<p:column headerText="Categoria" sortBy="#{servico.subCategoria.categoria.nome}">
-					<h:outputText value="#{servico.subCategoria.categoria.nome}" />
-				</p:column>
-				
-				<p:column headerText="Sub Categoria" sortBy="#{servico.subCategoria.nome}">
-					<h:outputText value="#{servico.subCategoria.nome}" />
+				<p:column headerText="Descricao" sortBy="#{servico.descricao}">
+					<h:outputText value="#{servico.descricao}" />
 				</p:column>
 
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Editar"
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
 						outcome="#{servicoControle.editar(servico)}" />
 				</p:column>
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times"
-						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{servicoControle.remover(servico)}"
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{servicoControle.remover}"
 						update="@form" process="@this @form"
 						rendered="#{servico.status == true}">
 						<p:ajax listener="#{servicoControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh"
-						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{servicoControle.salvar(servico)}"
+
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{servicoControle.salvar}"
 						update="@form" process="@this @form"
 						rendered="#{servico.status == false}">
 						<p:ajax listener="#{servicoControle.listar}" />
@@ -119,6 +113,7 @@
 					oncomplete="PF('servicoDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
+
 		</h:form>
 
 	</ui:define>

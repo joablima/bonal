@@ -11,10 +11,7 @@
 	<f:metadata>
 		<f:viewParam name="servicoId"
 			value="#{servicoControle.servicoId}" />
-		<f:viewParam name="subCategoriaCodigo"
-			value="#{servicoControle.subCategoriaCodigo}" />
-		<f:viewAction
-			action="#{servicoControle.recuperarServicoPorId}"
+		<f:viewAction action="#{servicoControle.inicializa}" update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
 			if="#{param.servicoId != null}" />
 	</f:metadata>
 
@@ -44,20 +41,87 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
-						<p:inputText id="codigo"
+						<p:inputMask id="codigo"
 							value="#{servicoControle.servico.codigo}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Código do servico obrigatório"
 							validatorMessage="Código do servico deve ter no minimo 2 caracteres"
-							maxlength="80">
+							maxlength="80" mask="9-99-99-99">
 							<p:clientValidator event="blur" />
-						</p:inputText>
+							<p:ajax event="keyup" process="@this"
+								update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
+								listener="#{servicoControle.constroiEstrutura}" />
+						</p:inputMask>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="codigo" id="codigoMessage" />
 					</div>
 				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Categoria:" for="categoria" />
+						<p:inputText placeholder="Código"  id="categoriaCodigo"
+							value="#{servicoControle.categoria.codigo}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Nome" id="categoria"
+								value="#{servicoControle.categoria.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="categoria"
+								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="categoria codigo categoriaCodigo subCategoriaCodigo"
+									listener="#{servicoControle.categoriaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="categoria" id="categoriaMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Sub Categoria:" for="subCategoria" />
+						<p:inputText placeholder="Código"  id="subCategoriaCodigo"
+							value="#{servicoControle.subCategoria.codigo}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Nome" id="subCategoria"
+								value="#{servicoControle.subCategoria.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="subCategoria"
+								actionListener="#{dialogControle.subCategoriaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="subCategoria categoria categoriaCodigo subCategoriaCodigo codigo"
+									listener="#{servicoControle.subCategoriaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="subCategoria" id="subCategoriaMessage" />
+					</div>
+				</div>
+
 
 
 
@@ -99,39 +163,49 @@
 					</div>
 				</div>
 
+
+
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Sub categoria:" for="subCategoriaCodigo" />
-						<p:inputText id="subCategoriaCodigo"
-							value="#{servicoControle.subCategoriaCodigo}"
+						<p:outputLabel value="Unidade de Medida"
+							for="unidadeDeMedidaSigla" />
+						<p:inputText id="unidadeDeMedidaSigla"
+							value="#{servicoControle.unidadeDeMedidaSigla}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Codigo da sub categoria obrigatório" maxlength="80">
+							requiredMessage="Codigo da unidade de medida obrigatório"
+							maxlength="80">
 							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="unidadeDeMedida"
+								listener="#{servicoControle.getUnidadeDeMedidaPorSigla}" />
 						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="subCategoriaCodigo" id="subCategoriaCodigoMessage" />
+						<p:message for="unidadeDeMedidaSigla"
+							id="unidadeDeMedidaSiglaMessage" />
 					</div>
 				</div>
-				
+
+
 				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Unidade de Medida" for="unidadeDeMedidaCodigo" />
-						<p:inputText id="unidadeDeMedidaCodigo"
-							value="#{servicoControle.unidadeDeMedidaCodigo}"
-							styleClass="form-normal" required="true"
-							requiredMessage="Codigo da unidade de medida obrigatório" maxlength="80">
-							<p:clientValidator event="blur" />
-						</p:inputText>
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Unidade de medida" id="unidadeDeMedida"
+								value="#{servicoControle.unidadeDeMedida.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="unidadeDeMedida"
+								actionListener="#{dialogControle.unidadeDeMedidaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{servicoControle.unidadeDeMedidaSelecionada}" />
+							</p:commandButton>
+						</div>
 					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="unidadeDeMedidaCodigo" id="unidadeDeMedidaMessage" />
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedida" id="unidadeDeMedidaMessage" />
 					</div>
 				</div>
-
-
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
