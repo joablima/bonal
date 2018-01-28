@@ -240,7 +240,7 @@ public class BemDeConsumoControle implements Serializable {
 		bemDeConsumo.setUnidadeDeMedida(unidadeDeMedida);
 		
 		ItemDeProducao existe = bemDeConsumoRepositorio.getItemDeProducaoPorCodigo(bemDeConsumo.getCodigo());
-		if (existe != null) {
+		if (existe != null && (existe.getId()!=bemDeConsumo.getId())) {
 			facesContext.warn("Codigo duplicado");
 			return null;
 		}
