@@ -14,10 +14,7 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
-import br.com.empresa.bonal.entidades.Categoria;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.UnidadeDeMedidaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -29,7 +26,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
-	
 
 	private Long unidadeDeMedidaId;
 
@@ -40,7 +36,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 	// Listas para Consulta
 	private List<UnidadeDeMedida> unidadesDeMedida;
 	private List<UnidadeDeMedida> lista = new ArrayList<>();
-	
 
 	@Inject
 	private RequestContext requestContext;
@@ -80,12 +75,9 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedidaNome = unidadeDeMedidaNome;
 	}
 
-	
-
 	public List<UnidadeDeMedida> getUnidadesDeMedida() {
 		return unidadesDeMedida;
 	}
-
 
 	public List<UnidadeDeMedida> getLista() {
 		return Collections.unmodifiableList(lista);
@@ -107,6 +99,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
+
 	// ----------------- METODOS ----------------------
 	@PostConstruct
 	@Transacional
@@ -147,7 +140,17 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedidaNome = "";
 	}
 
-	
+	// Remove um Categoria do banco de dados
+	@Transacional
+	public String salvar(UnidadeDeMedida unidadeDeMedida) {
+		unidadeDeMedida.setStatus(true);
+		unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
+		this.unidadesDeMedida = null;
+		this.unidadeDeMedida = new UnidadeDeMedida();
+		listarTabela();
+		return null;
+	}
+
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
@@ -160,7 +163,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 				facesContext.warn("Já existe uma unidade de medida registrada com essa sigla.");
 				return null;
 			}
-			
+
 			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
 			message += "Unidade de Medida Cadastrada com Sucesso.";
 		} else {
@@ -199,7 +202,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 			return false;
 		return true;
 	}
-	
 
 	// Método usado para carregar objeto para o dialog
 	public void selecionarUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {

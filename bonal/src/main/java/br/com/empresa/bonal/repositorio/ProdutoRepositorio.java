@@ -8,20 +8,26 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.empresa.bonal.entidades.Produto;
+import br.com.empresa.bonal.entidades.Categoria;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
-@SuppressWarnings("serial")
 public class ProdutoRepositorio implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Inject
 	EntityManager em;
 
 	// m�todo que persiste um registro
 	public void adicionar(Produto produto) {
+
 		em.persist(produto);
 	}
 
 	// m�todo que atualiza um registro
 	public void atualizar(Produto produto) {
+
 		em.merge(produto);
 	}
 
@@ -38,42 +44,34 @@ public class ProdutoRepositorio implements Serializable {
 	// m�todo que lista todos os registros
 	public List<Produto> listarTodos() {
 		try {
-			return em.createQuery("select p from Produto p", Produto.class).getResultList();
+			return em.createQuery("select s from Produto s", Produto.class).getResultList();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
-	public List<Produto> listarPorCriterios(String nome, Long categoriaId, Long unidadeDeMedidaId) {
-		String jpql = "select p from Produto p where ";
+	public List<Produto> listarPorCriterios(String nome) {
+		String jpql = "select s from Produto s where ";
 
 		if (nome != null)
-			jpql += "(p.nome like :pnome or p.codigo like :pcodigo or p.descricao like :pdescricao) and ";
-		if (categoriaId != null)
-			jpql += "p.categoria.id = :pcategoria and ";
-		if (unidadeDeMedidaId != null)
-			jpql += "p.unidadeDeMedida.id = :punidade and ";
+			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao or s.quantidade like :pquantidade );";
 		jpql += "1 = 1";
 
 		TypedQuery<Produto> query = em.createQuery(jpql, Produto.class);
 
-		if (nome != null) {
+		if (nome != null)
 			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
-					.setParameter("pdescricao", '%' + nome + '%');
-		}
-		if (categoriaId != null)
-			query.setParameter("pcategoria", categoriaId);
-		if (unidadeDeMedidaId != null)
-			query.setParameter("punidade", unidadeDeMedidaId);
+					.setParameter("pdescricao", '%' + nome + '%').setParameter("pquantidade", '%' + nome + '%');
 
 		return query.getResultList();
 	}
 
 	// método que verifica se elemento existe
-	public Produto codigoExiste(Produto produto) {
-		TypedQuery<Produto> query = em.createQuery("select p from Produto p where p.codigo = :codigo", Produto.class)
-				.setParameter("codigo", produto.getCodigo());
+	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
+		TypedQuery<UnidadeDeMedida> query = em
+				.createQuery("select c from UnidadeDeMedida c where c.sigla = :psigla", UnidadeDeMedida.class)
+				.setParameter("psigla", sigla.toUpperCase());
 
 		try {
 			return query.getSingleResult();
@@ -81,4 +79,18 @@ public class ProdutoRepositorio implements Serializable {
 			return null;
 		}
 	}
+
+	// método que verifica se elemento existe
+	public Produto getProdutoPorCodigo(String codigo) {
+		TypedQuery<Produto> query = em
+				.createQuery("select c from Produto c where c.codigo = :pcodigo", Produto.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

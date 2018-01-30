@@ -20,7 +20,6 @@ import br.com.empresa.bonal.entidades.BemPermanente;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemPermanenteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.tx.Transacional;

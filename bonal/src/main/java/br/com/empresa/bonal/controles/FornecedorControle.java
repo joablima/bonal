@@ -15,7 +15,6 @@ import javax.inject.Named;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
-import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.repositorio.FornecedorRepositorio;
@@ -162,6 +161,11 @@ public class FornecedorControle implements Serializable {
 	public void limparFiltros() {
 		this.fornecedorNome = "";
 
+	}
+	
+	public String salvar(Fornecedor f){
+		this.fornecedor = f;
+		return salvar();
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio

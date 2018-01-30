@@ -16,20 +16,10 @@ import javax.persistence.ManyToOne;
 public class BemDeConsumo extends ItemDeProducao implements Serializable{
 	
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "unidade_de_medida")
-	private UnidadeDeMedida unidadeDeMedida;	
 	
 	private BigDecimal quantidade;
 	
-	public UnidadeDeMedida getUnidadeDeMedida() {
-		return unidadeDeMedida;
-	}
-
-	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
-		this.unidadeDeMedida = unidadeDeMedida;
-	}
-
+	
 	public BigDecimal getQuantidade() {
 		return quantidade;
 	}

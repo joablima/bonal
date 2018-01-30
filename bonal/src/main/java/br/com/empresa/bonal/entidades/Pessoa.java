@@ -29,7 +29,8 @@ public abstract class Pessoa implements Serializable{
 
 	// atributo que define se essa pessoa é do tipo fisico ou juridico
 	private String tipo;
-
+	
+	
 	// cpf para pessoas fisicas e cnpj para pessoas juridicas
 	private String documento;
 

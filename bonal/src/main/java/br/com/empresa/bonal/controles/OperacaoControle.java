@@ -15,8 +15,6 @@ import javax.inject.Named;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
-import br.com.empresa.bonal.entidades.Cargo;
-import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.Operacao;
 import br.com.empresa.bonal.repositorio.OperacaoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -145,7 +143,15 @@ public class OperacaoControle implements Serializable {
 		this.operacaoNome = "";
 	}
 
-	
+	// Remove um cargo do banco de dados
+	@Transacional
+	public String salvar(Operacao operacao) {
+		operacao.setStatus(true);
+		operacaoRepositorio.atualizar(operacao);
+		this.operacoes = null;
+		listar();
+		return null;
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
@@ -185,7 +191,6 @@ public class OperacaoControle implements Serializable {
 		return "operacao?operacaoId=" + operacao.getId();
 	}
 
-
 	public String cancelar() {
 		return "index";
 	}
@@ -200,5 +205,5 @@ public class OperacaoControle implements Serializable {
 	public void selecionarOperacao(Operacao operacao) {
 		requestContext.closeDialog(operacao);
 	}
-	
+
 }

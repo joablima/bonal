@@ -6,8 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
+import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Funcionario;
 
 public class FuncionarioRepositorio implements Serializable {
@@ -18,11 +18,13 @@ public class FuncionarioRepositorio implements Serializable {
 
 	// m�todo que persiste um registro
 	public void adicionar(Funcionario funcionario) {
+
 		em.persist(funcionario);
 	}
 
 	// m�todo que atualiza um registro
 	public void atualizar(Funcionario funcionario) {
+
 		em.merge(funcionario);
 	}
 
@@ -38,34 +40,54 @@ public class FuncionarioRepositorio implements Serializable {
 
 	// m�todo que lista todos os registros
 	public List<Funcionario> listarTodos() {
-		CriteriaQuery<Funcionario> query = em.getCriteriaBuilder().createQuery(Funcionario.class);
-		query.select(query.from(Funcionario.class));
-		List<Funcionario> list = em.createQuery(query).getResultList();
-		return list;
+		try {
+			return em.createQuery("select s from Funcionario s", Funcionario.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
-	public List<Funcionario> listarPorCriterios(String nome, Long cargoId) {
-		String jpql = "select f from Funcionario f where ";
+	public List<Funcionario> listarPorCriterios(String nome) {
+		String jpql = "select s from Funcionario s where ";
 
 		if (nome != null)
-			jpql += "(f.nome like :pnome or f.documento like :pdocumento or f.identificacao like :pidentificacao or f.email like :pemail) and ";
-		if (cargoId != null)
-			jpql += "p.categoria.id = :pcategoria and ";
-
+			jpql += "(s.nome like :pnome or s.documento like :pdocumento or s.identificacao like :pidentificacao);";
 		jpql += "1 = 1";
 
 		TypedQuery<Funcionario> query = em.createQuery(jpql, Funcionario.class);
 
-		if (nome != null) {
-			query.setParameter("pnome", '%' + nome + '%')
-			.setParameter("pdocumento", '%' + nome + '%')
-			.setParameter("pidentificacao", '%' + nome + '%')
-			.setParameter("pemail", '%' + nome + '%');
-		}
-		if (cargoId != null)
-			query.setParameter("pcargo", cargoId);
+		if (nome != null)
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pdocumento", '%' + nome + '%')
+					.setParameter("pidentificacao", '%' + nome + '%');
 
 		return query.getResultList();
 	}
+
+	// método que verifica se elemento existe
+	public Cargo getCargoPorCodigo(String codigo) {
+		TypedQuery<Cargo> query = em
+				.createQuery("select c from Cargo c where c.codigo = :pcodigo", Cargo.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// método que verifica se elemento existe
+	public Funcionario getFuncionarioPorCpf(String documento) {
+		TypedQuery<Funcionario> query = em
+				.createQuery("select c from Funcionario c where c.documento = :pdocumento", Funcionario.class)
+				.setParameter("pdocumento", documento.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

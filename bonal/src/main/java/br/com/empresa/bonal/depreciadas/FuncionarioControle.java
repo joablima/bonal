@@ -1,4 +1,4 @@
-package br.com.empresa.bonal.controles;
+/*package br.com.empresa.bonal.depreciadas;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,10 +16,15 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.Cargo;
+import br.com.empresa.bonal.entidades.Endereco;
+import br.com.empresa.bonal.entidades.Fornecedor;
+import br.com.empresa.bonal.entidades.Funcionario;
+import br.com.empresa.bonal.entidades.Operacao;
+import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.repositorio.FuncionarioRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -29,15 +34,14 @@ public class FuncionarioControle implements Serializable {
 
 	private Funcionario funcionario = new Funcionario();
 
-	private String cargoCodigo = "";
-	private Cargo cargo = new Cargo();
+	private Boolean status = true;
 
 	private Long funcionarioId;
+	private Long cargoId;
 
 	// Atributos para Consulta
 	private String funcionarioNome = "";
 
-	private Boolean status = true;
 	// Listas para Consulta
 	private List<Funcionario> funcionarios;
 	private List<Funcionario> lista = new ArrayList<>();
@@ -46,21 +50,50 @@ public class FuncionarioControle implements Serializable {
 	private FuncionarioRepositorio funcionarioRepositorio;
 
 	@Inject
-	private RequestContext requestContext;
+	private CargoRepositorio cargoRepositorio;
 
 	@Inject
 	private FacesContextUtil facesContext;
 
 	@Inject
+	private RequestContext requestContext;
+
+	@Inject
 	private Logger logger;
 
-	//getter e setters
+	// Getters and Setters
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	// Adicionado para propriedade de contexto das tabelas do Primefaces
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
+
+	public Endereco getEndereco() {
+		return funcionario.getEndereco();
+	}
+
+	// Adicionado para propriedade de contexto das tabelas do Primefaces
+	public void setEndereco(Endereco endereco) {
+		this.funcionario.setEndereco(endereco);
+	}
+
 	public Long getFuncionarioId() {
 		return funcionarioId;
 	}
 
 	public void setFuncionarioId(Long funcionarioId) {
 		this.funcionarioId = funcionarioId;
+	}
+
+	public Long getCargoId() {
+		return cargoId;
+	}
+
+	public void setCargoId(Long cargoId) {
+		this.cargoId = cargoId;
 	}
 
 	public String getFuncionarioNome() {
@@ -96,30 +129,6 @@ public class FuncionarioControle implements Serializable {
 		this.status = status;
 	}
 
-	public String getCargoCodigo() {
-		return cargoCodigo;
-	}
-
-	public void setCargoCodigo(String cargoCodigo) {
-		this.cargoCodigo = cargoCodigo;
-	}
-
-	public Cargo getCargo() {
-		return cargo;
-	}
-
-	public void setCargo(Cargo cargo) {
-		this.cargo = cargo;
-	}
-
-	public Funcionario getFuncionario() {
-		return funcionario;
-	}
-
-	public void setFuncionario(Funcionario funcionario) {
-		this.funcionario = funcionario;
-	}
-
 	// ----------------- METODOS ----------------------
 	@PostConstruct
 	@Transacional
@@ -134,13 +143,17 @@ public class FuncionarioControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Funcionario> stream = lista.stream();
 
-		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
-				| (c.getDocumento().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
-				| (c.getCargo().getNome().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
-				| c.getIdentificacao().toLowerCase().contains(funcionarioNome.toLowerCase().trim()));
+		if (!funcionarioNome.equals(null))
+			stream = stream.filter(f -> (f.getNome().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
+					| (f.getDocumento().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
+					| (f.getEmail().toLowerCase().contains(funcionarioNome.toLowerCase().trim()))
+					| f.getIdentificacao().toLowerCase().contains(funcionarioNome.toLowerCase().trim()));
 
 		if (status.equals(true))
-			stream = stream.filter(c -> (c.getStatus().equals(status)));
+			stream = stream.filter(f -> (f.getStatus().equals(status)));
+
+		if (cargoId != null)
+			stream = stream.filter(c -> (c.getCargo().getId().equals(cargoId)));
 
 		funcionarios = stream.collect(Collectors.toList());
 	}
@@ -160,54 +173,30 @@ public class FuncionarioControle implements Serializable {
 
 	public void limparFiltros() {
 		this.funcionarioNome = "";
-	}
-	
-	@Transacional
-	public String salvar(Funcionario funcionario){
-		funcionario.setStatus(true);
-		funcionarioRepositorio.atualizar(funcionario);
-		this.funcionarios = null;
-		this.funcionario = new Funcionario();
-		listarTabela();
-		return null;
+		this.cargoId = null;
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
 		String message = "";
+
 		this.funcionario.setStatus(true);
 		this.funcionario.setTipo("PESSOA_FISICA");
-		
-		cargo = funcionarioRepositorio.getCargoPorCodigo(cargoCodigo);
 
-		if (cargo == null) {
-			facesContext.warn("cargo inexistente, insira um codigo de cargo válido");
-			return null;
-		}
-	
-		
-		funcionario.setCargo(cargo);
-		
-		
-		Funcionario existe = funcionarioRepositorio.getFuncionarioPorCpf(funcionario.getDocumento());
-		if (existe != null && (existe.getId()!=funcionario.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
-		}
+		Cargo cargo = cargoRepositorio.buscarPorId(cargoId);
+		this.funcionario.setCargo(cargo);
 
 		if (funcionario.getId() == null) {
 			funcionarioRepositorio.adicionar(funcionario);
-			message += "Funcionario Cadastrada com Sucesso.";
+			message += "Funcionario Cadastrado com Sucesso.";
 		} else {
 			funcionarioRepositorio.atualizar(funcionario);
-			message += "Funcionario Atualizada com Sucesso.";
+			message += "Funcionario Atualizado com Sucesso.";
 		}
 		facesContext.info(message);
 		logger.info(message);
-		funcionario = new Funcionario();
-		cargo = new Cargo();
-		cargoCodigo = null;
+		this.funcionario = new Funcionario();
 		return null;
 	}
 
@@ -220,44 +209,47 @@ public class FuncionarioControle implements Serializable {
 	@Transacional
 	public String remover(Funcionario funcionario) {
 		funcionario.setStatus(false);
-		funcionarioRepositorio.atualizar(funcionario);
+		funcionarioRepositorio.remover(funcionario);
 		this.funcionarios = null;
-		this.funcionario = new Funcionario();
 		listarTabela();
 		return null;
 	}
 
-	// Editar um Funcionario
+	@Logging
 	public String editar(Funcionario funcionario) {
 		return "funcionario?funcionarioId=" + funcionario.getId();
 	}
 
-	public boolean funcionarioIdExiste() {
+	public String addCoeficientes() {
+		return "coeficientetecnico?funcionarioId=" + this.funcionarioId;
+	}
+
+	public boolean FuncionarioIdExiste() {
 		if (this.funcionarioId == null)
 			return false;
 		return true;
 	}
 
-	public void cargoSelecionada(SelectEvent event) {
-		cargo = (Cargo) event.getObject();
-		cargoCodigo = cargo.getCodigo();
+	// vou tirar isso daqui não se preocupe
+	public void carregandoDados() {
+		try {
+			// simulate a long running request
+			Thread.sleep(1500);
+		} catch (Exception e) {
+			// ignore
+		}
+	}
+
+	public void cargoSelecionado(SelectEvent event) {
+		Cargo cargo = (Cargo) event.getObject();
+		this.funcionario.setCargo(cargo);
 		requestContext.update("formFuncionario:cargo");
 	}
 
-	@Transacional
-	public void getCargoPorCodigo() {
-		cargo = funcionarioRepositorio.getCargoPorCodigo(cargoCodigo);
-	}
-
-	
 	// Método usado para carregar objeto para o dialog
 	public void selecionarFuncionario(Funcionario funcionario) {
 		requestContext.closeDialog(funcionario);
 	}
 
-	public void inicializa() {
-		recuperarFuncionarioPorId();
-		cargoCodigo = funcionario.getCargo().getCodigo();
-		getCargoPorCodigo();
-	}
 }
+*/

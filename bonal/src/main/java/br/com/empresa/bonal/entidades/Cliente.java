@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 
 @SuppressWarnings("serial")
 @Entity
-@DiscriminatorValue("FORNECEDOR")
+@DiscriminatorValue("CLIENTE")
 public class Cliente extends Pessoa implements Serializable{
 	
 	

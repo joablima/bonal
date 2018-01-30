@@ -46,10 +46,7 @@
 					<p:ajax update="@form :tabelaClientes"
 						listener="#{clienteControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente itens ativados"
-					rendered="#{clienteControle.status == true}" />
-				<h:outputText value="Visualizar todos os itens"
-					rendered="#{clienteControle.status == false}" />
+				<h:outputText value="Visualizar somente clientes ativos"/>
 			</div>
 		</h:form>
 
@@ -93,12 +90,12 @@
 				<p:column headerText="Email" sortBy="#{cliente.email}">
 					<p:outputLabel value="#{cliente.email}" />
 				</p:column>
-
+<!-- 
 				<p:column headerText="Endereço" sortBy="#{cliente.endereco}">
 					<p:outputLabel
 						value="#{cliente.logradouro}, nº #{cliente.numero}, #{cliente.bairro}. #{cliente.cidade} - #{cliente.uf}. Cep: #{cliente.cep}" />
 				</p:column>
-
+ -->
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
 						value="Editar" outcome="#{clienteControle.editar(cliente)}" />
@@ -107,7 +104,7 @@
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{clienteControle.remover()}" update="@form"
+						action="#{clienteControle.remover(cliente)}" update="@form"
 						process="@this @form" rendered="#{cliente.status == true}">
 						<p:ajax listener="#{clienteControle.listar}" />
 					</p:commandButton>

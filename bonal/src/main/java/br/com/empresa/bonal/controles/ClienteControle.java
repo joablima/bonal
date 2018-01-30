@@ -15,11 +15,8 @@ import javax.inject.Named;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
-import br.com.empresa.bonal.entidades.Cargo;
-import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Endereco;
-import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.repositorio.ClienteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
@@ -164,6 +161,12 @@ public class ClienteControle implements Serializable {
 	public void limparFiltros() {
 		this.clienteNome = "";
 
+	}
+	
+	
+	public String salvar(Cliente c){
+		this.cliente = c;
+		return salvar();
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio

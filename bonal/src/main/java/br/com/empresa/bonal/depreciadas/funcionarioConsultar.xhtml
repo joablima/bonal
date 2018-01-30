@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -8,6 +8,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
+
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
@@ -21,32 +22,46 @@
 
 		<h:form id="formFuncionarioConsulta">
 			<div class="filtros-consultar">
-				<div class="ui-g-12 ui-md-6 ui-lg-6">
-					<p:outputLabel value="Nome ou Cpf da Funcionario: "
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Cargo:" for="cargoId" />
+					<p:selectOneMenu value="#{funcionarioControle.cargoId}"
+						id="cargoId" styleClass="form-normal">
+						<f:selectItem itemValue="" itemLabel="Escolha um Cargo" />
+						<f:selectItems value="#{cargoControle.cargos}" var="cargo"
+							itemLabel="#{cargo.nome}" itemValue="#{cargo.id}" />
+						<p:ajax event="valueChange"
+							listener="#{funcionarioControle.listar}" process="@form"
+							update=":tabelaFuncionarios" />
+					</p:selectOneMenu>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Nome ou Cpf do Funcionario: "
 						for="funcionarioNome" />
 					<p:inputText value="#{funcionarioControle.funcionarioNome}"
 						id="funcionarioNome" styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{funcionarioControle.listar}"
-							process="@form" update="@form :tabelaFuncionarios" />
+							process="@form" update=":tabelaFuncionarios" />
 					</p:inputText>
 				</div>
-				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
 					<p:commandButton id="buscarFuncionario" value="Filtrar"
 						action="#{funcionarioControle.listar}" process="@form"
 						update="@form :tabelaFuncionarios" icon="fa fa-fw fa-filter" />
+
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
 						action="#{funcionarioControle.limpar}" process="@form"
 						update="@form :tabelaFuncionarios" />
 				</div>
 			</div>
-
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
 				<p:selectBooleanCheckbox value="#{funcionarioControle.status}">
 					<p:ajax update="@form :tabelaFuncionarios"
 						listener="#{funcionarioControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente funcionarios ativos" />
-
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{funcionarioControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{funcionarioControle.status == false}" />
 			</div>
 		</h:form>
 
@@ -59,58 +74,69 @@
 				rowKey="#{funcionario.id}"
 				selection="#{funcionarioControle.funcionario}"
 				selectionMode="single"
-				emptyMessage="Nenhuma Funcionario Encontrado!" styleClass="ui-g-12">
+				emptyMessage="Nenhum Funcionarios Encontrado!" styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Funcionarios
 				
-				<span style="float: right"> <p:commandButton value="xls"
+					<span style="float: right"> <p:commandButton value="xls"
 							ajax="false">
 							<p:fileDownload
 								value="#{poiControle.downloadXlsx(funcionarioControle.funcionarios)}" />
 						</p:commandButton> <p:messages id="messages" showDetail="true" />
 					</span>
-
 				</f:facet>
+
 				<p:column headerText="Nome" sortBy="#{funcionario.nome}">
-					<h:outputText value="#{funcionario.nome}" />
+					<p:outputLabel value="#{funcionario.nome}" />
 				</p:column>
-				
+
 				<p:column headerText="Cpf" sortBy="#{funcionario.documento}">
-					<h:outputText value="#{funcionario.documento}" />
+					<p:outputLabel value="#{funcionario.documento}" />
 				</p:column>
 
 				<p:column headerText="Rg" sortBy="#{funcionario.identificacao}">
-					<h:outputText value="#{funcionario.identificacao}" />
+					<p:outputLabel value="#{funcionario.identificacao}" />
 				</p:column>
 
-				<p:column headerText="Cargo" sortBy="#{funcionario.cargo.nome}">
-					<h:outputText value="#{funcionario.cargo.nome}" />
+				<p:column headerText="cargo" sortBy="#{funcionario.cargo.nome}">
+					<p:outputLabel value="#{funcionario.cargo.nome}" />
 				</p:column>
 
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Editar"
+				<p:column headerText="Email" sortBy="#{funcionario.email}">
+					<p:outputLabel value="#{funcionario.email}" />
+				</p:column>
+				
+				<p:column headerText="Email" sortBy="#{funcionario.email}">
+					<p:outputLabel value="#{funcionario.email}" />
+				</p:column>
+				
+				<p:column headerText="Telefone" sortBy="#{funcionario.telefone}">
+					<p:outputLabel value="#{funcionario.telefone}" />
+				</p:column>
+				
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
 						outcome="#{funcionarioControle.editar(funcionario)}" />
 				</p:column>
-				<p:column headerText="Ação" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times"
-						styleClass="tab-btn btn-desativar" value="Desativar"
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
 						action="#{funcionarioControle.remover(funcionario)}"
 						update="@form" process="@this @form"
 						rendered="#{funcionario.status == true}">
 						<p:ajax listener="#{funcionarioControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh"
-						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{funcionarioControle.salvar(funcionario)}" update="@form"
-						process="@this @form" rendered="#{funcionario.status == false}">
+					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{funcionarioControle.salvar(funcionario)}"
+						update="@form" process="@this @form"
+						rendered="#{funcionario.status == false}">
 						<p:ajax listener="#{funcionarioControle.listar}" />
 					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<h:outputText
+					<p:outputLabel
 						value=" #{funcionarioControle.totalFuncionarios} de #{funcionarioControle.totalFuncionariosConsulta}" />
 				</f:facet>
 
@@ -118,8 +144,12 @@
 					oncomplete="PF('funcionarioDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
+
+
+
 		</h:form>
 
 	</ui:define>
 </ui:composition>
 </html>
+ -->

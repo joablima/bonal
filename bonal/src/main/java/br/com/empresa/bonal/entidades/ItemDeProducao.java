@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo")
-public abstract class ItemDeProducao implements Serializable{
+public class ItemDeProducao implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +36,11 @@ public abstract class ItemDeProducao implements Serializable{
 	@NotNull(message = "Nome do Bem é obrigatório")
 	private String nome;
 	private String descricao;
+	
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "unidade_de_medida")
+	private UnidadeDeMedida unidadeDeMedida;	
 	
 	private Boolean status;
 
@@ -90,6 +95,12 @@ public abstract class ItemDeProducao implements Serializable{
 
 	public Long getId() {
 		return id;
+	}
+	public UnidadeDeMedida getUnidadeDeMedida() {
+		return unidadeDeMedida;
+	}
+	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
+		this.unidadeDeMedida = unidadeDeMedida;
 	}
 	
 	

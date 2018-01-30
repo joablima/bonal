@@ -1,33 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="produtoId"
-			value="#{produtoControle.produtoId}" />
-		<f:viewAction action="#{produtoControle.inicializa}" update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
+		<f:viewParam name="produtoId" value="#{produtoControle.produtoId}" />
+		<f:viewAction action="#{produtoControle.recuperarProdutoPorId}"
 			if="#{param.produtoId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText
-					rendered="#{produtoControle.produtoId == null}"
-					value="Cadastro de Produto" />
-				<h:outputText
-					rendered="#{produtoControle.produtoId != null}"
-					value="Edição de Produto" />
+				<h:outputText rendered="#{produtoControle.produtoId == null}"
+					value="Cadastro de Produtos" />
+				<h:outputText rendered="#{produtoControle.produtoId != null}"
+					value="Edição de Produtos" />
 			</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar Produto" outcome="produtoConsultar" />
-			</span>
+			<span><i class="fa fa-coffee" /> <p:link
+					value="Consultar Produtos" outcome="produtoConsultar" /> </span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
@@ -41,32 +38,27 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
-						<p:inputMask id="codigo"
-							value="#{produtoControle.produto.codigo}"
+						<p:inputText id="codigo" value="#{produtoControle.produto.codigo}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Código do produto obrigatório"
-							validatorMessage="Código do produto deve ter no minimo 2 caracteres"
-							maxlength="80" mask="99-99">
+							requiredMessage="Código da produto obrigatório"
+							validatorMessage="Código da produto deve ter no minimo 2 caracteres"
+							maxlength="80">
 							<p:clientValidator event="blur" />
-							
-						</p:inputMask>
+						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="codigo" id="codigoMessage" />
 					</div>
 				</div>
-				
-			
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Nome:" for="nome" />
-						<p:inputText id="nome"
-							value="#{produtoControle.produto.nome}"
+						<p:inputText id="nome" value="#{produtoControle.produto.nome}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Nome do produto obrigatório"
-							validatorMessage="Nome do produto deve ter no minimo 2 caracteres"
+							requiredMessage="Nome da produto obrigatório"
+							validatorMessage="Nome da produto deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -85,8 +77,8 @@
 						<p:inputText id="descricao"
 							value="#{produtoControle.produto.descricao}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Descrição do produto obrigatório"
-							validatorMessage="Descrição do produto deve ter no minimo 2 caracteres"
+							requiredMessage="Descrição da produto obrigatório"
+							validatorMessage="Descrição da produto deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 						</p:inputText>
@@ -97,9 +89,7 @@
 					</div>
 				</div>
 
-
-
-				<div class="ui-g">
+					<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Unidade de Medida"
 							for="unidadeDeMedidaSigla" />
@@ -145,13 +135,14 @@
 			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
 					action="#{produtoControle.salvar}" process="@this @form"
-					update="@form :messages" icon="fa fa-fw fa-save"
-					validateClient="true" />
+					update="@form" icon="fa fa-fw fa-save" validateClient="true" />
+
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
-
 		</h:form>
+
 	</ui:define>
 </ui:composition>
 </html>
+ -->

@@ -13,18 +13,7 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("servico")
 public class Servico extends ItemDeProducao implements Serializable {
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "unidade_de_medida")
-	private UnidadeDeMedida unidadeDeMedida;
-
-	public UnidadeDeMedida getUnidadeDeMedida() {
-		return unidadeDeMedida;
-	}
-
-	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
-		this.unidadeDeMedida = unidadeDeMedida;
-	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

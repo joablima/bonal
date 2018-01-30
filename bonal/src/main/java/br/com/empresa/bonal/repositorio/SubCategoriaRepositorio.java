@@ -9,10 +9,6 @@ import javax.persistence.TypedQuery;
 
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.Categoria;
-import br.com.empresa.bonal.entidades.ItemDeProducao;
-import br.com.empresa.bonal.entidades.SubCategoria;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
-import br.com.empresa.bonal.util.logging.Logging;
 
 public class SubCategoriaRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;

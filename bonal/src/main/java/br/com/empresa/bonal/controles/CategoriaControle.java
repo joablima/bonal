@@ -15,7 +15,6 @@ import javax.inject.Named;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
-import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.repositorio.CategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;

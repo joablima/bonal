@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
-import br.com.empresa.bonal.util.logging.Logging;
 
 @Named
 @SessionScoped

@@ -1,18 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
 		<f:viewParam name="funcionarioId"
 			value="#{funcionarioControle.funcionarioId}" />
-		<f:viewAction action="#{funcionarioControle.inicializa}"
-			update="cargo cargoCodigo" if="#{param.funcionarioId != null}" />
+		<f:viewAction
+			action="#{funcionarioControle.recuperarFuncionarioPorId}"
+			if="#{param.funcionarioId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
@@ -20,14 +22,13 @@
 			<h1>
 				<h:outputText
 					rendered="#{funcionarioControle.funcionarioId == null}"
-					value="Cadastro de Funcionario" />
+					value="Cadastro de Funcionarios" />
 				<h:outputText
 					rendered="#{funcionarioControle.funcionarioId != null}"
-					value="Edição de Funcionario" />
+					value="Edição de Funcionarios" />
 			</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar Funcionario" outcome="funcionarioConsultar" />
-			</span>
+			<span><i class="fa fa-coffee" /> <p:link
+					value="Consultar Funcionarios" outcome="funcionarioConsultar" /> </span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
@@ -37,6 +38,24 @@
 		<h:form id="formFuncionario">
 			<p:focus context="formFuncionario" />
 			<p:fieldset legend="Dados do Funcionario">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Cpf:" for="documento" />
+						<p:inputMask id="documento"
+							value="#{funcionarioControle.funcionario.documento}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Cpf da funcionario obrigatório"
+							validatorMessage="Cpf da funcionario deve ter no minimo 2 caracteres"
+							maxlength="80" mask="999-999-999-99">
+							<p:clientValidator event="blur" />
+						</p:inputMask>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="documento" id="documentoMessage" />
+					</div>
+				</div>
 
 
 				<div class="ui-g">
@@ -58,23 +77,6 @@
 				</div>
 
 
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Cpf:" for="documento" />
-						<p:inputMask id="documento"
-							value="#{funcionarioControle.funcionario.documento}"
-							styleClass="form-normal" required="true"
-							requiredMessage="Cpf do funcionario obrigatório"
-							validatorMessage="Cpf do funcionario deve ter no minimo 2 caracteres"
-							maxlength="80" mask="999-999-999-99">
-							<p:clientValidator event="blur" />
-						</p:inputMask>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="documento" id="documentoMessage" />
-					</div>
-				</div>
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
@@ -94,49 +96,45 @@
 					</div>
 				</div>
 
-
 				
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Cargo" for="cargoCodigo" />
-						<p:inputMask id="cargoCodigo"
-							value="#{funcionarioControle.cargoCodigo}"
+						<p:inputText id="categoriaCodigo"
+							value="#{subCategoriaControle.categoriaCodigo}"
 							styleClass="form-normal" required="true"
-							mask="9-99-99-99"
-							requiredMessage="Codigo do Cargo obrigatório" maxlength="80">
+							requiredMessage="Codigo da Categoria obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
-							<p:ajax event="keyup" process="@this" update="cargo"
-									listener="#{funcionarioControle.getCargoPorCodigo}" />
-						</p:inputMask>
+							<p:ajax event="keyup" process="@this" update="categoria"
+									listener="#{subCategoriaControle.getCategoriaPorCodigo}" />
+						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="cargoCodigo" id="cargoCodigoMessage" />
+						<p:message for="categoriaCodigo" id="categoriaCodigoMessage" />
 					</div>
 				</div>
-
-
+				
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
-							<p:inputText placeholder="Nome" id="cargo"
-								value="#{funcionarioControle.cargo.nome}"
-								styleClass="form-normal" required="true" readonly="true" />
+							<p:inputText placeholder="Categoria" id="categoria"
+								value="#{subCategoriaControle.categoria.nome}" styleClass="form-normal"
+								required="true" readonly="true"/>
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="cargo"
-								actionListener="#{dialogControle.cargoConsultaDialogShow}">
-								<p:ajax event="dialogReturn" process="@this"
-									update="cargo cargoCodigo"
-									listener="#{funcionarioControle.cargoSelecionada}" />
+								process="@this" update="categoria"
+								actionListener="#{dialogControle.categoriaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this" update="categoria categoriaCodigo"
+									listener="#{subCategoriaControle.categoriaSelecionada}" />
 							</p:commandButton>
 						</div>
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="cargo" id="cargoMessage" />
+						<p:message for="categoria" id="categoriaMessage" />
 					</div>
 				</div>
-
-
+				
+				
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
@@ -306,6 +304,7 @@
 					action="#{funcionarioControle.salvar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />
+
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
@@ -314,3 +313,4 @@
 	</ui:define>
 </ui:composition>
 </html>
+ -->

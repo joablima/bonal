@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="produtoId"
+			value="#{coeficienteTecnicoControle.produtoId}" />
+		<f:viewAction action="#{coeficienteTecnicoControle.inicializa}"
+			if="#{param.produtoId != null}" />
+		<f:event type="preRenderView"
+			listener="#{coeficienteTecnicoControle.listarTabela}" />
+	</f:metadata>
+
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText
+					value="Coefientes Tecnicos do produto #{coeficienteTecnicoControle.produto.nome}"></h:outputText>
+			</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Novo CoeficienteTecnico"
+					outcome="#{coeficienteTecnicoControle.adicionarCoeficienteTecnico()}" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formCoeficienteTecnicoConsulta">
+			<div class="filtros-consultar">
+
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel
+						value="Produto ou item de producao do CoeficienteTecnico: "
+						for="coeficienteTecnicoNome" />
+					<p:inputText
+						value="#{coeficienteTecnicoControle.coeficienteTecnicoNome}"
+						id="coeficienteTecnicoNome" styleClass="form-normal">
+						<p:ajax event="keyup"
+							listener="#{coeficienteTecnicoControle.listar}" process="@form"
+							update=":tabelaCoeficientesTecnicos" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
+					<p:commandButton id="buscarCoeficienteTecnico" value="Filtrar"
+						action="#{coeficienteTecnicoControle.listar}" process="@form"
+						update="@form :tabelaCoeficientesTecnicos"
+						icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{coeficienteTecnicoControle.limpar}" process="@form"
+						update="@form :tabelaCoeficientesTecnicos" />
+				</div>
+			</div>
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox
+					value="#{coeficienteTecnicoControle.status}">
+					<p:ajax update="@form :tabelaCoeficientesTecnicos"
+						listener="#{coeficienteTecnicoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente coeficientesTecnicos ativos" />
+			</div>
+		</h:form>
+
+		<h:form id="tabelaCoeficientesTecnicos">
+			<p:dataTable id="coeficienteTecnico" var="coeficienteTecnico"
+				value="#{coeficienteTecnicoControle.coeficientesTecnicos}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{coeficienteTecnico.id}"
+				selection="#{coeficienteTecnicoControle.coeficienteTecnico}"
+				selectionMode="single"
+				emptyMessage="Nenhum CoeficientesTecnicos Encontrado!"
+				styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de CoeficientesTecnicos
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(coeficienteTecnicoControle.coeficientesTecnicos)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+
+				</f:facet>
+
+				<p:column headerText="Item de producao"
+					sortBy="#{coeficienteTecnico.itemDeProducao.nome}">
+					<p:outputLabel value="#{coeficienteTecnico.itemDeProducao.nome}" />
+				</p:column>
+
+				<p:column headerText="Quantidade"
+					sortBy="#{coeficienteTecnico.quantidade}">
+					<p:outputLabel value="#{coeficienteTecnico.quantidade}" />
+				</p:column>
+
+				<p:column headerText="Unidade de medida"
+					sortBy="#{coeficienteTecnico.unidadeDeMedida.nome}">
+					<p:outputLabel value="#{coeficienteTecnico.unidadeDeMedida.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar"
+						outcome="#{coeficienteTecnicoControle.editar(coeficienteTecnico)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{coeficienteTecnicoControle.remover(coeficienteTecnico)}"
+						update="@form" process="@this @form"
+						rendered="#{coeficienteTecnico.status == true}">
+						<p:ajax listener="#{coeficienteTecnicoControle.listar}" />
+					</p:commandButton>
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{coeficienteTecnicoControle.salvar(coeficienteTecnico)}"
+						update="@form" process="@this @form"
+						rendered="#{coeficienteTecnico.status == false}">
+						<p:ajax listener="#{coeficienteTecnicoControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<p:outputLabel
+						value=" #{coeficienteTecnicoControle.totalCoeficientesTecnicos} de #{coeficienteTecnicoControle.totalCoeficientesTecnicosConsulta}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('coeficienteTecnicoDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
+
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
