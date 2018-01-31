@@ -20,6 +20,7 @@ import br.com.empresa.bonal.entidades.BemPermanente;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.BemPermanenteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.tx.Transacional;
@@ -35,6 +36,8 @@ public class BemPermanenteControle implements Serializable {
 	private Categoria categoria = new Categoria();
 	private String subCategoriaCodigo = "";
 	private SubCategoria subCategoria = new SubCategoria();
+	private String unidadeDeMedidaSigla = "";
+	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
 	private Long bemPermanenteId;
 
@@ -140,6 +143,24 @@ public class BemPermanenteControle implements Serializable {
 	public void setSubCategoria(SubCategoria subCategoria) {
 		this.subCategoria = subCategoria;
 	}
+	
+	
+
+	public String getUnidadeDeMedidaSigla() {
+		return unidadeDeMedidaSigla;
+	}
+
+	public void setUnidadeDeMedidaSigla(String unidadeDeMedidaSigla) {
+		this.unidadeDeMedidaSigla = unidadeDeMedidaSigla;
+	}
+
+	public UnidadeDeMedida getUnidadeDeMedida() {
+		return unidadeDeMedida;
+	}
+
+	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
+		this.unidadeDeMedida = unidadeDeMedida;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -213,6 +234,16 @@ public class BemPermanenteControle implements Serializable {
 		
 		bemPermanente.setSubCategoria(subCategoria);
 		
+		unidadeDeMedida = bemPermanenteRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
+
+		if (unidadeDeMedida == null) {
+			facesContext.warn("unidadeDeMedida inexistente, insira um codigo de categoria válido");
+			return null;
+		}
+		
+		
+		bemPermanente.setUnidadeDeMedida(unidadeDeMedida);
+		
 		ItemDeProducao existe = bemPermanenteRepositorio.getItemDeProducaoPorCodigo(bemPermanente.getCodigo());
 		if (existe != null && (existe.getId()!=bemPermanente.getId())) {
 			facesContext.warn("Codigo duplicado");
@@ -233,6 +264,8 @@ public class BemPermanenteControle implements Serializable {
 		subCategoriaCodigo = null;
 		categoria = new Categoria();
 		categoriaCodigo = null;
+		unidadeDeMedida = new UnidadeDeMedida();
+		unidadeDeMedidaSigla = null;
 		return null;
 	}
 
@@ -271,6 +304,17 @@ public class BemPermanenteControle implements Serializable {
 	}
 
 	@Transacional
+	public void getUnidadeDeMedidaPorSigla() {
+		unidadeDeMedida = bemPermanenteRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
+	}
+	
+	public void unidadeDeMedidaSelecionada(SelectEvent event) {
+		unidadeDeMedida = (UnidadeDeMedida) event.getObject();
+		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
+		requestContext.update("formBemPermanente:unidadeDeMedida");
+	}
+
+	@Transacional
 	public void getCategoriaPorCodigo() {
 		categoria = bemPermanenteRepositorio.getCategoriaPorCodigo(categoriaCodigo);
 	}
@@ -302,6 +346,8 @@ public class BemPermanenteControle implements Serializable {
 		getSubCategoriaPorCodigo();
 		categoriaCodigo = subCategoria.getCategoria().getCodigo();
 		getCategoriaPorCodigo();
+		unidadeDeMedida = bemPermanente.getUnidadeDeMedida();
+		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
 	}
 
 	public void constroiEstrutura() {

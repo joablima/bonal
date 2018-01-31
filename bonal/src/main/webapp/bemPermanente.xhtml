@@ -12,7 +12,7 @@
 		<f:viewParam name="bemPermanenteId"
 			value="#{bemPermanenteControle.bemPermanenteId}" />
 		<f:viewAction action="#{bemPermanenteControle.inicializa}"
-			update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
+			update="categoria subCategoria categoriaCodigo subCategoriaCodigo unidadeDeMedida unidadeDeMedidaSigla"
 			if="#{param.bemPermanenteId != null}" />
 	</f:metadata>
 
@@ -50,7 +50,7 @@
 							maxlength="80" mask="9-99-99-99">
 							<p:clientValidator event="blur" />
 							<p:ajax event="keyup" process="@this"
-								update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
+								update="categoria subCategoria categoriaCodigo subCategoriaCodigo unidadeDeMedida unidadeDeMedidaSigla"
 								listener="#{bemPermanenteControle.constroiEstrutura}" />
 						</p:inputMask>
 					</div>
@@ -199,6 +199,49 @@
 						<p:message for="modelo" id="modeloMessage" />
 					</div>
 				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Unidade de Medida"
+							for="unidadeDeMedidaSigla" />
+						<p:inputText id="unidadeDeMedidaSigla"
+							value="#{bemPermanenteControle.unidadeDeMedidaSigla}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da unidade de medida obrigatório"
+							readonly = "#{param.bemPermanenteId != null}" 
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="unidadeDeMedida"
+								listener="#{bemPermanenteControle.getUnidadeDeMedidaPorSigla}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedidaSigla"
+							id="unidadeDeMedidaSiglaMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Unidade de medida" id="unidadeDeMedida"
+								value="#{bemPermanenteControle.unidadeDeMedida.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"  disabled="#{param.bemPermanenteId != null}" 
+								process="@this" update="unidadeDeMedida"
+								actionListener="#{dialogControle.unidadeDeMedidaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{bemPermanenteControle.unidadeDeMedidaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedida" id="unidadeDeMedidaMessage" />
+					</div>
+				</div>
 
 			</p:fieldset>
 
@@ -210,6 +253,9 @@
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
+			
+			
+
 
 		</h:form>
 	</ui:define>

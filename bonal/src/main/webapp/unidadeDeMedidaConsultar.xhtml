@@ -105,7 +105,7 @@
 					</p:commandButton>
 					<p:commandButton icon="fa fa-fw fa-refresh"
 						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{unidadeDeMedidaControle.salvar}" update="@form"
+						action="#{unidadeDeMedidaControle.salvar(unidadeDeMedida)}" update="@form"
 						process="@this @form"
 						rendered="#{unidadeDeMedida.status == false}">
 						<p:ajax listener="#{unidadeDeMedidaControle.listar}" />
@@ -154,7 +154,7 @@
 
 		</h:form>
 
-		<h:form id="importXls">
+		<!-- <h:form id="importXls">
 			<p:fileUpload
 				fileUploadListener="#{unidadeDeMedidaControle.importXlsx}"
 				mode="advanced" multiple="false" update="messageImportarXls"
@@ -203,7 +203,7 @@
 
 			<p:messages id="messages" showDetail="true" />
 		</h:form>
-
+ -->
 	</ui:define>
 </ui:composition>
 </html>

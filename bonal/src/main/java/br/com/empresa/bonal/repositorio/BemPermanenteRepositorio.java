@@ -11,6 +11,7 @@ import br.com.empresa.bonal.entidades.BemPermanente;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
 public class BemPermanenteRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -78,6 +79,19 @@ public class BemPermanenteRepositorio implements Serializable {
 			return null;
 		}
 	}
+	
+	// método que verifica se elemento existe
+		public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
+			TypedQuery<UnidadeDeMedida> query = em
+					.createQuery("select c from UnidadeDeMedida c where c.sigla = :psigla", UnidadeDeMedida.class)
+					.setParameter("psigla", sigla.toUpperCase());
+
+			try {
+				return query.getSingleResult();
+			} catch (Exception e) {
+				return null;
+			}
+		}
 
 	// método que verifica se elemento existe
 	public SubCategoria getSubCategoriaPorCodigo(String codigo) {
