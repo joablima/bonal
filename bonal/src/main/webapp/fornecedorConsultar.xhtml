@@ -8,7 +8,6 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
-
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
@@ -22,35 +21,32 @@
 
 		<h:form id="formFornecedorConsulta">
 			<div class="filtros-consultar">
-
-				<div class="ui-g-12 ui-md-6 ui-lg-4">
-					<p:outputLabel value="Nome ou Cpf do Fornecedor: "
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Pesquisar"
 						for="fornecedorNome" />
 					<p:inputText value="#{fornecedorControle.fornecedorNome}"
 						id="fornecedorNome" styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{fornecedorControle.listar}"
-							process="@form" update=":tabelaFornecedores" />
+							process="@form" update="@form :tabelaFornecedores" />
 					</p:inputText>
 				</div>
-				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
 					<p:commandButton id="buscarFornecedor" value="Filtrar"
 						action="#{fornecedorControle.listar}" process="@form"
 						update="@form :tabelaFornecedores" icon="fa fa-fw fa-filter" />
-
 					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
 						action="#{fornecedorControle.limpar}" process="@form"
 						update="@form :tabelaFornecedores" />
 				</div>
 			</div>
+
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
 				<p:selectBooleanCheckbox value="#{fornecedorControle.status}">
 					<p:ajax update="@form :tabelaFornecedores"
 						listener="#{fornecedorControle.listar}" />
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Visualizar somente itens ativados"
-					rendered="#{fornecedorControle.status == true}" />
-				<h:outputText value="Visualizar todos os itens"
-					rendered="#{fornecedorControle.status == false}" />
+				<h:outputText value="Visualizar somente fornecedores ativos" />
+
 			</div>
 		</h:form>
 
@@ -61,8 +57,9 @@
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
 				rowKey="#{fornecedor.id}"
-				selection="#{fornecedorControle.fornecedor}" selectionMode="single"
-				emptyMessage="Nenhum Fornecedores Encontrado!" styleClass="ui-g-12">
+				selection="#{fornecedorControle.fornecedor}"
+				selectionMode="single"
+				emptyMessage="Nenhuma Fornecedor Encontrado!" styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Fornecedores
 				
@@ -72,53 +69,44 @@
 								value="#{poiControle.downloadXlsx(fornecedorControle.fornecedores)}" />
 						</p:commandButton> <p:messages id="messages" showDetail="true" />
 					</span>
-				
+
 				</f:facet>
-
 				<p:column headerText="Nome" sortBy="#{fornecedor.nome}">
-					<p:outputLabel value="#{fornecedor.nome}" />
+					<h:outputText value="#{fornecedor.nome}" />
+				</p:column>
+				
+				<p:column headerText="Documento" sortBy="#{fornecedor.documento}">
+					<h:outputText value="#{fornecedor.documento}" />
 				</p:column>
 
-				<p:column headerText="Cpf" sortBy="#{fornecedor.documento}">
-					<p:outputLabel value="#{fornecedor.documento}" />
+				<p:column headerText="Identificacao" sortBy="#{fornecedor.identificacao}">
+					<h:outputText value="#{fornecedor.identificacao}" />
 				</p:column>
 
-				<p:column headerText="Rg" sortBy="#{fornecedor.identificacao}">
-					<p:outputLabel value="#{fornecedor.identificacao}" />
-				</p:column>
-
-				<p:column headerText="Email" sortBy="#{fornecedor.email}">
-					<p:outputLabel value="#{fornecedor.email}" />
-				</p:column>
-
-			
-				<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}">
-					<p:outputLabel value="#{fornecedor.telefone}" />
-				</p:column>
-
-				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
+				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar"
 						outcome="#{fornecedorControle.editar(fornecedor)}" />
 				</p:column>
-
-				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{fornecedorControle.remover(fornecedor)}" update="@form"
-						process="@this @form"
+				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{fornecedorControle.remover(fornecedor)}"
+						update="@form" process="@this @form"
 						rendered="#{fornecedor.status == true}">
 						<p:ajax listener="#{fornecedorControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
 						action="#{fornecedorControle.salvar(fornecedor)}" update="@form"
-						process="@this @form"
-						rendered="#{fornecedor.status == false}">
+						process="@this @form" rendered="#{fornecedor.status == false}">
 						<p:ajax listener="#{fornecedorControle.listar}" />
 					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
-					<p:outputLabel
+					<h:outputText
 						value=" #{fornecedorControle.totalFornecedores} de #{fornecedorControle.totalFornecedoresConsulta}" />
 				</f:facet>
 
@@ -126,9 +114,6 @@
 					oncomplete="PF('fornecedorDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
-
-
-
 		</h:form>
 
 	</ui:define>

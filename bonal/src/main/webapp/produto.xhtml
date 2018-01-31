@@ -9,20 +9,18 @@
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="produtoId"
-			value="#{produtoControle.produtoId}" />
-		<f:viewAction action="#{produtoControle.inicializa}" update="categoria subCategoria categoriaCodigo subCategoriaCodigo"
+		<f:viewParam name="produtoId" value="#{produtoControle.produtoId}" />
+		<f:viewAction action="#{produtoControle.inicializa}"
+			update="unidadeDeMedida unidadeDeMedidaSigla"
 			if="#{param.produtoId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText
-					rendered="#{produtoControle.produtoId == null}"
+				<h:outputText rendered="#{produtoControle.produtoId == null}"
 					value="Cadastro de Produto" />
-				<h:outputText
-					rendered="#{produtoControle.produtoId != null}"
+				<h:outputText rendered="#{produtoControle.produtoId != null}"
 					value="Edição de Produto" />
 			</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
@@ -41,14 +39,13 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Código:" for="codigo" />
-						<p:inputMask id="codigo"
-							value="#{produtoControle.produto.codigo}"
+						<p:inputMask id="codigo" value="#{produtoControle.produto.codigo}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Código do produto obrigatório"
 							validatorMessage="Código do produto deve ter no minimo 2 caracteres"
 							maxlength="80" mask="99-99">
 							<p:clientValidator event="blur" />
-							
+
 						</p:inputMask>
 					</div>
 
@@ -56,14 +53,13 @@
 						<p:message for="codigo" id="codigoMessage" />
 					</div>
 				</div>
-				
-			
+
+
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Nome:" for="nome" />
-						<p:inputText id="nome"
-							value="#{produtoControle.produto.nome}"
+						<p:inputText id="nome" value="#{produtoControle.produto.nome}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Nome do produto obrigatório"
 							validatorMessage="Nome do produto deve ter no minimo 2 caracteres"

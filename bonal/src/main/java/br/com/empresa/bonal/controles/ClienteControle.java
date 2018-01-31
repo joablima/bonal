@@ -14,13 +14,13 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Cliente;
-import br.com.empresa.bonal.entidades.Endereco;
+import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.ClienteRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
-import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -30,17 +30,15 @@ public class ClienteControle implements Serializable {
 
 	private Cliente cliente = new Cliente();
 
-	// private EnumPessoa tipo;
 	private Long clienteId;
 
 	// Atributos para Consulta
 	private String clienteNome = "";
 
+	private Boolean status = true;
 	// Listas para Consulta
 	private List<Cliente> clientes;
 	private List<Cliente> lista = new ArrayList<>();
-
-	private Boolean status = true;
 
 	@Inject
 	private ClienteRepositorio clienteRepositorio;
@@ -54,25 +52,7 @@ public class ClienteControle implements Serializable {
 	@Inject
 	private Logger logger;
 
-	// Getters and Setters
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	// Adicionado para propriedade de contexto das tabelas do Primefaces
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public Endereco getEndereco() {
-		return cliente.getEndereco();
-	}
-
-	// Adicionado para propriedade de contexto das tabelas do Primefaces
-	public void setEndereco(Endereco endereco) {
-		this.cliente.setEndereco(endereco);
-	}
-
+	// getter e setters
 	public Long getClienteId() {
 		return clienteId;
 	}
@@ -106,17 +86,25 @@ public class ClienteControle implements Serializable {
 		return clientes.size();
 	}
 
-	// ----- Carrega os Enums em Arrays -----
-	public EnumPessoa[] getEnumPessoa() {
-		return EnumPessoa.values();
-	}
-
 	public Boolean getStatus() {
 		return status;
 	}
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	// ----- Carrega os Enums em Arrays -----
+	public EnumPessoa[] getEnumPessoa() {
+		return EnumPessoa.values();
 	}
 
 	// ----------------- METODOS ----------------------
@@ -133,11 +121,9 @@ public class ClienteControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Cliente> stream = lista.stream();
 
-		if (!clienteNome.equals(null))
-			stream = stream.filter(c -> (c.getNome().toLowerCase().contains(clienteNome.toLowerCase().trim()))
-					| (c.getDocumento().toLowerCase().contains(clienteNome.toLowerCase().trim()))
-					| (c.getEmail().toLowerCase().contains(clienteNome.toLowerCase().trim()))
-					| c.getIdentificacao().toLowerCase().contains(clienteNome.toLowerCase().trim()));
+		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(clienteNome.toLowerCase().trim()))
+				| (c.getDocumento().toLowerCase().contains(clienteNome.toLowerCase().trim()))
+				| c.getIdentificacao().toLowerCase().contains(clienteNome.toLowerCase().trim()));
 
 		if (status.equals(true))
 			stream = stream.filter(c -> (c.getStatus().equals(status)));
@@ -160,31 +146,40 @@ public class ClienteControle implements Serializable {
 
 	public void limparFiltros() {
 		this.clienteNome = "";
-
 	}
-	
-	
-	public String salvar(Cliente c){
-		this.cliente = c;
-		return salvar();
+
+	@Transacional
+	public String salvar(Cliente cliente) {
+		cliente.setStatus(true);
+		clienteRepositorio.atualizar(cliente);
+		this.clientes = null;
+		this.cliente = new Cliente();
+		listarTabela();
+		return null;
 	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
 		String message = "";
-
 		this.cliente.setStatus(true);
+
+		Cliente existe = clienteRepositorio.getClientePorDocumento(cliente.getDocumento());
+		if (existe != null && (existe.getId() != cliente.getId())) {
+			facesContext.warn("Documento duplicado");
+			return null;
+		}
+
 		if (cliente.getId() == null) {
 			clienteRepositorio.adicionar(cliente);
-			message += "Cliente Cadastrado com Sucesso.";
+			message += "Cliente Cadastrada com Sucesso.";
 		} else {
 			clienteRepositorio.atualizar(cliente);
-			message += "Cliente Atualizado com Sucesso.";
+			message += "Cliente Atualizada com Sucesso.";
 		}
 		facesContext.info(message);
 		logger.info(message);
-		this.cliente = new Cliente();
+		cliente = new Cliente();
 		return null;
 	}
 
@@ -197,39 +192,30 @@ public class ClienteControle implements Serializable {
 	@Transacional
 	public String remover(Cliente cliente) {
 		cliente.setStatus(false);
-		clienteRepositorio.remover(cliente);
+		clienteRepositorio.atualizar(cliente);
 		this.clientes = null;
+		this.cliente = new Cliente();
 		listarTabela();
 		return null;
 	}
 
-	@Logging
+	// Editar um Cliente
 	public String editar(Cliente cliente) {
 		return "cliente?clienteId=" + cliente.getId();
 	}
 
-	public String addCoeficientes() {
-		return "coeficientetecnico?clienteId=" + this.clienteId;
-	}
-
-	public boolean ClienteIdExiste() {
+	public boolean clienteIdExiste() {
 		if (this.clienteId == null)
 			return false;
 		return true;
 	}
 
-	// vou tirar isso daqui não se preocupe
-	public void carregandoDados() {
-		try {
-			// simulate a long running request
-			Thread.sleep(1500);
-		} catch (Exception e) {
-			// ignore
-		}
-	}
-
 	// Método usado para carregar objeto para o dialog
 	public void selecionarCliente(Cliente cliente) {
 		requestContext.closeDialog(cliente);
+	}
+
+	public void inicializa() {
+		recuperarClientePorId();
 	}
 }

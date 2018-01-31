@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/dialog.xhtml">
+	<ui:define name="frame">
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formProdutoConsultaDialog">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-12 ui-lg-6">
+					<p:outputLabel value="Nome do Produto: " for="produtoNome" />
+					<p:inputText value="#{produtoControle.produtoNome}" id="produtoNome"
+						styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{produtoControle.listar}"
+							process="@form" update="@form :tabelaProdutos" />
+					</p:inputText>
+				</div>
+
+				<div class="ui-g-12 ui-md-12 ui-lg-6">
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{produtoControle.limpar}" process="@form"
+						update="formProdutoConsultaDialog" styleClass="white-button" />
+
+
+					<p:commandButton icon="fa fa-search" styleClass="white-button"
+						process="@this" update="formProdutoConsultaDialog"
+						actionListener="#{dialogControle.produtoCadastroDialogShow}" />
+				</div>
+
+			</div>
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{produtoControle.status}">
+					<p:ajax update="@form :tabelaProdutos"
+						listener="#{produtoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itens ativados"
+					rendered="#{produtoControle.status == true}" />
+				<h:outputText value="Visualizar todos os itens"
+					rendered="#{produtoControle.status == false}" />
+			</div>
+		</h:form>
+
+		<h:form id="tabelaProdutos">
+			<p:dataTable id="produto" var="produto" value="#{produtoControle.produtos}"
+				rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rowKey="#{produto.id}"
+				selection="#{produtoControle.produto}" selectionMode="single"
+				emptyMessage="Nenhum Produto Encontrado!" styleClass="ui-g-12">
+
+				<p:column headerText="Nome" sortBy="#{produto.nome}">
+					<p:outputLabel value="#{produto.nome}" />
+				</p:column>
+
+
+				<p:column headerText="Unidade de Medida" sortBy="#{produto.unidadeDeMedida.sigla}">
+					<p:outputLabel value="#{produto.unidadeDeMedida.sigla}" />
+				</p:column>
+
+				<p:column headerText="Importar">
+					<p:commandButton icon="fa fa-fw fa-check"
+						styleClass="tab-btn btn-ativar green-button"
+						action="#{produtoControle.selecionarProduto(produto)}" update="@form"
+						process="@this @form" rendered="#{produto.status == true}">
+						<p:ajax listener="#{produtoControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<p:outputLabel
+						value=" #{produtoControle.totalProdutos} de #{produtoControle.totalProdutosConsulta}" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

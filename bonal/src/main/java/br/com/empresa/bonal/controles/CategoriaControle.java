@@ -28,6 +28,7 @@ public class CategoriaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Categoria categoria = new Categoria();
+	private String filtroTipo = "";
 
 	private Long categoriaId;
 
@@ -125,6 +126,14 @@ public class CategoriaControle implements Serializable {
 		this.status = status;
 	}
 
+	public String getFiltroTipo() {
+		return filtroTipo;
+	}
+
+	public void setFiltroTipo(String filtroTipo) {
+		this.filtroTipo = filtroTipo;
+	}
+
 	// ----------------- METODOS ----------------------
 	@PostConstruct
 	@Transacional
@@ -148,11 +157,20 @@ public class CategoriaControle implements Serializable {
 
 		categorias = stream.collect(Collectors.toList());
 	}
+	
+	
 
 	// M�todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
-		listarTabela();
-		return null;
+		if(filtroTipo.equals("")){
+			listarTabela();
+			return null;
+		}
+		else{
+			//listarTabela();
+			return null;
+		}
+		
 	}
 
 	// Limpar tabela da consulta

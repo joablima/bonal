@@ -195,6 +195,10 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 		coeficientesTecnicos = stream.collect(Collectors.toList());
 	}
+	
+	public String consultarCoeficientesTecnicos(){
+		return "coeficienteTecnicoConsultar?produtoId="+produto.getId();
+	}
 
 	// M�todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
@@ -268,8 +272,13 @@ public class CoeficienteTecnicoControle implements Serializable {
 		facesContext.info(message);
 		logger.info(message);
 		coeficienteTecnico = new CoeficienteTecnico();
-		produto = new Produto();
-		produtoCodigo = null;
+		
+		unidadeDeMedida = new UnidadeDeMedida();
+		unidadeDeMedidaSigla = null;
+		
+		itemDeProducao = new ItemDeProducao();
+		itemDeProducaoCodigo = null;
+				
 		return null;
 	}
 
@@ -364,7 +373,6 @@ public class CoeficienteTecnicoControle implements Serializable {
 	 public void listarTabela(ComponentSystemEvent event){
 	        if (!FacesContext.getCurrentInstance().isPostback()){
 	        	if (this.coeficientesTecnicos == null) {
-	    			System.out.println(produtoId);
 	    			lista = coeficienteTecnicoRepositorio.listarTodos();
 	    			coeficientesTecnicos = new ArrayList<>(lista);
 	    		}

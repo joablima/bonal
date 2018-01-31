@@ -9,29 +9,29 @@
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="produtoId"
-			value="#{coeficienteTecnicoControle.produtoId}" />
-		<f:viewAction action="#{coeficienteTecnicoControle.inicializa}"
+		<f:viewParam name="vendaId"
+			value="#{itemDaVendaControle.vendaId}" />
+		<f:viewAction action="#{itemDaVendaControle.inicializa}"
 			if="#{param.produtoId != null}" />
-		<f:viewParam name="coeficienteTecnicoId"
-			value="#{coeficienteTecnicoControle.coeficienteTecnicoId}" />
-		<f:viewAction action="#{coeficienteTecnicoControle.inicializa}"
-			if="#{param.coeficienteTecnicoId != null}" />
+		<f:viewParam name="itemDaVendaId"
+			value="#{itemDaVendaControle.itemDaVendaId}" />
+		<f:viewAction action="#{itemDaVendaControle.inicializa}"
+			if="#{param.itemDaVendaId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
 				<h:outputText
-					rendered="#{coeficienteTecnicoControle.coeficienteTecnicoId == null}"
-					value="Cadastro de Coeficiente técnico do produto #{coeficienteTecnicoControle.produto.nome}" />
+					rendered="#{itemDaVendaControle.itemDaVendaId == null}"
+					value="Adição de itens na venda #{itemDaVendaControle.venda.id}" />
 				<h:outputText
-					rendered="#{coeficienteTecnicoControle.produtoId == null}"
-					value="Edição de Coeficiente técnico do produto #{coeficienteTecnicoControle.produto.nome}" />
+					rendered="#{itemDaVendaControle.vendaId == null}"
+					value="Edição de Itens na venda #{itemDaVendaControle.venda.id}" />
 			</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
 					value="Consultar Coeficiente técnico"
-					outcome="#{coeficienteTecnicoControle.consultarCoeficientesTecnicos()}" />
+					outcome="#{itemDaVendaControle.consultarItensDaVenda()}" />
 			</span>
 		</div>
 
@@ -39,16 +39,16 @@
 			<p:effect type="pulsate" event="load" delay="500" />
 		</p:messages>
 
-		<h:form id="formCoeficienteTecnico">
-			<p:focus context="formCoeficienteTecnico" />
-			<p:fieldset legend="Dados do Coeficiente Tecnico">
+		<h:form id="formItemDaVenda">
+			<p:focus context="formItemDaVenda" />
+			<p:fieldset legend="Dados do Item">
 
 
-				<div class="ui-g">
+				<!-- <div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Produto" for="produto" />
 						<p:inputText placeholder="Código" id="produtoCodigo"
-							value="#{coeficienteTecnicoControle.produto.codigo}"
+							value="#{itemDaVendaControle.produto.codigo}"
 							styleClass="form-normal" required="true" readonly="true">
 						</p:inputText>
 					</div>
@@ -57,33 +57,33 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:inputText placeholder="Nome" id="produto"
-							value="#{coeficienteTecnicoControle.produto.nome}"
+							value="#{itemDaVendaControle.produto.nome}"
 							styleClass="form-normal" required="true" readonly="true">
 						</p:inputText>
 					</div>
 				</div>
 
-
+ -->
 
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Item de Producao"
-							for="itemDeProducaoCodigo" />
-						<p:inputText id="itemDeProducaoCodigo"
-							value="#{coeficienteTecnicoControle.itemDeProducaoCodigo}"
+						<p:outputLabel value="Produto"
+							for="produtoCodigo" />
+						<p:inputText id="produtoCodigo"
+							value="#{itemDaVendaControle.produtoCodigo}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Codigo do itemDeProducaoCodigo obrigatório"
+							requiredMessage="Codigo do produto obrigatório"
 							maxlength="80">
 							<p:clientValidator event="blur" /> 
-							<p:ajax event="keyup" process="@this" update="itemDeProducao unidadeDeMedida unidadeDeMedidaSigla"
-								listener="#{coeficienteTecnicoControle.getItemDeProducaoPorCodigo}" />
+							<p:ajax event="keyup" process="@this" update="produto unidadeDeMedida unidadeDeMedidaSigla"
+								listener="#{itemDaVendaControle.getProdutoPorCodigo}" />
 						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="itemDeProducaoCodigo"
-							id="itemDeProducaoCodigoMessage" />
+						<p:message for="produtoCodigo"
+							id="produtoCodigoMessage" />
 					</div>
 				</div>
 
@@ -91,31 +91,28 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
-							<p:inputText placeholder="Item de producao" id="itemDeProducao"
-								value="#{coeficienteTecnicoControle.itemDeProducao.nome}"
+							<p:inputText placeholder="Produto" id="produto"
+								value="#{itemDaVendaControle.produto.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="itemDeProducaoCodigo"
-								actionListener="#{dialogControle.itemDeProducaoConsultaDialogShow}">
+								process="@this" update="produtoCodigo"
+								actionListener="#{dialogControle.produtoConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
-									update="itemDeProducao itemDeProducaoCodigo unidadeDeMedida unidadeDeMedidaSigla"
-									listener="#{coeficienteTecnicoControle.itemDeProducaoSelecionado}" />
+									update="produto produtoCodigo unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{itemDaVendaControle.produtoSelecionado}" />
 							</p:commandButton>
 						</div>
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="itemDeProducao" id="itemDeProducaoMessage" />
+						<p:message for="produto" id="produtoMessage" />
 					</div>
 				</div>
-				
-				
-				
 				
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Quantidade" for="quantidade" />
 						<p:inputText id="quantidade"
-							value="#{coeficienteTecnicoControle.coeficienteTecnico.quantidade}"
+							value="#{itemDaVendaControle.itemDaVenda.quantidade}"
 							styleClass="form-normal" required="true"
 							requiredMessage="quantidade do coeficiente tecnico obrigatório"
 							validatorMessage="quantidade do coeficiente tecnico deve ter no minimo 2 caracteres"
@@ -128,13 +125,14 @@
 						<p:message for="quantidade" id="quantidadeMessage" />
 					</div>
 				</div>
-
-
+				
+				
+				
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Unidade de Medida" for="unidadeDeMedidaSigla" />
 						<p:inputText placeholder="Sigla" id="unidadeDeMedidaSigla"
-							value="#{coeficienteTecnicoControle.itemDeProducao.unidadeDeMedida.sigla}"
+							value="#{itemDaVendaControle.produto.unidadeDeMedida.sigla}"
 							styleClass="form-normal" required="true" readonly="true">
 						</p:inputText>
 					</div>
@@ -143,17 +141,21 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:inputText placeholder="Nome" id="unidadeDeMedida"
-							value="#{coeficienteTecnicoControle.itemDeProducao.unidadeDeMedida.nome}"
+							value="#{itemDaVendaControle.produto.unidadeDeMedida.nome}"
 							styleClass="form-normal" required="true" readonly="true">
 						</p:inputText>
 					</div>
 				</div>
+				
+				
+				
+
 
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Salvar"
-					action="#{coeficienteTecnicoControle.salvar()}"
+					action="#{itemDaVendaControle.salvar()}"
 					process="@this @form" update="@form :messages"
 					icon="fa fa-fw fa-save" validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"

@@ -6,8 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
+import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Cliente;
 
 public class ClienteRepositorio implements Serializable {
@@ -18,11 +18,13 @@ public class ClienteRepositorio implements Serializable {
 
 	// m�todo que persiste um registro
 	public void adicionar(Cliente cliente) {
+
 		em.persist(cliente);
 	}
 
 	// m�todo que atualiza um registro
 	public void atualizar(Cliente cliente) {
+
 		em.merge(cliente);
 	}
 
@@ -38,29 +40,43 @@ public class ClienteRepositorio implements Serializable {
 
 	// m�todo que lista todos os registros
 	public List<Cliente> listarTodos() {
-		CriteriaQuery<Cliente> query = em.getCriteriaBuilder().createQuery(Cliente.class);
-		query.select(query.from(Cliente.class));
-		List<Cliente> list = em.createQuery(query).getResultList();
-		return list;
+		try {
+			return em.createQuery("select s from Cliente s", Cliente.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	// m�todo que lista com crit�rios todos os registros
 	public List<Cliente> listarPorCriterios(String nome) {
-		String jpql = "select c from Cliente c where ";
+		String jpql = "select s from Cliente s where ";
 
 		if (nome != null)
-			jpql += "(c.nome like :pnome or c.documento like :pdocumento or c.identificacao like :pidentificacao or c.email like :pemail) and ";
-
+			jpql += "(s.nome like :pnome or s.documento like :pdocumento or s.identificacao like :pidentificacao);";
 		jpql += "1 = 1";
 
 		TypedQuery<Cliente> query = em.createQuery(jpql, Cliente.class);
 
 		if (nome != null)
-			query.setParameter("pnome", '%' + nome + '%')
-			.setParameter("pdocumento", '%' + nome + '%')
-			.setParameter("pidentificacao", '%' + nome + '%')
-			.setParameter("pemail", '%' + nome + '%');
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pdocumento", '%' + nome + '%')
+					.setParameter("pidentificacao", '%' + nome + '%');
 
 		return query.getResultList();
 	}
+
+
+
+	// método que verifica se elemento existe
+	public Cliente getClientePorDocumento(String documento) {
+		TypedQuery<Cliente> query = em
+				.createQuery("select c from Cliente c where c.documento = :pdocumento", Cliente.class)
+				.setParameter("pdocumento", documento.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

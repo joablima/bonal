@@ -1,4 +1,4 @@
-package br.com.empresa.bonal.controles;
+/*package br.com.empresa.bonal.depreciadas;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
+import br.com.empresa.bonal.entidades.Endereco;
 import br.com.empresa.bonal.entidades.Fornecedor;
-import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.repositorio.FornecedorRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -30,15 +30,17 @@ public class FornecedorControle implements Serializable {
 
 	private Fornecedor fornecedor = new Fornecedor();
 
+	// private EnumPessoa tipo;
 	private Long fornecedorId;
 
 	// Atributos para Consulta
 	private String fornecedorNome = "";
 
-	private Boolean status = true;
 	// Listas para Consulta
 	private List<Fornecedor> fornecedores;
 	private List<Fornecedor> lista = new ArrayList<>();
+
+	private Boolean status = true;
 
 	@Inject
 	private FornecedorRepositorio fornecedorRepositorio;
@@ -52,7 +54,25 @@ public class FornecedorControle implements Serializable {
 	@Inject
 	private Logger logger;
 
-	// getter e setters
+	// Getters and Setters
+	public Fornecedor getFornecedor() {
+		return fornecedor;
+	}
+
+	// Adicionado para propriedade de contexto das tabelas do Primefaces
+	public void setFornecedor(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
+	}
+
+	public Endereco getEndereco() {
+		return fornecedor.getEndereco();
+	}
+
+	// Adicionado para propriedade de contexto das tabelas do Primefaces
+	public void setEndereco(Endereco endereco) {
+		this.fornecedor.setEndereco(endereco);
+	}
+
 	public Long getFornecedorId() {
 		return fornecedorId;
 	}
@@ -86,25 +106,17 @@ public class FornecedorControle implements Serializable {
 		return fornecedores.size();
 	}
 
+	// ----- Carrega os Enums em Arrays -----
+	public EnumPessoa[] getEnumPessoa() {
+		return EnumPessoa.values();
+	}
+
 	public Boolean getStatus() {
 		return status;
 	}
 
 	public void setStatus(Boolean status) {
 		this.status = status;
-	}
-
-	public Fornecedor getFornecedor() {
-		return fornecedor;
-	}
-
-	public void setFornecedor(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
-	}
-
-	// ----- Carrega os Enums em Arrays -----
-	public EnumPessoa[] getEnumPessoa() {
-		return EnumPessoa.values();
 	}
 
 	// ----------------- METODOS ----------------------
@@ -121,12 +133,14 @@ public class FornecedorControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Fornecedor> stream = lista.stream();
 
-		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
-				| (c.getDocumento().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
-				| c.getIdentificacao().toLowerCase().contains(fornecedorNome.toLowerCase().trim()));
+		if (!fornecedorNome.equals(null))
+			stream = stream.filter(f -> (f.getNome().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
+					| (f.getDocumento().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
+					| (f.getEmail().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
+					| f.getIdentificacao().toLowerCase().contains(fornecedorNome.toLowerCase().trim()));
 
 		if (status.equals(true))
-			stream = stream.filter(c -> (c.getStatus().equals(status)));
+			stream = stream.filter(f -> (f.getStatus().equals(status)));
 
 		fornecedores = stream.collect(Collectors.toList());
 	}
@@ -146,14 +160,13 @@ public class FornecedorControle implements Serializable {
 
 	public void limparFiltros() {
 		this.fornecedorNome = "";
-	}
 
+	}
 	@Transacional
-	public String salvar(Fornecedor fornecedor) {
+	public String salvar(Fornecedor f){
 		fornecedor.setStatus(true);
 		fornecedorRepositorio.atualizar(fornecedor);
 		this.fornecedores = null;
-		this.fornecedor = new Fornecedor();
 		listarTabela();
 		return null;
 	}
@@ -162,46 +175,43 @@ public class FornecedorControle implements Serializable {
 	@Transacional
 	public String salvar() {
 		String message = "";
+
 		this.fornecedor.setStatus(true);
-
-		Fornecedor existe = fornecedorRepositorio.getFornecedorPorDocumento(fornecedor.getDocumento());
-		if (existe != null && (existe.getId() != fornecedor.getId())) {
-			facesContext.warn("Documento duplicado");
-			return null;
-		}
-
 		if (fornecedor.getId() == null) {
 			fornecedorRepositorio.adicionar(fornecedor);
-			message += "Fornecedor Cadastrada com Sucesso.";
+			message += "Fornecedor Cadastrado com Sucesso.";
 		} else {
 			fornecedorRepositorio.atualizar(fornecedor);
-			message += "Fornecedor Atualizada com Sucesso.";
+			message += "Fornecedor Atualizado com Sucesso.";
 		}
 		facesContext.info(message);
 		logger.info(message);
-		fornecedor = new Fornecedor();
+		this.fornecedor = new Fornecedor();
 		return null;
 	}
 
 	@Transacional
 	public void recuperarFornecedorPorId() {
-		fornecedor = fornecedorRepositorio.buscarPorId(fornecedorId);
+		this.fornecedor = fornecedorRepositorio.buscarPorId(fornecedorId);
 	}
 
 	// Remove um Fornecedor do banco de dados
 	@Transacional
 	public String remover(Fornecedor fornecedor) {
 		fornecedor.setStatus(false);
-		fornecedorRepositorio.atualizar(fornecedor);
+		fornecedorRepositorio.remover(fornecedor);
 		this.fornecedores = null;
-		this.fornecedor = new Fornecedor();
 		listarTabela();
 		return null;
 	}
 
-	// Editar um Fornecedor
+	@Logging
 	public String editar(Fornecedor fornecedor) {
 		return "fornecedor?fornecedorId=" + fornecedor.getId();
+	}
+
+	public String addCoeficientes() {
+		return "coeficientetecnico?fornecedorId=" + this.fornecedorId;
 	}
 
 	public boolean fornecedorIdExiste() {
@@ -210,12 +220,19 @@ public class FornecedorControle implements Serializable {
 		return true;
 	}
 
+	// vou tirar isso daqui não se preocupe
+	public void carregandoDados() {
+		try {
+			// simulate a long running request
+			Thread.sleep(1500);
+		} catch (Exception e) {
+			// ignore
+		}
+	}
+
 	// Método usado para carregar objeto para o dialog
 	public void selecionarFornecedor(Fornecedor fornecedor) {
 		requestContext.closeDialog(fornecedor);
 	}
-
-	public void inicializa() {
-		recuperarFornecedorPorId();
-	}
 }
+*/

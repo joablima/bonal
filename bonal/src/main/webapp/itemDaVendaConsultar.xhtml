@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="vendaId" value="#{itemDaVendaControle.vendaId}" />
+		<f:viewAction action="#{itemDaVendaControle.inicializa}"
+			if="#{param.vendaId != null}" />
+		<f:event type="preRenderView"
+			listener="#{itemDaVendaControle.listarTabela}" />
+	</f:metadata>
+
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText value="Itens da venda #{itemDaVendaControle.venda.id}"></h:outputText>
+			</h1>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Cadastrar Novo ItemDaVenda"
+					outcome="#{itemDaVendaControle.adicionarItemDaVenda()}" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formItemDaVendaConsulta">
+			<div class="filtros-consultar">
+
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Pesquisa" for="itemDaVendaNome" />
+					<p:inputText value="#{itemDaVendaControle.itemDaVendaNome}"
+						id="itemDaVendaNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{itemDaVendaControle.listar}"
+							process="@form" update=":tabelaItensDaVenda" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-12 ui-lg-4 botoes">
+					<p:commandButton id="buscarItemDaVenda" value="Filtrar"
+						action="#{itemDaVendaControle.listar}" process="@form"
+						update="@form :tabelaItensDaVenda" icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{itemDaVendaControle.limpar}" process="@form"
+						update="@form :tabelaItensDaVenda" />
+				</div>
+			</div>
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{itemDaVendaControle.status}">
+					<p:ajax update="@form :tabelaItensDaVenda"
+						listener="#{itemDaVendaControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itensDaVenda ativos" />
+			</div>
+		</h:form>
+
+		<h:form id="tabelaItensDaVenda">
+			<p:dataTable id="itemDaVenda" var="itemDaVenda"
+				value="#{itemDaVendaControle.itensDaVenda}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{itemDaVenda.id}"
+				selection="#{itemDaVendaControle.itemDaVenda}"
+				selectionMode="single"
+				emptyMessage="Nenhum ItensDaVenda Encontrado!" styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de ItensDaVenda
+				
+				<span style="float: right"> <p:commandButton value="xls"
+							ajax="false">
+							<p:fileDownload
+								value="#{poiControle.downloadXlsx(itemDaVendaControle.itensDaVenda)}" />
+						</p:commandButton> <p:messages id="messages" showDetail="true" />
+					</span>
+
+				</f:facet>
+
+				<p:column headerText="Produto" sortBy="#{itemDaVenda.produto.nome}">
+					<p:outputLabel value="#{itemDaVenda.produto.nome}" />
+				</p:column>
+
+				<p:column headerText="Quantidade" sortBy="#{itemDaVenda.quantidade}">
+					<p:outputLabel value="#{itemDaVenda.quantidade}" />
+				</p:column>
+
+				<p:column headerText="Unidade de medida"
+					sortBy="#{itemDaVenda.unidadeDeMedida.nome}">
+					<p:outputLabel value="#{itemDaVenda.unidadeDeMedida.nome}" />
+				</p:column>
+
+				
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar"
+						outcome="#{itemDaVendaControle.editar(itemDaVenda)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{itemDaVendaControle.remover(itemDaVenda)}"
+						update="@form" process="@this @form"
+						rendered="#{itemDaVenda.status == true}">
+						<p:ajax listener="#{itemDaVendaControle.listar}" />
+					</p:commandButton>
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{itemDaVendaControle.salvar(itemDaVenda)}" update="@form"
+						process="@this @form" rendered="#{itemDaVenda.status == false}">
+						<p:ajax listener="#{itemDaVendaControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<p:outputLabel
+						value=" #{itemDaVendaControle.totalItensDaVenda} de #{itemDaVendaControle.totalItensDaVendaConsulta}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('itemDaVendaDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
+
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

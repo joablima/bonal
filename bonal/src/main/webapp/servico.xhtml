@@ -173,6 +173,7 @@
 							value="#{servicoControle.unidadeDeMedidaSigla}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Codigo da unidade de medida obrigatório"
+							readonly = "#{param.servicoId != null}" 
 							maxlength="80">
 							<p:clientValidator event="blur" />
 							<p:ajax event="keyup" process="@this" update="unidadeDeMedida"
@@ -193,7 +194,7 @@
 							<p:inputText placeholder="Unidade de medida" id="unidadeDeMedida"
 								value="#{servicoControle.unidadeDeMedida.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
-							<p:commandButton icon="fa fa-search" styleClass="white-button"
+							<p:commandButton icon="fa fa-search" styleClass="white-button" disabled="#{param.servicoId != null}" 
 								process="@this" update="unidadeDeMedida"
 								actionListener="#{dialogControle.unidadeDeMedidaConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"

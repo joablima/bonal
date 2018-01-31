@@ -5,26 +5,29 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="clienteId" value="#{clienteControle.clienteId}" />
-		<f:viewAction action="#{clienteControle.recuperarClientePorId}"
-			if="#{param.clienteId != null}" />
+		<f:viewParam name="clienteId"
+			value="#{clienteControle.clienteId}" />
+		<f:viewAction action="#{clienteControle.inicializa}"
+			update="cargo cargoCodigo" if="#{param.clienteId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText rendered="#{clienteControle.clienteId == null}"
-					value="Cadastro de Clientes" />
-				<h:outputText rendered="#{clienteControle.clienteId != null}"
-					value="Edição de Clientes" />
+				<h:outputText
+					rendered="#{clienteControle.clienteId == null}"
+					value="Cadastro de Cliente" />
+				<h:outputText
+					rendered="#{clienteControle.clienteId != null}"
+					value="Edição de Cliente" />
 			</h1>
-			<span><i class="fa fa-coffee" /> <p:link
-					value="Consultar Clientes" outcome="clienteConsultar" /> </span>
+			<span> <i class="fa fa-coffee" /> <p:link
+					value="Consultar Cliente" outcome="clienteConsultar" />
+			</span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" closable="true">
@@ -34,8 +37,7 @@
 		<h:form id="formCliente">
 			<p:focus context="formCliente" />
 			<p:fieldset legend="Dados do Cliente">
-
-				<div class="ui-g">
+<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Selecione o Tipo" for="tipo" />
 						<p:selectOneMenu label="Selecione o Tipo" styleClass="form-normal"
@@ -53,27 +55,9 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="CPF/CNPJ" for="documento" />
-						<p:inputText id="documento"
-							value="#{clienteControle.cliente.documento}"
-							styleClass="form-normal" required="true"
-							requiredMessage="Cpf da cliente obrigatório"
-							validatorMessage="Cpf da cliente deve ter no minimo 2 caracteres"
-							maxlength="80">
-							<p:clientValidator event="blur" />
-						</p:inputText>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="documento" id="documentoMessage" />
-					</div>
-				</div>
-
-
-				<div class="ui-g">
-					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Nome:" for="nome" />
-						<p:inputText id="nome" value="#{clienteControle.cliente.nome}"
+						<p:inputText id="nome"
+							value="#{clienteControle.cliente.nome}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Nome da cliente obrigatório"
 							validatorMessage="Nome da cliente deve ter no minimo 2 caracteres"
@@ -88,10 +72,27 @@
 				</div>
 
 
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Documento" for="documento" />
+						<p:inputMask id="documento"
+							value="#{clienteControle.cliente.documento}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Cpf do cliente obrigatório"
+							validatorMessage="Cpf do cliente deve ter no minimo 2 caracteres"
+							maxlength="80" mask="999-999-999-99">
+							<p:clientValidator event="blur" />
+						</p:inputMask>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="documento" id="documentoMessage" />
+					</div>
+				</div>
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="RG/IE" for="identificacao" />
+						<p:outputLabel value="Identificacao" for="identificacao" />
 						<p:inputText id="identificacao"
 							value="#{clienteControle.cliente.identificacao}"
 							styleClass="form-normal" required="true"
@@ -107,10 +108,14 @@
 					</div>
 				</div>
 
+
+				
+			
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Email:" for="email" />
-						<p:inputText id="email" value="#{clienteControle.cliente.email}"
+						<p:inputText id="email"
+							value="#{clienteControle.cliente.email}"
 							styleClass="form-normal" required="true"
 							requiredMessage="email da cliente obrigatório"
 							validatorMessage="email da cliente deve ter no minimo 2 caracteres"
@@ -144,13 +149,13 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="País:" for="uf" />
+						<p:outputLabel value="Estado:" for="uf" />
 						<p:inputText id="uf"
 							value="#{clienteControle.cliente.endereco.uf}"
 							styleClass="form-normal" required="true"
-							requiredMessage="País da cliente obrigatório"
-							validatorMessage="País da cliente deve ter no minimo 2 caracteres"
-							maxlength="80">
+							requiredMessage="Estado da cliente obrigatório"
+							validatorMessage="Estado da cliente deve ter 2 caracteres"
+							maxlength="2">
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
@@ -267,8 +272,6 @@
 						<p:message for="complemento" id="complementoMessage" />
 					</div>
 				</div>
-
-
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
@@ -276,7 +279,6 @@
 					action="#{clienteControle.salvar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />
-
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>
