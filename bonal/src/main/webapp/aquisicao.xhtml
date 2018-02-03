@@ -9,23 +9,23 @@
 
 <ui:composition template="/template/main.xhtml">
 	<f:metadata>
-		<f:viewParam name="vendaId" value="#{vendaControle.vendaId}" />
-		<f:viewAction action="#{vendaControle.inicializa}"
-			update="funcionario cliente funcionarioDocumento clienteDocumento"
-			if="#{param.vendaId != null}" />
+		<f:viewParam name="aquisicaoId" value="#{aquisicaoControle.aquisicaoId}" />
+		<f:viewAction action="#{aquisicaoControle.inicializa}"
+			update="funcionario fornecedor funcionarioDocumento fornecedorDocumento"
+			if="#{param.aquisicaoId != null}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText rendered="#{vendaControle.vendaId == null}"
-					value="Cadastro de Venda" />
-				<h:outputText rendered="#{vendaControle.vendaId != null}"
-					value="Edição de Venda" />
+				<h:outputText rendered="#{aquisicaoControle.aquisicaoId == null}"
+					value="Cadastro de Aquisicao" />
+				<h:outputText rendered="#{aquisicaoControle.aquisicaoId != null}"
+					value="Edição de Aquisicao" />
 			</h1>
 			<span> <i class="fa fa-fw fa-search" /> <h:button class="botoes-cadastrar"
-					value="Consultar Vendas" 
-					outcome="vendaConsultar" />
+					value="Consultar Aquisicoes" 
+					outcome="aquisicaoConsultar" />
 			</span>
 		</div>
 
@@ -33,28 +33,28 @@
 			<p:effect type="pulsate" event="load" delay="500" />
 		</p:messages>
 
-		<h:form id="formVenda">
-			<p:focus context="formVenda" />
-			<p:fieldset legend="Dados do Venda">
+		<h:form id="formAquisicao">
+			<p:focus context="formAquisicao" />
+			<p:fieldset legend="Dados do Aquisicao">
 
 
 
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Cliente" for="clienteDocumento" />
-						<p:inputText id="clienteDocumento"
-							value="#{vendaControle.clienteDocumento}"
+						<p:outputLabel value="Fornecedor" for="fornecedorDocumento" />
+						<p:inputText id="fornecedorDocumento"
+							value="#{aquisicaoControle.fornecedorDocumento}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Cliente obrigatório" maxlength="80">
+							requiredMessage="Fornecedor obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
-							<p:ajax event="keyup" process="@this" update="cliente"
-								listener="#{vendaControle.getClientePorDocumento}" />
+							<p:ajax event="keyup" process="@this" update="fornecedor"
+								listener="#{aquisicaoControle.getFornecedorPorDocumento}" />
 						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="clienteDocumento" id="clienteDocumentoMessage" />
+						<p:message for="fornecedorDocumento" id="fornecedorDocumentoMessage" />
 					</div>
 				</div>
 
@@ -62,20 +62,20 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
-							<p:inputText placeholder="Cliente" id="cliente"
-								value="#{vendaControle.cliente.nome}" styleClass="form-normal"
+							<p:inputText placeholder="Fornecedor" id="fornecedor"
+								value="#{aquisicaoControle.fornecedor.nome}" styleClass="form-normal"
 								required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="cliente"
-								actionListener="#{dialogControle.clienteConsultaDialogShow}">
+								process="@this" update="fornecedor"
+								actionListener="#{dialogControle.fornecedorConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
-									update="cliente clienteDocumento"
-									listener="#{vendaControle.clienteSelecionado}" />
+									update="fornecedor fornecedorDocumento"
+									listener="#{aquisicaoControle.fornecedorSelecionado}" />
 							</p:commandButton>
 						</div>
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="cliente" id="clienteMessage" />
+						<p:message for="fornecedor" id="fornecedorMessage" />
 					</div>
 				</div>
 
@@ -84,12 +84,12 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Funcionario" for="funcionarioDocumento" />
 						<p:inputText id="funcionarioDocumento"
-							value="#{vendaControle.funcionarioDocumento}"
+							value="#{aquisicaoControle.funcionarioDocumento}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Funcionario obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
 							<p:ajax event="keyup" process="@this" update="funcionario"
-								listener="#{vendaControle.getFuncionarioPorDocumento}" />
+								listener="#{aquisicaoControle.getFuncionarioPorDocumento}" />
 						</p:inputText>
 					</div>
 
@@ -104,14 +104,14 @@
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
 							<p:inputText placeholder="Funcionario" id="funcionario"
-								value="#{vendaControle.funcionario.nome}"
+								value="#{aquisicaoControle.funcionario.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
 								process="@this" update="funcionario"
 								actionListener="#{dialogControle.funcionarioConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
 									update="funcionario funcionarioDocumento"
-									listener="#{vendaControle.funcionarioSelecionado}" />
+									listener="#{aquisicaoControle.funcionarioSelecionado}" />
 							</p:commandButton>
 						</div>
 					</div>
@@ -122,8 +122,8 @@
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
-				<h:commandButton id="continuar" value = "Adicionar Itens " actionListener="#{vendaControle.salvar}" process="@this @form"
-					action="#{vendaControle.consultarItensDaVenda()}">
+				<h:commandButton id="continuar" value = "Adicionar Itens " actionListener="#{aquisicaoControle.salvar}" process="@this @form"
+					action="#{aquisicaoControle.consultarItensDaAquisicao()}">
 				</h:commandButton>
 				
 				<p:commandButton value="Limpar" type="reset"

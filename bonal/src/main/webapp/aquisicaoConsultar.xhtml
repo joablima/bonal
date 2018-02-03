@@ -11,29 +11,29 @@
 	<ui:define name="content">
 
 		<div class="ui-g-12 titulo">
-			<h1>Consultar Vendas</h1>
+			<h1>Consultar Aquisicoes</h1>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
 
-		<h:form id="formVendaConsulta">
+		<h:form id="formAquisicaoConsulta">
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
-					<p:outputLabel value="Nome ou Codigo da Venda: "
-						for="vendaNome" />
-					<p:inputText value="#{vendaControle.vendaNome}"
-						id="vendaNome" styleClass="form-normal">
-						<p:ajax event="keyup" listener="#{vendaControle.listar}"
-							process="@form" update="@form :tabelaVendas" />
+					<p:outputLabel value="Nome ou Codigo da Aquisicao: "
+						for="aquisicaoNome" />
+					<p:inputText value="#{aquisicaoControle.aquisicaoNome}"
+						id="aquisicaoNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{aquisicaoControle.listar}"
+							process="@form" update="@form :tabelaAquisicoes" />
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<h:button id="cadastrarVenda" value="Cadastrar" 
-						outcome="venda" icon="fa fa-fw fa-filter" />
+					<h:button id="cadastrarAquisicao" value="Cadastrar" 
+						outcome="aquisicao" icon="fa fa-fw fa-filter" />
 
 					<p:commandButton value="Download" icon="fa fa-fw fa-download"  ajax="false">
 						<p:fileDownload
-							value="#{poiControle.downloadXlsx(vendaControle.vendas)}">
+							value="#{poiControle.downloadXlsx(aquisicaoControle.aquisicoes)}">
 							<p:graphicImage library="img/icon" alt="Exportar para xls"
 								name="xls.png" width="30" height="30" />
 						</p:fileDownload>
@@ -42,84 +42,77 @@
 			</div>
 
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
-				<p:selectBooleanCheckbox value="#{vendaControle.status}">
-					<p:ajax update="@form :tabelaVendas"
-						listener="#{vendaControle.listar}" />
+				<p:selectBooleanCheckbox value="#{aquisicaoControle.status}">
+					<p:ajax update="@form :tabelaAquisicoes"
+						listener="#{aquisicaoControle.listar}" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="Visualizar somente itens ativados" />
 				
 			</div>
 		</h:form>
 
-		<h:form id="tabelaVendas">
-			<p:dataTable id="venda" var="venda"
-				value="#{vendaControle.vendas}" resizableColumns="true"
+		<h:form id="tabelaAquisicoes">
+			<p:dataTable id="aquisicao" var="aquisicao"
+				value="#{aquisicaoControle.aquisicoes}" resizableColumns="true"
 				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
-				rowKey="#{venda.id}" selection="#{vendaControle.venda}"
-				selectionMode="single" emptyMessage="Nenhuma Venda Encontrado!"
+				rowKey="#{aquisicao.id}" selection="#{aquisicaoControle.aquisicao}"
+				selectionMode="single" emptyMessage="Nenhuma Aquisicao Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de Vendas
+				<f:facet name="header">Lista de Aquisicoes
 				
 				</f:facet>
 
-				<p:column headerText="Id" sortBy="#{venda.id}">
-					<h:outputText value="#{venda.id}" />
+				<p:column headerText="Id" sortBy="#{aquisicao.id}">
+					<h:outputText value="#{aquisicao.id}" />
 				</p:column>
 
-				<p:column headerText="Funcionario" sortBy="#{venda.funcionario.nome}">
-					<h:outputText value="#{venda.funcionario.nome}" />
+				<p:column headerText="Funcionario" sortBy="#{aquisicao.funcionario.nome}">
+					<h:outputText value="#{aquisicao.funcionario.nome}" />
 				</p:column>
 				
-				<p:column headerText="Cliente" sortBy="#{venda.cliente.nome}">
-					<h:outputText value="#{venda.cliente.nome}" />
+				<p:column headerText="Cliente" sortBy="#{aquisicao.cliente.nome}">
+					<h:outputText value="#{aquisicao.cliente.nome}" />
 				</p:column>
 				
-				
-				<!-- <p:column headerText="Consultar Coeficientes Técnicos" style="width: 7ch;" priority="6">
+				<p:column headerText="Consultar Itens da Aquisicao" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Coeficientes Tecnicos"
-						outcome="#{vendaControle.consultarItensDaVenda(venda)}" />
-				</p:column> -->
-				
-				<p:column headerText="Consultar Itens da Venda" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Itens da venda"
-						outcome="#{vendaControle.consultarItensDaVenda(venda)}" />
+						value="Itens da aquisicao"
+						outcome="#{aquisicaoControle.consultarItensDaAquisicao(aquisicao)}" />
 				</p:column>
 				
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
 						value="Editar"
-						outcome="#{vendaControle.editar(venda)}" />
+						outcome="#{aquisicaoControle.editar(aquisicao)}" />
 				</p:column>
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{vendaControle.remover(venda)}"
+						action="#{aquisicaoControle.remover(aquisicao)}"
 						update="@form" process="@this @form"
-						rendered="#{venda.status == true}">
-						<p:ajax listener="#{vendaControle.listar}" />
+						rendered="#{aquisicao.status == true}">
+						<p:ajax listener="#{aquisicaoControle.listar}" />
 					</p:commandButton>
 					<p:commandButton icon="fa fa-fw fa-refresh"
 						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{vendaControle.salvar(venda)}"
+						action="#{aquisicaoControle.salvar(aquisicao)}"
 						update="@form" process="@this @form"
-						rendered="#{venda.status == false}">
-						<p:ajax listener="#{vendaControle.listar}" />
+						rendered="#{aquisicao.status == false}">
+						<p:ajax listener="#{aquisicaoControle.listar}" />
 					</p:commandButton>
 				</p:column>
 
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
 					<h:outputText
-						value=" #{vendaControle.totalVendas} de #{vendaControle.totalVendasConsulta}" />
+						value=" #{aquisicaoControle.totalAquisicoes} de #{aquisicaoControle.totalAquisicoesConsulta}" />
 				</f:facet>
 
 				<p:ajax event="rowDblselect"
-					oncomplete="PF('vendaDialog').show()" update="@form"
+					oncomplete="PF('aquisicaoDialog').show()" update="@form"
 					global="false" />
 			</p:dataTable>
 		</h:form>

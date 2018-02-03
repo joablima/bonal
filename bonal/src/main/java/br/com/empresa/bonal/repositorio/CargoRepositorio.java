@@ -11,6 +11,7 @@ import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
 public class CargoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -104,5 +105,18 @@ public class CargoRepositorio implements Serializable {
 			return null;
 		}
 	}
+	
+	// método que verifica se elemento existe
+		public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
+			TypedQuery<UnidadeDeMedida> query = em
+					.createQuery("select c from UnidadeDeMedida c where c.sigla = :psigla", UnidadeDeMedida.class)
+					.setParameter("psigla", sigla.toUpperCase());
+
+			try {
+				return query.getSingleResult();
+			} catch (Exception e) {
+				return null;
+			}
+		}
 
 }

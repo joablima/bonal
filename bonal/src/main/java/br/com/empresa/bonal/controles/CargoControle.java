@@ -20,6 +20,7 @@ import br.com.empresa.bonal.entidades.Cargo;
 import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPermissao;
@@ -36,6 +37,8 @@ public class CargoControle implements Serializable {
 	private Categoria categoria = new Categoria();
 	private String subCategoriaCodigo = "";
 	private SubCategoria subCategoria = new SubCategoria();
+	private String unidadeDeMedidaSigla = "";
+	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
 	private Long cargoId;
 
@@ -145,6 +148,22 @@ public class CargoControle implements Serializable {
 	// ----- Carrega os Enums em Arrays -----
 	public EnumPermissao[] getEnumPermissao() {
 		return EnumPermissao.values();
+	}	
+	
+	public String getUnidadeDeMedidaSigla() {
+		return unidadeDeMedidaSigla;
+	}
+
+	public void setUnidadeDeMedidaSigla(String unidadeDeMedidaSigla) {
+		this.unidadeDeMedidaSigla = unidadeDeMedidaSigla;
+	}
+
+	public UnidadeDeMedida getUnidadeDeMedida() {
+		return unidadeDeMedida;
+	}
+
+	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
+		this.unidadeDeMedida = unidadeDeMedida;
 	}
 
 	// ----------------- METODOS ----------------------
@@ -281,6 +300,20 @@ public class CargoControle implements Serializable {
 	public void getCategoriaPorCodigo() {
 		categoria = cargoRepositorio.getCategoriaPorCodigo(categoriaCodigo);
 	}
+	@Transacional
+	public void getUnidadeDeMedidaPorSigla() {
+		unidadeDeMedida = cargoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
+		cargo.setUnidadeDeMedida(unidadeDeMedida);
+	}
+
+	public void unidadeDeMedidaSelecionada(SelectEvent event) {
+		unidadeDeMedida = (UnidadeDeMedida) event.getObject();
+		unidadeDeMedidaSigla = unidadeDeMedida.getSigla();
+		cargo.setUnidadeDeMedida(unidadeDeMedida);
+		requestContext.update("formServico:unidadeDeMedida");
+	}
+
+
 
 	@Transacional
 	public void getSubCategoriaPorCodigo() {

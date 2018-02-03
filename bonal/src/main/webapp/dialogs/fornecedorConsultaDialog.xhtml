@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/dialog.xhtml">
+	<ui:define name="frame">
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formFornecedorConsultaDialog">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-12 ui-lg-6">
+					<p:outputLabel value="Nome do Fornecedor: " for="fornecedorNome" />
+					<p:inputText value="#{fornecedorControle.fornecedorNome}" id="fornecedorNome"
+						styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{fornecedorControle.listar}"
+							process="@form" update="@form :tabelaFornecedores" />
+					</p:inputText>
+				</div>
+
+				<div class="ui-g-12 ui-md-12 ui-lg-6">
+					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+						action="#{fornecedorControle.limpar}" process="@form"
+						update="formFornecedorConsultaDialog" styleClass="white-button" />
+				</div>
+
+			</div>
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{fornecedorControle.status}">
+					<p:ajax update="@form :tabelaFornecedores"
+						listener="#{fornecedorControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente fornecedores ativos"
+					rendered="#{fornecedorControle.status == true}" />
+			</div>
+		</h:form>
+
+		<h:form id="tabelaFornecedores">
+			<p:dataTable id="fornecedor" var="fornecedor" value="#{fornecedorControle.fornecedores}"
+				rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rowKey="#{fornecedor.id}"
+				selection="#{fornecedorControle.fornecedor}" selectionMode="single"
+				emptyMessage="Nenhum Fornecedor Encontrado!" styleClass="ui-g-12">
+				
+				<p:column headerText="Nome" sortBy="#{fornecedor.nome}">
+					<p:outputLabel value="#{fornecedor.nome}" />
+				</p:column>
+				
+				<p:column headerText="Documento" sortBy="#{fornecedor.documento}">
+					<h:outputText value="#{fornecedor.documento}" />
+				</p:column>
+
+				<p:column headerText="Identificacao" sortBy="#{fornecedor.identificacao}">
+					<h:outputText value="#{fornecedor.identificacao}" />
+				</p:column>
+
+
+				<p:column headerText="Importar">
+					<p:commandButton icon="fa fa-fw fa-check"
+						styleClass="tab-btn btn-ativar green-button"
+						action="#{fornecedorControle.selecionarFornecedor(fornecedor)}" update="@form"
+						process="@this @form" rendered="#{fornecedor.status == true}">
+						<p:ajax listener="#{fornecedorControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<p:outputLabel
+						value=" #{fornecedorControle.totalFornecedores} de #{fornecedorControle.totalFornecedoresConsulta}" />
+				</f:facet>s
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

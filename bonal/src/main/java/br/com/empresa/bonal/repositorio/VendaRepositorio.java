@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.Venda;
+import br.com.empresa.bonal.util.logging.Logging;
 
 public class VendaRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,13 @@ public class VendaRepositorio implements Serializable {
 	// m�todo que persiste um registro
 	public void adicionar(Venda venda) {
 		em.persist(venda);
+	}
+
+	@Logging
+	// m�todo que persiste um registro
+	public Long adicionarComRetorno(Venda venda) {
+		em.persist(venda);
+		return venda.getId();
 	}
 
 	// m�todo que atualiza um registro

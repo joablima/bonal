@@ -12,9 +12,6 @@
 
 		<div class="ui-g-12 titulo">
 			<h1>Consultar Servicos</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Novo Servico" outcome="servico" />
-			</span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
@@ -31,12 +28,17 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarServico" value="Filtrar"
-						action="#{servicoControle.listar}" process="@form"
-						update="@form :tabelaServicos" icon="fa fa-fw fa-filter" />
-					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{servicoControle.limpar}" process="@form"
-						update="@form :tabelaServicos" />
+					<h:button id="cadastrarServico" value="Cadastrar" outcome="servico"
+						icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"
+						ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(servicoControle.servicos)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
 				</div>
 			</div>
 
@@ -46,7 +48,7 @@
 						listener="#{servicoControle.listar}" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="Visualizar somente itens ativados" />
-				
+
 			</div>
 		</h:form>
 
@@ -61,13 +63,6 @@
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Servicos
-				
-				<span style="float: right"> <p:commandButton value="xls"
-							ajax="false">
-							<p:fileDownload
-								value="#{poiControle.downloadXlsx(servicoControle.servicos)}" />
-						</p:commandButton> <p:messages id="messages" showDetail="true" />
-					</span>
 					
 				</f:facet>
 
@@ -79,32 +74,31 @@
 					<h:outputText value="#{servico.nome}" />
 				</p:column>
 
-				<p:column headerText="Categoria" sortBy="#{servico.subCategoria.categoria.nome}">
+				<p:column headerText="Categoria"
+					sortBy="#{servico.subCategoria.categoria.nome}">
 					<h:outputText value="#{servico.subCategoria.categoria.nome}" />
 				</p:column>
-				
-				<p:column headerText="Sub Categoria" sortBy="#{servico.subCategoria.nome}">
+
+				<p:column headerText="Sub Categoria"
+					sortBy="#{servico.subCategoria.nome}">
 					<h:outputText value="#{servico.subCategoria.nome}" />
 				</p:column>
 
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Editar"
-						outcome="#{servicoControle.editar(servico)}" />
+						value="Editar" outcome="#{servicoControle.editar(servico)}" />
 				</p:column>
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{servicoControle.remover(servico)}"
-						update="@form" process="@this @form"
-						rendered="#{servico.status == true}">
+						action="#{servicoControle.remover(servico)}" update="@form"
+						process="@this @form" rendered="#{servico.status == true}">
 						<p:ajax listener="#{servicoControle.listar}" />
 					</p:commandButton>
 					<p:commandButton icon="fa fa-fw fa-refresh"
 						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{servicoControle.salvar(servico)}"
-						update="@form" process="@this @form"
-						rendered="#{servico.status == false}">
+						action="#{servicoControle.salvar(servico)}" update="@form"
+						process="@this @form" rendered="#{servico.status == false}">
 						<p:ajax listener="#{servicoControle.listar}" />
 					</p:commandButton>
 				</p:column>
@@ -115,9 +109,8 @@
 						value=" #{servicoControle.totalServicos} de #{servicoControle.totalServicosConsulta}" />
 				</f:facet>
 
-				<p:ajax event="rowDblselect"
-					oncomplete="PF('servicoDialog').show()" update="@form"
-					global="false" />
+				<p:ajax event="rowDblselect" oncomplete="PF('servicoDialog').show()"
+					update="@form" global="false" />
 			</p:dataTable>
 		</h:form>
 

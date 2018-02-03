@@ -26,8 +26,9 @@
 					rendered="#{cargoControle.cargoId != null}"
 					value="Edição de Cargo" />
 			</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar Cargo" outcome="cargoConsultar" />
+			<span> <i class="fa fa-fw fa-search" /> <h:button class="botoes-cadastrar"
+					value="Consultar Cargos" 
+					outcome="cargoConsultar" />
 			</span>
 		</div>
 
@@ -161,6 +162,50 @@
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="descricao" id="descricaoMessage" />
+					</div>
+				</div>
+				
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Unidade de Medida"
+							for="unidadeDeMedidaSigla" />
+						<p:inputText id="unidadeDeMedidaSigla"
+							value="#{cargoControle.unidadeDeMedidaSigla}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo da unidade de medida obrigatório"
+							readonly = "#{param.servicoId != null}" 
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="unidadeDeMedida"
+								listener="#{cargoControle.getUnidadeDeMedidaPorSigla}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedidaSigla"
+							id="unidadeDeMedidaSiglaMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Unidade de medida" id="unidadeDeMedida"
+								value="#{cargoControle.unidadeDeMedida.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button" disabled="#{param.servicoId != null}" 
+								process="@this" update="unidadeDeMedida"
+								actionListener="#{dialogControle.unidadeDeMedidaConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{cargoControle.unidadeDeMedidaSelecionada}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="unidadeDeMedida" id="unidadeDeMedidaMessage" />
 					</div>
 				</div>
 				

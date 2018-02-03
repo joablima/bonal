@@ -12,9 +12,7 @@
 
 		<div class="ui-g-12 titulo">
 			<h1>Consultar SubCategorias</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Novo SubCategoria" outcome="subCategoria" />
-			</span>
+
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
@@ -31,12 +29,17 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarSubCategoria" value="Filtrar"
-						action="#{subCategoriaControle.listar}" process="@form"
-						update="@form :tabelaSubCategorias" icon="fa fa-fw fa-filter" />
-					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{subCategoriaControle.limpar}" process="@form"
-						update="@form :tabelaSubCategorias" />
+					<h:button id="cadastrarSubCategoria" value="Cadastrar" outcome="subCategoria"
+						icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"
+						ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(subCategoriaControle.subcategorias)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
 				</div>
 			</div>
 
@@ -46,29 +49,22 @@
 						listener="#{subCategoriaControle.listar}" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="Visualizar somente itens ativados" />
-				
+
 			</div>
 		</h:form>
 
 		<h:form id="tabelaSubCategorias">
 			<p:dataTable id="subCategoria" var="subCategoria"
-				value="#{subCategoriaControle.subCategorias}" resizableColumns="true"
-				reflow="true" rows="10" paginator="true"
+				value="#{subCategoriaControle.subCategorias}"
+				resizableColumns="true" reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
-				rowKey="#{subCategoria.id}" selection="#{subCategoriaControle.subCategoria}"
-				selectionMode="single" emptyMessage="Nenhuma SubCategoria Encontrado!"
-				styleClass="ui-g-12">
+				rowKey="#{subCategoria.id}"
+				selection="#{subCategoriaControle.subCategoria}"
+				selectionMode="single"
+				emptyMessage="Nenhuma SubCategoria Encontrado!" styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de SubCategorias
-				
-				<span style="float: right"> <p:commandButton value="xls"
-							ajax="false">
-							<p:fileDownload
-								value="#{poiControle.downloadXlsx(subCategoriaControle.subCategorias)}" />
-						</p:commandButton> <p:messages id="messages" showDetail="true" />
-					</span>
-					
 				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{subCategoria.codigo}">
@@ -79,10 +75,11 @@
 					<h:outputText value="#{subCategoria.nome}" />
 				</p:column>
 
-				<p:column headerText="Categoria" sortBy="#{subCategoria.categoria.nome}">
+				<p:column headerText="Categoria"
+					sortBy="#{subCategoria.categoria.nome}">
 					<h:outputText value="#{subCategoria.categoria.nome}" />
 				</p:column>
-				
+
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
 						value="Editar"

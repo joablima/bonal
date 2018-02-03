@@ -12,9 +12,6 @@
 
 		<div class="ui-g-12 titulo">
 			<h1>Consultar Operacoes</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar/Editar Operacao" outcome="operacao" />
-			</span>
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
@@ -31,12 +28,17 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarOperacao" value="Filtrar"
-						action="#{operacaoControle.listar}" process="@form"
-						update="@form :tabelaOperacoes" icon="fa fa-fw fa-filter" />
-					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{operacaoControle.limpar}" process="@form"
-						update="@form :tabelaOperacoes" />
+					<h:button id="cadastrarOperacao" value="Cadastrar"
+						outcome="operacao" icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"
+						ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(operacaoControle.operacoes)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
 				</div>
 			</div>
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -63,13 +65,6 @@
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Operações
-				
-				<span style="float: right"> <p:commandButton value="xls"
-							ajax="false">
-							<p:fileDownload
-								value="#{poiControle.downloadXlsx(operacaoControle.operacoes)}" />
-						</p:commandButton> <p:messages id="messages" showDetail="true" />
-					</span>
 				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{operacao.codigo}">
@@ -86,17 +81,19 @@
 
 
 				<p:column headerText="Editar" style="width: 7ch;" priority="6">
-					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar" value="Editar"
-						outcome="#{operacaoControle.editar(operacao)}" />
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar" outcome="#{operacaoControle.editar(operacao)}" />
 				</p:column>
 
 				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
-					<p:commandButton icon="fa fa-fw fa-times" styleClass="tab-btn btn-desativar" value="Desativar"
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
 						action="#{operacaoControle.remover(operacao)}" update="@form"
 						process="@this @form" rendered="#{operacao.status == true}">
 						<p:ajax listener="#{operacaoControle.listar}" />
 					</p:commandButton>
-					<p:commandButton icon="fa fa-fw fa-refresh" styleClass="tab-btn btn-ativar" value="Ativar"
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
 						action="#{operacaoControle.salvar(operacao)}" update="@form"
 						process="@this @form" rendered="#{operacao.status == false}">
 						<p:ajax listener="#{operacaoControle.listar}" />

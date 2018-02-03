@@ -17,9 +17,7 @@
 
 		<div class="ui-g-12 titulo">
 			<h1>Consultar Unidades de Medidas</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Unidade De Medida" outcome="unidadeDeMedida" />
-			</span>
+			
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
@@ -36,13 +34,16 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarUnidadeDeMedida" value="Filtrar"
-						action="#{unidadeDeMedidaControle.listar}" process="@form"
-						update="@form :tabelaUnidadesDeMedida" icon="fa fa-fw fa-filter" />
+					<h:button id="buscarUnidadeDeMedida" value="Cadastrar" 
+						outcome="unidadeDeMedida" icon="fa fa-fw fa-filter" />
 
-					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{unidadeDeMedidaControle.limpar}" process="@this"
-						update="@form tabelaUnidadesDeMedida:unidadeDeMedida" />
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"  ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(unidadeDeMedidaControle.unidadesDeMedida)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
 				</div>
 			</div>
 			<div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -71,13 +72,7 @@
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Unidades de Medida				
-				<p:commandButton value="xls" style="float: right" ajax="false">
-						<p:fileDownload
-							value="#{poiControle.downloadXlsx(unidadeDeMedidaControle.unidadesDeMedida)}">
-							<p:graphicImage library="img/icon" alt="Exportar para xls"
-								name="xls.png" width="30" height="30" />
-						</p:fileDownload>
-					</p:commandButton>
+				
 					<p:messages id="messages" showDetail="true" />
 
 				</f:facet>
@@ -105,8 +100,8 @@
 					</p:commandButton>
 					<p:commandButton icon="fa fa-fw fa-refresh"
 						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{unidadeDeMedidaControle.salvar(unidadeDeMedida)}" update="@form"
-						process="@this @form"
+						action="#{unidadeDeMedidaControle.salvar(unidadeDeMedida)}"
+						update="@form" process="@this @form"
 						rendered="#{unidadeDeMedida.status == false}">
 						<p:ajax listener="#{unidadeDeMedidaControle.listar}" />
 					</p:commandButton>
@@ -125,85 +120,7 @@
 					global="false" />
 			</p:dataTable>
 
-
-
-<!-- 			<p:dialog header="Edição de unidade De Medida" -->
-<!-- 				widgetVar="unidadeDeMedidaDialog" modal="true" showEffect="fade" -->
-<!-- 				hideEffect="fade" resizable="false"> -->
-<!-- 				<p:outputPanel id="unidadeDeMedidaEditar" style="text-align:center;"> -->
-<!-- 					<p:panelGrid columns="2" -->
-<!-- 						rendered="#{not empty unidadeDeMedidaControle.unidadesDeMedida}" -->
-<!-- 						columnClasses="label,value"> -->
-<!-- 						<f:facet name="header"> -->
-<!-- 						Titulo -->
-<!-- 						</f:facet> -->
-<!-- 						<h:outputText value="Sigla" /> -->
-<!-- 						<h:outputText -->
-<!-- 							value="#{unidadeDeMedidaControle.unidadeDeMedida.sigla}" /> -->
-<!-- 						<h:outputText value="Nome:" /> -->
-<!-- 						<h:outputText -->
-<!-- 							value="#{unidadeDeMedidaControle.unidadeDeMedida.nome}" /> -->
-<!-- 						<p:commandButton styleClass="botao" value="Excluir" -->
-<!-- 							action="#{unidadeDeMedidaControle.remover(unidadeDeMedidaControle.unidadeDeMedida)}" /> -->
-							
-<!-- 						<p:button styleClass="botao" value="Editar" -->
-<!-- 							outcome="unidadeDeMedidaControle.editar(unidadeDeMedidaControle.unidadeDeMedida)" /> -->
-<!-- 					</p:panelGrid> -->
-<!-- 				</p:outputPanel> -->
-<!-- 			</p:dialog> -->
-
 		</h:form>
-
-		<!-- <h:form id="importXls">
-			<p:fileUpload
-				fileUploadListener="#{unidadeDeMedidaControle.importXlsx}"
-				mode="advanced" multiple="false" update="messageImportarXls"
-				sizeLimit="26214500" fileLimit="1" label="Escolher"
-				uploadLabel="Enviar" cancelLabel="Cancelar"
-				allowTypes="/(\.|\/)(xls|xlsx|odt)$/"
-				invalidFileMessage="São permitidas somente imagens (xls, xlsx e odt)"
-				invalidSizeMessage="O tamanho máximo permitido é de 25MB."
-				fileLimitMessage="Só é possível escolher 1 arquivos por vez."
-				onstart="console.log('Iniciando envio de arquivo')"
-				onerror="console.log('Erro na requisição de envio')"
-				oncomplete="console.log('Envio concluído')" />
-
-			<p:messages id="messageImportarXls" showDetail="true" />
-		</h:form>
-
-
-		<h:form id="upload">
-			<p:fileUpload fileUploadListener="#{arquivoControle.upload}"
-				mode="advanced" dragDropSupport="true" multiple="true"
-				update="messages" sizeLimit="26214500" fileLimit="5"
-				label="Escolher1" uploadLabel="Enviar1" cancelLabel="Cancelar1"
-				invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
-				invalidSizeMessage="O tamanho máximo permitido é de 25MB."
-				fileLimitMessage="Só é possível escolher 5 arquivos por vez."
-				onstart="console.log('Iniciando envio de arquivo')"
-				onerror="console.log('Erro na requisição de envio')"
-				oncomplete="console.log('Envio concluído')" />
-
-			<p:messages id="messages" showDetail="true" />
-		</h:form>
-
-
-
-		<h:form id="upload2">
-			<p:fileUpload fileUploadListener="#{arquivoControle.upload2}"
-				mode="advanced" dragDropSupport="true" multiple="true"
-				update="messages" sizeLimit="26214500" fileLimit="5"
-				label="Escolher2" uploadLabel="Enviar2" cancelLabel="Cancelar2"
-				invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
-				invalidSizeMessage="O tamanho máximo permitido é de 25MB."
-				fileLimitMessage="Só é possível escolher 5 arquivos por vez."
-				onstart="console.log('Iniciando envio de arquivo')"
-				onerror="console.log('Erro na requisição de envio')"
-				oncomplete="console.log('Envio concluído')" />
-
-			<p:messages id="messages" showDetail="true" />
-		</h:form>
- -->
 	</ui:define>
 </ui:composition>
 </html>

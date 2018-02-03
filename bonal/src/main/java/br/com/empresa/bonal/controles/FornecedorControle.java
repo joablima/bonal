@@ -14,10 +14,9 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Fornecedor;
-import br.com.empresa.bonal.entidades.Cargo;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.repositorio.FornecedorRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPessoa;
@@ -38,6 +37,7 @@ public class FornecedorControle implements Serializable {
 	private Boolean status = true;
 	// Listas para Consulta
 	private List<Fornecedor> fornecedores;
+	private List<ItemDeProducao> itensFornecidos = new ArrayList<>(); ;
 	private List<Fornecedor> lista = new ArrayList<>();
 
 	@Inject
@@ -106,6 +106,14 @@ public class FornecedorControle implements Serializable {
 	public EnumPessoa[] getEnumPessoa() {
 		return EnumPessoa.values();
 	}
+	
+	public List<ItemDeProducao> getItensFornecidos() {
+		return itensFornecidos;
+	}
+
+	public void setItensFornecidos(List<ItemDeProducao> itensFornecidos) {
+		this.itensFornecidos = itensFornecidos;
+	}
 
 	// ----------------- METODOS ----------------------
 	@PostConstruct
@@ -117,6 +125,21 @@ public class FornecedorControle implements Serializable {
 		}
 		filtrarTabela();
 	}
+
+	public void filtrarItensFornecidos() {
+		Stream<ItemDeProducao> stream = fornecedor.getItens().stream();
+
+		stream = stream.filter(c -> (c.getNome().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
+				| (c.getSubCategoria().getNome().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
+				| (c.getSubCategoria().getCategoria().getNome().toLowerCase().contains(fornecedorNome.toLowerCase().trim()))
+				| c.getCodigo().toString().toLowerCase().contains(fornecedorNome.toLowerCase().trim()));
+
+		if (status.equals(true))
+			stream = stream.filter(c -> (c.getStatus().equals(status)));
+
+		itensFornecidos = stream.collect(Collectors.toList());
+	}
+
 
 	public void filtrarTabela() {
 		Stream<Fornecedor> stream = lista.stream();
@@ -217,5 +240,6 @@ public class FornecedorControle implements Serializable {
 
 	public void inicializa() {
 		recuperarFornecedorPorId();
+		itensFornecidos = fornecedor.getItens();
 	}
 }

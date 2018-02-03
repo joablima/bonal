@@ -1,13 +1,13 @@
 package br.com.empresa.bonal.controles;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -18,11 +18,11 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.ItemDaVenda;
-import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.entidades.Venda;
 import br.com.empresa.bonal.repositorio.ItemDaVendaRepositorio;
+import br.com.empresa.bonal.repositorio.ProdutoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
@@ -91,11 +91,17 @@ public class ItemDaVendaControle implements Serializable {
 
 	// verificar importancia dos m�todos abaixo //verificar se est�o trocados??
 	public Integer getTotalItensDaVenda() {
-		return lista.size();
+		if(lista==null)
+			return 0;
+		else
+			return lista.size();
 	}
 
 	public Integer getTotalItensDaVendaConsulta() {
-		return itensDaVenda.size();
+		if(itensDaVenda == null)
+			return 0;
+		else
+			return itensDaVenda.size();
 	}
 
 	public Boolean getStatus() {
@@ -166,7 +172,15 @@ public class ItemDaVendaControle implements Serializable {
 	
 	// ----------------- METODOS ----------------------
 
-
+	@Transacional
+	public void listarTabela(ComponentSystemEvent event) {
+		if (this.itensDaVenda == null) {
+			lista = itemDaVendaRepositorio.listarTodosPorVenda(vendaId);
+			itensDaVenda = new ArrayList<>(lista);
+		}
+		filtrarTabela();
+	}
+	
 	@Transacional
 	public void listarTabela() {
 		if (this.itensDaVenda == null) {
@@ -214,6 +228,7 @@ public class ItemDaVendaControle implements Serializable {
 	@Transacional
 	public String salvar(ItemDaVenda itemDaVenda) {
 		itemDaVenda.setStatus(true);
+		
 		itemDaVendaRepositorio.atualizar(itemDaVenda);
 		this.itensDaVenda = null;
 		this.itemDaVenda = new ItemDaVenda();
@@ -357,14 +372,5 @@ public class ItemDaVendaControle implements Serializable {
 
 	}
 	
-	 public void listarTabela(ComponentSystemEvent event){
-	        if (!FacesContext.getCurrentInstance().isPostback()){
-	        	if (this.itensDaVenda == null) {
-	    			lista = itemDaVendaRepositorio.listarTodos();
-	    			itensDaVenda = new ArrayList<>(lista);
-	    		}
-	    		filtrarTabela();
-	        }
-	    }
 	
 }

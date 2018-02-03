@@ -12,9 +12,7 @@
 
 		<div class="ui-g-12 titulo">
 			<h1>Consultar Produtos</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Novo Produto" outcome="produto" />
-			</span>
+
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
@@ -31,12 +29,17 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarProduto" value="Filtrar"
-						action="#{produtoControle.listar}" process="@form"
-						update="@form :tabelaProdutos" icon="fa fa-fw fa-filter" />
-					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{produtoControle.limpar}" process="@form"
-						update="@form :tabelaProdutos" />
+					<h:button id="cadastrarProduto" value="Cadastrar" outcome="produto"
+						icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"
+						ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(produtoControle.produtos)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
 				</div>
 			</div>
 
@@ -46,7 +49,7 @@
 						listener="#{produtoControle.listar}" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="Visualizar somente itens ativados" />
-				
+
 			</div>
 		</h:form>
 
@@ -61,14 +64,6 @@
 				styleClass="ui-g-12">
 
 				<f:facet name="header">Lista de Produtos
-				
-				<span style="float: right"> <p:commandButton value="xls"
-							ajax="false">
-							<p:fileDownload
-								value="#{poiControle.downloadXlsx(produtoControle.produtos)}" />
-						</p:commandButton> <p:messages id="messages" showDetail="true" />
-					</span>
-					
 				</f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{produto.codigo}">
@@ -78,36 +73,38 @@
 				<p:column headerText="Nome" sortBy="#{produto.nome}">
 					<h:outputText value="#{produto.nome}" />
 				</p:column>
-				
-				<p:column headerText="Unidade de Medida" sortBy="#{produto.unidadeDeMedida.sigla}">
+
+				<p:column headerText="Quantidade" sortBy="#{produto.quantidade}">
+					<h:outputText value="#{produto.quantidade}" />
+				</p:column>
+
+				<p:column headerText="Unidade de Medida"
+					sortBy="#{produto.unidadeDeMedida.sigla}">
 					<h:outputText value="#{produto.unidadeDeMedida.sigla}" />
 				</p:column>
-				
-				
-				<p:column headerText="Consultar Coeficientes Técnicos" style="width: 7ch;" priority="6">
+
+
+				<p:column headerText="Coeficientes" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Coeficientes Tecnicos"
+						value="Coeficientes"
 						outcome="#{produtoControle.consultarCoeficientesTecnicos(produto)}" />
 				</p:column>
-				
+
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
-						value="Editar"
-						outcome="#{produtoControle.editar(produto)}" />
+						value="Editar" outcome="#{produtoControle.editar(produto)}" />
 				</p:column>
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Desativar"
-						action="#{produtoControle.remover(produto)}"
-						update="@form" process="@this @form"
-						rendered="#{produto.status == true}">
+						action="#{produtoControle.remover(produto)}" update="@form"
+						process="@this @form" rendered="#{produto.status == true}">
 						<p:ajax listener="#{produtoControle.listar}" />
 					</p:commandButton>
 					<p:commandButton icon="fa fa-fw fa-refresh"
 						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{produtoControle.salvar(produto)}"
-						update="@form" process="@this @form"
-						rendered="#{produto.status == false}">
+						action="#{produtoControle.salvar(produto)}" update="@form"
+						process="@this @form" rendered="#{produto.status == false}">
 						<p:ajax listener="#{produtoControle.listar}" />
 					</p:commandButton>
 				</p:column>
@@ -118,9 +115,8 @@
 						value=" #{produtoControle.totalProdutos} de #{produtoControle.totalProdutosConsulta}" />
 				</f:facet>
 
-				<p:ajax event="rowDblselect"
-					oncomplete="PF('produtoDialog').show()" update="@form"
-					global="false" />
+				<p:ajax event="rowDblselect" oncomplete="PF('produtoDialog').show()"
+					update="@form" global="false" />
 			</p:dataTable>
 		</h:form>
 

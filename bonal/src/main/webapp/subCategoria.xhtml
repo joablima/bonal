@@ -21,13 +21,14 @@
 			<h1>
 				<h:outputText
 					rendered="#{subCategoriaControle.subCategoriaId == null}"
-					value="Cadastro de SubCategoria" />
+					value="Cadastro de Subcategoria" />
 				<h:outputText
 					rendered="#{subCategoriaControle.subCategoriaId != null}"
-					value="Edição de SubCategoria" />
+					value="Edição de Subcategoria" />
 			</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar SubCategoria" outcome="subCategoriaConsultar" />
+			<span> <i class="fa fa-fw fa-search" /> <h:button class="botoes-cadastrar"
+					value="Consultar Subcategorias" 
+					outcome="subCategoriaConsultar" />
 			</span>
 		</div>
 

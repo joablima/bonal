@@ -17,6 +17,9 @@ html, body, .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea
 		'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;
 }
 
+#botao-consultar {
+	border: 20px solid #bdc3c7;
+}
 #content {
 	display: flex;
 	flex-direction: column;

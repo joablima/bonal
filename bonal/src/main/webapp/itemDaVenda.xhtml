@@ -24,13 +24,13 @@
 			<h1>
 				<h:outputText
 					rendered="#{itemDaVendaControle.itemDaVendaId == null}"
-					value="Adição de itens na venda #{itemDaVendaControle.venda.id}" />
+					value="Adição de itens na venda #{itemDaVendaControle.vendaId}" />
 				<h:outputText
 					rendered="#{itemDaVendaControle.vendaId == null}"
-					value="Edição de Itens na venda #{itemDaVendaControle.venda.id}" />
+					value="Edição de Itens na venda #{itemDaVendaControle.vendaId}" />
 			</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Consultar Coeficiente técnico"
+			<span> <i class="fa fa-fw fa-search" /> <h:button
+					class="botoes-cadastrar" value="Consultar Itens da Venda"
 					outcome="#{itemDaVendaControle.consultarItensDaVenda()}" />
 			</span>
 		</div>

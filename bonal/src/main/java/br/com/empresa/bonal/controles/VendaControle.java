@@ -21,6 +21,7 @@ import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.Venda;
 import br.com.empresa.bonal.repositorio.VendaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -190,7 +191,28 @@ public class VendaControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	@Transacional
+	public void adicionar() {
+		venda.setStatus(true);
+		cliente = vendaRepositorio.getClientePorDocumento(clienteDocumento);
+		funcionario = vendaRepositorio.getFuncionarioPorDocumento(funcionarioDocumento);
 
+		if (funcionario == null) {
+			facesContext.warn("funcionario inexistente");
+		}
+		if (cliente == null) {
+			facesContext.warn("Cliente inexistente");
+		}
+
+		
+		venda.setCliente(cliente);
+		venda.setFuncionario(funcionario);
+		
+		vendaId = vendaRepositorio.adicionarComRetorno(venda);
+	}
+	
+	@Logging
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
 	public String salvar() {
@@ -216,7 +238,7 @@ public class VendaControle implements Serializable {
 		venda.setFuncionario(funcionario);
 
 		if (venda.getId() == null) {
-			vendaRepositorio.adicionar(venda);
+			vendaId = vendaRepositorio.adicionarComRetorno(venda);
 			message += "Venda Cadastrada com Sucesso.";
 		} else {
 			vendaRepositorio.atualizar(venda);
@@ -251,8 +273,21 @@ public class VendaControle implements Serializable {
 		return "venda?vendaId=" + venda.getId();
 	}
 	
-	public String consultarItensDaVenda(Venda venda){
+	public String consultarItensDaVenda(Venda venda){		
 		return "itemDaVendaConsultar?vendaId="+venda.getId();
+	}
+	
+	public String consultarItensDaVenda(){
+		if(funcionario == null ){
+			facesContext.warn("Funcionario inexistente");
+			return null;
+		}
+		if(cliente == null ){
+			facesContext.warn("Cliente inexistente");
+			return null;
+		}
+		
+		return "itemDaVendaConsultar?faces-redirect=true&vendaId="+vendaId;
 	}
 	
 
