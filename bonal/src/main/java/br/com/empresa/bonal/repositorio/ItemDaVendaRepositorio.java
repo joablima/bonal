@@ -33,6 +33,12 @@ public class ItemDaVendaRepositorio implements Serializable {
 	}
 
 	// m�todo que atualiza um registro
+	public void atualizar(Venda venda) {
+
+		em.merge(venda);
+	}
+
+	// m�todo que atualiza um registro
 	public void atualizar(Produto produto) {
 
 		em.merge(produto);

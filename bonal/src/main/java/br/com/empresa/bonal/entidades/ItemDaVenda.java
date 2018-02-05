@@ -20,6 +20,12 @@ public class ItemDaVenda implements Serializable{
 	
 	private BigDecimal quantidade;
 	
+
+	private BigDecimal precoUnitario;
+	
+
+	private BigDecimal precoTotal;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "produto")
 	private Produto produto;	
@@ -77,6 +83,22 @@ public class ItemDaVenda implements Serializable{
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+
+	public BigDecimal getPrecoUnitario() {
+		return precoUnitario;
+	}
+
+	public void setPrecoUnitario(BigDecimal precoUnitario) {
+		this.precoUnitario = precoUnitario;
+	}
+
+	public BigDecimal getPrecoTotal() {
+		return precoTotal;
+	}
+
+	public void setPrecoTotal(BigDecimal precoTotal) {
+		this.precoTotal = precoTotal;
 	}	
 	
 	

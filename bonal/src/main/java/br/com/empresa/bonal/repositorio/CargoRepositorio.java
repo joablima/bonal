@@ -12,19 +12,23 @@ import br.com.empresa.bonal.entidades.Categoria;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
+import br.com.empresa.bonal.util.logging.Logging;
 
 public class CargoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	EntityManager em;
-
+	
+	
+	@Logging
 	// m�todo que persiste um registro
 	public void adicionar(Cargo cargo) {
 
 		em.persist(cargo);
 	}
 
+	@Logging
 	// m�todo que atualiza um registro
 	public void atualizar(Cargo cargo) {
 

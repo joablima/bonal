@@ -117,12 +117,53 @@
 							requiredMessage="quantidade do coeficiente tecnico obrigatório"
 							validatorMessage="quantidade do coeficiente tecnico deve ter no minimo 2 caracteres"
 							maxlength="80">
+							<p:ajax event="keyup" process="@this" update="precoTotal"
+								listener="#{itemDaVendaControle.calculaPrecoTotal()}" />
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
 						<p:message for="quantidade" id="quantidadeMessage" />
+					</div>
+				</div>
+				
+					<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Preco unitário" for="precoUnitario" />
+						<p:inputText id="precoUnitario"
+							value="#{itemDaVendaControle.itemDaVenda.precoUnitario}"
+							styleClass="form-normal" required="true"
+							requiredMessage="precoUnitario do item obrigatório"
+							validatorMessage="precoUnitario do item deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="precoTotal"
+								listener="#{itemDaVendaControle.calculaPrecoTotal()}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="precoUnitario" id="precoUnitarioMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Preco total" for="precoTotal" />
+						<p:inputText id="precoTotal"
+							value="#{itemDaVendaControle.itemDaVenda.precoTotal}"
+							styleClass="form-normal" required="true"
+							requiredMessage="precoTotal do item obrigatório"
+							validatorMessage="precoTotal do item deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="precoTotal" id="precoTotalMessage" />
 					</div>
 				</div>
 				

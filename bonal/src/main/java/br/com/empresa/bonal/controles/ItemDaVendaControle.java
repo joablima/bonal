@@ -273,6 +273,8 @@ public class ItemDaVendaControle implements Serializable {
 		itemDaVenda.setVenda(venda);
 
 		if (itemDaVenda.getId() == null) {
+			venda.setPrecoTotal(venda.getPrecoTotal().add(itemDaVenda.getPrecoTotal()));
+			itemDaVendaRepositorio.atualizar(venda);
 			itemDaVendaRepositorio.adicionar(itemDaVenda);
 			message += "ItemDaVenda Cadastrada com Sucesso.";
 		} else {
@@ -371,5 +373,11 @@ public class ItemDaVendaControle implements Serializable {
 
 	}
 	
+	public void calculaPrecoTotal(){
+		if(itemDaVenda.getQuantidade()!=null && itemDaVenda.getPrecoUnitario()!=null){
+			itemDaVenda.setPrecoTotal(itemDaVenda.getPrecoUnitario().multiply(itemDaVenda.getQuantidade()));
+		}
+		
+	}
 	
 }

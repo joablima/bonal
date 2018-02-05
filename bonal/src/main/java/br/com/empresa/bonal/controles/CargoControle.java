@@ -24,6 +24,7 @@ import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.CargoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumPermissao;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -238,11 +239,12 @@ public class CargoControle implements Serializable {
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
+	@Logging
 	public void salvar() {
 		message = "";
 		this.cargo.setStatus(true);
 
-		subCategoria = cargoRepositorio.getSubCategoriaPorCodigo(cargo.getSubCategoria().getCodigo());
+		subCategoria = cargoRepositorio.getSubCategoriaPorCodigo(subCategoriaCodigo);
 
 		if (subCategoria == null) {
 			message = "SubCategoria inexistente, insira um codigo de subcategoria válido";
@@ -254,6 +256,12 @@ public class CargoControle implements Serializable {
 		}
 
 		cargo.setSubCategoria(subCategoria);
+		
+		unidadeDeMedida = cargoRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
+		if (unidadeDeMedida == null) {
+			message = "Unidade de medida inexistente, insira um codigo válido";
+		}
+		cargo.setUnidadeDeMedida(unidadeDeMedida);
 
 		ItemDeProducao existe = cargoRepositorio.getItemDeProducaoPorCodigo(cargo.getCodigo());
 		if (existe != null && (existe.getId() != cargo.getId())) {
