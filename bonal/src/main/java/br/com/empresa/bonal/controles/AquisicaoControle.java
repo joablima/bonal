@@ -1,6 +1,7 @@
 package br.com.empresa.bonal.controles;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,9 +17,9 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
+import br.com.empresa.bonal.entidades.Aquisicao;
 import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Funcionario;
-import br.com.empresa.bonal.entidades.Aquisicao;
 import br.com.empresa.bonal.repositorio.AquisicaoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.logging.Logging;
@@ -30,6 +31,8 @@ public class AquisicaoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Aquisicao aquisicao = new Aquisicao();
+	
+	private String message = "";
 
 	private String fornecedorDocumento = "";
 	private Fornecedor fornecedor = new Fornecedor();
@@ -156,8 +159,9 @@ public class AquisicaoControle implements Serializable {
 	public void filtrarTabela() {
 		Stream<Aquisicao> stream = lista.stream();
 
-		stream = stream.filter(c -> (c.getFornecedor().getNome().toLowerCase().contains(aquisicaoNome.toLowerCase().trim()))
-				| (c.getFuncionario().getNome().toLowerCase().contains(aquisicaoNome.toLowerCase().trim())));
+		stream = stream
+				.filter(c -> (c.getFornecedor().getNome().toLowerCase().contains(aquisicaoNome.toLowerCase().trim()))
+						| (c.getFuncionario().getNome().toLowerCase().contains(aquisicaoNome.toLowerCase().trim())));
 
 		if (status.equals(true))
 			stream = stream.filter(c -> (c.getStatus().equals(status)));
@@ -192,51 +196,51 @@ public class AquisicaoControle implements Serializable {
 		return null;
 	}
 	
-	@Transacional
-	public void adicionar() {
-		aquisicao.setStatus(true);
-				
-		aquisicaoId = aquisicaoRepositorio.adicionarComRetorno(aquisicao);
+	public String consultarAquisicoes(){
+		return "aquisicaoConsultar";
 	}
 	
+	public String aquisicaoConsultar(){
+		
+		if(message.equals("")){
+			aquisicao = new Aquisicao();
+			fornecedor = new Fornecedor();
+			fornecedorDocumento = null;
+			return "aquisicaoConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
+
 	@Logging
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		
+
+		getFuncionarioPorDocumento();
+		
+		if(funcionario == null){
+			message = "Funcionário inexistente";
+		}
+		
+
+		getFornecedorPorDocumento();
+		if(fornecedor == null){
+			message = "Fornecedor inexistente";
+		}
+		
 		this.aquisicao.setStatus(true);
 
-		fornecedor = aquisicaoRepositorio.getFornecedorPorDocumento(aquisicao.getFornecedor().getDocumento());
-
-		if (fornecedor == null) {
-			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
-			return null;
-		}
-
-		aquisicao.setFornecedor(fornecedor);
-		
-		funcionario = aquisicaoRepositorio.getFuncionarioPorDocumento(aquisicao.getFuncionario().getDocumento());
-
-		if (funcionario == null) {
-			facesContext.warn("funcionario inexistente");
-			return null;
-		}
-
-		aquisicao.setFuncionario(funcionario);
-
 		if (aquisicao.getId() == null) {
+			aquisicao.setPrecoTotal(new BigDecimal("0"));
 			aquisicaoId = aquisicaoRepositorio.adicionarComRetorno(aquisicao);
-			message += "Aquisicao Cadastrada com Sucesso.";
 		} else {
 			aquisicaoRepositorio.atualizar(aquisicao);
-			message += "Aquisicao Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
-		logger.info(message);
-		aquisicao = new Aquisicao();
-		fornecedor = new Fornecedor();
-		fornecedorDocumento = null;
-		return null;
+		
 	}
 
 	@Transacional
@@ -259,24 +263,23 @@ public class AquisicaoControle implements Serializable {
 	public String editar(Aquisicao aquisicao) {
 		return "aquisicao?aquisicaoId=" + aquisicao.getId();
 	}
-	
-	public String consultarItensDaAquisicao(Aquisicao aquisicao){		
-		return "itemDaAquisicaoConsultar?aquisicaoId="+aquisicao.getId();
+
+	public String consultarItensDaAquisicao(Aquisicao aquisicao) {
+		return "itemDaAquisicaoConsultar?aquisicaoId=" + aquisicao.getId();
 	}
-	
-	public String consultarItensDaAquisicao(){
-		if(funcionario == null ){
+
+	public String consultarItensDaAquisicao() {
+		if (funcionario == null) {
 			facesContext.warn("Funcionario inexistente");
 			return null;
 		}
-		if(fornecedor == null ){
+		if (fornecedor == null) {
 			facesContext.warn("Fornecedor inexistente");
 			return null;
 		}
-		
-		return "itemDaAquisicaoConsultar?faces-redirect=true&aquisicaoId="+aquisicaoId;
+
+		return "itemDaAquisicaoConsultar?faces-redirect=true&aquisicaoId=" + aquisicaoId;
 	}
-	
 
 	public boolean aquisicaoIdExiste() {
 		if (this.aquisicaoId == null)
@@ -293,10 +296,9 @@ public class AquisicaoControle implements Serializable {
 	public void fornecedorSelecionado(SelectEvent event) {
 		fornecedor = (Fornecedor) event.getObject();
 		fornecedorDocumento = fornecedor.getDocumento();
-		aquisicao.setFornecedor(fornecedor);
 		requestContext.update("formAquisicao:fornecedor");
 	}
-	
+
 	@Transacional
 	public void getFuncionarioPorDocumento() {
 		funcionario = aquisicaoRepositorio.getFuncionarioPorDocumento(funcionarioDocumento);
@@ -306,7 +308,6 @@ public class AquisicaoControle implements Serializable {
 	public void funcionarioSelecionado(SelectEvent event) {
 		funcionario = (Funcionario) event.getObject();
 		funcionarioDocumento = funcionario.getDocumento();
-		aquisicao.setFuncionario(funcionario);
 		requestContext.update("formAquisicao:funcionario");
 	}
 
@@ -317,13 +318,10 @@ public class AquisicaoControle implements Serializable {
 
 	public void inicializa() {
 		recuperarAquisicaoPorId();
-
 		fornecedorDocumento = aquisicao.getFornecedor().getDocumento();
 		getFornecedorPorDocumento();
 		funcionarioDocumento = aquisicao.getFuncionario().getDocumento();
 		getFuncionarioPorDocumento();
-		
-		
 
 	}
 }

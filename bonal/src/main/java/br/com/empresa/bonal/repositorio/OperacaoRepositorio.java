@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.empresa.bonal.entidades.Operacao;
@@ -43,6 +44,20 @@ public class OperacaoRepositorio implements Serializable {
 			return null;
 		}
 	}
+	
+	// método que verifica se elemento existe
+	public Operacao getOperacaoPorCodigo(String codigo) {
+		TypedQuery<Operacao> query = em
+				.createQuery("select c from Operacao c where c.codigo = :pcodigo", Operacao.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 
 	// m�todo que lista com critérios todos os registros
 	public List<Operacao> listarPorCriterios(String nome) {

@@ -27,6 +27,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
 
+	private String message = "";
 	private Long unidadeDeMedidaId;
 
 	// Atributos para Consulta
@@ -100,7 +101,27 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.status = status;
 	}
 
+	// --------------------Metodos usados para redirecionamento ----------
+
+	// Editar um Categoria
+	public String editar(UnidadeDeMedida unidadeDeMedida) {
+		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedida.getId();
+	}
+
+	public String unidadeDeMedidaConsultar() {
+
+		if (!message.equals("")) {
+			unidadeDeMedida = new UnidadeDeMedida();
+			facesContext.info(message);
+			return null;
+		} else {
+			return "unidadeDeMedidaConsultar";
+		}
+
+	}
+
 	// ----------------- METODOS ----------------------
+
 	@PostConstruct
 	@Transacional
 	public void listarTabela() {
@@ -153,27 +174,24 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.unidadeDeMedida.setStatus(true);
 
 		if (unidadeDeMedida.getId() == null) {
-			UnidadeDeMedida existe = unidadeDeMedidaRepositorio.unidadeMedidaExiste(unidadeDeMedida);
-			if (existe != null) {
-				facesContext.warn("Já existe uma unidade de medida registrada com essa sigla.");
-				return null;
-			}
+			UnidadeDeMedida existe = unidadeDeMedidaRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedida.getSigla());
 
-			unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
-			message += "Unidade de Medida Cadastrada com Sucesso.";
+			if (existe != null) {
+				message = "Já existe uma unidade de medida registrada com essa sigla.";
+			} else {
+				unidadeDeMedidaRepositorio.adicionar(unidadeDeMedida);
+				unidadeDeMedida = new UnidadeDeMedida();
+			}
 		} else {
 			unidadeDeMedidaRepositorio.atualizar(unidadeDeMedida);
-			message += "Unidade de medida Atualizada com Sucesso.";
+			unidadeDeMedida = new UnidadeDeMedida();
 		}
-		facesContext.info(message);
 		logger.info(message);
-		unidadeDeMedida = new UnidadeDeMedida();
-		return null;
 	}
 
 	@Transacional
@@ -190,11 +208,6 @@ public class UnidadeDeMedidaControle implements Serializable {
 		this.unidadeDeMedida = new UnidadeDeMedida();
 		listarTabela();
 		return null;
-	}
-
-	// Editar um Categoria
-	public String editar(UnidadeDeMedida unidadeDeMedida) {
-		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedida.getId();
 	}
 
 	public boolean unidadeDeMedidaIdExiste() {

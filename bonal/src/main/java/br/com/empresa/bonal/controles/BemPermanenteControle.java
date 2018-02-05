@@ -29,7 +29,7 @@ import br.com.empresa.bonal.util.tx.Transacional;
 @ViewScoped
 public class BemPermanenteControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	private String message= "";
 	private BemPermanente bemPermanente = new BemPermanente();
 
 	private String categoriaCodigo = "";
@@ -212,24 +212,42 @@ public class BemPermanenteControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String bemPermanenteConsultar(){
+		if(message.equals("")){
+			bemPermanente = new BemPermanente();
+			subCategoria = new SubCategoria();
+			subCategoriaCodigo = null;
+			categoria = new Categoria();
+			categoriaCodigo = null;
+			unidadeDeMedida = new UnidadeDeMedida();
+			unidadeDeMedidaSigla = null;
+			
+			return "bemPermanenteConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.bemPermanente.setStatus(true);
 		
 		subCategoria = bemPermanenteRepositorio.getSubCategoriaPorCodigo(bemPermanente.getSubCategoria().getCodigo());
 
 		if (subCategoria == null) {
-			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
-			return null;
+			message = "SubCategoria inexistente, insira um codigo de categoria válido";
+			
 		}
 		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("bem_permanente")) {
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
+			message = "SubCategoria inválida! Está associada com uma categoria de "
 					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
-					+ ". Não é possível inserir bens permanente nela.");
-			return null;
+					+ ". Não é possível inserir bens permanente nela.";
+		
 		}
 		
 		bemPermanente.setSubCategoria(subCategoria);
@@ -237,8 +255,8 @@ public class BemPermanenteControle implements Serializable {
 		unidadeDeMedida = bemPermanenteRepositorio.getUnidadeDeMedidaPorSigla(unidadeDeMedidaSigla);
 
 		if (unidadeDeMedida == null) {
-			facesContext.warn("unidadeDeMedida inexistente, insira um codigo de categoria válido");
-			return null;
+			message = "unidadeDeMedida inexistente, insira um codigo de categoria válido";
+			
 		}
 		
 		
@@ -246,27 +264,18 @@ public class BemPermanenteControle implements Serializable {
 		
 		ItemDeProducao existe = bemPermanenteRepositorio.getItemDeProducaoPorCodigo(bemPermanente.getCodigo());
 		if (existe != null && (existe.getId()!=bemPermanente.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
+			message = "Codigo duplicado";
+			
 		}
 
 		if (bemPermanente.getId() == null) {
 			bemPermanenteRepositorio.adicionar(bemPermanente);
-			message += "BemPermanente Cadastrada com Sucesso.";
 		} else {
 			bemPermanenteRepositorio.atualizar(bemPermanente);
-			message += "BemPermanente Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		bemPermanente = new BemPermanente();
-		subCategoria = new SubCategoria();
-		subCategoriaCodigo = null;
-		categoria = new Categoria();
-		categoriaCodigo = null;
-		unidadeDeMedida = new UnidadeDeMedida();
-		unidadeDeMedidaSigla = null;
-		return null;
+		
+		
 	}
 
 	@Transacional

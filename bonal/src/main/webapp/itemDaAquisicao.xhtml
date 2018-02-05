@@ -1,0 +1,206 @@
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="aquisicaoId"
+			value="#{itemDaAquisicaoControle.aquisicaoId}" />
+		<f:viewAction action="#{itemDaAquisicaoControle.inicializa}"
+			if="#{param.itemDeProducaoId != null}" />
+		<f:viewParam name="itemDaAquisicaoId"
+			value="#{itemDaAquisicaoControle.itemDaAquisicaoId}" />
+		<f:viewAction action="#{itemDaAquisicaoControle.inicializa}"
+			if="#{param.itemDaAquisicaoId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText
+					rendered="#{itemDaAquisicaoControle.itemDaAquisicaoId == null}"
+					value="Adição de itens na aquisicao #{itemDaAquisicaoControle.aquisicaoId}" />
+				<h:outputText
+					rendered="#{itemDaAquisicaoControle.aquisicaoId == null}"
+					value="Edição de Itens na aquisicao #{itemDaAquisicaoControle.aquisicaoId}" />
+			</h1>
+			<span> <i class="fa fa-fw fa-search" /> <h:button
+					class="botoes-cadastrar" value="Consultar Itens da Aquisicao"
+					outcome="#{itemDaAquisicaoControle.consultarItensDaAquisicao()}" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formItemDaAquisicao">
+			<p:focus context="formItemDaAquisicao" />
+			<p:fieldset legend="Dados do Item">
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="ItemDeProducao" for="itemDeProducao" />
+						<p:inputText placeholder="Código" id="itemDeProducaoCodigo"
+							value="#{itemDaAquisicaoControle.itemDeProducao.codigo}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:inputText placeholder="Nome" id="itemDeProducao"
+							value="#{itemDaAquisicaoControle.itemDeProducao.nome}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="ItemDeProducao"
+							for="itemDeProducaoCodigo" />
+						<p:inputText id="itemDeProducaoCodigo"
+							value="#{itemDaAquisicaoControle.itemDeProducaoCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo do itemDeProducao obrigatório"
+							maxlength="80">
+							<p:clientValidator event="blur" /> 
+							<p:ajax event="keyup" process="@this" update="itemDeProducao unidadeDeMedida unidadeDeMedidaSigla"
+								listener="#{itemDaAquisicaoControle.getItemDeProducaoPorCodigo}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="itemDeProducaoCodigo"
+							id="itemDeProducaoCodigoMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="ItemDeProducao" id="itemDeProducao"
+								value="#{itemDaAquisicaoControle.itemDeProducao.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="itemDeProducaoCodigo"
+								actionListener="#{dialogControle.itemDeProducaoConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="itemDeProducao itemDeProducaoCodigo unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{itemDaAquisicaoControle.itemDeProducaoSelecionado}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="itemDeProducao" id="itemDeProducaoMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Quantidade" for="quantidade" />
+						<p:inputText id="quantidade"
+							value="#{itemDaAquisicaoControle.itemDaAquisicao.quantidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="quantidade do coeficiente tecnico obrigatório"
+							validatorMessage="quantidade do coeficiente tecnico deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="quantidade" id="quantidadeMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Preco unitário" for="precoUnitario" />
+						<p:inputText id="precoUnitario"
+							value="#{itemDaAquisicaoControle.itemDaAquisicao.precoUnitario}"
+							styleClass="form-normal" required="true"
+							requiredMessage="precoUnitario do item obrigatório"
+							validatorMessage="precoUnitario do item deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="precoTotal"
+								listener="#{itemDaAquisicaoControle.calculaPrecoTotal}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="precoUnitario" id="precoUnitarioMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Preco total" for="precoTotal" />
+						<p:inputText id="precoTotal"
+							value="#{itemDaAquisicaoControle.itemDaAquisicao.precoTotal}"
+							styleClass="form-normal" required="true"
+							requiredMessage="precoTotal do item obrigatório"
+							validatorMessage="precoTotal do item deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="precoUnitario" id="precoUnitarioMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Unidade de Medida" for="unidadeDeMedidaSigla" />
+						<p:inputText placeholder="Sigla" id="unidadeDeMedidaSigla"
+							value="#{itemDaAquisicaoControle.itemDeProducao.unidadeDeMedida.sigla}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:inputText placeholder="Nome" id="unidadeDeMedida"
+							value="#{itemDaAquisicaoControle.itemDeProducao.unidadeDeMedida.nome}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+				
+				
+				
+
+
+			</p:fieldset>
+
+			<div class="botoes-cadastrar">
+				<p:commandButton id="salvar" value="Salvar"
+					action="#{itemDaAquisicaoControle.salvar()}"
+					process="@this @form" update="@form :messages"
+					icon="fa fa-fw fa-save" validateClient="true" />
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
+ -->

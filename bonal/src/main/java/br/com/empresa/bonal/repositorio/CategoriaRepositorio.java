@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.empresa.bonal.entidades.Categoria;
+import br.com.empresa.bonal.util.logging.Logging;
 
 public class CategoriaRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -44,21 +45,31 @@ public class CategoriaRepositorio implements Serializable {
 		}
 	}
 
+	// m�todo que lista todos os registros
+	public List<Categoria> listarPorTipo(String tipo) {
+		try {
+			TypedQuery<Categoria> query = em.createQuery("select from categoria where tipo = '"+tipo+"';", Categoria.class);
+			System.out.println(query.getResultList().size());
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@Logging
 	// m�todo que lista com crit�rios todos os registros
 	public List<Categoria> listarPorCriterios(String nome) {
 		String jpql = "select c from Categoria c where ";
 
 		if (nome != null)
-			jpql += "(c.nome like :pnome or c.codigo like :pcodigo or c.descricao like :pdescricao);";
+			jpql += "(c.tipo like :ptipo);";
 		jpql += "1 = 1";
 
 		TypedQuery<Categoria> query = em.createQuery(jpql, Categoria.class);
 
 		if (nome != null)
-			query.setParameter("pnome", '%' + nome + '%')
-			.setParameter("pcodigo", '%' + nome + '%')
-			.setParameter("pdescricao", '%' + nome + '%');
-
+			query.setParameter("ptipo", '%' + nome + '%');
+		System.out.println(query.getResultList().size());
 		return query.getResultList();
 	}
 

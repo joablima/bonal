@@ -182,6 +182,16 @@ public class CoeficienteTecnicoControle implements Serializable {
 		}
 		filtrarTabela();
 	}
+	
+	public void listarTabela(ComponentSystemEvent event){
+        if (!FacesContext.getCurrentInstance().isPostback()){
+        	if (this.coeficientesTecnicos == null) {
+    			lista = coeficienteTecnicoRepositorio.listarTodos();
+    			coeficientesTecnicos = new ArrayList<>(lista);
+    		}
+    		filtrarTabela();
+        }
+    }
 
 	public void filtrarTabela() {
 		Stream<CoeficienteTecnico> stream = lista.stream();
@@ -370,14 +380,6 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 	}
 	
-	 public void listarTabela(ComponentSystemEvent event){
-	        if (!FacesContext.getCurrentInstance().isPostback()){
-	        	if (this.coeficientesTecnicos == null) {
-	    			lista = coeficienteTecnicoRepositorio.listarTodos();
-	    			coeficientesTecnicos = new ArrayList<>(lista);
-	    		}
-	    		filtrarTabela();
-	        }
-	    }
+	 
 	
 }

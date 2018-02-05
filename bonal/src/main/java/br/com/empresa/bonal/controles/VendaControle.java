@@ -1,6 +1,7 @@
 package br.com.empresa.bonal.controles;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,7 @@ public class VendaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Venda venda = new Venda();
-
+	private String message = "";
 	private String clienteDocumento = "";
 	private Cliente cliente = new Cliente();
 
@@ -212,18 +213,32 @@ public class VendaControle implements Serializable {
 		vendaId = vendaRepositorio.adicionarComRetorno(venda);
 	}
 	
+	public String vendaConsultar(){
+		
+		if(message.equals("")){
+			venda = new Venda();
+			cliente = new Cliente();
+			clienteDocumento = null;
+			return "vendaConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
+	
+	
 	@Logging
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.venda.setStatus(true);
-
+		
 		cliente = vendaRepositorio.getClientePorDocumento(venda.getCliente().getDocumento());
 
 		if (cliente == null) {
-			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
-			return null;
+			message = "Unidade de medida inexistente, insira um codigo válido";
 		}
 
 		venda.setCliente(cliente);
@@ -231,25 +246,20 @@ public class VendaControle implements Serializable {
 		funcionario = vendaRepositorio.getFuncionarioPorDocumento(venda.getFuncionario().getDocumento());
 
 		if (funcionario == null) {
-			facesContext.warn("funcionario inexistente");
-			return null;
+			message = "Funcionario inexistente";
 		}
 
 		venda.setFuncionario(funcionario);
 
 		if (venda.getId() == null) {
+			venda.setPrecoTotal(new BigDecimal("0"));
 			vendaId = vendaRepositorio.adicionarComRetorno(venda);
-			message += "Venda Cadastrada com Sucesso.";
 		} else {
 			vendaRepositorio.atualizar(venda);
-			message += "Venda Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
+		
 		logger.info(message);
-		venda = new Venda();
-		cliente = new Cliente();
-		clienteDocumento = null;
-		return null;
+		
 	}
 
 	@Transacional

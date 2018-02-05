@@ -31,6 +31,7 @@ public class ServicoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Servico servico = new Servico();
+	private String message = "";
 
 	private String categoriaCodigo = "";
 	private Categoria categoria = new Categoria();
@@ -210,30 +211,46 @@ public class ServicoControle implements Serializable {
 		listarTabela();
 		return null;
 	}
-
+	
+	public String servicoConsultar(){
+		
+		if(message.equals("")){
+			servico = new Servico();
+			unidadeDeMedida = new UnidadeDeMedida();
+			unidadeDeMedidaSigla = null;
+			subCategoria = new SubCategoria();
+			subCategoriaCodigo = null;
+			categoria = new Categoria();
+			categoriaCodigo = null;
+			return "servicoConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
+	
+	
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.servico.setStatus(true);
 		
 		subCategoria = servicoRepositorio.getSubCategoriaPorCodigo(servico.getSubCategoria().getCodigo());
 		unidadeDeMedida = servicoRepositorio.getUnidadeDeMedidaPorSigla(servico.getUnidadeDeMedida().getSigla());
 
 		if (subCategoria == null) {
-			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
-			return null;
+			message = "SubCategoria inexistente, insira um codigo de categoria válido";
 		}
 		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("servico")) {
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
+			message = "SubCategoria inválida! Está associada com uma categoria de "
 					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
-					+ ". Não é possível inserir servico nela.");
-			return null;
+					+ ". Não é possível inserir servico nela.";
 		}
 
 		if (unidadeDeMedida == null) {
-			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
-			return null;
+			message = "Unidade de medida inexistente, insira um codigo válido";
 		}
 		
 		servico.setSubCategoria(subCategoria);
@@ -241,27 +258,16 @@ public class ServicoControle implements Serializable {
 		
 		ItemDeProducao existe = servicoRepositorio.getItemDeProducaoPorCodigo(servico.getCodigo());
 		if (existe != null && (existe.getId()!=servico.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
+			message = "Codigo duplicado";
 		}
 
 		if (servico.getId() == null) {
 			servicoRepositorio.adicionar(servico);
-			message += "Servico Cadastrada com Sucesso.";
 		} else {
 			servicoRepositorio.atualizar(servico);
-			message += "Servico Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		servico = new Servico();
-		unidadeDeMedida = new UnidadeDeMedida();
-		unidadeDeMedidaSigla = null;
-		subCategoria = new SubCategoria();
-		subCategoriaCodigo = null;
-		categoria = new Categoria();
-		categoriaCodigo = null;
-		return null;
+
 	}
 
 	@Transacional

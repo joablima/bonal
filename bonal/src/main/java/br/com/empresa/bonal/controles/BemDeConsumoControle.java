@@ -31,6 +31,7 @@ public class BemDeConsumoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private BemDeConsumo bemDeConsumo = new BemDeConsumo();
+	private String message ="";
 
 	private String categoriaCodigo = "";
 	private Categoria categoria = new Categoria();
@@ -43,7 +44,6 @@ public class BemDeConsumoControle implements Serializable {
 
 	// Atributos para Consulta
 	private String bemDeConsumoNome = "";
-
 	private Boolean status = true;
 	// Listas para Consulta
 	private List<BemDeConsumo> bensDeConsumo;
@@ -210,30 +210,45 @@ public class BemDeConsumoControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String bemDeConsumoConsultar(){
+		if(message.equals("")){
+
+			bemDeConsumo = new BemDeConsumo();
+			unidadeDeMedida = new UnidadeDeMedida();
+			unidadeDeMedidaSigla = null;
+			subCategoria = new SubCategoria();
+			subCategoriaCodigo = null;
+			categoria = new Categoria();
+			categoriaCodigo = null;
+			return "bemDeConsumoConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.bemDeConsumo.setStatus(true);
 		
 		subCategoria = bemDeConsumoRepositorio.getSubCategoriaPorCodigo(bemDeConsumo.getSubCategoria().getCodigo());
 		unidadeDeMedida = bemDeConsumoRepositorio.getUnidadeDeMedidaPorSigla(bemDeConsumo.getUnidadeDeMedida().getSigla());
 
 		if (subCategoria == null) {
-			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
-			return null;
+			message = "SubCategoria inexistente, insira um codigo de categoria válido";
 		}
 		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("bem_consumo")) {
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
+			message = "SubCategoria inválida! Está associada com uma categoria de "
 					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
-					+ ". Não é possível inserir bens de consumo nela.");
-			return null;
+					+ ". Não é possível inserir bens de consumo nela.";
 		}
 
 		if (unidadeDeMedida == null) {
-			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
-			return null;
+			message = "Unidade de medida inexistente, insira um codigo válido";
 		}
 		
 		bemDeConsumo.setSubCategoria(subCategoria);
@@ -241,27 +256,17 @@ public class BemDeConsumoControle implements Serializable {
 		
 		ItemDeProducao existe = bemDeConsumoRepositorio.getItemDeProducaoPorCodigo(bemDeConsumo.getCodigo());
 		if (existe != null && (existe.getId()!=bemDeConsumo.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
+			message = "Codigo duplicado";
+			
 		}
 
 		if (bemDeConsumo.getId() == null) {
 			bemDeConsumoRepositorio.adicionar(bemDeConsumo);
-			message += "BemDeConsumo Cadastrada com Sucesso.";
 		} else {
 			bemDeConsumoRepositorio.atualizar(bemDeConsumo);
-			message += "BemDeConsumo Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		bemDeConsumo = new BemDeConsumo();
-		unidadeDeMedida = new UnidadeDeMedida();
-		unidadeDeMedidaSigla = null;
-		subCategoria = new SubCategoria();
-		subCategoriaCodigo = null;
-		categoria = new Categoria();
-		categoriaCodigo = null;
-		return null;
+		
 	}
 
 	@Transacional

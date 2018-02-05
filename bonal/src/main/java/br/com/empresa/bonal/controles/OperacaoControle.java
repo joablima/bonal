@@ -28,6 +28,8 @@ public class OperacaoControle implements Serializable {
 
 	private Operacao operacao = new Operacao();
 
+	private String message = "";
+
 	private Long operacaoId;
 
 	// Atributos para Consulta
@@ -153,22 +155,36 @@ public class OperacaoControle implements Serializable {
 		return null;
 	}
 
+	public String produtoConsultar() {
+		if (message.equals("")) {
+
+			operacao = new Operacao();
+			return "produtoConsultar";
+		} else {
+
+			facesContext.info(message);
+			return null;
+
+		}
+	}
+
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
+	public void salvar() {
 		String message = "";
 		this.operacao.setStatus(true);
 		if (operacao.getId() == null) {
-			operacaoRepositorio.adicionar(operacao);
-			message += "Operacao Cadastrada com Sucesso.";
+			Operacao existe = operacaoRepositorio.getOperacaoPorCodigo(operacao.getCodigo());
+
+			if (existe != null) {
+				message = "Código duplicado";
+			} else
+				operacaoRepositorio.adicionar(operacao);
 		} else {
 			operacaoRepositorio.atualizar(operacao);
-			message += "Operacao Atualizada com Sucesso.";
 		}
 		logger.info(message);
-		facesContext.info(message);
-		operacao = new Operacao();
-		return null;
+
 	}
 
 	@Transacional

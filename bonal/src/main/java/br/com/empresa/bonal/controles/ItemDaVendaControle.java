@@ -357,7 +357,6 @@ public class ItemDaVendaControle implements Serializable {
 	public void inicializa() {
 		if (vendaId != null) {
 			recuperarVendaPorId();
-			produtoCodigo = produto.getCodigo();
 		}
 
 		if (itemDaVendaId != null) {

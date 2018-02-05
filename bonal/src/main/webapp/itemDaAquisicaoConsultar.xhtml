@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="aquisicaoId" value="#{itemDaAquisicaoControle.aquisicaoId}" />
+		<f:viewAction action="#{itemDaAquisicaoControle.inicializa}"
+			if="#{param.aquisicaoId != null}" />
+		<f:event type="preRenderView"
+			listener="#{itemDaAquisicaoControle.listarTabela}" />
+	</f:metadata>
+
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText value="Itens da aquisicao #{itemDaAquisicaoControle.aquisicao.id}"></h:outputText>
+			</h1>
+			
+		</div>
+
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText value="Preco total #{itemDaAquisicaoControle.aquisicao.precoTotal}"></h:outputText>
+			</h1>
+			
+		</div>
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formItemDaAquisicaoConsulta">
+			<div class="filtros-consultar">
+
+				<div class="ui-g-12 ui-md-6 ui-lg-4">
+					<p:outputLabel value="Pesquisa" for="itemDaAquisicaoNome" />
+					<p:inputText value="#{itemDaAquisicaoControle.itemDaAquisicaoNome}"
+						id="itemDaAquisicaoNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{itemDaAquisicaoControle.listar}"
+							process="@form" update=":tabelaItensDaAquisicao" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-12 ui-lg-6 botoes">
+					<h:button id="cadastrarItem" value="Cadastrar"
+						outcome="#{itemDaAquisicaoControle.adicionarItemDaAquisicao()}"
+						icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"
+						ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(itemDaAquisicaoControle.itensDaAquisicao)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
+				</div>
+			</div>
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{itemDaAquisicaoControle.status}">
+					<p:ajax update="@form :tabelaItensDaAquisicao"
+						listener="#{itemDaAquisicaoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itensDaAquisicao ativos" />
+			</div>
+		</h:form>
+
+		<h:form id="tabelaItensDaAquisicao">
+			<p:dataTable id="itemDaAquisicao" var="itemDaAquisicao"
+				value="#{itemDaAquisicaoControle.itensDaAquisicao}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{itemDaAquisicao.id}"
+				selection="#{itemDaAquisicaoControle.itemDaAquisicao}"
+				selectionMode="single"
+				emptyMessage="Nenhum ItensDaAquisicao Encontrado!" styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de ItensDaAquisicao
+				</f:facet>
+
+				<p:column headerText="Item" sortBy="#{itemDaAquisicao.itemDeProducao.nome}">
+					<p:outputLabel value="#{itemDaAquisicao.itemDeProducao.nome}" />
+				</p:column>
+
+				<p:column headerText="Quantidade" sortBy="#{itemDaAquisicao.quantidade}">
+					<p:outputLabel value="#{itemDaAquisicao.quantidade}" />
+				</p:column>
+
+				<p:column headerText="Unidade de medida"
+					sortBy="#{itemDaAquisicao.unidadeDeMedida.nome}">
+					<p:outputLabel value="#{itemDaAquisicao.unidadeDeMedida.nome}" />
+				</p:column>
+
+				
+
+				<p:column headerText="Editar" style="width: 7ch;" priority="6">
+					<p:button icon="fa fa-fw fa-pencil" styleClass="tab-btn btn-editar"
+						value="Editar"
+						outcome="#{itemDaAquisicaoControle.editar(itemDaAquisicao)}" />
+				</p:column>
+
+				<p:column headerText="Excluir" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Desativar"
+						action="#{itemDaAquisicaoControle.remover(itemDaAquisicao)}"
+						update="@form" process="@this @form"
+						rendered="#{itemDaAquisicao.status == true}">
+						<p:ajax listener="#{itemDaAquisicaoControle.listar}" />
+					</p:commandButton>
+					<p:commandButton icon="fa fa-fw fa-refresh"
+						styleClass="tab-btn btn-ativar" value="Ativar"
+						action="#{itemDaAquisicaoControle.salvar(itemDaAquisicao)}" update="@form"
+						process="@this @form" rendered="#{itemDaAquisicao.status == false}">
+						<p:ajax listener="#{itemDaAquisicaoControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<p:outputLabel
+						value=" #{itemDaAquisicaoControle.totalItensDaAquisicao} de #{itemDaAquisicaoControle.totalItensDaAquisicaoConsulta}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('itemDaAquisicaoDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
+
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

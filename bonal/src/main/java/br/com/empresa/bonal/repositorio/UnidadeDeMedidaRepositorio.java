@@ -65,10 +65,10 @@ public class UnidadeDeMedidaRepositorio implements Serializable {
 	}
 
 	// método que verifica se elemento existe
-	public UnidadeDeMedida unidadeMedidaExiste(UnidadeDeMedida unidade) {
+	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
 		TypedQuery<UnidadeDeMedida> query = em
 				.createQuery("select u from UnidadeDeMedida u where u.sigla = :sigla", UnidadeDeMedida.class)
-				.setParameter("sigla", unidade.getSigla().toUpperCase());
+				.setParameter("sigla", sigla.toUpperCase());
 
 		try {
 			return query.getSingleResult();

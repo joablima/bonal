@@ -122,7 +122,7 @@
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
-				<h:commandButton id="continuar" value = "Adicionar Itens " actionListener="#{aquisicaoControle.salvar}" process="@this @form"
+				<h:commandButton id="continuar" value = "Adicionar Itens " actionListener="#{aquisicaoControle.salvar()}" process="@this @form"
 					action="#{aquisicaoControle.consultarItensDaAquisicao()}">
 				</h:commandButton>
 				

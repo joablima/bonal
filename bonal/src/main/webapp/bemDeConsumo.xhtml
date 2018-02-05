@@ -197,7 +197,7 @@
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"  disabled="#{param.bemDeConsumoId != null}" 
 								process="@this" update="unidadeDeMedida"
-								actionListener="#{dialogControle.unidadeDeMedidaConsultaDialogShow}">
+								actionListener="#{dialogControle.subCategoriaConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
 									update="unidadeDeMedida unidadeDeMedidaSigla"
 									listener="#{bemDeConsumoControle.unidadeDeMedidaSelecionada}" />
@@ -211,8 +211,8 @@
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
-				<p:commandButton id="salvar" value="Salvar"
-					action="#{bemDeConsumoControle.salvar}" process="@this @form"
+				<p:commandButton id="salvar" value="Salvar" actionListener="#{bemDeConsumoControle.salvar}"
+					action="#{bemDeConsumoControle.bemDeConsumoConsultar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"

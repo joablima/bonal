@@ -28,6 +28,8 @@ public class FuncionarioControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Funcionario funcionario = new Funcionario();
+	
+	private String message = "";
 
 	private String cargoCodigo = "";
 	private Cargo cargo = new Cargo();
@@ -171,19 +173,32 @@ public class FuncionarioControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String funcionarioConsultar(){
+		
+		if(message.equals("")){
+			funcionario = new Funcionario();
+			cargo = new Cargo();
+			cargoCodigo = null;
+			return "funcionarioConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.funcionario.setStatus(true);
 		this.funcionario.setTipo("PESSOA_FISICA");
 		
 		cargo = funcionarioRepositorio.getCargoPorCodigo(cargoCodigo);
 
 		if (cargo == null) {
-			facesContext.warn("cargo inexistente, insira um codigo de cargo válido");
-			return null;
+			message = "cargo inexistente, insira um codigo de cargo válido";
 		}
 	
 		
@@ -192,23 +207,17 @@ public class FuncionarioControle implements Serializable {
 		
 		Funcionario existe = funcionarioRepositorio.getFuncionarioPorCpf(funcionario.getDocumento());
 		if (existe != null && (existe.getId()!=funcionario.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
+			message = "Codigo duplicado";
 		}
 
 		if (funcionario.getId() == null) {
 			funcionarioRepositorio.adicionar(funcionario);
-			message += "Funcionario Cadastrada com Sucesso.";
 		} else {
 			funcionarioRepositorio.atualizar(funcionario);
-			message += "Funcionario Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
+		
 		logger.info(message);
-		funcionario = new Funcionario();
-		cargo = new Cargo();
-		cargoCodigo = null;
-		return null;
+		
 	}
 
 	@Transacional

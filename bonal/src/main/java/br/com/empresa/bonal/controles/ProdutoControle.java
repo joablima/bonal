@@ -29,7 +29,8 @@ public class ProdutoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Produto produto = new Produto();
-
+	
+	private String message = "";
 	
 	private String unidadeDeMedidaSigla = "";
 	private UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
@@ -172,11 +173,25 @@ public class ProdutoControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String produtoConsultar(){
+		if(message.equals("")){
+			produto = new Produto();
+			unidadeDeMedida = new UnidadeDeMedida();
+			unidadeDeMedidaSigla = null;
+			return "produtoConsultar";
+		}
+		else{
+			
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.produto.setStatus(true);
 		
 		unidadeDeMedida = produtoRepositorio.getUnidadeDeMedidaPorSigla(produto.getUnidadeDeMedida().getSigla());
@@ -184,8 +199,7 @@ public class ProdutoControle implements Serializable {
 		
 
 		if (unidadeDeMedida == null) {
-			facesContext.warn("Unidade de medida inexistente, insira um codigo válido");
-			return null;
+			message = "Unidade de medida inexistente, insira um codigo válido";
 		}
 		
 		produto.setUnidadeDeMedida(unidadeDeMedida);
@@ -193,24 +207,18 @@ public class ProdutoControle implements Serializable {
 		Produto existe = produtoRepositorio.getProdutoPorCodigo(produto.getCodigo());
 		
 		if (existe != null && (existe.getId()!=produto.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
+			message = "Codigo duplicado";
 		}
 
 		if (produto.getId() == null) {
 			produto.setQuantidade(new BigDecimal("0"));
 			produtoRepositorio.adicionar(produto);
-			message += "Produto Cadastrada com Sucesso.";
 		} else {
 			produtoRepositorio.atualizar(produto);
-			message += "Produto Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
+		
 		logger.info(message);
-		produto = new Produto();
-		unidadeDeMedida = new UnidadeDeMedida();
-		unidadeDeMedidaSigla = null;
-		return null;
+		
 	}
 
 	@Transacional

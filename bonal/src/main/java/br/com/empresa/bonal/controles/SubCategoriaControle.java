@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,10 +16,11 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.entidades.Categoria;
+import br.com.empresa.bonal.entidades.SubCategoria;
 import br.com.empresa.bonal.repositorio.SubCategoriaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -28,10 +29,12 @@ public class SubCategoriaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private SubCategoria subCategoria = new SubCategoria();
+	
 
 	private String categoriaCodigo = "";
 	private Categoria categoria = new Categoria();
-
+	private String message="";
+	private String filtroTipo = "";
 	private Long subCategoriaId;
 
 	// Atributos para Consulta
@@ -120,10 +123,27 @@ public class SubCategoriaControle implements Serializable {
 		this.subCategoria = subCategoria;
 	}
 
+	public String getFiltroTipo() {
+		return filtroTipo;
+	}
+
+	public void setFiltroTipo(String filtroTipo) {
+		this.filtroTipo = filtroTipo;
+	}
+
 	// ----------------- METODOS ----------------------
-	@PostConstruct
+	
 	@Transacional
 	public void listarTabela() {
+		if (this.subCategorias == null) {
+			lista = subCategoriaRepositorio.listarTodos();
+			subCategorias = new ArrayList<>(lista);
+		}
+		filtrarTabela();
+	}
+	@Logging
+	public void preRenderView(ComponentSystemEvent event){
+		System.out.println(filtroTipo);
 		if (this.subCategorias == null) {
 			lista = subCategoriaRepositorio.listarTodos();
 			subCategorias = new ArrayList<>(lista);
@@ -138,6 +158,10 @@ public class SubCategoriaControle implements Serializable {
 				| (c.getCodigo().toLowerCase().contains(subCategoriaNome.toLowerCase().trim()))
 				| (c.getCategoria().getNome().toLowerCase().contains(subCategoriaNome.toLowerCase().trim()))
 				| c.getDescricao().toLowerCase().contains(subCategoriaNome.toLowerCase().trim()));
+		
+		if(!filtroTipo.equals("")){
+			stream = stream.filter(c -> (c.getCategoria().getTipo().toString().equals(filtroTipo)));
+		}
 
 		if (status.equals(true))
 			stream = stream.filter(c -> (c.getStatus().equals(status)));
@@ -171,43 +195,47 @@ public class SubCategoriaControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String subCategoriaConsultar(){
+		if(message.equals("")){
+			subCategoria = new SubCategoria();
+			categoria = new Categoria();
+			categoriaCodigo = null;
+			return "subCategoriaConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.subCategoria.setStatus(true);
 		
-		categoria = subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
-
-		if (categoria == null) {
-			facesContext.warn("categoria inexistente, insira um codigo de categoria válido");
-			return null;
-		}
-	
+		getCategoriaPorCodigo();
 		
-		subCategoria.setCategoria(categoria);
+		if(categoria == null){
+			message = "Categoria inexistente";
+		}
 		
 		
 		SubCategoria existe = subCategoriaRepositorio.getSubCategoriaPorCodigo(subCategoria.getCodigo());
 		if (existe != null && (existe.getId()!=subCategoria.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
+			message = "Codigo duplicado";
+			
 		}
 
 		if (subCategoria.getId() == null) {
 			subCategoriaRepositorio.adicionar(subCategoria);
-			message += "SubCategoria Cadastrada com Sucesso.";
 		} else {
 			subCategoriaRepositorio.atualizar(subCategoria);
-			message += "SubCategoria Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		subCategoria = new SubCategoria();
-		categoria = new Categoria();
-		categoriaCodigo = null;
-		return null;
+		
+		
 	}
 
 	@Transacional
@@ -247,6 +275,7 @@ public class SubCategoriaControle implements Serializable {
 	@Transacional
 	public void getCategoriaPorCodigo() {
 		categoria = subCategoriaRepositorio.getCategoriaPorCodigo(categoriaCodigo);
+		subCategoria.setCategoria(categoria);
 	}
 
 	

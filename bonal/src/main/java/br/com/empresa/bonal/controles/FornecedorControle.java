@@ -28,6 +28,7 @@ public class FornecedorControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Fornecedor fornecedor = new Fornecedor();
+	private String message = "";
 
 	private Long fornecedorId;
 
@@ -180,30 +181,36 @@ public class FornecedorControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String fornecedorConsultar(){
+		
+		if(message.equals("")){
+			fornecedor = new Fornecedor();
+			return "fornecedorConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.fornecedor.setStatus(true);
 
 		Fornecedor existe = fornecedorRepositorio.getFornecedorPorDocumento(fornecedor.getDocumento());
 		if (existe != null && (existe.getId() != fornecedor.getId())) {
-			facesContext.warn("Documento duplicado");
-			return null;
+			message = "Documento duplicado";
 		}
 
 		if (fornecedor.getId() == null) {
 			fornecedorRepositorio.adicionar(fornecedor);
-			message += "Fornecedor Cadastrada com Sucesso.";
 		} else {
 			fornecedorRepositorio.atualizar(fornecedor);
-			message += "Fornecedor Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		fornecedor = new Fornecedor();
-		return null;
 	}
 
 	@Transacional

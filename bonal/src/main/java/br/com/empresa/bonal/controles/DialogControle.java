@@ -1,7 +1,9 @@
 package br.com.empresa.bonal.controles;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.view.ViewScoped;
@@ -12,25 +14,15 @@ import org.primefaces.context.RequestContext;
 
 @Named
 @ViewScoped
-public class DialogControle implements Serializable{
+public class DialogControle implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Inject
 	private RequestContext requestContext;
-
-	public void cargoCadastroDialogShow() {
-		Map<String, Object> options = optionsDialog();
-		requestContext.openDialog("/dialogs/cargoCadastroDialog", options, null);
-	}
 
 	public void cargoConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/cargoConsultaDialog", options, null);
-	}
-	
-	public void categoriaCadastroDialogShow() {
-		Map<String, Object> options = optionsDialog();
-		requestContext.openDialog("/dialogs/categoriaCadastroDialog", options, null);
 	}
 
 	public void categoriaConsultaDialogShow() {
@@ -38,55 +30,41 @@ public class DialogControle implements Serializable{
 		requestContext.openDialog("/dialogs/categoriaConsultaDialog", options, null);
 	}
 
-	public void unidadeDeMedidaCadastroDialogShow() {
-		Map<String, Object> options = optionsDialog();
-		requestContext.openDialog("/dialogs/unidadeDeMedidaCadastroDialog", options, null);
-	}
-
-	
 	public void unidadeDeMedidaConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/unidadeDeMedidaConsultaDialog", options, null);
 	}
-	
-	public void subCategoriaCadastroDialogShow() {
-		Map<String, Object> options = optionsDialog();
-		requestContext.openDialog("/dialogs/subCategoriaCadastroDialog", options, null);
-	}
 
-	
 	public void subCategoriaConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/subCategoriaConsultaDialog", options, null);
 	}
-	
+
 
 	public void itemDeProducaoConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/itemDeProducaoConsultaDialog", options, null);
 	}
-	
+
 	public void clienteConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/clienteConsultaDialog", options, null);
 	}
-	
+
 	public void funcionarioConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/funcionarioConsultaDialog", options, null);
 	}
-	
+
 	public void fornecedorConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/fornecedorConsultaDialog", options, null);
 	}
-	
+
 	public void produtoConsultaDialogShow() {
 		Map<String, Object> options = optionsDialog();
 		requestContext.openDialog("/dialogs/produtoConsultaDialog", options, null);
 	}
-	
-
 
 	private Map<String, Object> optionsDialog() {
 		Map<String, Object> options = new HashMap<String, Object>();
@@ -95,6 +73,8 @@ public class DialogControle implements Serializable{
 		options.put("resizable", false);
 		options.put("contentWidth", 720);
 		options.put("contentHeight", 500);
+		options.put("includeViewParams", true);
+
 		return options;
 	}
 
@@ -114,6 +94,7 @@ public class DialogControle implements Serializable{
 		// options.put("contentHeight", "100%");
 		// options.put("includeViewParams", true);
 		// options.put("headerElement", "customheader");
-		// requestContext.openDialog("/dialogs/cargoConsultaDialog", options, null);
+		// requestContext.openDialog("/dialogs/cargoConsultaDialog", options,
+		// null);
 	}
 }

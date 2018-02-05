@@ -29,6 +29,7 @@ public class ClienteControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Cliente cliente = new Cliente();
+	private String message = "";
 
 	private Long clienteId;
 
@@ -157,30 +158,37 @@ public class ClienteControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String clienteConsultar(){
+		
+		if(message.equals("")){
+
+			cliente = new Cliente();
+			return "clienteConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.cliente.setStatus(true);
 
 		Cliente existe = clienteRepositorio.getClientePorDocumento(cliente.getDocumento());
 		if (existe != null && (existe.getId() != cliente.getId())) {
-			facesContext.warn("Documento duplicado");
-			return null;
+			message = "Documento duplicado";
 		}
 
 		if (cliente.getId() == null) {
 			clienteRepositorio.adicionar(cliente);
-			message += "Cliente Cadastrada com Sucesso.";
 		} else {
 			clienteRepositorio.atualizar(cliente);
-			message += "Cliente Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		cliente = new Cliente();
-		return null;
 	}
 
 	@Transacional

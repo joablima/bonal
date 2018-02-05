@@ -32,6 +32,8 @@ public class CargoControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Cargo cargo = new Cargo();
+	
+	private String message = "";
 
 	private String categoriaCodigo = "";
 	private Categoria categoria = new Categoria();
@@ -217,49 +219,54 @@ public class CargoControle implements Serializable {
 		listarTabela();
 		return null;
 	}
+	
+	public String cargoConsultar(){
+		
+		if(message.equals("")){
+			cargo = new Cargo();
+			subCategoria = new SubCategoria();
+			subCategoriaCodigo = null;
+			categoria = new Categoria();
+			categoriaCodigo = null;
+			return "cargoConsultar";
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
+	}
 
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.cargo.setStatus(true);
 
 		subCategoria = cargoRepositorio.getSubCategoriaPorCodigo(cargo.getSubCategoria().getCodigo());
 
 		if (subCategoria == null) {
-			facesContext.warn("SubCategoria inexistente, insira um codigo de categoria válido");
-			return null;
+			message = "SubCategoria inexistente, insira um codigo de subcategoria válido";
 		}
 		if (!subCategoria.getCategoria().getTipo().toString().toLowerCase().equals("mao_de_obra")) {
-			facesContext.warn("SubCategoria inválida! Está associada com uma categoria de "
+			message = "SubCategoria inválida! Está associada com uma categoria de "
 					+ subCategoria.getCategoria().getTipo().toString().toLowerCase()
-					+ ". Não é possível inserir cargos nela.");
-			return null;
+					+ ". Não é possível inserir cargos nela.";
 		}
 
 		cargo.setSubCategoria(subCategoria);
 
 		ItemDeProducao existe = cargoRepositorio.getItemDeProducaoPorCodigo(cargo.getCodigo());
 		if (existe != null && (existe.getId() != cargo.getId())) {
-			facesContext.warn("Codigo duplicado");
-			return null;
+			message = "Codigo duplicado";
 		}
 
 		if (cargo.getId() == null) {
 			cargoRepositorio.adicionar(cargo);
-			message += "Cargo Cadastrada com Sucesso.";
 		} else {
 			cargoRepositorio.atualizar(cargo);
-			message += "Cargo Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		cargo = new Cargo();
-		subCategoria = new SubCategoria();
-		subCategoriaCodigo = null;
-		categoria = new Categoria();
-		categoriaCodigo = null;
-		return null;
+		
 	}
 
 	@Transacional

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,7 +29,7 @@ public class CategoriaControle implements Serializable {
 
 	private Categoria categoria = new Categoria();
 	private String filtroTipo = "";
-
+	private String message = "";
 	private Long categoriaId;
 
 	// Atributos para Consulta
@@ -135,13 +135,26 @@ public class CategoriaControle implements Serializable {
 	}
 
 	// ----------------- METODOS ----------------------
-	@PostConstruct
+	@Logging
 	@Transacional
 	public void listarTabela() {
+
 		if (this.categorias == null) {
 			lista = categoriaRepositorio.listarTodos();
+
 			categorias = new ArrayList<>(lista);
 		}
+
+		filtrarTabela();
+	}
+
+	@Logging
+	@Transacional
+	public void preRenderView(ComponentSystemEvent event) {
+
+		if (this.categorias == null)
+			lista = categoriaRepositorio.listarTodos();
+
 		filtrarTabela();
 	}
 
@@ -155,22 +168,23 @@ public class CategoriaControle implements Serializable {
 		if (status.equals(true))
 			stream = stream.filter(c -> (c.getStatus().equals(status)));
 
+		if (!filtroTipo.equals("")) {
+			stream = stream.filter(c -> (c.getTipo().toString().equals(filtroTipo)));
+		}
+
 		categorias = stream.collect(Collectors.toList());
 	}
-	
-	
 
 	// M�todo chamado ao carregar pagina de consulta para popular tabela
 	public String listar() {
-		if(filtroTipo.equals("")){
+		if (filtroTipo.equals("")) {
 			listarTabela();
 			return null;
-		}
-		else{
-			//listarTabela();
+		} else {
+			// listarTabela();
 			return null;
 		}
-		
+
 	}
 
 	// Limpar tabela da consulta
@@ -189,28 +203,33 @@ public class CategoriaControle implements Serializable {
 		salvar();
 	}
 
+	public String categoriaConsultar() {
+		if (message.equals("")) {
+
+			categoria = new Categoria();
+			return "categoriaConsultar";
+		} else {
+			facesContext.info(message);
+			return null;
+		}
+	}
+
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.categoria.setStatus(true);
 
 		if (categoria.getId() == null) {
 			Categoria existe = categoriaRepositorio.codigoExiste(categoria);
 			if (existe != null) {
-				facesContext.warn("Já existe uma Categoria registrada com esse código." + existe.resumo());
-				return null;
+				message = "Já existe uma Categoria registrada com esse código.";
 			}
 			categoriaRepositorio.adicionar(categoria);
-			message += "Categoria Cadastrada com Sucesso.";
 		} else {
 			categoriaRepositorio.atualizar(categoria);
-			message += "Categoria Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		categoria = new Categoria();
-		return null;
 	}
 
 	@Transacional

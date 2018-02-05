@@ -9,12 +9,9 @@
 <ui:composition template="/template/dialog.xhtml">
 	<ui:define name="frame">
 	<f:metadata>
-		<f:viewParam name="categoriaCodigo"
-			value="#{subCategoriaControle.categoriaCodigo}" />
-		<f:viewAction
-			action="#{subCategoriaControle.getCategoriaPorCodigo}"
-			if="#{param.categoriaCodigo != null}" />
-	</f:metadata>
+        <f:viewParam name="filtroTipo" value="#{subCategoriaControle.filtroTipo}"/>
+        <f:event type="preRenderView" listener="#{subCategoriaControle.preRenderView}"/>
+    </f:metadata>
 
 		<p:messages id="messages" globalOnly="true" />
 
@@ -35,10 +32,7 @@
 						action="#{subCategoriaControle.limpar}" process="@form"
 						update="formSubCategoriaConsultaDialog" styleClass="white-button" />
 
-<!-- 
-					<p:commandButton icon="fa fa-search" styleClass="white-button"
-						process="@this" update="formSubCategoriaConsultaDialog"
-						actionListener="#{dialogControle.subCategoriaCadastroDialogShow}" /> -->
+
 				</div>
 
 			</div>

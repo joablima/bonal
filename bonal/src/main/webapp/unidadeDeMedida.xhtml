@@ -82,8 +82,9 @@
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
-				<p:commandButton id="salvar" value="Salvar"
-					action="#{unidadeDeMedidaControle.salvar()}" process="@this @form"
+				<p:commandButton id="salvar" value="Salvar" 
+					actionListener="#{unidadeDeMedidaControle.salvar}" process="@this @form"
+					action="#{unidadeDeMedidaControle.unidadeDeMedidaConsultar}"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"
