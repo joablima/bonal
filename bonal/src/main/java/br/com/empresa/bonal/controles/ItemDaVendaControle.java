@@ -33,6 +33,7 @@ public class ItemDaVendaControle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private ItemDaVenda itemDaVenda = new ItemDaVenda();
+	private String message = "";
 
 	private String produtoCodigo = "";
 	private Produto produto = new Produto();
@@ -203,9 +204,29 @@ public class ItemDaVendaControle implements Serializable {
 
 		itensDaVenda = stream.collect(Collectors.toList());
 	}
-	
+	@Logging 
 	public String consultarItensDaVenda(){
-		return "itemDaVendaConsultar?vendaId="+vendaId;
+		System.out.println(vendaId);
+		return "itemDaVendaConsultar?faces-redirect=true&vendaId="+vendaId;
+	}
+	
+	public String itemDaVendaConsultar(){
+		if(message.equals("")){
+			itemDaVenda = new ItemDaVenda();
+			
+			unidadeDeMedida = new UnidadeDeMedida();
+			unidadeDeMedidaSigla = null;
+			
+			produto = new Produto();
+			produtoCodigo = null;
+			
+			venda = new Venda();
+			return consultarItensDaVenda();
+		}
+		else{
+			facesContext.info(message);
+			return null;
+		}
 	}
 
 	// M�todo chamado ao carregar pagina de consulta para popular tabela
@@ -228,6 +249,10 @@ public class ItemDaVendaControle implements Serializable {
 	@Transacional
 	public String salvar(ItemDaVenda itemDaVenda) {
 		itemDaVenda.setStatus(true);
+
+		BigDecimal aux = venda.getPrecoTotal().add(itemDaVenda.getPrecoTotal());
+		venda.setPrecoTotal(aux);
+		itemDaVendaRepositorio.atualizar(venda);
 		
 		itemDaVendaRepositorio.atualizar(itemDaVenda);
 		this.itensDaVenda = null;
@@ -239,15 +264,14 @@ public class ItemDaVendaControle implements Serializable {
 	@Logging
 	// M�todos que utilizam m�todos do reposit�rio
 	@Transacional
-	public String salvar() {
-		String message = "";
+	public void salvar() {
+		message = "";
 		this.itemDaVenda.setStatus(true);
 
 		produto = itemDaVendaRepositorio.getProdutoPorCodigo(produto.getCodigo());
 
 		if (produto == null) {
-			facesContext.warn("produto inexistente, insira um codigo de produto válido");
-			return null;
+			message = "produto inexistente, insira um codigo de produto válido";
 		}
 
 		itemDaVenda.setProduto(produto);
@@ -257,8 +281,7 @@ public class ItemDaVendaControle implements Serializable {
 		unidadeDeMedida = itemDaVendaRepositorio.getUnidadeDeMedidaPorSigla(produto.getUnidadeDeMedida().getSigla());
 
 		if (unidadeDeMedida == null) {
-			facesContext.warn("unidadeDeMedida inexistente, insira uma sigla de unidadeDeMedida válido");
-			return null;
+			message = "unidadeDeMedida inexistente, insira uma sigla de unidadeDeMedida válido";
 		}
 
 		itemDaVenda.setUnidadeDeMedida(unidadeDeMedida);
@@ -266,8 +289,7 @@ public class ItemDaVendaControle implements Serializable {
 		venda = itemDaVendaRepositorio.getVendaPorId(vendaId);
 
 		if (venda == null) {
-			facesContext.warn("venda inexistente, insira uma sigla de unidadeDeMedida válido");
-			return null;
+			message = "venda inexistente, insira uma sigla de unidadeDeMedida válido";
 		}
 
 		itemDaVenda.setVenda(venda);
@@ -276,25 +298,12 @@ public class ItemDaVendaControle implements Serializable {
 			venda.setPrecoTotal(venda.getPrecoTotal().add(itemDaVenda.getPrecoTotal()));
 			itemDaVendaRepositorio.atualizar(venda);
 			itemDaVendaRepositorio.adicionar(itemDaVenda);
-			message += "ItemDaVenda Cadastrada com Sucesso.";
 		} else {
 			itemDaVendaRepositorio.atualizar(itemDaVenda);
-			message += "ItemDaVenda Atualizada com Sucesso.";
 		}
-		facesContext.info(message);
 		logger.info(message);
-		itemDaVenda = new ItemDaVenda();
 		
-		unidadeDeMedida = new UnidadeDeMedida();
-		unidadeDeMedidaSigla = null;
-		
-		produto = new Produto();
-		produtoCodigo = null;
-		
-		venda = new Venda();
-		vendaId =null;
 				
-		return null;
 	}
 
 	@Transacional
@@ -316,6 +325,10 @@ public class ItemDaVendaControle implements Serializable {
 	@Transacional
 	public String remover(ItemDaVenda itemDaVenda) {
 		itemDaVenda.setStatus(false);
+		BigDecimal aux = venda.getPrecoTotal().subtract(itemDaVenda.getPrecoTotal());
+		venda.setPrecoTotal(aux);
+		itemDaVendaRepositorio.atualizar(venda);
+		
 		itemDaVendaRepositorio.atualizar(itemDaVenda);
 		this.itensDaVenda = null;
 		this.itemDaVenda = new ItemDaVenda();

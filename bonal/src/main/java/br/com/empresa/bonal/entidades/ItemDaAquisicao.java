@@ -2,14 +2,18 @@ package br.com.empresa.bonal.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class ItemDaAquisicao implements Serializable{
@@ -37,6 +41,11 @@ public class ItemDaAquisicao implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "aquisicao")
 	private Aquisicao aquisicao;
+	
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "data_cadastro")
+	private Calendar dataCadastro = Calendar.getInstance();
 	
 	
 	private Boolean status;
@@ -103,6 +112,14 @@ public class ItemDaAquisicao implements Serializable{
 
 	public void setPrecoTotal(BigDecimal precoTotal) {
 		this.precoTotal = precoTotal;
+	}
+
+	public Calendar getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Calendar dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}	
 	
 	

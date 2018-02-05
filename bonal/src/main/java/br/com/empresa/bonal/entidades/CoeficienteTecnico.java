@@ -2,8 +2,10 @@ package br.com.empresa.bonal.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
 @Entity
@@ -23,6 +27,10 @@ public class CoeficienteTecnico implements Serializable{
 	@JoinColumn(name="produto")
 	private Produto produto;
 	
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "data_cadastro")
+	private Calendar dataCadastro = Calendar.getInstance();
 
 	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name="unidadeDeMedida")
@@ -81,6 +89,16 @@ public class CoeficienteTecnico implements Serializable{
 
 	public void setUnidadeDeMedida(UnidadeDeMedida unidadeDeMedida) {
 		this.unidadeDeMedida = unidadeDeMedida;
+	}
+	
+	
+
+	public Calendar getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Calendar dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	@Override

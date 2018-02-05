@@ -43,7 +43,8 @@ public class ItemDeProducao implements Serializable{
 	private UnidadeDeMedida unidadeDeMedida;	
 	
 	private Boolean status;
-
+	
+	
 
 	@Version
 	private Integer version;

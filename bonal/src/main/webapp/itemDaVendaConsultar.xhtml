@@ -25,7 +25,7 @@
 		</div>
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText value="Preço total #{itemDaVendaControle.venda.precoTotal}"></h:outputText>
+				<h:outputText id="precoTotal" value="Preço total #{itemDaVendaControle.venda.precoTotal}"></h:outputText>
 			</h1>
 		</div>
 
@@ -87,6 +87,10 @@
 				<p:column headerText="Quantidade" sortBy="#{itemDaVenda.quantidade}">
 					<p:outputLabel value="#{itemDaVenda.quantidade}" />
 				</p:column>
+				
+					<p:column headerText="Preco total" sortBy="#{itemDaVenda.precoTotal}">
+					<p:outputLabel value="#{itemDaVenda.precoTotal}" />
+				</p:column>
 
 				<p:column headerText="Unidade de medida"
 					sortBy="#{itemDaVenda.unidadeDeMedida.nome}">
@@ -105,13 +109,13 @@
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Desativar"
 						action="#{itemDaVendaControle.remover(itemDaVenda)}"
-						update="@form" process="@this @form"
+						update="@form precoTotal" process="@this @form"
 						rendered="#{itemDaVenda.status == true}">
 						<p:ajax listener="#{itemDaVendaControle.listar}" />
 					</p:commandButton>
 					<p:commandButton icon="fa fa-fw fa-refresh"
 						styleClass="tab-btn btn-ativar" value="Ativar"
-						action="#{itemDaVendaControle.salvar(itemDaVenda)}" update="@form"
+						action="#{itemDaVendaControle.salvar(itemDaVenda)}" update="@form precoTotal"
 						process="@this @form" rendered="#{itemDaVenda.status == false}">
 						<p:ajax listener="#{itemDaVendaControle.listar}" />
 					</p:commandButton>
