@@ -275,7 +275,13 @@ public class ProdutoControle implements Serializable {
 	public void selecionarProduto(Produto produto) {
 		requestContext.closeDialog(produto);
 	}
-
+	
+	public void calculaMargemDeLucro(){
+		if(produto.getCusto()!=null && produto.getVenda()!=null){
+			produto.setMargemDeLucro();
+		}
+	}
+	
 	public void inicializa() {
 		recuperarProdutoPorId();
 		

@@ -19,6 +19,7 @@ import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Cliente;
 import br.com.empresa.bonal.entidades.Funcionario;
+import br.com.empresa.bonal.entidades.ItemDaVenda;
 import br.com.empresa.bonal.entidades.Venda;
 import br.com.empresa.bonal.repositorio.VendaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -34,9 +35,11 @@ public class VendaControle implements Serializable {
 	private String message = "";
 	private String clienteDocumento = "";
 	private Cliente cliente = new Cliente();
-
+	
 	private String funcionarioDocumento = "";
 	private Funcionario funcionario = new Funcionario();
+	
+	private List<ItemDaVenda> itensDaVenda = new ArrayList<>();
 
 	private Long vendaId;
 

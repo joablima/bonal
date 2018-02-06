@@ -197,7 +197,7 @@
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"  disabled="#{param.bemDeConsumoId != null}" 
 								process="@this" update="unidadeDeMedida"
-								actionListener="#{dialogControle.subCategoriaConsultaDialogShow}">
+								actionListener="#{dialogControle.unidadeDeMedidaConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
 									update="unidadeDeMedida unidadeDeMedidaSigla"
 									listener="#{bemDeConsumoControle.unidadeDeMedidaSelecionada}" />

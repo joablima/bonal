@@ -34,6 +34,13 @@ public class Produto implements Serializable {
 	private String descricao;
 
 	private BigDecimal quantidade;
+	
+
+	private BigDecimal custo;
+
+	private BigDecimal venda;
+	
+	private BigDecimal margemDeLucro;
 
 	private Boolean status;
 
@@ -98,6 +105,33 @@ public class Produto implements Serializable {
 
 	public Integer getVersion() {
 		return version;
+	}
+	
+	
+
+	public BigDecimal getMargemDeLucro() {
+		return margemDeLucro;
+	}
+
+	public void setMargemDeLucro() {
+		this.margemDeLucro = getVenda().subtract(getCusto()).divide(getVenda()).multiply(new BigDecimal("100"));
+	}
+
+	
+	public BigDecimal getCusto() {
+		return custo;
+	}
+
+	public void setCusto(BigDecimal custo) {
+		this.custo = custo;
+	}
+
+	public BigDecimal getVenda() {
+		return venda;
+	}
+
+	public void setVenda(BigDecimal venda) {
+		this.venda = venda;
 	}
 
 	public Boolean getStatus() {

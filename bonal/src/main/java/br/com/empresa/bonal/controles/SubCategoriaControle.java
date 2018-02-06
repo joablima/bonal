@@ -142,6 +142,7 @@ public class SubCategoriaControle implements Serializable {
 		filtrarTabela();
 	}
 	@Logging
+	@Transacional
 	public void preRenderView(ComponentSystemEvent event){
 		System.out.println(filtroTipo);
 		if (this.subCategorias == null) {

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -146,9 +147,19 @@ public class AquisicaoControle implements Serializable {
 	}
 
 	// ----------------- METODOS ----------------------
-	@PostConstruct
+	
 	@Transacional
 	public void listarTabela() {
+		if (this.aquisicoes == null) {
+			lista = aquisicaoRepositorio.listarTodos();
+			aquisicoes = new ArrayList<>(lista);
+		}
+		filtrarTabela();
+	}
+	
+
+	@Transacional
+	public void preRenderView(ComponentSystemEvent event) {
 		if (this.aquisicoes == null) {
 			lista = aquisicaoRepositorio.listarTodos();
 			aquisicoes = new ArrayList<>(lista);

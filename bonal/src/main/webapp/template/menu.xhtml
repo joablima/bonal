@@ -8,52 +8,44 @@
 <nav>
 	<h:form id="menuLateral">
 		<p:panelMenu>
-			<p:submenu label="Consultar">
-				<p:submenu label="Categorias">
-					<p:menuitem value="Categoria" outcome="categoriaConsultar"
-						icon="ui-icon-disk" />
-					<p:menuitem value="Subcategoria" outcome="subCategoriaConsultar"
-						icon="ui-icon-disk" />
-				</p:submenu>
-
-				<p:submenu label="Itens de produção">
-					<p:menuitem value="Bem de consumo" outcome="bemDeConsumoConsultar"
-						icon="ui-icon-disk" />
-					<p:menuitem value="Bem permanente" outcome="bemPermanenteConsultar"
-						icon="ui-icon-disk" />
-					<p:menuitem value="Serviço" outcome="servicoConsultar"
-						icon="ui-icon-disk" />
-					<p:menuitem value="Cargo" outcome="cargoConsultar"
-						icon="ui-icon-disk" />
-				</p:submenu>
-
-				<p:submenu label="Pessoas">
-					<p:menuitem value="Funcionario" outcome="funcionarioConsultar"
-						icon="ui-icon-disk" />
-					<p:menuitem value="Fornecedor" outcome="fornecedorConsultar"
-						icon="ui-icon-disk" />
-					<p:menuitem value="Cliente" outcome="clienteConsultar"
-						icon="ui-icon-disk" />
-				</p:submenu>
 
 
-				<p:submenu label="Operações">
-					<p:menuitem value="Operação" outcome="operacaoConsultar"
+			<p:submenu label="PDS BONAL">
+				<p:submenu label="Catálogo">
+					<p:menuitem value="Produto" outcome="produtoConsultar"
 						icon="ui-icon-disk" />
 					<p:menuitem value="Unidade de medida"
 						outcome="unidadeDeMedidaConsultar" icon="ui-icon-disk" />
-				</p:submenu>
-
-
-				<p:submenu label="Produto">
-					<p:menuitem value="Produto" outcome="produtoConsultar"
+						<p:menuitem value="Categorias" outcome="categoriaConsultar"
+						icon="ui-icon-disk" />
+						<p:menuitem value="Subcategorias" outcome="subCategoriaConsultar"
+						icon="ui-icon-disk" />
+						<p:menuitem value="Bens de consumo" outcome="bemDeConsumoConsultar"
+						icon="ui-icon-disk" />
+						<p:menuitem value="Bens permamentse" outcome="bemPermanenteConsultar"
+						icon="ui-icon-disk" />
+						<p:menuitem value="Serviços" outcome="servicoConsultar"
 						icon="ui-icon-disk" />
 				</p:submenu>
-
+				
+				<p:submenu label="Vendas">
+					<p:menuitem value="Pedidos" outcome="vendaConsultar"
+						icon="ui-icon-disk" />
+					<p:menuitem value="Clientes"
+						outcome="clienteConsultar" icon="ui-icon-disk" />
+				</p:submenu>
+				
+				
+				<p:submenu label="Compras">
+					<p:menuitem value="Pedidos" outcome="aquisicaoConsultar"
+						icon="ui-icon-disk" />
+					<p:menuitem value="Fornecedores"
+						outcome="fornecedorConsultar" icon="ui-icon-disk" />
+				</p:submenu>
+				
 			</p:submenu>
-
-
-
+			
+		
 			<p:submenu label="Ajuda">
 				<p:menuitem value="Bem Vindo" styleClass="cursor-help"
 					outcome="index" icon="ui-icon-disk" />

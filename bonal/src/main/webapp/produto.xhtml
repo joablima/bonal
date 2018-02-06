@@ -23,8 +23,8 @@
 				<h:outputText rendered="#{produtoControle.produtoId != null}"
 					value="Edição de Produto" />
 			</h1>
-			<span> <i class="fa fa-fw fa-search" /> <h:button class="botoes-cadastrar"
-					value="Consultar Produtos" 
+			<span> <i class="fa fa-fw fa-search" /> <h:button
+					class="botoes-cadastrar" value="Consultar Produtos"
 					outcome="produtoConsultar" />
 			</span>
 		</div>
@@ -44,7 +44,7 @@
 							styleClass="form-normal" required="true"
 							requiredMessage="Código do produto obrigatório"
 							validatorMessage="Código do produto deve ter no minimo 2 caracteres"
-							maxlength="80" mask="99-99">
+							maxlength="80" mask="#{produtoControle.mask}">
 							<p:clientValidator event="blur" />
 
 						</p:inputMask>
@@ -94,6 +94,53 @@
 					</div>
 				</div>
 
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Custo" for="custo" />
+						<p:inputText id="custo" value="#{produtoControle.produto.custo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="custo do produto obrigatório"
+							validatorMessage="custo do produto deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="margemDeLucro"
+								listener="#{produtoControle.calculaMargemDeLucro}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="custo" id="custoMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Venda" for="venda" />
+						<p:inputText id="venda" value="#{produtoControle.produto.venda}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Venda do produto obrigatório"
+							validatorMessage="Venda do produto deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="margemDeLucro"
+								listener="#{produtoControle.calculaMargemDeLucro}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="venda" id="vendaMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Margem de lucro aproximada em porcentagem" />
+						<p:inputText placeholder="Margem de lucro" id="margemDeLucro"
+							value="#{produtoControle.produto.margemDeLucro}"
+							styleClass="form-normal" required="true" readonly="true" />
+					</div>
+				</div>
+
 
 
 				<div class="ui-g">
@@ -140,7 +187,8 @@
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
-				<p:commandButton id="salvar" value="Salvar" actionListener="#{produtoControle.salvar}"
+				<p:commandButton id="salvar" value="Salvar"
+					actionListener="#{produtoControle.salvar}"
 					action="#{produtoControle.produtoConsultar}" process="@this @form"
 					update="@form :messages" icon="fa fa-fw fa-save"
 					validateClient="true" />

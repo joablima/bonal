@@ -8,6 +8,10 @@
 
 <ui:composition template="/template/dialog.xhtml">
 	<ui:define name="frame">
+	<f:metadata>
+        <f:viewParam name="filtroTipo" value="#{categoriaControle.filtroTipo}"/>
+        <f:event type="preRenderView" listener="#{categoriaControle.preRenderView}"/>
+    </f:metadata>
 
 		<p:messages id="messages" globalOnly="true" />
 

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -170,9 +171,19 @@ public class CargoControle implements Serializable {
 	}
 
 	// ----------------- METODOS ----------------------
-	@PostConstruct
+
 	@Transacional
 	public void listarTabela() {
+		if (this.cargos == null) {
+			lista = cargoRepositorio.listarTodos();
+			cargos = new ArrayList<>(lista);
+		}
+		filtrarTabela();
+	}
+	
+
+	@Transacional
+	public void preRenderView(ComponentSystemEvent event) {
 		if (this.cargos == null) {
 			lista = cargoRepositorio.listarTodos();
 			cargos = new ArrayList<>(lista);

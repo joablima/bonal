@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,6 +36,7 @@ public class ClienteControle implements Serializable {
 
 	// Atributos para Consulta
 	private String clienteNome = "";
+	private String mask = "999-999-999-99";
 
 	private Boolean status = true;
 	// Listas para Consulta
@@ -107,11 +109,35 @@ public class ClienteControle implements Serializable {
 	public EnumPessoa[] getEnumPessoa() {
 		return EnumPessoa.values();
 	}
+	
+	public String getMask() {
+		
+		return mask;
+	}
 
+
+	public void setMask(String mask) {
+		this.mask = mask;
+	}
+
+	
+	
 	// ----------------- METODOS ----------------------
-	@PostConstruct
+	
+	
+
 	@Transacional
 	public void listarTabela() {
+		if (this.clientes == null) {
+			lista = clienteRepositorio.listarTodos();
+			clientes = new ArrayList<>(lista);
+		}
+		filtrarTabela();
+	}
+	
+
+	@Transacional
+	public void preRenderView(ComponentSystemEvent event) {
 		if (this.clientes == null) {
 			lista = clienteRepositorio.listarTodos();
 			clientes = new ArrayList<>(lista);
@@ -222,7 +248,15 @@ public class ClienteControle implements Serializable {
 	public void selecionarCliente(Cliente cliente) {
 		requestContext.closeDialog(cliente);
 	}
-
+	
+	public void atualizarMascara(){
+		if(cliente.getTipo().equals("PESSOA_FISICA")){
+			mask = "999.999.999-99";
+		}
+		else{
+			mask = "99.999.999/9999-99";
+		}
+	}
 	public void inicializa() {
 		recuperarClientePorId();
 	}

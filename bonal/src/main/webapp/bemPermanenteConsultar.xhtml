@@ -9,12 +9,13 @@
 
 <ui:composition template="/template/main.xhtml">
 	<ui:define name="content">
+	<f:metadata>
+        <f:event type="preRenderView" listener="#{bemPermanenteControle.preRenderView}"/>
+    </f:metadata>
 
 		<div class="ui-g-12 titulo">
-			<h1>Consultar BensPermanentes</h1>
-			<span> <i class="fa fa-coffee" /> <p:link
-					value="Cadastrar Novo BemPermanente" outcome="bemPermanente" />
-			</span>
+			<h1>Consultar bens permanentes</h1>
+			
 		</div>
 
 		<p:messages id="messages" globalOnly="true" />
@@ -31,12 +32,16 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<p:commandButton id="buscarBemPermanente" value="Filtrar"
-						action="#{bemPermanenteControle.listar}" process="@form"
-						update="@form :tabelaBensPermanentes" icon="fa fa-fw fa-filter" />
-					<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-						action="#{bemPermanenteControle.limpar}" process="@form"
-						update="@form :tabelaBensPermanentes" />
+					<h:button id="addBemPermanente" value="Adicionar" 
+						outcome="bemPermanente" icon="fa fa-fw fa-filter" />
+						
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"  ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(bemPermanenteControle.bensPermanentes)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
 				</div>
 			</div>
 
@@ -60,16 +65,7 @@
 				selectionMode="single" emptyMessage="Nenhuma BemPermanente Encontrado!"
 				styleClass="ui-g-12">
 
-				<f:facet name="header">Lista de BensPermanentes
-				
-				<span style="float: right"> <p:commandButton value="xls"
-							ajax="false">
-							<p:fileDownload
-								value="#{poiControle.downloadXlsx(bemPermanenteControle.bensPermanentes)}" />
-						</p:commandButton> <p:messages id="messages" showDetail="true" />
-					</span>
-					
-				</f:facet>
+				<f:facet name="header">Lista de BensPermanentes </f:facet>
 
 				<p:column headerText="Codigo" sortBy="#{bemPermanente.codigo}">
 					<h:outputText value="#{bemPermanente.codigo}" />

@@ -35,6 +35,8 @@ public class FornecedorControle implements Serializable {
 	// Atributos para Consulta
 	private String fornecedorNome = "";
 
+	private String mask = "999-999-999-99";
+
 	private Boolean status = true;
 	// Listas para Consulta
 	private List<Fornecedor> fornecedores;
@@ -114,6 +116,16 @@ public class FornecedorControle implements Serializable {
 
 	public void setItensFornecidos(List<ItemDeProducao> itensFornecidos) {
 		this.itensFornecidos = itensFornecidos;
+	}
+	
+	
+
+	public String getMask() {
+		return mask;
+	}
+
+	public void setMask(String mask) {
+		this.mask = mask;
 	}
 
 	// ----------------- METODOS ----------------------
@@ -245,6 +257,15 @@ public class FornecedorControle implements Serializable {
 		requestContext.closeDialog(fornecedor);
 	}
 
+	public void atualizarMascara(){
+		if(fornecedor.getTipo().equals("PESSOA_FISICA")){
+			mask = "999.999.999-99";
+		}
+		else{
+			mask = "99.999.999/9999-99";
+		}
+	}
+	
 	public void inicializa() {
 		recuperarFornecedorPorId();
 		itensFornecidos = fornecedor.getItens();
