@@ -116,6 +116,10 @@ public class ItemDaVenda implements Serializable{
 
 	public void setDataCadastro(Calendar dataCadastro) {
 		this.dataCadastro = dataCadastro;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}	
 	
 	

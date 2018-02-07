@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="aquisicaoId"
+			value="#{aquisicaoControle.aquisicaoId}" />
+		<f:viewAction action="#{aquisicaoControle.inicializa}"
+			update="funcionario fornecedor funcionarioDocumento fornecedorDocumento"
+			if="#{param.aquisicaoId != null}" />
+	</f:metadata>
+
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>Pedidos da venda</h1>
+		</div>
+
+
+		<h:form id="formAddItens">
+
+
+			<div class="ui-g-12 ui-md-6 ui-lg-6 botoes"></div>
+		</h:form>
+
+		<h:form id="formDadosCliente">
+			<p:focus context="formDadosCliente" />
+			<p:fieldset legend="Dados do Cliente">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Cliente" for="clienteDocumento" />
+						<p:inputText id="clienteDocumento"
+							value="#{pedidoVendaControle.clienteDocumento}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Cliente obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="cliente"
+								listener="#{pedidoVendaControle.getClientePorDocumento}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="clienteDocumento" id="clienteDocumentoMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Cliente" id="cliente"
+								value="#{pedidoVendaControle.cliente.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="cliente"
+								actionListener="#{dialogControle.clienteConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="cliente clienteDocumento"
+									listener="#{pedidoVendaControle.clienteSelecionado}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="cliente" id="clienteMessage" />
+					</div>
+				</div>
+			</p:fieldset>
+		</h:form>
+
+		<h:form id="formDadosItem">
+			<p:focus context="formDadosItem" />
+			<p:fieldset legend="Item">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Produto" for="produtoCodigo" />
+						<p:inputText id="produtoCodigo"
+							value="#{pedidoVendaControle.produtoCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo do produto obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this"
+								update="produto unidadeDeMedida unidadeDeMedidaSigla"
+								listener="#{pedidoVendaControle.getProdutoPorCodigo}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="produtoCodigo" id="produtoCodigoMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Produto" id="produto"
+								value="#{pedidoVendaControle.produto.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="produtoCodigo"
+								actionListener="#{dialogControle.produtoConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="produto produtoCodigo unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{pedidoVendaControle.produtoSelecionado}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="produto" id="produtoMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Unidade de Medida"
+							for="unidadeDeMedidaSigla" />
+						<p:inputText placeholder="Sigla" id="unidadeDeMedidaSigla"
+							value="#{pedidoVendaControle.produto.unidadeDeMedida.sigla}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:inputText placeholder="Nome" id="unidadeDeMedida"
+							value="#{pedidoVendaControle.produto.unidadeDeMedida.nome}"
+							styleClass="form-normal" required="true" readonly="true">
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Quantidade" for="quantidade" />
+						<p:inputText id="quantidade"
+							value="#{pedidoVendaControle.itemDaVenda.quantidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Quantidade obrigatório"
+							validatorMessage="Quantidade deve ser um número inteiro ou decimal"
+							maxlength="80">
+							<p:ajax event="keyup" process="@this" update="precoTotal"
+								listener="#{pedidoVendaControle.calculaPrecoTotal()}" />
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="quantidade" id="quantidadeMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Valor unitário" for="precoUnitario" />
+						<p:inputText id="precoUnitario"
+							value="#{pedidoVendaControle.itemDaVenda.precoUnitario}"
+							styleClass="form-normal" required="true"
+							requiredMessage="precoUnitario do item obrigatório"
+							validatorMessage="precoUnitario do item deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="precoTotal"
+								listener="#{pedidoVendaControle.calculaPrecoTotal}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="precoUnitario" id="precoUnitarioMessage" />
+					</div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Valor total" for="precoTotal" />
+						<p:inputText id="precoTotal"
+							value="#{pedidoVendaControle.itemDaVenda.precoTotal}"
+							styleClass="form-normal" required="true"
+							requiredMessage="precoTotal do item obrigatório"
+							validatorMessage="precoTotal do item deve ter no minimo 2 caracteres"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="precoTotal" id="precoTotalMessage" />
+					</div>
+				</div>
+
+			</p:fieldset>
+
+			<div class="botoes-cadastrar">
+				<p:commandButton id="salvar" value="Adicionar"
+					action="#{pedidoVendaControle.adicionarItem}" process="@this @form"
+					update="@form" icon="fa fa-fw fa-save" validateClient="true" />
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+
+		<div></div>
+
+
+		<h:form id="formTabelaItens">
+			<p:dataTable id="itens" var="itemDaVenda"
+				value="#{pedidoVendaControle.itensDaVenda}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{itemDaVenda.id}"
+				selection="#{pedidoVendaControle.itemDaVenda}"
+				selectionMode="single" emptyMessage="Nenhum item!"
+				styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de itens do pedido
+				
+				</f:facet>
+
+				<p:column headerText="Id" sortBy="#{itemDaVenda.id}">
+					<h:outputText value="#{itemDaVenda.id}" />
+				</p:column>
+
+				<p:column headerText="Item" sortBy="#{itemDaVenda.produto.nome}">
+					<h:outputText value="#{itemDaVenda.produto.nome}" />
+				</p:column>
+
+
+				<p:column headerText="Quantidade" sortBy="#{itemDaVenda.quantidade}">
+					<h:outputText value="#{itemDaVenda.quantidade}" />
+				</p:column>
+
+				<p:column headerText="Valor unitario"
+					sortBy="#{itemDaVenda.precoUnitario}">
+					<h:outputText value="#{itemDaVenda.precoUnitario}" />
+				</p:column>
+
+				<p:column headerText="Valor total"
+					sortBy="#{itemDaVenda.precoTotal}">
+					<h:outputText value="#{itemDaVenda.precoTotal}" />
+				</p:column>
+
+
+				<p:column headerText="Ação" style="width: 7ch;" priority="6">
+					<p:commandButton icon="fa fa-fw fa-times"
+						styleClass="tab-btn btn-desativar" value="Remover"
+						action="#{pedidoVendaControle.removerItem(itemDaVenda)}"
+						update="@form" process="@this @form">
+					</p:commandButton>
+				</p:column>
+
+
+
+				<f:facet name="footer">
+					Total de itens: 
+					<h:outputText value=" #{pedidoVendaControle.totalDeItens}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect" oncomplete="PF('vendaDialog').show()"
+					update="@form" global="false" />
+			</p:dataTable>
+		</h:form>
+
+		<h:form id="formDadosPagamento">
+			<p:focus context="formDadosPagamento" />
+			<p:fieldset legend="Pagamento">
+
+				<p:outputLabel value="Valor total = #{pedidoVendaControle.pedidoVenda.precoTotal}" id="precoTotal" />
+
+
+
+
+
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+
+
+
+
+
+</ui:composition>
+</html>

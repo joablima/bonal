@@ -8,6 +8,10 @@
 
 <ui:composition template="/template/dialog.xhtml">
 	<ui:define name="frame">
+	<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{clienteControle.preRenderView}" />
+		</f:metadata>
 
 		<p:messages id="messages" globalOnly="true" />
 
