@@ -273,13 +273,105 @@
 			<p:focus context="formDadosPagamento" />
 			<p:fieldset legend="Pagamento">
 
-				<p:outputLabel value="Valor total = #{pedidoVendaControle.pedidoVenda.precoTotal}" id="precoTotal" />
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Valor total" for="precoTotal" />
+						<p:inputText id="precoTotal"
+							value="#{pedidoVendaControle.pedidoVenda.precoTotal}"
+							styleClass="form-normal"
+							readonly="true"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
 
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="precoTotal" id="precoTotalMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Vencimento" for="vencimento" />
+						<p:inputMask id="vencimento"
+							value="#{pedidoVendaControle.pedidoVenda.vencimento}"
+							styleClass="form-normal" required="true"
+							mask="99/99/9999"
+							maxlength="80">
+							 <f:convertDateTime pattern="dd/mm/yyyy" />
+							<p:clientValidator event="blur" />
+						</p:inputMask>
+						<p:watermark  value="DD/MM/YYYY" for="vencimento" />
+					</div>
 
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="vencimento" id="vencimentoMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Emissao" for="emissao" />
+						<p:inputMask id="emissao"
+							value="#{pedidoVendaControle.pedidoVenda.dataCadastro}"
+							styleClass="form-normal" required="true"
+							readonly="true"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputMask>
+						<p:watermark  value="DD/MM/YYYY" for="emissao"/>
+					</div>
 
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="emissao" id="emissaoMessage" />
+					</div>
+				</div>
+	
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Tipo:" for="tipoDePagamento" />
+						<p:selectOneMenu label="Forma pagamento"
+							styleClass="form-normal"
+							value="#{pedidoVendaControle.conta.tipoDePagamento}" id="tipoDePagamento"
+							required="true" requiredMessage="Selecione uma opção de pagamento">
+							<f:selectItems value="#{pedidoVendaControle.enumTipoPagamento}" var="tipo"
+								itemValue="#{tipo}" itemLabel="#{tipo.label}" />
+							<p:clientValidator event="blur" /> 
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+						<p:message for="tipoDePagamento" id="tipoDePagamentoMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<p:outputLabel value="Status" for="statusPagamento" />
+						<p:selectOneMenu label="Status do pagamento"
+							styleClass="form-normal"
+							value="#{pedidoVendaControle.conta.statusPagamento}" id="statusPagamento"
+							required="true" requiredMessage="Selecione um status">
+							<f:selectItems value="#{pedidoVendaControle.enumStatusPagamento}" var="tipo"
+								itemValue="#{tipo}" itemLabel="#{tipo.label}" />
+							<p:clientValidator event="blur" /> 
+						</p:selectOneMenu>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-6 form-messages">
+						<p:message for="statusPagamento" id="statusPagamentoMessage" />
+					</div>
+				</div>
 
 
 			</p:fieldset>
+				<div class="botoes-cadastrar">
+				<p:commandButton id="salvar" value="Salvar" actionListener = "#{pedidoVendaControle.salvarTudo}"
+					action="index" process="@this @form"
+					update="@form" icon="fa fa-fw fa-save"
+					validateClient="true" />
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+			
 		</h:form>
 	</ui:define>
 

@@ -9,6 +9,8 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.empresa.bonal.entidades.Cliente;
+import br.com.empresa.bonal.entidades.Conta;
+import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.PedidoVenda;
 import br.com.empresa.bonal.entidades.Produto;
 
@@ -21,6 +23,20 @@ public class PedidoVendaRepositorio implements Serializable {
 	// m�todo que persiste um registro
 	public void adicionar(PedidoVenda pedidoVenda) {
 		em.persist(pedidoVenda);
+	}
+
+	// m�todo que persiste um registro
+	public Long adicionarPedidoComRetorno(PedidoVenda pedidoVenda) {
+		em.persist(pedidoVenda);
+
+		return pedidoVenda.getId();
+	}
+
+	// m�todo que persiste um registro
+	public Long adicionarContaComRetorno(Conta conta) {
+		em.persist(conta);
+
+		return conta.getId();
 	}
 
 	// m�todo que atualiza um registro
@@ -55,7 +71,6 @@ public class PedidoVendaRepositorio implements Serializable {
 				.getResultList();
 		return list;
 	}
-	
 
 	// método que verifica se elemento existe
 	public Produto getProdutoPorCodigo(String codigo) {
@@ -69,12 +84,23 @@ public class PedidoVendaRepositorio implements Serializable {
 		}
 	}
 
-	
-	
 	// método que verifica se elemento existe
 	public Cliente getClientePorDocumento(String documento) {
 		TypedQuery<Cliente> query = em
 				.createQuery("select c from Cliente c where c.documento = :pdocumento", Cliente.class)
+				.setParameter("pdocumento", documento.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// método que verifica se elemento existe
+	public Funcionario getFuncionarioPorDocumento(String documento) {
+		TypedQuery<Funcionario> query = em
+				.createQuery("select c from Funcionario c where c.documento = :pdocumento", Funcionario.class)
 				.setParameter("pdocumento", documento.toUpperCase());
 
 		try {

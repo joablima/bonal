@@ -1,6 +1,7 @@
 package br.com.empresa.bonal.entidades;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,6 +39,10 @@ public class PedidoVenda {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "funcionario")
 	private Funcionario funcionario;	
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "conta")
+	private Conta conta;
 	
 	private BigDecimal precoTotal;
 	
@@ -118,8 +123,21 @@ public class PedidoVenda {
 		this.status = status;
 	}
 
-	public Calendar getDataCadastro() {
-		return dataCadastro;
+	public String getDataCadastro() {
+		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+	    fmt.setCalendar(dataCadastro);
+	    String dateFormatted = fmt.format(dataCadastro.getTime());
+	    return dateFormatted;
+	}
+	
+	
+	
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 
 	public Integer getVersion() {

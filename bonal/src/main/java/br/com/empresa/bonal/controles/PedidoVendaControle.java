@@ -18,11 +18,15 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.Cliente;
+import br.com.empresa.bonal.entidades.Conta;
+import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.ItemDaVenda;
 import br.com.empresa.bonal.entidades.PedidoVenda;
 import br.com.empresa.bonal.entidades.Produto;
 import br.com.empresa.bonal.repositorio.PedidoVendaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.enums.EnumStatusPagamento;
+import br.com.empresa.bonal.util.enums.EnumTipoPagamento;
 import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
@@ -34,12 +38,17 @@ public class PedidoVendaControle implements Serializable {
 	private PedidoVenda pedidoVenda = new PedidoVenda();
 	private Cliente cliente = new Cliente();
 	private String clienteDocumento;
-	
+
+	private Funcionario funcionario = new Funcionario();
+	private String funcionarioDocumento;
+
+	private Conta conta = new Conta();
+
 	private Produto produto = new Produto();
 	private String produtoCodigo;
 
 	private String message = "";
-	
+
 	private ItemDaVenda itemDaVenda = new ItemDaVenda();
 
 	private Long pedidoVendaId;
@@ -50,9 +59,9 @@ public class PedidoVendaControle implements Serializable {
 	// Listas para Consulta
 	private List<PedidoVenda> pedidos;
 	private List<PedidoVenda> lista = new ArrayList<>();
-	
+
 	private List<ItemDaVenda> itensDaVenda = new ArrayList<>();
-	
+
 	private Boolean status = true;
 
 	@Inject
@@ -66,7 +75,7 @@ public class PedidoVendaControle implements Serializable {
 
 	@Inject
 	private Logger logger;
-	
+
 	private int contador = 0;
 
 	// Getters and Setters
@@ -119,7 +128,7 @@ public class PedidoVendaControle implements Serializable {
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
-	
+
 	public List<ItemDaVenda> getItensDaVenda() {
 		return itensDaVenda;
 	}
@@ -127,16 +136,16 @@ public class PedidoVendaControle implements Serializable {
 	public void setItensDaVenda(List<ItemDaVenda> itensDaVenda) {
 		this.itensDaVenda = itensDaVenda;
 	}
-	
-	public void addItem(ItemDaVenda item){
+
+	public void addItem(ItemDaVenda item) {
 		itensDaVenda.add(item);
 	}
-	
-	public void delItem(ItemDaVenda item){
+
+	public void delItem(ItemDaVenda item) {
 		itensDaVenda.remove(item);
 	}
-	
-	public Integer getTotalDeItens(){
+
+	public Integer getTotalDeItens() {
 		return itensDaVenda.size();
 	}
 
@@ -179,13 +188,42 @@ public class PedidoVendaControle implements Serializable {
 	public void setProdutoCodigo(String produtoCodigo) {
 		this.produtoCodigo = produtoCodigo;
 	}
-	
-	
+
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
+
+	public String getFuncionarioDocumento() {
+		return funcionarioDocumento;
+	}
+
+	public void setFuncionarioDocumento(String funcionarioDocumento) {
+		this.funcionarioDocumento = funcionarioDocumento;
+	}
+
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
+	}
+
+	// ----- Carrega os Enums em Arrays -----
+	public EnumTipoPagamento[] getEnumTipoPagamento() {
+		return EnumTipoPagamento.values();
+	}
+
+	// ----- Carrega os Enums em Arrays -----
+	public EnumStatusPagamento[] getEnumStatusPagamento() {
+		return EnumStatusPagamento.values();
+	}
 
 	// ----------------- METODOS ----------------------
-
-	
-
 
 	@Transacional
 	public void listarTabela() {
@@ -259,20 +297,6 @@ public class PedidoVendaControle implements Serializable {
 		}
 	}
 
-	// M�todos que utilizam m�todos do reposit�rio
-	@Transacional
-	public void salvar() {
-		String message = "";
-		this.pedidoVenda.setStatus(true);
-		if (pedidoVenda.getId() == null) {
-			pedidoVendaRepositorio.adicionar(pedidoVenda);
-		} else {
-			pedidoVendaRepositorio.atualizar(pedidoVenda);
-		}
-		logger.info(message);
-
-	}
-
 	@Transacional
 	public void recuperarPedidoVendaPorId() {
 		pedidoVenda = pedidoVendaRepositorio.buscarPorId(pedidoVendaId);
@@ -287,21 +311,33 @@ public class PedidoVendaControle implements Serializable {
 		listar();
 		return null;
 	}
-	
 
 	@Transacional
 	public void getClientePorDocumento() {
 		cliente = pedidoVendaRepositorio.getClientePorDocumento(clienteDocumento);
 		pedidoVenda.setCliente(cliente);
 	}
-	
+
 	public void clienteSelecionado(SelectEvent event) {
 		cliente = (Cliente) event.getObject();
 		clienteDocumento = cliente.getDocumento();
 		pedidoVenda.setCliente(cliente);
 		requestContext.update("formDadosCliente:cliente");
 	}
-	
+
+	public void funcionarioSelecionado(SelectEvent event) {
+		funcionario = (Funcionario) event.getObject();
+		clienteDocumento = funcionario.getDocumento();
+		pedidoVenda.setFuncionario(funcionario);
+		requestContext.update("formDadosCliente:funcionario");
+	}
+
+	@Transacional
+	public void getFuncionarioPorDocumento() {
+		funcionario = pedidoVendaRepositorio.getFuncionarioPorDocumento(funcionarioDocumento);
+		pedidoVenda.setFuncionario(funcionario);
+	}
+
 	public void produtoSelecionado(SelectEvent event) {
 		produto = (Produto) event.getObject();
 		produtoCodigo = produto.getCodigo();
@@ -309,16 +345,13 @@ public class PedidoVendaControle implements Serializable {
 		itemDaVenda.setUnidadeDeMedida(produto.getUnidadeDeMedida());
 		requestContext.update("formDadosItem:produto");
 	}
-	
-	
+
 	@Transacional
 	public void getProdutoPorCodigo() {
 		produto = pedidoVendaRepositorio.getProdutoPorCodigo(produtoCodigo);
 		itemDaVenda.setProduto(produto);
 		itemDaVenda.setUnidadeDeMedida(produto.getUnidadeDeMedida());
 	}
-	
-	
 
 	@Logging
 	public String editar(PedidoVenda pedidoVenda) {
@@ -339,21 +372,19 @@ public class PedidoVendaControle implements Serializable {
 	public void selecionarPedidoVenda(PedidoVenda pedidoVenda) {
 		requestContext.closeDialog(pedidoVenda);
 	}
-	
-	
-	public void calculaPrecoTotal(){
-		if(itemDaVenda.getQuantidade()!=null && itemDaVenda.getPrecoUnitario()!=null){
+
+	public void calculaPrecoTotal() {
+		if (itemDaVenda.getQuantidade() != null && itemDaVenda.getPrecoUnitario() != null) {
 			itemDaVenda.setPrecoTotal(itemDaVenda.getPrecoUnitario().multiply(itemDaVenda.getQuantidade()));
 		}
-		
+
 	}
-	
-	
-	public void adicionarItem(){
-		if(pedidoVenda.getPrecoTotal()==null){
+
+	public void adicionarItem() {
+		if (pedidoVenda.getPrecoTotal() == null) {
 			pedidoVenda.setPrecoTotal(new BigDecimal("0"));
 		}
-		
+
 		BigDecimal aux = itemDaVenda.getPrecoTotal().add(pedidoVenda.getPrecoTotal());
 		pedidoVenda.setPrecoTotal(aux);
 		itemDaVenda.setId(new Long(contador));
@@ -364,20 +395,50 @@ public class PedidoVendaControle implements Serializable {
 		produtoCodigo = null;
 		requestContext.update("formTabelaItens:itens");
 		requestContext.update("formDadosPagamento");
-		
+
 	}
-	
-	public void removerItem(ItemDaVenda itemDaVenda){
-		if(pedidoVenda.getPrecoTotal()==null){
+
+	public void removerItem(ItemDaVenda itemDaVenda) {
+		if (pedidoVenda.getPrecoTotal() == null) {
 			pedidoVenda.setPrecoTotal(new BigDecimal("0"));
 		}
-		
+
 		BigDecimal aux = pedidoVenda.getPrecoTotal().subtract(itemDaVenda.getPrecoTotal());
 		pedidoVenda.setPrecoTotal(aux);
 		itensDaVenda.remove(itemDaVenda);
 		requestContext.update("formTabelaItens:itens");
 		requestContext.update("formDadosPagamento");
+
+	}
+
+	public void salvarTudo() {
+		for (int i = 0; i < itensDaVenda.size(); i++) {
+			itensDaVenda.get(i).setId(null);
+		}
+
+		cliente = pedidoVendaRepositorio.getClientePorDocumento(clienteDocumento);
+
+		funcionario = pedidoVendaRepositorio.getFuncionarioPorDocumento(funcionarioDocumento);
 		
+		conta.setPrecoTotal(pedidoVenda.getPrecoTotal());
+		conta.setVencimento(pedidoVenda.getVencimento());
+		
+		Long contaId = pedidoVendaRepositorio.adicionarContaComRetorno(conta);
+		
+
+		pedidoVenda.setCliente(cliente);
+
+		pedidoVenda.setFuncionario(funcionario);
+
+		pedidoVenda.setItensDaVenda(itensDaVenda);
+
+		Long pedidoId = pedidoVendaRepositorio.adicionarPedidoComRetorno(pedidoVenda);
+		
+		PedidoVenda pedido = pedidoVendaRepositorio.buscarPorId(pedidoId);
+		
+		
+	
+
 	}
 
 }
