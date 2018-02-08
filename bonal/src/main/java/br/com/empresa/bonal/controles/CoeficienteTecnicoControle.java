@@ -187,7 +187,7 @@ public class CoeficienteTecnicoControle implements Serializable {
 	public void preRenderView(ComponentSystemEvent event){
         if (!FacesContext.getCurrentInstance().isPostback()){
         	if (this.coeficientesTecnicos == null) {
-    			lista = coeficienteTecnicoRepositorio.listarTodos();
+    			lista = coeficienteTecnicoRepositorio.listarTodosPorProduto(produtoId);
     			coeficientesTecnicos = new ArrayList<>(lista);
     		}
     		filtrarTabela();

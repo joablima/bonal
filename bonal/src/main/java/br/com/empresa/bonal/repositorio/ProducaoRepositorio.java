@@ -7,9 +7,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import br.com.empresa.bonal.entidades.BemDeConsumo;
+import br.com.empresa.bonal.entidades.CoeficienteTecnico;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.Producao;
 import br.com.empresa.bonal.entidades.Produto;
-import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 
 public class ProducaoRepositorio implements Serializable {
@@ -36,6 +38,11 @@ public class ProducaoRepositorio implements Serializable {
 		em.merge(produto);
 	}
 
+	// m�todo que atualiza um registro
+	public void atualizarBemDeConsumo(BemDeConsumo bemDeConsumo) {
+		em.merge(bemDeConsumo);
+	}
+
 	// m�todo que remove um registro
 	public void remover(Producao producao) {
 		em.merge(producao);
@@ -46,10 +53,25 @@ public class ProducaoRepositorio implements Serializable {
 		return em.find(Producao.class, id);
 	}
 
+	// m�todo que recupera um objeto pelo id
+	public BemDeConsumo getBemDeConsumoPorId(Long id) {
+		return em.find(BemDeConsumo.class, id);
+	}
+
 	// m�todo que lista todos os registros
 	public List<Producao> listarTodos() {
 		try {
 			return em.createQuery("select s from Producao s", Producao.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// m�todo que lista todos os registros
+	public List<CoeficienteTecnico> listarCoeficientesPorProduto(Long produtoId) {
+		try {
+			return em.createQuery("select s from CoeficienteTecnico s where produto = " + produtoId,
+					CoeficienteTecnico.class).getResultList();
 		} catch (Exception e) {
 			return null;
 		}

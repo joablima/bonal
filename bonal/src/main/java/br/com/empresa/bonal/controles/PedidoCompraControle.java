@@ -17,12 +17,13 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-import br.com.empresa.bonal.entidades.Fornecedor;
+import br.com.empresa.bonal.entidades.BemDeConsumo;
 import br.com.empresa.bonal.entidades.Conta;
+import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.ItemDaCompra;
-import br.com.empresa.bonal.entidades.PedidoCompra;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.PedidoCompra;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.PedidoCompraRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
@@ -434,7 +435,11 @@ public class PedidoCompraControle implements Serializable {
 			
 			UnidadeDeMedida u = pedidoCompraRepositorio.getUnidadeDeMedidaPorSigla(p.getUnidadeDeMedida().getSigla());
 			itensDaVenda.get(i).setUnidadeDeMedida(u);
-			
+			if(p.getSubCategoria().getCategoria().getTipo().toString().equals("BEM_CONSUMO")){
+				BemDeConsumo bem = pedidoCompraRepositorio.getBemDeConsumoPorCodigo(p.getCodigo());
+				bem.setQuantidade(bem.getQuantidade().add(itensDaVenda.get(i).getQuantidade()));
+				pedidoCompraRepositorio.atualizarBemDeConsumo(bem);
+			}
 			
 			pedidoCompra.addItem(itensDaVenda.get(i));
 		}

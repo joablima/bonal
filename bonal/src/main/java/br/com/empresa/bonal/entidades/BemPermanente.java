@@ -1,6 +1,8 @@
 package br.com.empresa.bonal.entidades;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -14,6 +16,7 @@ public class BemPermanente extends ItemDeProducao implements Serializable{
 	private String modelo;
 		
 
+	private BigDecimal quantidade = new BigDecimal("0");
 
 	public String getMarca() {
 		return marca;
@@ -31,5 +34,12 @@ public class BemPermanente extends ItemDeProducao implements Serializable{
 	public String resumo(){
 		return "";
 	}
+	public BigDecimal getQuantidade() {
+		return quantidade;
+	}
+	public void setQuantidade(BigDecimal quantidade) {
+		this.quantidade = quantidade;
+	}
+	
 	
 }

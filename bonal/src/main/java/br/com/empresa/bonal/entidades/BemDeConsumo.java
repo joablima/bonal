@@ -16,8 +16,7 @@ import javax.persistence.ManyToOne;
 public class BemDeConsumo extends ItemDeProducao implements Serializable{
 	
 	
-	
-	private BigDecimal quantidade;
+	private BigDecimal quantidade = new BigDecimal("0");
 	
 	
 	public BigDecimal getQuantidade() {

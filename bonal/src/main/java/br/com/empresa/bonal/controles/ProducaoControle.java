@@ -16,10 +16,11 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
+import br.com.empresa.bonal.entidades.BemDeConsumo;
+import br.com.empresa.bonal.entidades.CoeficienteTecnico;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.Producao;
 import br.com.empresa.bonal.entidades.Produto;
-import br.com.empresa.bonal.entidades.ItemDeProducao;
-import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.ProducaoRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.tx.Transacional;
@@ -196,6 +197,9 @@ public class ProducaoControle implements Serializable {
 		this.producao.setStatus(true);
 		
 		produto = producaoRepositorio.getProdutoPorCodigo(produto.getCodigo());
+		List<CoeficienteTecnico> coeficientes = new ArrayList<>();
+		coeficientes = producaoRepositorio.listarCoeficientesPorProduto(produto.getId());
+		
 
 		if (produto == null) {
 			message = "Produto inexistente, insira um codigo de produto válido";
@@ -205,6 +209,18 @@ public class ProducaoControle implements Serializable {
 		
 	
 		if (producao.getId() == null) {
+
+			for(int i =0; i<coeficientes.size(); i ++){
+				ItemDeProducao item = coeficientes.get(i).getItemDeProducao();
+				
+				if(item.getSubCategoria().getCategoria().getTipo().toString().equals("BEM_CONSUMO")){
+					BemDeConsumo bem = producaoRepositorio.getBemDeConsumoPorId(item.getId());
+					bem.setQuantidade(bem.getQuantidade().subtract(coeficientes.get(i).getQuantidade().multiply(producao.getQuantidade())));
+					producaoRepositorio.atualizarBemDeConsumo(bem);	
+				}
+				
+				
+			}
 			
 			produto.setQuantidade(produto.getQuantidade().add(producao.getQuantidade()));
 			

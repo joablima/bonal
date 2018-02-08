@@ -8,11 +8,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import br.com.empresa.bonal.entidades.Fornecedor;
+import br.com.empresa.bonal.entidades.BemDeConsumo;
 import br.com.empresa.bonal.entidades.Conta;
+import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Funcionario;
-import br.com.empresa.bonal.entidades.PedidoCompra;
 import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.PedidoCompra;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.util.logging.Logging;
 
@@ -33,7 +34,7 @@ public class PedidoCompraRepositorio implements Serializable {
 
 		return pedidoCompra.getId();
 	}
-	
+
 	@Logging
 	// m�todo que persiste um registro
 	public Long adicionarContaComRetorno(Conta conta) {
@@ -45,6 +46,11 @@ public class PedidoCompraRepositorio implements Serializable {
 	// m�todo que atualiza um registro
 	public void atualizar(PedidoCompra pedidoCompra) {
 		em.merge(pedidoCompra);
+	}
+
+	// m�todo que atualiza um registro
+	public void atualizarBemDeConsumo(BemDeConsumo bemDeConsumo) {
+		em.merge(bemDeConsumo);
 	}
 
 	// m�todo que remove um registro
@@ -82,7 +88,21 @@ public class PedidoCompraRepositorio implements Serializable {
 
 	// método que verifica se elemento existe
 	public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
-		TypedQuery<ItemDeProducao> query = em.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
+		TypedQuery<ItemDeProducao> query = em
+				.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// método que verifica se elemento existe
+	public BemDeConsumo getBemDeConsumoPorCodigo(String codigo) {
+		TypedQuery<BemDeConsumo> query = em
+				.createQuery("select c from BemDeConsumo c where c.codigo = :pcodigo", BemDeConsumo.class)
 				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {
@@ -104,7 +124,7 @@ public class PedidoCompraRepositorio implements Serializable {
 			return null;
 		}
 	}
-	
+
 	// método que verifica se elemento existe
 	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
 		TypedQuery<UnidadeDeMedida> query = em
@@ -117,7 +137,6 @@ public class PedidoCompraRepositorio implements Serializable {
 			return null;
 		}
 	}
-	
 
 	// método que verifica se elemento existe
 	public Funcionario getFuncionarioPorDocumento(String documento) {

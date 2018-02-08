@@ -1,6 +1,7 @@
 package br.com.empresa.bonal.entidades;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 import javax.persistence.CascadeType;
@@ -56,6 +57,7 @@ public class ItemDeProducao implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "subCategoria")
 	private SubCategoria subCategoria;	
+	
 	
 	public String getCodigo() {
 		return codigo;

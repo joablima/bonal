@@ -14,7 +14,7 @@
 		<f:viewAction action="#{coeficienteTecnicoControle.inicializa}"
 			if="#{param.produtoId != null}" />
 		<f:event type="preRenderView"
-			listener="#{coeficienteTecnicoControle.listarTabela}" />
+			listener="#{coeficienteTecnicoControle.preRenderView}" />
 	</f:metadata>
 
 	<ui:define name="content">
