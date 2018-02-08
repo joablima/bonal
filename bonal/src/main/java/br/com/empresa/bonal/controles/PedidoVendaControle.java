@@ -23,6 +23,7 @@ import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.ItemDaVenda;
 import br.com.empresa.bonal.entidades.PedidoVenda;
 import br.com.empresa.bonal.entidades.Produto;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
 import br.com.empresa.bonal.repositorio.PedidoVendaRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
 import br.com.empresa.bonal.util.enums.EnumStatusPagamento;
@@ -327,7 +328,7 @@ public class PedidoVendaControle implements Serializable {
 
 	public void funcionarioSelecionado(SelectEvent event) {
 		funcionario = (Funcionario) event.getObject();
-		clienteDocumento = funcionario.getDocumento();
+		funcionarioDocumento = funcionario.getDocumento();
 		pedidoVenda.setFuncionario(funcionario);
 		requestContext.update("formDadosCliente:funcionario");
 	}
@@ -341,6 +342,7 @@ public class PedidoVendaControle implements Serializable {
 	public void produtoSelecionado(SelectEvent event) {
 		produto = (Produto) event.getObject();
 		produtoCodigo = produto.getCodigo();
+		itemDaVenda = new ItemDaVenda();
 		itemDaVenda.setProduto(produto);
 		itemDaVenda.setUnidadeDeMedida(produto.getUnidadeDeMedida());
 		requestContext.update("formDadosItem:produto");
@@ -387,8 +389,6 @@ public class PedidoVendaControle implements Serializable {
 
 		BigDecimal aux = itemDaVenda.getPrecoTotal().add(pedidoVenda.getPrecoTotal());
 		pedidoVenda.setPrecoTotal(aux);
-		itemDaVenda.setId(new Long(contador));
-		contador++;
 		itensDaVenda.add(itemDaVenda);
 		itemDaVenda = new ItemDaVenda();
 		produto = new Produto();
@@ -410,31 +410,49 @@ public class PedidoVendaControle implements Serializable {
 		requestContext.update("formDadosPagamento");
 
 	}
-
+	@Transacional
+	@Logging
 	public void salvarTudo() {
-		for (int i = 0; i < itensDaVenda.size(); i++) {
-			itensDaVenda.get(i).setId(null);
-		}
 
-		cliente = pedidoVendaRepositorio.getClientePorDocumento(clienteDocumento);
-
-		funcionario = pedidoVendaRepositorio.getFuncionarioPorDocumento(funcionarioDocumento);
-		
-		conta.setPrecoTotal(pedidoVenda.getPrecoTotal());
 		conta.setVencimento(pedidoVenda.getVencimento());
+		conta.setPrecoTotal(pedidoVenda.getPrecoTotal());
+		conta.setStatus(true);
+		
 		
 		Long contaId = pedidoVendaRepositorio.adicionarContaComRetorno(conta);
 		
-
-		pedidoVenda.setCliente(cliente);
-
-		pedidoVenda.setFuncionario(funcionario);
-
-		pedidoVenda.setItensDaVenda(itensDaVenda);
-
-		Long pedidoId = pedidoVendaRepositorio.adicionarPedidoComRetorno(pedidoVenda);
+		conta = pedidoVendaRepositorio.buscarContaPorId(contaId);
 		
-		PedidoVenda pedido = pedidoVendaRepositorio.buscarPorId(pedidoId);
+		pedidoVenda.setStatus(true);
+		pedidoVenda.setConta(conta);
+		
+		for(int i = 0; i < itensDaVenda.size(); i++){
+			
+			Produto p = pedidoVendaRepositorio.getProdutoPorCodigo(itensDaVenda.get(i).getProduto().getCodigo());
+			itensDaVenda.get(i).setProduto(p);
+			
+			UnidadeDeMedida u = pedidoVendaRepositorio.getUnidadeDeMedidaPorSigla(p.getUnidadeDeMedida().getSigla());
+			itensDaVenda.get(i).setUnidadeDeMedida(u);
+			
+			
+			pedidoVenda.addItem(itensDaVenda.get(i));
+		}
+		
+		System.out.println(pedidoVenda.getItensDaVenda().size());
+		
+		Funcionario f = pedidoVendaRepositorio.getFuncionarioPorDocumento(funcionarioDocumento);
+		pedidoVenda.setFuncionario(f);
+		
+		Cliente c = pedidoVendaRepositorio.getClientePorDocumento(clienteDocumento);
+		pedidoVenda.setCliente(c);
+
+		System.out.println(pedidoVenda.getCliente().getNome());
+		System.out.println(pedidoVenda.getFuncionario().getNome());
+		System.out.println(pedidoVenda.getConta().getId());
+		System.out.println(pedidoVenda.getPrecoTotal());
+		System.out.println(pedidoVenda.getVencimento());
+		
+		pedidoVendaRepositorio.adicionar(pedidoVenda);
 		
 		
 	

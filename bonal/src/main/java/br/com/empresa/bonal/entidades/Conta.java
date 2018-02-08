@@ -3,6 +3,7 @@ package br.com.empresa.bonal.entidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import br.com.empresa.bonal.util.enums.EnumStatusPagamento;
 import br.com.empresa.bonal.util.enums.EnumTipoPagamento;
 
 @Entity
@@ -29,10 +31,12 @@ public class Conta implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private EnumTipoPagamento tipoDePagamento;
 	
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private EnumStatusPagamento statusPagamento;
+
 	
-	private String statusPagamento;
-	
-	private Calendar vencimento;
+	private Date vencimento;
 	
 	private BigDecimal precoTotal;
 	
@@ -55,11 +59,13 @@ public class Conta implements Serializable{
 		this.tipoDePagamento = tipoDePagamento;
 	}
 
-	public Calendar getVencimento() {
+
+
+	public Date getVencimento() {
 		return vencimento;
 	}
 
-	public void setVencimento(Calendar vencimento) {
+	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
 	}
 
@@ -91,12 +97,21 @@ public class Conta implements Serializable{
 		return version;
 	}
 
-	public String getStatusPagamento() {
+	
+
+	public EnumStatusPagamento getStatusPagamento() {
 		return statusPagamento;
 	}
 
-	public void setStatusPagamento(String statusPagamento) {
+	public void setStatusPagamento(EnumStatusPagamento statusPagamento) {
 		this.statusPagamento = statusPagamento;
+	}
+
+	@Override
+	public String toString() {
+		return "Conta [id="+ ", tipoDePagamento=" + tipoDePagamento.toString() + ", statusPagamento=" + statusPagamento.toString()
+				+ ", vencimento=" + vencimento.toString() + ", precoTotal=" + precoTotal.toString() + ", dataCadastro=" + dataCadastro.toString()
+				+ ", version=" + version + ", status=" + status + "]";
 	}
 
 	

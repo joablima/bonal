@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,10 +16,11 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.Cargo;
+import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.repositorio.FuncionarioRepositorio;
 import br.com.empresa.bonal.util.FacesContextUtil;
+import br.com.empresa.bonal.util.logging.Logging;
 import br.com.empresa.bonal.util.tx.Transacional;
 
 @Named
@@ -123,13 +124,24 @@ public class FuncionarioControle implements Serializable {
 	}
 
 	// ----------------- METODOS ----------------------
-	@PostConstruct
+
 	@Transacional
 	public void listarTabela() {
 		if (this.funcionarios == null) {
 			lista = funcionarioRepositorio.listarTodos();
 			funcionarios = new ArrayList<>(lista);
 		}
+		filtrarTabela();
+	}
+	
+	@Logging
+	@Transacional
+	public void preRenderView(ComponentSystemEvent event) {
+		if (this.funcionarios == null) {
+			lista = funcionarioRepositorio.listarTodos();
+			funcionarios = new ArrayList<>(lista);
+		}
+
 		filtrarTabela();
 	}
 
@@ -180,7 +192,7 @@ public class FuncionarioControle implements Serializable {
 			funcionario = new Funcionario();
 			cargo = new Cargo();
 			cargoCodigo = null;
-			return "funcionarioConsultar";
+			return "funcionarioConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);

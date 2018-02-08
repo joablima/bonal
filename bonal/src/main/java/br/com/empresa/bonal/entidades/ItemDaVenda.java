@@ -38,10 +38,6 @@ public class ItemDaVenda implements Serializable{
 	@JoinColumn(name = "unidade_de_medida")
 	private UnidadeDeMedida unidadeDeMedida;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "venda")
-	private Venda venda;
-	
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
@@ -66,13 +62,6 @@ public class ItemDaVenda implements Serializable{
 		this.unidadeDeMedida = unidadeDeMedida;
 	}
 
-	public Venda getVenda() {
-		return venda;
-	}
-
-	public void setVenda(Venda venda) {
-		this.venda = venda;
-	}
 
 	public Long getId() {
 		return id;

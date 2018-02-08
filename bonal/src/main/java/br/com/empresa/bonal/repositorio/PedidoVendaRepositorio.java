@@ -13,6 +13,8 @@ import br.com.empresa.bonal.entidades.Conta;
 import br.com.empresa.bonal.entidades.Funcionario;
 import br.com.empresa.bonal.entidades.PedidoVenda;
 import br.com.empresa.bonal.entidades.Produto;
+import br.com.empresa.bonal.entidades.UnidadeDeMedida;
+import br.com.empresa.bonal.util.logging.Logging;
 
 public class PedidoVendaRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +33,8 @@ public class PedidoVendaRepositorio implements Serializable {
 
 		return pedidoVenda.getId();
 	}
-
+	
+	@Logging
 	// m�todo que persiste um registro
 	public Long adicionarContaComRetorno(Conta conta) {
 		em.persist(conta);
@@ -52,6 +55,11 @@ public class PedidoVendaRepositorio implements Serializable {
 	// m�todo que recupera um objeto pelo id
 	public PedidoVenda buscarPorId(Long id) {
 		return em.find(PedidoVenda.class, id);
+	}
+
+	// m�todo que recupera um objeto pelo id
+	public Conta buscarContaPorId(Long id) {
+		return em.find(Conta.class, id);
 	}
 
 	// m�todo que lista todos os registros
@@ -96,6 +104,20 @@ public class PedidoVendaRepositorio implements Serializable {
 			return null;
 		}
 	}
+	
+	// método que verifica se elemento existe
+	public UnidadeDeMedida getUnidadeDeMedidaPorSigla(String sigla) {
+		TypedQuery<UnidadeDeMedida> query = em
+				.createQuery("select u from UnidadeDeMedida u where u.sigla = :sigla", UnidadeDeMedida.class)
+				.setParameter("sigla", sigla.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 
 	// método que verifica se elemento existe
 	public Funcionario getFuncionarioPorDocumento(String documento) {

@@ -71,6 +71,49 @@
 						<p:message for="cliente" id="clienteMessage" />
 					</div>
 				</div>
+				
+				
+				
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Funcionario" for="funcionarioDocumento" />
+						<p:inputText id="funcionarioDocumento"
+							value="#{pedidoVendaControle.funcionarioDocumento}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Funcionario obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this" update="funcionario"
+								listener="#{pedidoVendaControle.getFuncionarioPorDocumento}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="funcionarioDocumento" id="funcionarioDocumentoMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Funcionario" id="funcionario"
+								value="#{pedidoVendaControle.funcionario.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="funcionario"
+								actionListener="#{dialogControle.funcionarioConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="funcionario funcionarioDocumento"
+									listener="#{pedidoVendaControle.funcionarioSelecionado}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="funcionario" id="funcionarioMessage" />
+					</div>
+				</div>
+				
 			</p:fieldset>
 		</h:form>
 
@@ -216,7 +259,7 @@
 				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
-				rowKey="#{itemDaVenda.id}"
+				rowKey="#{itemDaVenda.produto.id}"
 				selection="#{pedidoVendaControle.itemDaVenda}"
 				selectionMode="single" emptyMessage="Nenhum item!"
 				styleClass="ui-g-12">
@@ -293,15 +336,14 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Vencimento" for="vencimento" />
-						<p:inputMask id="vencimento"
+						<p:calendar id="vencimento"
 							value="#{pedidoVendaControle.pedidoVenda.vencimento}"
 							styleClass="form-normal" required="true"
-							mask="99/99/9999"
 							maxlength="80">
-							 <f:convertDateTime pattern="dd/mm/yyyy" />
+							<f:convertDateTime type="date" pattern="dd/mm/yy" />
 							<p:clientValidator event="blur" />
-						</p:inputMask>
-						<p:watermark  value="DD/MM/YYYY" for="vencimento" />
+						</p:calendar>
+						<p:watermark  value="DD/MM/YY" for="vencimento" />
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
@@ -364,8 +406,8 @@
 
 			</p:fieldset>
 				<div class="botoes-cadastrar">
-				<p:commandButton id="salvar" value="Salvar" actionListener = "#{pedidoVendaControle.salvarTudo}"
-					action="index" process="@this @form"
+				<p:commandButton id="salvarTudo" value="Salvar" 
+					action="#{pedidoVendaControle.salvarTudo}" process="@this @form"
 					update="@form" icon="fa fa-fw fa-save"
 					validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"

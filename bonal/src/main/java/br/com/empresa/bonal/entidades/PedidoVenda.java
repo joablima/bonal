@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -52,7 +53,7 @@ public class PedidoVenda {
 	
 	private Boolean status;
 	
-	private Calendar vencimento; 
+	private Date vencimento; 
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pedido_id")
@@ -83,14 +84,15 @@ public class PedidoVenda {
 		itensDaVenda.remove(itemDaVenda);
 	}
 
-	public Calendar getVencimento() {
+	
+	public Date getVencimento() {
 		return vencimento;
 	}
 
-	public void setVencimento(Calendar vencimento) {
+	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
 	}
-	
+
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -146,10 +148,11 @@ public class PedidoVenda {
 
 	@Override
 	public String toString() {
-		return "PedidoVenda [id=" + id + ", vencimento=" + vencimento + ", itensDaVenda=" + itensDaVenda.size() + "]";
+		return "PedidoVenda [id=" + ", cliente=" + cliente.getNome() + ", dataCadastro=" + getDataCadastro() + ", funcionario="
+				+ funcionario.getNome() + ", conta=" + ", precoTotal=" + precoTotal.toString() + ", version="+ ", status="
+				+ status + ", vencimento=" + vencimento.getTime() + ", itensDaVenda=" + itensDaVenda.size() + "]";
 	}
 
-	
 	
 	
 	

@@ -8,6 +8,10 @@
 
 <ui:composition template="/template/dialog.xhtml">
 	<ui:define name="frame">
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{funcionarioControle.preRenderView}" />
+		</f:metadata>
 
 		<p:messages id="messages" globalOnly="true" />
 
@@ -15,8 +19,8 @@
 			<div class="filtros-consultar">
 				<div class="ui-g-12 ui-md-12 ui-lg-6">
 					<p:outputLabel value="Nome do Funcionario: " for="funcionarioNome" />
-					<p:inputText value="#{funcionarioControle.funcionarioNome}" id="funcionarioNome"
-						styleClass="form-normal">
+					<p:inputText value="#{funcionarioControle.funcionarioNome}"
+						id="funcionarioNome" styleClass="form-normal">
 						<p:ajax event="keyup" listener="#{funcionarioControle.listar}"
 							process="@form" update="@form :tabelaFuncionarios" />
 					</p:inputText>
@@ -41,22 +45,25 @@
 		</h:form>
 
 		<h:form id="tabelaFuncionarios">
-			<p:dataTable id="funcionario" var="funcionario" value="#{funcionarioControle.funcionarios}"
-				rows="10" paginator="true"
+			<p:dataTable id="funcionario" var="funcionario"
+				value="#{funcionarioControle.funcionarios}" rows="10"
+				paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15" rowKey="#{funcionario.id}"
-				selection="#{funcionarioControle.funcionario}" selectionMode="single"
-				emptyMessage="Nenhum Funcionario Encontrado!" styleClass="ui-g-12">
-				
+				selection="#{funcionarioControle.funcionario}"
+				selectionMode="single" emptyMessage="Nenhum Funcionario Encontrado!"
+				styleClass="ui-g-12">
+
 				<p:column headerText="Nome" sortBy="#{funcionario.nome}">
 					<p:outputLabel value="#{funcionario.nome}" />
 				</p:column>
-				
+
 				<p:column headerText="Documento" sortBy="#{funcionario.documento}">
 					<h:outputText value="#{funcionario.documento}" />
 				</p:column>
 
-				<p:column headerText="Identificacao" sortBy="#{funcionario.identificacao}">
+				<p:column headerText="Identificacao"
+					sortBy="#{funcionario.identificacao}">
 					<h:outputText value="#{funcionario.identificacao}" />
 				</p:column>
 
@@ -64,8 +71,9 @@
 				<p:column headerText="Importar">
 					<p:commandButton icon="fa fa-fw fa-check"
 						styleClass="tab-btn btn-ativar green-button"
-						action="#{funcionarioControle.selecionarFuncionario(funcionario)}" update="@form"
-						process="@this @form" rendered="#{funcionario.status == true}">
+						action="#{funcionarioControle.selecionarFuncionario(funcionario)}"
+						update="@form" process="@this @form"
+						rendered="#{funcionario.status == true}">
 						<p:ajax listener="#{funcionarioControle.listar}" />
 					</p:commandButton>
 				</p:column>
