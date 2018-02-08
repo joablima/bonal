@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<ui:define name="content">
+
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Producoes</h1>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formProducaoConsulta">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Codigo da Producao: "
+						for="producaoNome" />
+					<p:inputText value="#{producaoControle.producaoNome}"
+						id="producaoNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{producaoControle.listar}"
+							process="@form" update="@form :tabelaProducoes" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					<h:button id="cadastrarProducao" value="Cadastrar" 
+						outcome="producao" icon="fa fa-fw fa-filter" />
+
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"  ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(producaoControle.producoes)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
+				</div>
+			</div>
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:selectBooleanCheckbox value="#{producaoControle.status}">
+					<p:ajax update="@form :tabelaProducoes"
+						listener="#{producaoControle.listar}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Visualizar somente itens ativados" />
+				
+			</div>
+		</h:form>
+
+		<h:form id="tabelaProducoes">
+			<p:dataTable id="producao" var="producao"
+				value="#{producaoControle.producoes}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{producao.id}" selection="#{producaoControle.producao}"
+				selectionMode="single" emptyMessage="Nenhuma Producao Encontrado!"
+				styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de Producoes
+				
+				</f:facet>
+
+				<p:column headerText="Id" sortBy="#{producao.id}">
+					<h:outputText value="#{producao.id}" />
+				</p:column>
+
+				<p:column headerText="Produto" sortBy="#{producao.produto.nome}">
+					<h:outputText value="#{producao.produto.nome}" />
+				</p:column>
+				
+				<p:column headerText="Quantidade" sortBy="#{producao.quantidade}">
+					<h:outputText value="#{producao.quantidade}" />
+				</p:column>
+			
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{producaoControle.totalProducoes} de #{producaoControle.totalProducoesConsulta}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('producaoDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

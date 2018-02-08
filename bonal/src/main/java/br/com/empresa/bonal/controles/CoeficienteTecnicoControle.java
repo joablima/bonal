@@ -208,7 +208,7 @@ public class CoeficienteTecnicoControle implements Serializable {
 	}
 	
 	public String consultarCoeficientesTecnicos(){
-		return "coeficienteTecnicoConsultar?produtoId="+produto.getId();
+		return "coeficienteTecnicoConsultar?faces-redirect=true&produtoId="+produto.getId();
 	}
 
 	// M�todo chamado ao carregar pagina de consulta para popular tabela
@@ -316,12 +316,12 @@ public class CoeficienteTecnicoControle implements Serializable {
 
 	// Editar um CoeficienteTecnico
 	public String editar(CoeficienteTecnico coeficienteTecnico) {
-		return "coeficienteTecnico?coeficienteTecnicoId=" + coeficienteTecnico.getId();
+		return "coeficienteTecnico?faces-redirect=true&coeficienteTecnicoId=" + coeficienteTecnico.getId();
 	}
 
 	// Editar um CoeficienteTecnico
 	public String adicionarCoeficienteTecnico() {
-		return "coeficienteTecnico?produtoId=" + produto.getId();
+		return "coeficienteTecnico?faces-redirect=true&produtoId=" + produto.getId();
 	}
 
 	public boolean coeficienteTecnicoIdExiste() {

@@ -105,7 +105,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 
 	// Editar um Categoria
 	public String editar(UnidadeDeMedida unidadeDeMedida) {
-		return "unidadeDeMedida?unidadeDeMedidaId=" + unidadeDeMedida.getId();
+		return "unidadeDeMedida?faces-redirect=true&unidadeDeMedidaId=" + unidadeDeMedida.getId();
 	}
 
 	public String unidadeDeMedidaConsultar() {
@@ -115,7 +115,7 @@ public class UnidadeDeMedidaControle implements Serializable {
 			facesContext.info(message);
 			return null;
 		} else {
-			return "unidadeDeMedidaConsultar";
+			return "unidadeDeMedidaConsultar?faces-redirect=true";
 		}
 
 	}

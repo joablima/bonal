@@ -198,7 +198,7 @@ public class FornecedorControle implements Serializable {
 		
 		if(message.equals("")){
 			fornecedor = new Fornecedor();
-			return "fornecedorConsultar";
+			return "fornecedorConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);
@@ -243,7 +243,7 @@ public class FornecedorControle implements Serializable {
 
 	// Editar um Fornecedor
 	public String editar(Fornecedor fornecedor) {
-		return "fornecedor?fornecedorId=" + fornecedor.getId();
+		return "fornecedor?faces-redirect=true&fornecedorId=" + fornecedor.getId();
 	}
 
 	public boolean fornecedorIdExiste() {

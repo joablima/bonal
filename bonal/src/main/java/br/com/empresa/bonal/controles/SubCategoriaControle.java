@@ -202,7 +202,7 @@ public class SubCategoriaControle implements Serializable {
 			subCategoria = new SubCategoria();
 			categoria = new Categoria();
 			categoriaCodigo = null;
-			return "subCategoriaConsultar";
+			return "subCategoriaConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);
@@ -257,7 +257,7 @@ public class SubCategoriaControle implements Serializable {
 
 	// Editar um SubCategoria
 	public String editar(SubCategoria subCategoria) {
-		return "subCategoria?subCategoriaId=" + subCategoria.getId();
+		return "subCategoria?faces-redirect=true&subCategoriaId=" + subCategoria.getId();
 	}
 
 	public boolean subCategoriaIdExiste() {

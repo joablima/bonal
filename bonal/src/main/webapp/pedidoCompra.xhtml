@@ -8,13 +8,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/template/main.xhtml">
-	<f:metadata>
-		<f:viewParam name="aquisicaoId"
-			value="#{aquisicaoControle.aquisicaoId}" />
-		<f:viewAction action="#{aquisicaoControle.inicializa}"
-			update="funcionario fornecedor funcionarioDocumento fornecedorDocumento"
-			if="#{param.aquisicaoId != null}" />
-	</f:metadata>
+	
 
 	<ui:define name="content">
 
@@ -29,25 +23,25 @@
 			<div class="ui-g-12 ui-md-6 ui-lg-6 botoes"></div>
 		</h:form>
 
-		<h:form id="formDadosCliente">
-			<p:focus context="formDadosCliente" />
-			<p:fieldset legend="Dados do Cliente">
+		<h:form id="formDadosFornecedor">
+			<p:focus context="formDadosFornecedor" />
+			<p:fieldset legend="Dados do Fornecedor">
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Cliente" for="clienteDocumento" />
-						<p:inputText id="clienteDocumento"
-							value="#{pedidoVendaControle.clienteDocumento}"
+						<p:outputLabel value="Fornecedor" for="fornecedorDocumento" />
+						<p:inputText id="fornecedorDocumento"
+							value="#{pedidoCompraControle.fornecedorDocumento}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Cliente obrigatório" maxlength="80">
+							requiredMessage="Fornecedor obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
-							<p:ajax event="keyup" process="@this" update="cliente"
-								listener="#{pedidoVendaControle.getClientePorDocumento}" />
+							<p:ajax event="keyup" process="@this" update="fornecedor"
+								listener="#{pedidoCompraControle.getFornecedorPorDocumento}" />
 						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="clienteDocumento" id="clienteDocumentoMessage" />
+						<p:message for="fornecedorDocumento" id="fornecedorDocumentoMessage" />
 					</div>
 				</div>
 
@@ -55,20 +49,20 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
-							<p:inputText placeholder="Cliente" id="cliente"
-								value="#{pedidoVendaControle.cliente.nome}"
+							<p:inputText placeholder="Fornecedor" id="fornecedor"
+								value="#{pedidoCompraControle.fornecedor.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="cliente"
-								actionListener="#{dialogControle.clienteConsultaDialogShow}">
+								process="@this" update="fornecedor"
+								actionListener="#{dialogControle.fornecedorConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
-									update="cliente clienteDocumento"
-									listener="#{pedidoVendaControle.clienteSelecionado}" />
+									update="fornecedor fornecedorDocumento"
+									listener="#{pedidoCompraControle.fornecedorSelecionado}" />
 							</p:commandButton>
 						</div>
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="cliente" id="clienteMessage" />
+						<p:message for="fornecedor" id="fornecedorMessage" />
 					</div>
 				</div>
 				
@@ -79,12 +73,12 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Funcionario" for="funcionarioDocumento" />
 						<p:inputText id="funcionarioDocumento"
-							value="#{pedidoVendaControle.funcionarioDocumento}"
+							value="#{pedidoCompraControle.funcionarioDocumento}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Funcionario obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
 							<p:ajax event="keyup" process="@this" update="funcionario"
-								listener="#{pedidoVendaControle.getFuncionarioPorDocumento}" />
+								listener="#{pedidoCompraControle.getFuncionarioPorDocumento}" />
 						</p:inputText>
 					</div>
 
@@ -98,14 +92,14 @@
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
 							<p:inputText placeholder="Funcionario" id="funcionario"
-								value="#{pedidoVendaControle.funcionario.nome}"
+								value="#{pedidoCompraControle.funcionario.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
 								process="@this" update="funcionario"
 								actionListener="#{dialogControle.funcionarioConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
 									update="funcionario funcionarioDocumento"
-									listener="#{pedidoVendaControle.funcionarioSelecionado}" />
+									listener="#{pedidoCompraControle.funcionarioSelecionado}" />
 							</p:commandButton>
 						</div>
 					</div>
@@ -123,20 +117,20 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Produto" for="produtoCodigo" />
-						<p:inputText id="produtoCodigo"
-							value="#{pedidoVendaControle.produtoCodigo}"
+						<p:outputLabel value="ItemDeProducao" for="itemDeProducaoCodigo" />
+						<p:inputText id="itemDeProducaoCodigo"
+							value="#{pedidoCompraControle.itemDeProducaoCodigo}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Codigo do produto obrigatório" maxlength="80">
+							requiredMessage="Codigo do itemDeProducao obrigatório" maxlength="80">
 							<p:clientValidator event="blur" />
 							<p:ajax event="keyup" process="@this"
-								update="produto unidadeDeMedida unidadeDeMedidaSigla"
-								listener="#{pedidoVendaControle.getProdutoPorCodigo}" />
+								update="itemDeProducao unidadeDeMedida unidadeDeMedidaSigla"
+								listener="#{pedidoCompraControle.getItemDeProducaoPorCodigo}" />
 						</p:inputText>
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="produtoCodigo" id="produtoCodigoMessage" />
+						<p:message for="itemDeProducaoCodigo" id="itemDeProducaoCodigoMessage" />
 					</div>
 				</div>
 
@@ -144,20 +138,20 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-12 ui-lg-6">
 						<div class="ui-inputgroup">
-							<p:inputText placeholder="Produto" id="produto"
-								value="#{pedidoVendaControle.produto.nome}"
+							<p:inputText placeholder="ItemDeProducao" id="itemDeProducao"
+								value="#{pedidoCompraControle.itemDeProducao.nome}"
 								styleClass="form-normal" required="true" readonly="true" />
 							<p:commandButton icon="fa fa-search" styleClass="white-button"
-								process="@this" update="produtoCodigo"
-								actionListener="#{dialogControle.produtoConsultaDialogShow}">
+								process="@this" update="itemDeProducaoCodigo"
+								actionListener="#{dialogControle.itemDeProducaoConsultaDialogShow}">
 								<p:ajax event="dialogReturn" process="@this"
-									update="produto produtoCodigo unidadeDeMedida unidadeDeMedidaSigla"
-									listener="#{pedidoVendaControle.produtoSelecionado}" />
+									update="itemDeProducao itemDeProducaoCodigo unidadeDeMedida unidadeDeMedidaSigla"
+									listener="#{pedidoCompraControle.itemDeProducaoSelecionado}" />
 							</p:commandButton>
 						</div>
 					</div>
 					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
-						<p:message for="produto" id="produtoMessage" />
+						<p:message for="itemDeProducao" id="itemDeProducaoMessage" />
 					</div>
 				</div>
 
@@ -166,7 +160,7 @@
 						<p:outputLabel value="Unidade de Medida"
 							for="unidadeDeMedidaSigla" />
 						<p:inputText placeholder="Sigla" id="unidadeDeMedidaSigla"
-							value="#{pedidoVendaControle.produto.unidadeDeMedida.sigla}"
+							value="#{pedidoCompraControle.itemDeProducao.unidadeDeMedida.sigla}"
 							styleClass="form-normal" required="true" readonly="true">
 						</p:inputText>
 					</div>
@@ -175,7 +169,7 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:inputText placeholder="Nome" id="unidadeDeMedida"
-							value="#{pedidoVendaControle.produto.unidadeDeMedida.nome}"
+							value="#{pedidoCompraControle.itemDeProducao.unidadeDeMedida.nome}"
 							styleClass="form-normal" required="true" readonly="true">
 						</p:inputText>
 					</div>
@@ -185,13 +179,13 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Quantidade" for="quantidade" />
 						<p:inputText id="quantidade"
-							value="#{pedidoVendaControle.itemDaVenda.quantidade}"
+							value="#{pedidoCompraControle.itemDaCompra.quantidade}"
 							styleClass="form-normal" required="true"
 							requiredMessage="Quantidade obrigatório"
 							validatorMessage="Quantidade deve ser um número inteiro ou decimal"
 							maxlength="80">
 							<p:ajax event="keyup" process="@this" update="precoTotal"
-								listener="#{pedidoVendaControle.calculaPrecoTotal()}" />
+								listener="#{pedidoCompraControle.calculaPrecoTotal()}" />
 							<p:clientValidator event="blur" />
 						</p:inputText>
 					</div>
@@ -205,14 +199,14 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Valor unitário" for="precoUnitario" />
 						<p:inputText id="precoUnitario"
-							value="#{pedidoVendaControle.itemDaVenda.precoUnitario}"
+							value="#{pedidoCompraControle.itemDaCompra.precoUnitario}"
 							styleClass="form-normal" required="true"
 							requiredMessage="precoUnitario do item obrigatório"
 							validatorMessage="precoUnitario do item deve ter no minimo 2 caracteres"
 							maxlength="80">
 							<p:clientValidator event="blur" />
 							<p:ajax event="keyup" process="@this" update="precoTotal"
-								listener="#{pedidoVendaControle.calculaPrecoTotal}" />
+								listener="#{pedidoCompraControle.calculaPrecoTotal}" />
 						</p:inputText>
 					</div>
 
@@ -225,7 +219,7 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Valor total" for="precoTotal" />
 						<p:inputText id="precoTotal"
-							value="#{pedidoVendaControle.itemDaVenda.precoTotal}"
+							value="#{pedidoCompraControle.itemDaCompra.precoTotal}"
 							styleClass="form-normal" required="true"
 							requiredMessage="precoTotal do item obrigatório"
 							validatorMessage="precoTotal do item deve ter no minimo 2 caracteres"
@@ -243,7 +237,7 @@
 
 			<div class="botoes-cadastrar">
 				<p:commandButton id="salvar" value="Adicionar"
-					action="#{pedidoVendaControle.adicionarItem}" process="@this @form"
+					action="#{pedidoCompraControle.adicionarItem}" process="@this @form"
 					update="@form" icon="fa fa-fw fa-save" validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
@@ -254,13 +248,13 @@
 
 
 		<h:form id="formTabelaItens">
-			<p:dataTable id="itens" var="itemDaVenda"
-				value="#{pedidoVendaControle.itensDaVenda}" resizableColumns="true"
+			<p:dataTable id="itens" var="itemDaCompra"
+				value="#{pedidoCompraControle.itensDaVenda}" resizableColumns="true"
 				reflow="true" rows="10" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="10,25,50" draggableColumns="true"
-				rowKey="#{itemDaVenda.produto.id}"
-				selection="#{pedidoVendaControle.itemDaVenda}"
+				rowKey="#{itemDaCompra.itemDeProducao.id}"
+				selection="#{pedidoCompraControle.itemDaCompra}"
 				selectionMode="single" emptyMessage="Nenhum item!"
 				styleClass="ui-g-12">
 
@@ -268,34 +262,34 @@
 				
 				</f:facet>
 
-				<p:column headerText="Id" sortBy="#{itemDaVenda.id}">
-					<h:outputText value="#{itemDaVenda.id}" />
+				<p:column headerText="Id" sortBy="#{itemDaCompra.id}">
+					<h:outputText value="#{itemDaCompra.id}" />
 				</p:column>
 
-				<p:column headerText="Item" sortBy="#{itemDaVenda.produto.nome}">
-					<h:outputText value="#{itemDaVenda.produto.nome}" />
+				<p:column headerText="Item" sortBy="#{itemDaCompra.itemDeProducao.nome}">
+					<h:outputText value="#{itemDaCompra.itemDeProducao.nome}" />
 				</p:column>
 
 
-				<p:column headerText="Quantidade" sortBy="#{itemDaVenda.quantidade}">
-					<h:outputText value="#{itemDaVenda.quantidade}" />
+				<p:column headerText="Quantidade" sortBy="#{itemDaCompra.quantidade}">
+					<h:outputText value="#{itemDaCompra.quantidade}" />
 				</p:column>
 
 				<p:column headerText="Valor unitario"
-					sortBy="#{itemDaVenda.precoUnitario}">
-					<h:outputText value="#{itemDaVenda.precoUnitario}" />
+					sortBy="#{itemDaCompra.precoUnitario}">
+					<h:outputText value="#{itemDaCompra.precoUnitario}" />
 				</p:column>
 
 				<p:column headerText="Valor total"
-					sortBy="#{itemDaVenda.precoTotal}">
-					<h:outputText value="#{itemDaVenda.precoTotal}" />
+					sortBy="#{itemDaCompra.precoTotal}">
+					<h:outputText value="#{itemDaCompra.precoTotal}" />
 				</p:column>
 
 
 				<p:column headerText="Ação" style="width: 7ch;" priority="6">
 					<p:commandButton icon="fa fa-fw fa-times"
 						styleClass="tab-btn btn-desativar" value="Remover"
-						action="#{pedidoVendaControle.removerItem(itemDaVenda)}"
+						action="#{pedidoCompraControle.removerItem(itemDaCompra)}"
 						update="@form" process="@this @form">
 					</p:commandButton>
 				</p:column>
@@ -304,7 +298,7 @@
 
 				<f:facet name="footer">
 					Total de itens: 
-					<h:outputText value=" #{pedidoVendaControle.totalDeItens}" />
+					<h:outputText value=" #{pedidoCompraControle.totalDeItens}" />
 				</f:facet>
 
 				<p:ajax event="rowDblselect" oncomplete="PF('vendaDialog').show()"
@@ -320,7 +314,7 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Valor total" for="precoTotal" />
 						<p:inputText id="precoTotal"
-							value="#{pedidoVendaControle.pedidoVenda.precoTotal}"
+							value="#{pedidoCompraControle.pedidoCompra.precoTotal}"
 							styleClass="form-normal"
 							readonly="true"
 							maxlength="80">
@@ -337,7 +331,7 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Vencimento" for="vencimento" />
 						<p:calendar id="vencimento"
-							value="#{pedidoVendaControle.pedidoVenda.vencimento}"
+							value="#{pedidoCompraControle.pedidoCompra.vencimento}"
 							styleClass="form-normal" required="true"
 							maxlength="80">
 							<f:convertDateTime type="date" pattern="dd/mm/yy" />
@@ -355,7 +349,7 @@
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Emissao" for="emissao" />
 						<p:inputMask id="emissao"
-							value="#{pedidoVendaControle.pedidoVenda.dataCadastro}"
+							value="#{pedidoCompraControle.pedidoCompra.dataCadastro}"
 							styleClass="form-normal" required="true"
 							readonly="true"
 							maxlength="80">
@@ -374,9 +368,9 @@
 						<p:outputLabel value="Tipo:" for="tipoDePagamento" />
 						<p:selectOneMenu label="Forma pagamento"
 							styleClass="form-normal"
-							value="#{pedidoVendaControle.conta.tipoDePagamento}" id="tipoDePagamento"
+							value="#{pedidoCompraControle.conta.tipoDePagamento}" id="tipoDePagamento"
 							required="true" requiredMessage="Selecione uma opção de pagamento">
-							<f:selectItems value="#{pedidoVendaControle.enumTipoPagamento}" var="tipo"
+							<f:selectItems value="#{pedidoCompraControle.enumTipoPagamento}" var="tipo"
 								itemValue="#{tipo}" itemLabel="#{tipo.label}" />
 							<p:clientValidator event="blur" /> 
 						</p:selectOneMenu>
@@ -391,9 +385,9 @@
 						<p:outputLabel value="Status" for="statusPagamento" />
 						<p:selectOneMenu label="Status do pagamento"
 							styleClass="form-normal"
-							value="#{pedidoVendaControle.conta.statusPagamento}" id="statusPagamento"
+							value="#{pedidoCompraControle.conta.statusPagamento}" id="statusPagamento"
 							required="true" requiredMessage="Selecione um status">
-							<f:selectItems value="#{pedidoVendaControle.enumStatusPagamento}" var="tipo"
+							<f:selectItems value="#{pedidoCompraControle.enumStatusPagamento}" var="tipo"
 								itemValue="#{tipo}" itemLabel="#{tipo.label}" />
 							<p:clientValidator event="blur" /> 
 						</p:selectOneMenu>
@@ -406,8 +400,8 @@
 
 			</p:fieldset>
 				<div class="botoes-cadastrar">
-				<p:commandButton id="salvarTudo" value="Salvar" actionListener="#{pedidoVendaControle.salvarTudo}"
-					action="#{pedidoVendaControle.index}" process="@this @form"
+				<p:commandButton id="salvarTudo" value="Salvar" actionListener="#{pedidoCompraControle.salvarTudo}"
+					action="#{pedidoCompraControle.index}" process="@this @form"
 					update="@form" icon="fa fa-fw fa-save"
 					validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"

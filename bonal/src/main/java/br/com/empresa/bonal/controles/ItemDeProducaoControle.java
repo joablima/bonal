@@ -160,7 +160,7 @@ public class ItemDeProducaoControle implements Serializable {
 
 	// Editar um Categoria
 	public String editar(ItemDeProducao itemDeProducao) {
-		return "itemDeProducao?itemDeProducaoId=" + itemDeProducao.getId();
+		return "itemDeProducao?faces-redirect=true&itemDeProducaoId=" + itemDeProducao.getId();
 	}
 
 	public boolean itemDeProducaoIdExiste() {

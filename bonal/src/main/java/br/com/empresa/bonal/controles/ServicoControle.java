@@ -222,7 +222,7 @@ public class ServicoControle implements Serializable {
 			subCategoriaCodigo = null;
 			categoria = new Categoria();
 			categoriaCodigo = null;
-			return "servicoConsultar";
+			return "servicoConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);
@@ -288,7 +288,7 @@ public class ServicoControle implements Serializable {
 
 	// Editar um SubCategoria
 	public String editar(Servico servico) {
-		return "servico?servicoId=" + servico.getId();
+		return "servico?faces-redirect=true&servicoId=" + servico.getId();
 	}
 
 	public boolean servicoIdExiste() {

@@ -2,6 +2,7 @@ package br.com.empresa.bonal.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,6 +39,8 @@ public class Conta implements Serializable{
 	
 	private Date vencimento;
 	
+	private String tipo;
+	
 	private BigDecimal precoTotal;
 	
 	
@@ -61,9 +64,15 @@ public class Conta implements Serializable{
 
 
 
-	public Date getVencimento() {
-		return vencimento;
+	public String getVencimento() {
+		Calendar c = Calendar.getInstance();
+		c.setTime(vencimento);
+		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+	    fmt.setCalendar(c);
+	    String dateFormatted = fmt.format(c.getTime());
+	    return dateFormatted;
 	}
+	
 
 	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
@@ -98,6 +107,14 @@ public class Conta implements Serializable{
 	}
 
 	
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
 	public EnumStatusPagamento getStatusPagamento() {
 		return statusPagamento;

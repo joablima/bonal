@@ -17,21 +17,18 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 @Entity
-public class Venda implements Serializable{
+public class Producao implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "cliente")
-	private Cliente cliente;	
+	@JoinColumn(name = "produto")
+	private Produto produto;	
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "funcionario")
-	private Funcionario funcionario;	
 	
-	private BigDecimal precoTotal;
+	private BigDecimal quantidade;
 	
 	
 	@Temporal(TemporalType.DATE)
@@ -43,37 +40,6 @@ public class Venda implements Serializable{
 	private Integer version;
 	
 	private Boolean status;
-
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-
-	public Funcionario getFuncionario() {
-		return funcionario;
-	}
-
-
-	public void setFuncionario(Funcionario funcionario) {
-		this.funcionario = funcionario;
-	}
-
-
-	public BigDecimal getPrecoTotal() {
-		return precoTotal;
-	}
-
-
-	public void setPrecoTotal(BigDecimal precoTotal) {
-		this.precoTotal = precoTotal;
-	}
-
 
 	public Long getId() {
 		return id;
@@ -97,6 +63,26 @@ public class Venda implements Serializable{
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+
+
+	public BigDecimal getQuantidade() {
+		return quantidade;
+	}
+
+
+	public void setQuantidade(BigDecimal quantidade) {
+		this.quantidade = quantidade;
+	}
+
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 	
 	

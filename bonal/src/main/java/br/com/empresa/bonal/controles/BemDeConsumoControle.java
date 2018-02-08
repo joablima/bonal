@@ -232,7 +232,7 @@ public class BemDeConsumoControle implements Serializable {
 			subCategoriaCodigo = null;
 			categoria = new Categoria();
 			categoriaCodigo = null;
-			return "bemDeConsumoConsultar";
+			return "bemDeConsumoConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);
@@ -298,7 +298,7 @@ public class BemDeConsumoControle implements Serializable {
 
 	// Editar um SubCategoria
 	public String editar(BemDeConsumo bemDeConsumo) {
-		return "bemDeConsumo?bemDeConsumoId=" + bemDeConsumo.getId();
+		return "bemDeConsumo?faces-redirect=true&bemDeConsumoId=" + bemDeConsumo.getId();
 	}
 
 	public boolean bemDeConsumoIdExiste() {

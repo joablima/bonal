@@ -208,7 +208,7 @@ public class AquisicaoControle implements Serializable {
 	}
 	
 	public String consultarAquisicoes(){
-		return "aquisicaoConsultar";
+		return "aquisicaoConsultar?faces-redirect=true";
 	}
 	
 	public String aquisicaoConsultar(){
@@ -217,7 +217,7 @@ public class AquisicaoControle implements Serializable {
 			aquisicao = new Aquisicao();
 			fornecedor = new Fornecedor();
 			fornecedorDocumento = null;
-			return "aquisicaoConsultar";
+			return "aquisicaoConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);
@@ -272,11 +272,11 @@ public class AquisicaoControle implements Serializable {
 
 	// Editar um SubCategoria
 	public String editar(Aquisicao aquisicao) {
-		return "aquisicao?aquisicaoId=" + aquisicao.getId();
+		return "aquisicao?faces-redirect=true&aquisicaoId=" + aquisicao.getId();
 	}
 
 	public String consultarItensDaAquisicao(Aquisicao aquisicao) {
-		return "itemDaAquisicaoConsultar?aquisicaoId=" + aquisicao.getId();
+		return "itemDaAquisicaoConsultar?faces-redirect=true&aquisicaoId=" + aquisicao.getId();
 	}
 
 	public String consultarItensDaAquisicao() {

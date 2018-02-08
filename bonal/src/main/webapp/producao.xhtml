@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<f:metadata>
+		<f:viewParam name="producaoId" value="#{producaoControle.producaoId}" />
+
+	</f:metadata>
+
+	<ui:define name="content">
+		<div class="ui-g-12 titulo">
+			<h1>
+				<h:outputText rendered="#{producaoControle.producaoId == null}"
+					value="Cadastro de Producao" />
+				<h:outputText rendered="#{producaoControle.producaoId != null}"
+					value="Edição de Producao" />
+			</h1>
+			<span> <i class="fa fa-fw fa-search" /> <h:button
+					class="botoes-cadastrar" value="Consultar Operações"
+					outcome="producaoConsultar" />
+			</span>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" closable="true">
+			<p:effect type="pulsate" event="load" delay="500" />
+		</p:messages>
+
+		<h:form id="formProducao">
+			<p:focus context="formProducao" />
+			<p:fieldset legend="Dados da Producao">
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Produto" for="produtoCodigo" />
+						<p:inputText id="produtoCodigo"
+							value="#{producaoControle.produtoCodigo}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Codigo do produto obrigatório" maxlength="80">
+							<p:clientValidator event="blur" />
+							<p:ajax event="keyup" process="@this"
+								update="produto"
+								listener="#{producaoControle.getProdutoPorCodigo}" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="produtoCodigo" id="produtoCodigoMessage" />
+					</div>
+				</div>
+
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-6">
+						<div class="ui-inputgroup">
+							<p:inputText placeholder="Produto" id="produto"
+								value="#{producaoControle.produto.nome}"
+								styleClass="form-normal" required="true" readonly="true" />
+							<p:commandButton icon="fa fa-search" styleClass="white-button"
+								process="@this" update="produtoCodigo"
+								actionListener="#{dialogControle.produtoConsultaDialogShow}">
+								<p:ajax event="dialogReturn" process="@this"
+									update="produto produtoCodigo"
+									listener="#{producaoControle.produtoSelecionado}" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="ui-g-6 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="produto" id="produtoMessage" />
+					</div>
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Quantidade" for="quantidade" />
+						<p:inputText id="quantidade"
+							value="#{producaoControle.producao.quantidade}"
+							styleClass="form-normal" required="true"
+							requiredMessage="Quantidade obrigatório"
+							validatorMessage="Quantidade deve ser um número inteiro ou decimal"
+							maxlength="80">
+							<p:clientValidator event="blur" />
+						</p:inputText>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="quantidade" id="quantidadeMessage" />
+					</div>
+				</div>
+
+			</p:fieldset>
+
+			<div class="botoes-cadastrar">
+				<p:commandButton id="salvar" value="Salvar"
+					actionListener="#{producaoControle.salvar}"
+					action="#{producaoControle.producaoConsultar}"
+					process="@this @form" update="@form :messages"
+					icon="fa fa-fw fa-save" validateClient="true" />
+				<p:commandButton value="Limpar" type="reset"
+					icon="fa fa-fw fa-eraser" update="@form" />
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

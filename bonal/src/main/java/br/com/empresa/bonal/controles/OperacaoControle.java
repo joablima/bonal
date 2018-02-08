@@ -159,7 +159,7 @@ public class OperacaoControle implements Serializable {
 		if (message.equals("")) {
 
 			operacao = new Operacao();
-			return "produtoConsultar";
+			return "produtoConsultar?faces-redirect=true&";
 		} else {
 
 			facesContext.info(message);
@@ -204,11 +204,11 @@ public class OperacaoControle implements Serializable {
 
 	@Logging
 	public String editar(Operacao operacao) {
-		return "operacao?operacaoId=" + operacao.getId();
+		return "operacao?faces-redirect=true&operacaoId=" + operacao.getId();
 	}
 
 	public String cancelar() {
-		return "index";
+		return "index?faces-redirect=true&";
 	}
 
 	public boolean operacaoIdExiste() {

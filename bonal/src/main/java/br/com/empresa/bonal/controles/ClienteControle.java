@@ -190,7 +190,7 @@ public class ClienteControle implements Serializable {
 		if(message.equals("")){
 
 			cliente = new Cliente();
-			return "clienteConsultar";
+			return "clienteConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);
@@ -235,7 +235,7 @@ public class ClienteControle implements Serializable {
 
 	// Editar um Cliente
 	public String editar(Cliente cliente) {
-		return "cliente?clienteId=" + cliente.getId();
+		return "cliente?faces-redirect=true&clienteId=" + cliente.getId();
 	}
 
 	public boolean clienteIdExiste() {

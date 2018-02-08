@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/main.xhtml">
+	<ui:define name="content">
+	<f:metadata>
+        <f:event type="preRenderView" listener="#{contaControle.preRenderView}"/>
+    </f:metadata>
+		<div class="ui-g-12 titulo">
+			<h1>Consultar Contas</h1>
+		</div>
+
+		<p:messages id="messages" globalOnly="true" />
+
+		<h:form id="formContaConsulta">
+			<div class="filtros-consultar">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+					<p:outputLabel value="Nome ou Codigo da Conta: "
+						for="contaNome" />
+					<p:inputText value="#{contaControle.contaNome}"
+						id="contaNome" styleClass="form-normal">
+						<p:ajax event="keyup" listener="#{contaControle.listar}"
+							process="@form" update="@form :tabelaContas" />
+					</p:inputText>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
+					
+
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"  ajax="false">
+						<p:fileDownload
+							value="#{poiControle.downloadXlsx(contaControle.contas)}">
+							<p:graphicImage library="img/icon" alt="Exportar para xls"
+								name="xls.png" width="30" height="30" />
+						</p:fileDownload>
+					</p:commandButton>
+				</div>
+			</div>
+
+		</h:form>
+
+		<h:form id="tabelaContas">
+			<p:dataTable id="conta" var="conta"
+				value="#{contaControle.contas}" resizableColumns="true"
+				reflow="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,25,50" draggableColumns="true"
+				rowKey="#{conta.id}" selection="#{contaControle.conta}"
+				selectionMode="single" emptyMessage="Nenhuma Conta Encontrado!"
+				styleClass="ui-g-12">
+
+				<f:facet name="header">Lista de Contas
+				
+				</f:facet>
+
+				<p:column headerText="Id" sortBy="#{conta.id}">
+					<h:outputText value="#{conta.id}" />
+				</p:column>
+
+				
+				
+				<p:column headerText="Valor total" sortBy="#{conta.precoTotal}">
+					<h:outputText value="#{conta.precoTotal}" />
+				</p:column>
+				
+				<p:column headerText="Vencimento" sortBy="#{conta.vencimento}">
+					<h:outputText value="#{conta.vencimento}" />
+				</p:column>
+				
+				<p:column headerText="Tipo" sortBy="#{conta.tipo}">
+					<h:outputText value="#{conta.tipo}" />
+				</p:column>
+				
+
+				<p:column headerText="Status" style="width: 7ch;" priority="6">
+					<p:commandButton 
+						styleClass="tab-btn btn-desativar" value="#{conta.statusPagamento}"
+						action="#{contaControle.mudarStatusPagamento(conta)}"
+						update="@form" process="@this @form">
+						<p:ajax listener="#{contaControle.listar}" />
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					Número de Consultas retornadas: 
+					<h:outputText
+						value=" #{contaControle.totalContas} de #{contaControle.totalContasConsulta}" />
+				</f:facet>
+
+				<p:ajax event="rowDblselect"
+					oncomplete="PF('contaDialog').show()" update="@form"
+					global="false" />
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -179,7 +179,7 @@ public class ProdutoControle implements Serializable {
 			produto = new Produto();
 			unidadeDeMedida = new UnidadeDeMedida();
 			unidadeDeMedidaSigla = null;
-			return "produtoConsultar";
+			return "produtoConsultar?faces-redirect=true";
 		}
 		else{
 			
@@ -239,7 +239,7 @@ public class ProdutoControle implements Serializable {
 
 	// Editar um SubCategoria
 	public String editar(Produto produto) {
-		return "produto?produtoId=" + produto.getId();
+		return "produto?faces-redirect=true&produtoId=" + produto.getId();
 	}
 
 	public boolean produtoIdExiste() {
@@ -256,11 +256,11 @@ public class ProdutoControle implements Serializable {
 	}
 
 	public String consultarCoeficientesTecnicos(){
-		return "coeficienteTecnicoConsultar?produtoId="+produto.getId();
+		return "coeficienteTecnicoConsultar?faces-redirect=true&produtoId="+produto.getId();
 	}
 	
 	public String consultarCoeficientesTecnicos(Produto p){
-		return "coeficienteTecnicoConsultar?produtoId="+p.getId();
+		return "coeficienteTecnicoConsultar?faces-redirect=true&produtoId="+p.getId();
 	}
 	
 

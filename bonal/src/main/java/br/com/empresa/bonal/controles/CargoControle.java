@@ -240,7 +240,7 @@ public class CargoControle implements Serializable {
 			subCategoriaCodigo = null;
 			categoria = new Categoria();
 			categoriaCodigo = null;
-			return "cargoConsultar";
+			return "cargoConsultar?faces-redirect=true";
 		}
 		else{
 			facesContext.info(message);
@@ -306,7 +306,7 @@ public class CargoControle implements Serializable {
 
 	// Editar um SubCategoria
 	public String editar(Cargo cargo) {
-		return "cargo?cargoId=" + cargo.getId();
+		return "cargo?faces-redirect=true&cargoId=" + cargo.getId();
 	}
 
 	public boolean cargoIdExiste() {

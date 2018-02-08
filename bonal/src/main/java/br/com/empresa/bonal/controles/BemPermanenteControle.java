@@ -306,7 +306,7 @@ public class BemPermanenteControle implements Serializable {
 
 	// Editar um SubCategoria
 	public String editar(BemPermanente bemPermanente) {
-		return "bemPermanente?bemPermanenteId=" + bemPermanente.getId();
+		return "bemPermanente?faces-redirect=true&bemPermanenteId=" + bemPermanente.getId();
 	}
 
 	public boolean bemPermanenteIdExiste() {

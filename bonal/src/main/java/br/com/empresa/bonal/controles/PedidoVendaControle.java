@@ -417,6 +417,7 @@ public class PedidoVendaControle implements Serializable {
 		conta.setVencimento(pedidoVenda.getVencimento());
 		conta.setPrecoTotal(pedidoVenda.getPrecoTotal());
 		conta.setStatus(true);
+		conta.setTipo("receita");
 		
 		
 		Long contaId = pedidoVendaRepositorio.adicionarContaComRetorno(conta);
@@ -434,11 +435,11 @@ public class PedidoVendaControle implements Serializable {
 			UnidadeDeMedida u = pedidoVendaRepositorio.getUnidadeDeMedidaPorSigla(p.getUnidadeDeMedida().getSigla());
 			itensDaVenda.get(i).setUnidadeDeMedida(u);
 			
-			
+			p.setQuantidade(p.getQuantidade().subtract(itensDaVenda.get(i).getQuantidade()));
+			pedidoVendaRepositorio.atualizarProduto(p);
 			pedidoVenda.addItem(itensDaVenda.get(i));
 		}
 		
-		System.out.println(pedidoVenda.getItensDaVenda().size());
 		
 		Funcionario f = pedidoVendaRepositorio.getFuncionarioPorDocumento(funcionarioDocumento);
 		pedidoVenda.setFuncionario(f);
@@ -446,17 +447,18 @@ public class PedidoVendaControle implements Serializable {
 		Cliente c = pedidoVendaRepositorio.getClientePorDocumento(clienteDocumento);
 		pedidoVenda.setCliente(c);
 
-		System.out.println(pedidoVenda.getCliente().getNome());
-		System.out.println(pedidoVenda.getFuncionario().getNome());
-		System.out.println(pedidoVenda.getConta().getId());
-		System.out.println(pedidoVenda.getPrecoTotal());
-		System.out.println(pedidoVenda.getVencimento());
 		
 		pedidoVendaRepositorio.adicionar(pedidoVenda);
-		
-		
+		conta = new Conta();
+		funcionario = new Funcionario();
+		cliente = new Cliente();
+		pedidoVenda = new PedidoVenda();
+		itensDaVenda = new ArrayList<>();
+		produto = new Produto();
+	}
 	
-
+	public String index(){
+		return "index?faces-redirect=true";
 	}
 
 }

@@ -205,7 +205,6 @@ public class FuncionarioControle implements Serializable {
 	public void salvar() {
 		message = "";
 		this.funcionario.setStatus(true);
-		this.funcionario.setTipo("PESSOA_FISICA");
 		
 		cargo = funcionarioRepositorio.getCargoPorCodigo(cargoCodigo);
 
@@ -250,7 +249,7 @@ public class FuncionarioControle implements Serializable {
 
 	// Editar um Funcionario
 	public String editar(Funcionario funcionario) {
-		return "funcionario?funcionarioId=" + funcionario.getId();
+		return "funcionario?faces-redirect=true&funcionarioId=" + funcionario.getId();
 	}
 
 	public boolean funcionarioIdExiste() {

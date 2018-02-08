@@ -16,7 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class ItemDaVenda implements Serializable{
+public class ItemDaCompra implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,8 @@ public class ItemDaVenda implements Serializable{
 	private BigDecimal precoTotal;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "produto")
-	private Produto produto;	
+	@JoinColumn(name = "itemDeproducao")
+	private ItemDeProducao itemDeProducao;	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "unidade_de_medida")
@@ -42,13 +42,15 @@ public class ItemDaVenda implements Serializable{
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_cadastro")
 	private Calendar dataCadastro = Calendar.getInstance();
+	
+	
 
-	public Produto getProduto() {
-		return produto;
+	public ItemDeProducao getItemDeProducao() {
+		return itemDeProducao;
 	}
 
-	public void setProduto(Produto produto) {
-		this.produto = produto;
+	public void setItemDeProducao(ItemDeProducao itemDeProducao) {
+		this.itemDeProducao = itemDeProducao;
 	}
 
 	public UnidadeDeMedida getUnidadeDeMedida() {

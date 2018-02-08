@@ -16,36 +16,46 @@
 						icon="ui-icon-disk" />
 					<p:menuitem value="Unidade de medida"
 						outcome="unidadeDeMedidaConsultar" icon="ui-icon-disk" />
-						<p:menuitem value="Categorias" outcome="categoriaConsultar"
+					<p:menuitem value="Categorias" outcome="categoriaConsultar"
 						icon="ui-icon-disk" />
-						<p:menuitem value="Subcategorias" outcome="subCategoriaConsultar"
+					<p:menuitem value="Subcategorias" outcome="subCategoriaConsultar"
 						icon="ui-icon-disk" />
-						<p:menuitem value="Bens de consumo" outcome="bemDeConsumoConsultar"
+					<p:menuitem value="Bens de consumo" outcome="bemDeConsumoConsultar"
 						icon="ui-icon-disk" />
-						<p:menuitem value="Bens permamentse" outcome="bemPermanenteConsultar"
+					<p:menuitem value="Bens permamentse"
+						outcome="bemPermanenteConsultar" icon="ui-icon-disk" />
+					<p:menuitem value="Serviços" outcome="servicoConsultar"
 						icon="ui-icon-disk" />
-						<p:menuitem value="Serviços" outcome="servicoConsultar"
+					<p:menuitem value="Funcionarios" outcome="funcionarioConsultar"
+						icon="ui-icon-disk" />
+					<p:menuitem value="Produção" outcome="producaoConsultar"
 						icon="ui-icon-disk" />
 				</p:submenu>
-				
+
 				<p:submenu label="Vendas">
 					<p:menuitem value="Pedidos" outcome="pedidoVenda"
 						icon="ui-icon-disk" />
-					<p:menuitem value="Clientes"
-						outcome="clienteConsultar" icon="ui-icon-disk" />
-				</p:submenu>
-				
-				
-				<p:submenu label="Compras">
-					<p:menuitem value="Pedidos" outcome="aquisicaoConsultar"
+					<p:menuitem value="Clientes" outcome="clienteConsultar"
 						icon="ui-icon-disk" />
-					<p:menuitem value="Fornecedores"
-						outcome="fornecedorConsultar" icon="ui-icon-disk" />
 				</p:submenu>
-				
+
+
+				<p:submenu label="Compras">
+					<p:menuitem value="Pedidos" outcome="pedidoCompra"
+						icon="ui-icon-disk" />
+					<p:menuitem value="Fornecedores" outcome="fornecedorConsultar"
+						icon="ui-icon-disk" />
+				</p:submenu>
+
+				<p:submenu label="Contas">
+					<p:menuitem value="Contas" outcome="contaConsultar"
+						icon="ui-icon-disk" />
+
+				</p:submenu>
+
 			</p:submenu>
-			
-		
+
+
 			<p:submenu label="Ajuda">
 				<p:menuitem value="Bem Vindo" styleClass="cursor-help"
 					outcome="index" icon="ui-icon-disk" />

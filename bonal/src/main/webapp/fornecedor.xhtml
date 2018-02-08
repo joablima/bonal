@@ -18,11 +18,9 @@
 	<ui:define name="content">
 		<div class="ui-g-12 titulo">
 			<h1>
-				<h:outputText
-					rendered="#{fornecedorControle.fornecedorId == null}"
+				<h:outputText rendered="#{fornecedorControle.fornecedorId == null}"
 					value="Cadastro de Fornecedor" />
-				<h:outputText
-					rendered="#{fornecedorControle.fornecedorId != null}"
+				<h:outputText rendered="#{fornecedorControle.fornecedorId != null}"
 					value="Edição de Fornecedor" />
 			</h1>
 			<span> <i class="fa fa-coffee" /> <p:link
@@ -37,15 +35,18 @@
 		<h:form id="formFornecedor">
 			<p:focus context="formFornecedor" />
 			<p:fieldset legend="Dados do Fornecedor">
-<div class="ui-g">
+				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Selecione o Tipo" for="tipo" />
 						<p:selectOneMenu label="Selecione o Tipo" styleClass="form-normal"
-							value="#{fornecedorControle.fornecedor.tipo}" id="tipo" required="true"
-							requiredMessage="Selecione o tipo" process="@this @form" update="@form">
-							<f:selectItems value="#{fornecedorControle.enumPessoa}" var="tipo"
-								itemValue="#{tipo}" itemLabel="#{tipo.label}" />
+							value="#{fornecedorControle.fornecedor.tipo}" id="tipo"
+							required="true" requiredMessage="Selecione o tipo"
+							process="@this @form" update="@form">
+							<f:selectItems value="#{fornecedorControle.enumPessoa}"
+								var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.label}" />
 							<p:clientValidator event="blur" />
+							<p:ajax event="change" update="documento"
+								listener="#{fornecedorControle.atualizarMascara}" />
 						</p:selectOneMenu>
 					</div>
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
@@ -74,13 +75,12 @@
 
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
-						<p:outputLabel value="Documento" for="documento" />
+						<p:outputLabel value="CPF/CNPJ" for="documento" />
 						<p:inputMask id="documento"
 							value="#{fornecedorControle.fornecedor.documento}"
 							styleClass="form-normal" required="true"
-							requiredMessage="Cpf do fornecedor obrigatório"
-							validatorMessage="Cpf do fornecedor deve ter no minimo 2 caracteres"
-							maxlength="80" mask="999-999-999-99">
+							requiredMessage="Documento do fornecedor obrigatório"
+							maxlength="80" mask="#{fornecedorControle.mask}">
 							<p:clientValidator event="blur" />
 						</p:inputMask>
 					</div>
@@ -109,8 +109,8 @@
 				</div>
 
 
-				
-			
+
+
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-6">
 						<p:outputLabel value="Email:" for="email" />
@@ -275,10 +275,11 @@
 			</p:fieldset>
 
 			<div class="botoes-cadastrar">
-				<p:commandButton id="salvar" value="Salvar"	actionListener="#{fornecedorControle.salvar}"
-					action="#{fornecedorControle.fornecedorConsultar}" process="@this @form"
-					update="@form :messages" icon="fa fa-fw fa-save"
-					validateClient="true" />
+				<p:commandButton id="salvar" value="Salvar"
+					actionListener="#{fornecedorControle.salvar}"
+					action="#{fornecedorControle.fornecedorConsultar}"
+					process="@this @form" update="@form :messages"
+					icon="fa fa-fw fa-save" validateClient="true" />
 				<p:commandButton value="Limpar" type="reset"
 					icon="fa fa-fw fa-eraser" update="@form" />
 			</div>

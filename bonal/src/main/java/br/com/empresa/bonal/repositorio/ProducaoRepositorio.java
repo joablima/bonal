@@ -7,65 +7,70 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.empresa.bonal.entidades.Fornecedor;
-import br.com.empresa.bonal.entidades.ItemDeProducao;
+import br.com.empresa.bonal.entidades.Producao;
 import br.com.empresa.bonal.entidades.Produto;
+import br.com.empresa.bonal.entidades.ItemDeProducao;
 import br.com.empresa.bonal.entidades.UnidadeDeMedida;
-import br.com.empresa.bonal.util.logging.Logging;
 
-public class FornecimentoRepositorio implements Serializable {
+public class ProducaoRepositorio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	EntityManager em;
 
 	// m�todo que persiste um registro
-	public void adicionar(Fornecedor fornecedor) {
-		em.persist(fornecedor);
+	public void adicionar(Producao producao) {
+
+		em.persist(producao);
 	}
 
 	// m�todo que atualiza um registro
-	public void atualizar(Fornecedor fornecedor) {
-		em.merge(fornecedor);
+	public void atualizar(Producao producao) {
+
+		em.merge(producao);
+	}
+
+	// m�todo que atualiza um registro
+	public void atualizarProduto(Produto produto) {
+
+		em.merge(produto);
 	}
 
 	// m�todo que remove um registro
-	public void remover(Fornecedor fornecedor) {
-		em.merge(fornecedor);
+	public void remover(Producao producao) {
+		em.merge(producao);
 	}
 
 	// m�todo que recupera um objeto pelo id
-	public ItemDeProducao getItemDeProducaoPorId(Long id) {
-		return em.find(ItemDeProducao.class, id);
+	public Producao buscarPorId(Long id) {
+		return em.find(Producao.class, id);
 	}
 
 	// m�todo que lista todos os registros
-	public List<Fornecedor> listarTodosItensPorFornecedor(Long fornecedorId) {
+	public List<Producao> listarTodos() {
 		try {
-			return em.createQuery("select s from fornecimento_de_item s where fornecedor_id = "+fornecedorId, Fornecedor.class).getResultList();
+			return em.createQuery("select s from Producao s", Producao.class).getResultList();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
+	// m�todo que lista com crit�rios todos os registros
+	public List<Producao> listarPorCriterios(String nome) {
+		String jpql = "select s from Producao s where ";
 
-	/*
-	 * // m�todo que lista com crit�rios todos os registros public
-	 * List<Fornecedor> listarPorCriterios(String nome) { String jpql =
-	 * "select s from Fornecedor s where ";
-	 * 
-	 * if (nome != null) jpql +=
-	 * "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao);"
-	 * ; jpql += "1 = 1";
-	 * 
-	 * TypedQuery<Fornecedor> query = em.createQuery(jpql, Fornecedor.class);
-	 * 
-	 * if (nome != null) query.setParameter("pnome", '%' + nome +
-	 * '%').setParameter("pcodigo", '%' + nome + '%')
-	 * .setParameter("pdescricao", '%' + nome + '%');
-	 * 
-	 * return query.getResultList(); }
-	 */
+		if (nome != null)
+			jpql += "(s.nome like :pnome or s.codigo like :pcodigo or s.descricao like :pdescricao or s.quantidade like :pquantidade );";
+		jpql += "1 = 1";
+
+		TypedQuery<Producao> query = em.createQuery(jpql, Producao.class);
+
+		if (nome != null)
+			query.setParameter("pnome", '%' + nome + '%').setParameter("pcodigo", '%' + nome + '%')
+					.setParameter("pdescricao", '%' + nome + '%').setParameter("pquantidade", '%' + nome + '%');
+
+		return query.getResultList();
+	}
 
 	// método que verifica se elemento existe
 	public Produto getProdutoPorCodigo(String codigo) {
@@ -93,9 +98,9 @@ public class FornecimentoRepositorio implements Serializable {
 	}
 
 	// método que verifica se elemento existe
-	public Fornecedor getFornecedorPorCodigo(String codigo) {
-		TypedQuery<Fornecedor> query = em
-				.createQuery("select c from Fornecedor c where c.codigo = :pcodigo", Fornecedor.class)
+	public ItemDeProducao getItemDeProducaoPorCodigo(String codigo) {
+		TypedQuery<ItemDeProducao> query = em
+				.createQuery("select c from ItemDeProducao c where c.codigo = :pcodigo", ItemDeProducao.class)
 				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {

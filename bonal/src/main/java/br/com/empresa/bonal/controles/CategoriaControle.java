@@ -250,7 +250,7 @@ public class CategoriaControle implements Serializable {
 
 	@Logging
 	public String editar(Categoria categoria) {
-		return "categoria?categoriaId=" + categoria.getId();
+		return "categoria?faces-redirect=true&categoriaId=" + categoria.getId();
 	}
 
 	public boolean CategoriaIdExiste() {
