@@ -14,7 +14,9 @@
 				<p:submenu label="Catálogo">
 					<p:menuitem value="Produto" outcome="produtoConsultar"
 						icon="ui-icon-disk" />
-					<p:menuitem value="Unidade de medida"
+						<p:menuitem value="Produção" outcome="producaoConsultar"
+						icon="ui-icon-disk" />
+					<p:menuitem value="Unidades de medida"
 						outcome="unidadeDeMedidaConsultar" icon="ui-icon-disk" />
 					<p:menuitem value="Categorias" outcome="categoriaConsultar"
 						icon="ui-icon-disk" />
@@ -30,8 +32,7 @@
 						outcome="cargoConsultar" icon="ui-icon-disk" />
 					<p:menuitem value="Funcionarios" outcome="funcionarioConsultar"
 						icon="ui-icon-disk" />
-					<p:menuitem value="Produção" outcome="producaoConsultar"
-						icon="ui-icon-disk" />
+					
 				</p:submenu>
 
 				<p:submenu label="Vendas">
@@ -65,8 +66,8 @@
 					outcome="index" icon="ui-icon-arrowrefresh-1-w" />
 				<p:menuitem value="Sobre o software" styleClass="cursor-help"
 					outcome="index" icon="ui-icon-disk" />
-				<p:menuitem value="mudar um pouco as coisa" styleClass="cursor-help"
-					outcome="design" />
+				<p:menuitem value="Trocar tema" styleClass="cursor-help"
+					outcome="design" icon="ui-icon-disk"/>
 			</p:submenu>
 		</p:panelMenu>
 	</h:form>

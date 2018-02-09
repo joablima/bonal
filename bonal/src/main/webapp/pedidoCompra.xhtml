@@ -334,10 +334,10 @@
 							value="#{pedidoCompraControle.pedidoCompra.vencimento}"
 							styleClass="form-normal" required="true"
 							maxlength="80">
-							<f:convertDateTime type="date" pattern="dd/mm/yy" />
+							<f:convertDateTime type="date" pattern="dd/mm/yyyy" />
 							<p:clientValidator event="blur" />
 						</p:calendar>
-						<p:watermark  value="DD/MM/YY" for="vencimento" />
+						<p:watermark  value="DD/MM/YYYY" for="vencimento" />
 					</div>
 
 					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">

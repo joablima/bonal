@@ -28,10 +28,11 @@
 					</p:inputText>
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6 botoes">
-					<h:button id="cadastrarProducao" value="Cadastrar" 
+					<h:button id="cadastrarProducao" value="Cadastrar"
 						outcome="producao" icon="fa fa-fw fa-filter" />
 
-					<p:commandButton value="Download" icon="fa fa-fw fa-download"  ajax="false">
+					<p:commandButton value="Download" icon="fa fa-fw fa-download"
+						ajax="false">
 						<p:fileDownload
 							value="#{poiControle.downloadXlsx(producaoControle.producoes)}">
 							<p:graphicImage library="img/icon" alt="Exportar para xls"
@@ -47,7 +48,7 @@
 						listener="#{producaoControle.listar}" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="Visualizar somente itens ativados" />
-				
+
 			</div>
 		</h:form>
 
@@ -72,11 +73,18 @@
 				<p:column headerText="Produto" sortBy="#{producao.produto.nome}">
 					<h:outputText value="#{producao.produto.nome}" />
 				</p:column>
-				
+
 				<p:column headerText="Quantidade" sortBy="#{producao.quantidade}">
 					<h:outputText value="#{producao.quantidade}" />
 				</p:column>
-			
+
+				<p:column headerText="Data de produção"
+					sortBy="#{producao.dataDeProducao}">
+					<h:outputText value="#{producao.dataDeProducao}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
 				<f:facet name="footer">
 					Número de Consultas retornadas: 
 					<h:outputText

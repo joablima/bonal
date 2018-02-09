@@ -92,6 +92,24 @@
 						<p:message for="quantidade" id="quantidadeMessage" />
 					</div>
 				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<p:outputLabel value="Data de produção" for="dataDeProducao" />
+						<p:calendar id="dataDeProducao"
+							value="#{producaoControle.producao.dataDeProducao}"
+							styleClass="form-normal" required="true"
+							maxlength="80">
+							<f:convertDateTime type="date" pattern="dd/mm/yyyy" />
+							<p:clientValidator event="blur" />
+						</p:calendar>
+						<p:watermark  value="DD/MM/YYYY" for="dataDeProducao" />
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-6 form-messages">
+						<p:message for="dataDeProducao" id="dataDeProducaoMessage" />
+					</div>
+				</div>
 
 			</p:fieldset>
 

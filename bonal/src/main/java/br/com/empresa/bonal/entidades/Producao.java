@@ -2,7 +2,9 @@ package br.com.empresa.bonal.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,6 +31,9 @@ public class Producao implements Serializable{
 	
 	
 	private BigDecimal quantidade;
+	
+
+	private Date dataDeProducao;
 	
 	
 	@Temporal(TemporalType.DATE)
@@ -66,10 +71,21 @@ public class Producao implements Serializable{
 	}
 
 
+	public Date getDataDeProducao() {
+		return dataDeProducao;
+	}
+
+
+	public void setDataDeProducao(Date dataDeProducao) {
+		this.dataDeProducao = dataDeProducao;
+	}
+
+
 	public BigDecimal getQuantidade() {
 		return quantidade;
 	}
 
+	
 
 	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;

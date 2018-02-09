@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.empresa.bonal.entidades.BemDeConsumo;
+import br.com.empresa.bonal.entidades.BemPermanente;
 import br.com.empresa.bonal.entidades.Conta;
 import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Funcionario;
@@ -51,6 +52,11 @@ public class PedidoCompraRepositorio implements Serializable {
 	// m�todo que atualiza um registro
 	public void atualizarBemDeConsumo(BemDeConsumo bemDeConsumo) {
 		em.merge(bemDeConsumo);
+	}
+
+	// m�todo que atualiza um registro
+	public void atualizarBemPermanente(BemPermanente bemPermanente) {
+		em.merge(bemPermanente);
 	}
 
 	// m�todo que remove um registro
@@ -103,6 +109,19 @@ public class PedidoCompraRepositorio implements Serializable {
 	public BemDeConsumo getBemDeConsumoPorCodigo(String codigo) {
 		TypedQuery<BemDeConsumo> query = em
 				.createQuery("select c from BemDeConsumo c where c.codigo = :pcodigo", BemDeConsumo.class)
+				.setParameter("pcodigo", codigo.toUpperCase());
+
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// método que verifica se elemento existe
+	public BemPermanente getBemPermanentePorCodigo(String codigo) {
+		TypedQuery<BemPermanente> query = em
+				.createQuery("select c from BemPermanente c where c.codigo = :pcodigo", BemPermanente.class)
 				.setParameter("pcodigo", codigo.toUpperCase());
 
 		try {

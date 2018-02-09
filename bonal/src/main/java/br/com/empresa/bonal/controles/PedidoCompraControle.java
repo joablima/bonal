@@ -18,6 +18,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 import br.com.empresa.bonal.entidades.BemDeConsumo;
+import br.com.empresa.bonal.entidades.BemPermanente;
 import br.com.empresa.bonal.entidades.Conta;
 import br.com.empresa.bonal.entidades.Fornecedor;
 import br.com.empresa.bonal.entidades.Funcionario;
@@ -440,6 +441,13 @@ public class PedidoCompraControle implements Serializable {
 				bem.setQuantidade(bem.getQuantidade().add(itensDaVenda.get(i).getQuantidade()));
 				pedidoCompraRepositorio.atualizarBemDeConsumo(bem);
 			}
+			
+			if(p.getSubCategoria().getCategoria().getTipo().toString().equals("BEM_PERMANENTE")){
+				BemPermanente bem = pedidoCompraRepositorio.getBemPermanentePorCodigo(p.getCodigo());
+				bem.setQuantidade(bem.getQuantidade().add(itensDaVenda.get(i).getQuantidade()));
+				pedidoCompraRepositorio.atualizarBemPermanente(bem);
+			}
+			
 			
 			pedidoCompra.addItem(itensDaVenda.get(i));
 		}
